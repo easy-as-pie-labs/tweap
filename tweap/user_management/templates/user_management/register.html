@@ -8,8 +8,8 @@
 </head>
 <body>
 
-    {% for error_message in error_messages %}
-        {{ error_message }}<br>
+    {% for error, message in error_messages.items %}
+        {{ message }}<br>
     {%  endfor %}
     <form method="post" action="{% url 'user_management:register' %}">
         {% csrf_token %}
