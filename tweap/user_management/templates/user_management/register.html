@@ -1,0 +1,22 @@
+{# TODO: template-inharitance einfügen #}
+{# TODO: hier localization nutzen #}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+    {% for error_message in error_messages %}
+        {{ error_message }}<br>
+    {%  endfor %}
+    <form method="post" action="{% url 'user_management:register' %}">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="Username" value="{{ username }}" required>
+        <input type="email" name="email" placeholder="eMail" value="{{ email }}" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="submit" value="Registrieren">
+    </form>
+</body>
+</html>
