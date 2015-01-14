@@ -12,7 +12,7 @@ def validate_registration_form(form):
 
     if 'username' in form and 'email' in form and 'password' in form:
 
-        credentials['username'] = form['username'].strip().lower()
+        credentials['username'] = str(form['username']).strip().lower()
         credentials['email'] = form['email'].strip().lower()
         credentials['password'] = str(form['password']).strip()
 

@@ -88,3 +88,9 @@ STATIC_URL = '/static/'
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
 )
+
+# non standard values
+
+LOGIN_REDIRECT_URL = 'user_management:home'  # TODO: auf dashboard abändern
+
+LOGIN_URL = 'user_management:login'

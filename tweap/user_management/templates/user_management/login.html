@@ -8,12 +8,12 @@
 </head>
 <body>
     <h1>Login</h1>
-    {% for error, message in error_messages.items %}
-        {{ message }}<br>
-    {%  endfor %}
+    {{ error_message }}
     <form method="post" action="{% url 'user_management:login' %}">
         {% csrf_token %}
-        {{ form }}
+        <input type="text" name="username" placeholder="Username" value="{{ username }}" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="hidden" name="next" value="{{ redirect }}">
         <input type="submit" value="Login">
     </form>
 </body>
