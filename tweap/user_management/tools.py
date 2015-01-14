@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login as django_login
 import re
 
 bad_passwords = ('123', 'abc',)  # TODO: füllen
@@ -45,5 +45,5 @@ def login(username, password, request):
     user = authenticate(username=username, password=password)
     if user is None:
         return False
-    login(request, user)
+    django_login(request, user)
     return True

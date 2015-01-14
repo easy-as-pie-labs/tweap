@@ -1,0 +1,20 @@
+{# TODO: template-inharitance einfügen #}
+{# TODO: hier localization nutzen #}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <h1>Login</h1>
+    {% for error, message in error_messages.items %}
+        {{ message }}<br>
+    {%  endfor %}
+    <form method="post" action="{% url 'user_management:login' %}">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Login">
+    </form>
+</body>
+</html>
