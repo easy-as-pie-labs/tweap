@@ -1,5 +1,11 @@
 from django.db import models
 
 
-class User(models.Model):
-    pass
+class Profile(models.Model):
+    pass  # TODO: implement
+
+class ProfileAddress(models.Model):
+    pass  # TODO: implement
+
+class PLZ(models.Model):
+    pass  # TODO: implement
