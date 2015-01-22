@@ -20,22 +20,29 @@ class ProfileAddress(models.Model):
     # could be something like 50A
     house_number = models.CharField(max_length=50)
 
-    PostalCode_id = models.ForeignKey(PostalCode)
+    postalCode = models.ForeignKey(PostalCode)
 
     def __str__(self):
-        return self.street + " " + self.house_number + ", " + str(self.PostalCode_id)
+        return self.street + " " + self.house_number + ", " + str(self.postalCode)
 
 
 class Profile(models.Model):
-    user_id = models.OneToOneField(User)
+    user = models.OneToOneField(User)
 
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
 
     # leading zeros etc
     telephone = models.CharField(max_length=50, blank=True)
-    address_id = models.ForeignKey(ProfileAddress, null=True, blank=True)
+    address = models.ForeignKey(ProfileAddress, null=True, blank=True)
     picture = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
-        return self.first_name + " " + self.last_name
+        if self.first_name == None and self.last_name == None:
+            return str(self.user.id) + ": " + str(self.user.username)
+        return str(self.user.id) + ": " + str(self.first_name) + " " + str(self.last_name)
+
+    @classmethod
+    def create(cls, user):
+        profile = cls(user=user)
+        return profile
