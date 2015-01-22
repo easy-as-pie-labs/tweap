@@ -31,6 +31,8 @@ class UserManagementTest(TestCase):
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
+        self.assertFalse('username' in resp.context)
+        self.assertFalse('email' in resp.context)
 
         # username already in use
         print("Test: username already in use")
@@ -41,6 +43,8 @@ class UserManagementTest(TestCase):
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
+        self.assertFalse('username' in resp.context)
+        self.assertEqual('test2@test.de', resp.context['email'])
 
         # username is an email address
         print("Test: username is email address")
@@ -51,6 +55,8 @@ class UserManagementTest(TestCase):
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
+        self.assertFalse('username' in resp.context)
+        self.assertEqual('test2@test.de', resp.context['email'])
 
         # email already in use
         print("Test: email already in use")
@@ -61,6 +67,8 @@ class UserManagementTest(TestCase):
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
+        self.assertEqual('test2', resp.context['username'])
+        self.assertFalse('email' in resp.context)
 
         # email format is not valid
         print("Test: email format is not valid")
@@ -71,6 +79,8 @@ class UserManagementTest(TestCase):
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
+        self.assertEqual('test2', resp.context['username'])
+        self.assertFalse('email' in resp.context)
 
         # password is in bad password list
         print("Test: password is in bad password list")
@@ -81,6 +91,8 @@ class UserManagementTest(TestCase):
         self.assertTrue('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
+        self.assertEqual('test2', resp.context['username'])
+        self.assertEqual('test2@test.de', resp.context['email'])
 
         # password equals username
         print("Test: password equals username")
@@ -91,6 +103,8 @@ class UserManagementTest(TestCase):
         self.assertTrue('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
+        self.assertEqual('test2', resp.context['username'])
+        self.assertEqual('test2@test.de', resp.context['email'])
 
         # password equals email
         print("Test: password equals email")
@@ -101,6 +115,8 @@ class UserManagementTest(TestCase):
         self.assertTrue('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
+        self.assertTrue('username' in resp.context)
+        self.assertEqual('test2@test.de', resp.context['email'])
 
         # username is blank
         print("Test: username is blank")
@@ -141,4 +157,5 @@ class UserManagementTest(TestCase):
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertTrue('form' in resp.context['error_messages'])
-
+        self.assertFalse('username' in resp.context)
+        self.assertFalse('email' in resp.context)
