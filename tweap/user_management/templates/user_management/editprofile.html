@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -5,46 +6,46 @@
     <title></title>
 </head>
 <body>
-<h2>Dein Benutzerprofil</h2>
+<h2>{% trans "Your Userprofile" %}</h2>
 <form action="" method="POST">
     <table>
         <tr>
-            <td><strong>Nutzername: </strong></td>
+            <td><strong>{% trans "Username" %}: </strong></td>
             <td><input type="text" id="username" value="{{ user.username }}"></td>
         </tr>
         <tr>
-            <td><strong>E-Mail:</strong></td>
+            <td><strong>{% trans "E-Mail" %}:</strong></td>
             <td><input type="text" id="username" value="{{ user.email }}"></td>
         </tr>
         <tr>
-            <td><strong>Vorname:</strong></td>
-            <td><input type="text" id="username" value="{{ user.profile.first_name }}"></td>
+            <td><strong>{% trans "First name" %}:</strong></td>
+            <td><input type="text" id="username" value="{% if not user.profile.first_name %}{% else %}{{ user.profile.first_name }}{% endif %}"></td>
         </tr>
         <tr>
-            <td><strong>Nachname:</strong></td>
-            <td><input type="text" id="username" value="{{ user.profile.last_name }}"></td>
+            <td><strong>{% trans "Last name" %}:</strong></td>
+            <td><input type="text" id="username" value="{% if not user.profile.last_name %}{% else %}{{ user.profile.last_name }}{% endif %}"></td>
         </tr>
         <tr>
-            <td><strong>Telefon:</strong></td>
-            <td><input type="text" id="username" value="{{ user.profile.telephone }}"></td>
+            <td><strong>{% trans "Phone" %}:</strong></td>
+            <td><input type="text" id="username" value="{% if not user.profile.telephone %}{% else %}{{ user.profile.telephone }}{% endif %}"></td>
         </tr>
         <tr>
-            <td><strong>Stadt:</strong></td>
+            <td><strong>{% trans "City" %}:</strong></td>
             <td><input type="text" id="username" value="{{ postal_code.city }}"></td>
         </tr>
         <tr>
-            <td><strong>Postleitzahl:</strong></td>
+            <td><strong>{% trans "ZIP-Code" %}:</strong></td>
             <td><input type="text" id="username" value="{{ postal_code.postal_code }}"></td>
         </tr>
         <tr>
-            <td><strong>Strasse:</strong></td>
+            <td><strong>{% trans "Street" %}:</strong></td>
             <td><input type="text" id="username" value="{{ profile_address.street }}"></td>
         </tr>
         <tr>
-            <td><strong>Hausnummer:</strong></td>
+            <td><strong>{% trans "Housenumber" %}:</strong></td>
             <td><input type="text" id="username" value="{{ profile_address.house_number }}"></td>
         </tr>
-            <button>Speichern</button>
+            <button>{% trans "Save Changes" %}</button>
     </table>
 </form>
 </body>

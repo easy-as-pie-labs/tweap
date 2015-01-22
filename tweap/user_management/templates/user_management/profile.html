@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -8,35 +9,35 @@
 <h2>Dein Benutzerprofil</h2>
     <table>
         <tr>
-            <td><strong>Nutzername: </strong></td>
+            <td><strong>{% trans "Username" %}: </strong></td>
             <td>{{ user.username }}</td>
         </tr>
         <tr>
-            <td><strong>E-Mail:</strong></td>
+            <td><strong>{% trans "E-Mail" %}:</strong></td>
             <td>{{ user.email }}</td>
         </tr>
         <tr>
-            <td><strong>letzer Login:</strong></td>
-            <td>{{ user.last_login}}</td>
+            <td><strong>{% trans "Latest login" %}:</strong></td>
+            <td>{{ user.last_login }}</td>
         </tr>
         <tr>
-            <td><strong>Vorname:</strong></td>
+            <td><strong>{% trans "First name" %}:</strong></td>
             <td>{% if not user.profile.first_name %}-{% else %}{{ user.profile.first_name }}{% endif %}</td>
         </tr>
         <tr>
-            <td><strong>Nachname:</strong></td>
+            <td><strong>{% trans "Last name" %}:</strong></td>
             <td>{% if not user.profile.last_name %}-{% else %}{{ user.profile.last_name }}{% endif %}</td>
         </tr>
         <tr>
-            <td><strong>Telefon:</strong></td>
+            <td><strong>{% trans "Phone" %}:</strong></td>
             <td>{% if not user.profile.telephone %}-{% else %}{{ user.profile.telephone }}{% endif %}</td>
         </tr>
         <tr>
-            <td><strong>Stadt:</strong></td>
+            <td><strong>{% trans "City" %}:</strong></td>
             <td>{% if not postal_code %}-{% else %}{{ postal_code }}{% endif %}</td>
         </tr>
         <tr>
-            <td><strong>Anschrift:</strong></td>
+            <td><strong>{% trans "Address" %}:</strong></td>
             <td>{% if not profile_address %}-{% else %}{{ profile_address }}{% endif %}</td>
         </tr>
     </table>
