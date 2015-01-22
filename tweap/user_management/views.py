@@ -19,10 +19,11 @@ class Register(View):
             return HttpResponseRedirect(reverse(settings.LOGIN_REDIRECT_URL))
         else:
             context = {'error_messages': errors}
-            if 'username' not in errors:
-                context['username'] = credentials['username']
-            if 'username' not in errors:
-                context['email'] = credentials['email']
+            if 'form' not in errors:
+                if 'username' not in errors:
+                    context['username'] = credentials['username']
+                if 'email' not in errors:
+                    context['email'] = credentials['email']
             return render(request, 'user_management/register.html', context)
 
 
@@ -54,8 +55,8 @@ def logout(request):
 class Home(View):
     def get(self, request):
         if request.user.is_authenticated():
-            welcome_message = "User"
+            username = request.user.username
         else:
-            welcome_message = "Gast"
-        return HttpResponse("Home! Hallo " + welcome_message)
+            username = "Gast"
+        return HttpResponse("Home: Hallo " + username)
 

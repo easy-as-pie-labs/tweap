@@ -9,16 +9,22 @@ class UserManagementTest(TestCase):
 
     def test_register(self):
 
+        print("__Test Regisration__")
+
         # site available
+        print("Test: site available")
         resp = self.client.get('/users/register/')
         self.assertEqual(resp.status_code, 200)
 
         # correct registration
-        resp = self.client.post('/users/register/', {'username': 'test', 'email': 'test@test.de', 'password': 'test'})
+        print("Test: correct registration")
+        resp = self.client.post('/users/register/', {'username': 'test', 'email': 'test@test.de', 'password': 'testpw'})
         self.assertEqual(resp.status_code, 302)
+        # self.assertEqual(resp.context['username'], 'test')  # TODO: anpassen auf Dashboard
 
         # username and email already in use
-        resp = self.client.post('/users/register/', {'username': 'test', 'email': 'test@test.de', 'password': 'test'})
+        print("Test: username and email already in use")
+        resp = self.client.post('/users/register/', {'username': 'test', 'email': 'test@test.de', 'password': 'testpw'})
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('username' in resp.context['error_messages'])
         self.assertTrue('email' in resp.context['error_messages'])
@@ -27,7 +33,8 @@ class UserManagementTest(TestCase):
         self.assertFalse('form' in resp.context['error_messages'])
 
         # username already in use
-        resp = self.client.post('/users/register/', {'username': 'test', 'email': 'test2@test.de', 'password': 'test'})
+        print("Test: username already in use")
+        resp = self.client.post('/users/register/', {'username': 'test', 'email': 'test2@test.de', 'password': 'testpw'})
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('username' in resp.context['error_messages'])
         self.assertFalse('email' in resp.context['error_messages'])
@@ -36,7 +43,8 @@ class UserManagementTest(TestCase):
         self.assertFalse('form' in resp.context['error_messages'])
 
         # username is an email address
-        resp = self.client.post('/users/register/', {'username': 'test3@test.de', 'email': 'test2@test.de', 'password': 'test'})
+        print("Test: username is email address")
+        resp = self.client.post('/users/register/', {'username': 'test3@test.de', 'email': 'test2@test.de', 'password': 'testpw'})
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('username' in resp.context['error_messages'])
         self.assertFalse('email' in resp.context['error_messages'])
@@ -44,22 +52,93 @@ class UserManagementTest(TestCase):
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
 
+        # email already in use
+        print("Test: email already in use")
+        resp = self.client.post('/users/register/', {'username': 'test2', 'email': 'test@test.de', 'password': 'testpw'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertFalse('username' in resp.context['error_messages'])
+        self.assertTrue('email' in resp.context['error_messages'])
+        self.assertFalse('password' in resp.context['error_messages'])
+        self.assertFalse('blank' in resp.context['error_messages'])
+        self.assertFalse('form' in resp.context['error_messages'])
 
-        '''
-        Alles korrekt -> Redirect
-        Name + Mail belegt -> check
-        Name belegt -> check
-        Name ist Email -> check
-        Mail belegt ->
-        Mail keine gültige Mail ->
-        Bad Password ->
-        Passwort == Username ->
-        Passwort == Email ->
-        leerer Name ->
-        leere Mail ->
-        leeres PW ->
-        Name nicht übermittelt ->
-        Mail nicht übermittelt ->
-        PW nicht übermittelt ->
-        '''
+        # email format is not valid
+        print("Test: email format is not valid")
+        resp = self.client.post('/users/register/', {'username': 'test2', 'email': 'testtest.de', 'password': 'testpw'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertFalse('username' in resp.context['error_messages'])
+        self.assertTrue('email' in resp.context['error_messages'])
+        self.assertFalse('password' in resp.context['error_messages'])
+        self.assertFalse('blank' in resp.context['error_messages'])
+        self.assertFalse('form' in resp.context['error_messages'])
+
+        # password is in bad password list
+        print("Test: password is in bad password list")
+        resp = self.client.post('/users/register/', {'username': 'test2', 'email': 'test2@test.de', 'password': 'abc'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertFalse('username' in resp.context['error_messages'])
+        self.assertFalse('email' in resp.context['error_messages'])
+        self.assertTrue('password' in resp.context['error_messages'])
+        self.assertFalse('blank' in resp.context['error_messages'])
+        self.assertFalse('form' in resp.context['error_messages'])
+
+        # password equals username
+        print("Test: password equals username")
+        resp = self.client.post('/users/register/', {'username': 'test2', 'email': 'test2@test.de', 'password': 'test2'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertFalse('username' in resp.context['error_messages'])
+        self.assertFalse('email' in resp.context['error_messages'])
+        self.assertTrue('password' in resp.context['error_messages'])
+        self.assertFalse('blank' in resp.context['error_messages'])
+        self.assertFalse('form' in resp.context['error_messages'])
+
+        # password equals email
+        print("Test: password equals email")
+        resp = self.client.post('/users/register/', {'username': 'test2', 'email': 'test2@test.de', 'password': 'test2@test.de'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertFalse('username' in resp.context['error_messages'])
+        self.assertFalse('email' in resp.context['error_messages'])
+        self.assertTrue('password' in resp.context['error_messages'])
+        self.assertFalse('blank' in resp.context['error_messages'])
+        self.assertFalse('form' in resp.context['error_messages'])
+
+        # username is blank
+        print("Test: username is blank")
+        resp = self.client.post('/users/register/', {'username': '', 'email': 'test2@test.de', 'password': 'testpw'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertFalse('username' in resp.context['error_messages'])
+        self.assertFalse('email' in resp.context['error_messages'])
+        self.assertFalse('password' in resp.context['error_messages'])
+        self.assertTrue('blank' in resp.context['error_messages'])
+        self.assertFalse('form' in resp.context['error_messages'])
+
+        # email is blank
+        print("Test: email is blank")
+        resp = self.client.post('/users/register/', {'username': 'test2', 'email': '', 'password': 'testpw'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertFalse('username' in resp.context['error_messages'])
+        self.assertFalse('email' in resp.context['error_messages'])
+        self.assertFalse('password' in resp.context['error_messages'])
+        self.assertTrue('blank' in resp.context['error_messages'])
+        self.assertFalse('form' in resp.context['error_messages'])
+
+        # password is blank
+        print("Test: password is blank")
+        resp = self.client.post('/users/register/', {'username': 'test2', 'email': 'test2@test.de', 'password': ' '})
+        self.assertEqual(resp.status_code, 200)
+        self.assertFalse('username' in resp.context['error_messages'])
+        self.assertFalse('email' in resp.context['error_messages'])
+        self.assertFalse('password' in resp.context['error_messages'])
+        self.assertTrue('blank' in resp.context['error_messages'])
+        self.assertFalse('form' in resp.context['error_messages'])
+
+        # username field is missing in POST
+        print("Test: username field is missing in POST")
+        resp = self.client.post('/users/register/', {'email': 'test2@test.de', 'password': 'testpw'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertFalse('username' in resp.context['error_messages'])
+        self.assertFalse('email' in resp.context['error_messages'])
+        self.assertFalse('password' in resp.context['error_messages'])
+        self.assertFalse('blank' in resp.context['error_messages'])
+        self.assertTrue('form' in resp.context['error_messages'])
 
