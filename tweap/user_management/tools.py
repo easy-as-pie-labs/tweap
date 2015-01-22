@@ -20,11 +20,15 @@ def validate_registration_form(form):
 
             if User.objects.filter(username=credentials['username']).exists():
                 errors['username'] = "Benutzername ist nicht verfügbar"  # TODO: Lokalisierung
+            if re.match("[^@]+@[^@]+\.[^@]+", credentials['username']):
+                errors['username'] = "Benutzername darf keine E-Mail-Adresse sein"  # TODO: Lokalisierung
             if not re.match("[^@]+@[^@]+\.[^@]+", credentials['email']):
                 errors['email'] = "Die eingegebene E-Mail-Adresse ist keine gültige E-Mail-Adresse"  # TODO: Lokalisierung
             if User.objects.filter(email=credentials['email']).exists():
                 errors['email'] = "E-Mail-Adresse wird bereits für einen anderen Account verwendet"  # TODO: Lokalisierung
-            if credentials['password'] in bad_passwords:
+            if credentials['password'] in bad_passwords or \
+               credentials['password'] == credentials['username'] or \
+               credentials['password'] == credentials['email']:
                 errors['password'] = "Das gewählte Passwort ist zu unsicher!"  # TODO: Lokalisierung
 
         else:
