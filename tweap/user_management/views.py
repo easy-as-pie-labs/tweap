@@ -1,11 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.conf import settings
 from django.contrib.auth import logout as django_logout
+from user_management.models import ProfileAddress, PostalCode
 from user_management.tools import validate_registration_form, register_and_login, login
 from django.utils.translation import ugettext
+from django.contrib.auth.models import User
+
 
 class Register(View):
 
@@ -19,10 +22,11 @@ class Register(View):
             return HttpResponseRedirect(reverse(settings.LOGIN_REDIRECT_URL))
         else:
             context = {'error_messages': errors}
-            if 'username' not in errors:
-                context['username'] = credentials['username']
-            if 'username' not in errors:
-                context['email'] = credentials['email']
+            if 'form' not in errors:
+                if 'username' not in errors:
+                    context['username'] = credentials['username']
+                if 'email' not in errors:
+                    context['email'] = credentials['email']
             return render(request, 'user_management/register.html', context)
 
 
@@ -59,3 +63,13 @@ class Home(View):
             welcome_message = ugettext("Home! Hello Guest!")
         return HttpResponse(welcome_message)
 
+
+class ViewProfile(View):
+    def get(self, request, user_id = None):
+        if user_id == None:
+            user_id = request.user.id
+        user_data = get_object_or_404(User, id=user_id)
+        profile_address_data = ProfileAddress.objects.get(id=user_data.profile.id)
+        postal_code_data = PostalCode.objects.get(id=profile_address_data.id)
+        context = {'user_data': user_data, 'profile_address_data': profile_address_data, 'postal_code_data': postal_code_data}
+        return render(request, 'user_management/profile.html', context)

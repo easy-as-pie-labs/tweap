@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<h2>Dein Benutzerprofil</h2>
+    <table>
+        <tr>
+            <td><strong>Nutzername: </strong></td>
+            <td>{{ user_data.username }}</td>
+        </tr>
+        <tr>
+            <td><strong>E-Mail:</strong></td>
+            <td>{{ user_data.email }}</td>
+        </tr>
+        <tr>
+            <td><strong>letzer Login:</strong></td>
+            <td>{{ user_data.last_login }}</td>
+        </tr>
+        <tr>
+            <td><strong>Vorname:</strong></td>
+            <td>{{ user_data.profile.first_name }}</td>
+        </tr>
+        <tr>
+            <td><strong>Nachname:</strong></td>
+            <td>{{ user_data.profile.last_name }}</td>
+        </tr>
+        <tr>
+            <td><strong>Telefon:</strong></td>
+            <td>{{ user_data.profile.telephone }}</td>
+        </tr>
+        <tr>
+            <td><strong>Stadt:</strong></td>
+            <td>{{ postal_code_data }}</td>
+        </tr>
+        <tr>
+            <td><strong>Anschrift:</strong></td>
+            <td>{{ profile_address_data }}</td>
+        </tr>
+    </table>
+</body>
+</html>
