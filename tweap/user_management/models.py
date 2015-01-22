@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 # default charfield length 50 chars, just to be safe
 
+
 class PostalCode(models.Model):
     # international postal codes may have dashes and letters
     postal_code = models.CharField(max_length=50)
@@ -11,6 +12,7 @@ class PostalCode(models.Model):
 
     def __str__(self):
         return self.postal_code + " " + self.city
+
 
 class ProfileAddress(models.Model):
     street = models.CharField(max_length=100)
@@ -22,6 +24,7 @@ class ProfileAddress(models.Model):
 
     def __str__(self):
         return self.street + " " + self.house_number + ", " + str(self.PostalCode_id)
+
 
 class Profile(models.Model):
     user_id = models.OneToOneField(User)

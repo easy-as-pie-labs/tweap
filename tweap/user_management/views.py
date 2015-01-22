@@ -47,7 +47,8 @@ class Login(View):
 
 def logout(request):
     django_logout(request)
-    return HttpResponse("Erfolgreich ausgeloggt!")  # TODO: template erstellen und rendern
+    context = {'redirect': request.GET.get('next', '')}
+    return render(request, 'user_management/logout.html', context)
 
 
 class Home(View):
