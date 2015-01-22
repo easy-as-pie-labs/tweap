@@ -1,10 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.conf import settings
 from django.contrib.auth import logout as django_logout
+from user_management.models import ProfileAddress, PostalCode
 from user_management.tools import validate_registration_form, register_and_login, login
+from django.contrib.auth.models import User
 
 
 class Register(View):
@@ -60,3 +62,13 @@ class Home(View):
             username = "Gast"
         return HttpResponse("Home: Hallo " + username)
 
+
+class ViewProfile(View):
+    def get(self, request, user_id = None):
+        if user_id == None:
+            user_id = request.user.id
+        user_data = get_object_or_404(User, id=user_id)
+        profile_address_data = ProfileAddress.objects.get(id=user_data.profile.id)
+        postal_code_data = PostalCode.objects.get(id=profile_address_data.id)
+        context = {'user_data': user_data, 'profile_address_data': profile_address_data, 'postal_code_data': postal_code_data}
+        return render(request, 'user_management/profile.html', context)
