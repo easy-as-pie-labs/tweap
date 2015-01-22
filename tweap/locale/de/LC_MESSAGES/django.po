@@ -1,0 +1,39 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-22 14:55+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: user_management/templates/user_management/logout.html:11
+msgid "Logged out"
+msgstr "Ausgeloggt"
+
+#: user_management/templates/user_management/logout.html:12
+msgid "Back to login."
+msgstr "Zurück zum login"
+
+#: user_management/views.py:44
+msgid "Login not successful!"
+msgstr "Login nicht erfolgreich"
+
+#: user_management/views.py:57
+msgid "Home! Hello User!"
+msgstr "Home! Hallo User!"
+
+#: user_management/views.py:59
+msgid "Home! Hello Guest!"
+msgstr "Home! Hallo Gast!"

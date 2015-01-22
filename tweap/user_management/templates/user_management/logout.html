@@ -1,5 +1,6 @@
 {# TODO: template-inharitance einfügen #}
 {# TODO: hier localization nutzen #}
+{% load i18n %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -7,7 +8,7 @@
     <title></title>
 </head>
 <body>
-    <h1>Du wurdest ausgeloggt :)</h1>
-    <p><a href="{% url 'user_management:login' %}">Zurück zum login</a></p>
+    <h1>{% trans "Logged out" %}</h1>
+    <p><a href="{% url 'user_management:login' %}">{% trans "Back to login." %}</a></p>
 </body>
 </html>

@@ -5,7 +5,7 @@ from django.views.generic import View
 from django.conf import settings
 from django.contrib.auth import logout as django_logout
 from user_management.tools import validate_registration_form, register_and_login, login
-
+from django.utils.translation import ugettext
 
 class Register(View):
 
@@ -41,7 +41,7 @@ class Login(View):
         if login(username, password, request):
             return HttpResponseRedirect(redirect)
         else:
-            context['error_message'] = "Login nicht erfolgreich."
+            context['error_message'] = ugettext("Login not successful!")
             return render(request, 'user_management/login.html', context)
 
 
@@ -54,8 +54,8 @@ def logout(request):
 class Home(View):
     def get(self, request):
         if request.user.is_authenticated():
-            welcome_message = "User"
+            welcome_message = ugettext("Home! Hello User!")
         else:
-            welcome_message = "Gast"
-        return HttpResponse("Home! Hallo " + welcome_message)
+            welcome_message = ugettext("Home! Hello Guest!")
+        return HttpResponse(welcome_message)
 
