@@ -20,10 +20,10 @@ class ProfileAddress(models.Model):
     # could be something like 50A
     house_number = models.CharField(max_length=50)
 
-    postalCode = models.ForeignKey(PostalCode)
+    postal_code = models.ForeignKey(PostalCode)
 
     def __str__(self):
-        return self.street + " " + self.house_number + ", " + str(self.postalCode)
+        return self.street + " " + self.house_number + ", " + str(self.postal_code)
 
 
 class Profile(models.Model):

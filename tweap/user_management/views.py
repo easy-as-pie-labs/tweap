@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.auth import logout as django_logout
 from user_management.models import ProfileAddress, PostalCode
 from user_management.tools import validate_registration_form, register_and_login, login
+from django.utils.translation import ugettext
 from django.contrib.auth.models import User
 
 
@@ -44,7 +45,7 @@ class Login(View):
         if login(username, password, request):
             return HttpResponseRedirect(redirect)
         else:
-            context['error_message'] = "Login nicht erfolgreich."
+            context['error_message'] = ugettext("Login not successful!")
             return render(request, 'user_management/login.html', context)
 
 
@@ -57,10 +58,10 @@ def logout(request):
 class Home(View):
     def get(self, request):
         if request.user.is_authenticated():
-            username = request.user.username
+            welcome_message = ugettext("Home! Hello User!")
         else:
-            username = "Gast"
-        return HttpResponse("Home: Hallo " + username)
+            welcome_message = ugettext("Home! Hello Guest!")
+        return HttpResponse(welcome_message)
 
 
 class ViewProfile(View):
