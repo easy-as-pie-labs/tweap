@@ -91,3 +91,19 @@ class EditProfile(View):
             postal_code = None
         context = {'user': user, 'profile_address': profile_address, 'postal_code': postal_code}
         return render(request, 'user_management/editprofile.html', context)
+
+    def post(self, request):
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        phone = request.POST.get('phone')
+
+        user = User.objects.get(id=request.user.id)
+        user.email = email
+        user.profile.first_name = first_name
+        user.profile.last_name = last_name
+        user.profile.telephone = phone
+        user.save()
+        user.profile.save()
+
+        return HttpResponseRedirect(reverse('user_management:profile'))
