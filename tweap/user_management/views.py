@@ -68,7 +68,15 @@ class ViewProfile(View):
         if user_id == None:
             user_id = request.user.id
         user_data = get_object_or_404(User, id=user_id)
+        profile_address_data = ProfileAddress.objects.get(id=user_data.profile.address.id)
+        postal_code_data = PostalCode.objects.get(id=profile_address_data.postalCode.id)
+        context = {'user_data': user_data, 'profile_address_data': profile_address_data, 'postal_code_data': postal_code_data}
+        return render(request, 'user_management/profile.html', context)
+
+class EditProfile(View):
+    def get(self, request):
+        user_data = get_object_or_404(User, id=request.user.id)
         profile_address_data = ProfileAddress.objects.get(id=user_data.profile.id)
         postal_code_data = PostalCode.objects.get(id=profile_address_data.id)
         context = {'user_data': user_data, 'profile_address_data': profile_address_data, 'postal_code_data': postal_code_data}
-        return render(request, 'user_management/profile.html', context)
+        return render(request, 'user_management/editprofile.html', context)
