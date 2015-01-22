@@ -9,35 +9,35 @@
     <table>
         <tr>
             <td><strong>Nutzername: </strong></td>
-            <td>{{ user_data.username }}</td>
+            <td>{{ user.username }}</td>
         </tr>
         <tr>
             <td><strong>E-Mail:</strong></td>
-            <td>{{ user_data.email }}</td>
+            <td>{{ user.email }}</td>
         </tr>
         <tr>
             <td><strong>letzer Login:</strong></td>
-            <td>{{ user_data.last_login }}</td>
+            <td>{{ user.last_login }}</td>
         </tr>
         <tr>
             <td><strong>Vorname:</strong></td>
-            <td>{{ user_data.profile.first_name }}</td>
+            <td>{{ user.profile.first_name }}</td>
         </tr>
         <tr>
             <td><strong>Nachname:</strong></td>
-            <td>{{ user_data.profile.last_name }}</td>
+            <td>{{ user.profile.last_name }}</td>
         </tr>
         <tr>
             <td><strong>Telefon:</strong></td>
-            <td>{{ user_data.profile.telephone }}</td>
+            <td>{{ user.profile.telephone }}</td>
         </tr>
         <tr>
             <td><strong>Stadt:</strong></td>
-            <td>{{ postal_code_data }}</td>
+            <td>{{ postal_code }}</td>
         </tr>
         <tr>
             <td><strong>Anschrift:</strong></td>
-            <td>{{ profile_address_data }}</td>
+            <td>{{ profile_address }}</td>
         </tr>
     </table>
 </body>
