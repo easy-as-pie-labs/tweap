@@ -58,7 +58,9 @@ def logout(request):
 class Home(View):
     def get(self, request):
         if request.user.is_authenticated():
-            welcome_message = ugettext("Home! Hello User!")
+            user_id = request.user.id
+            user = get_object_or_404(User, id=user_id)
+            welcome_message = ugettext("Home! Hello ") + user.username
         else:
             welcome_message = ugettext("Home! Hello Guest!")
         return HttpResponse(welcome_message)
@@ -69,15 +71,23 @@ class ViewProfile(View):
         if user_id == None:
             user_id = request.user.id
         user = get_object_or_404(User, id=user_id)
-        profile_address = ProfileAddress.objects.get(id=user.profile.address.id)
-        postal_code = PostalCode.objects.get(id=profile_address.postal_code.id)
+        try:
+            profile_address = ProfileAddress.objects.get(id=user.profile.address.id)
+            postal_code = PostalCode.objects.get(id=profile_address.postal_code.id)
+        except:
+            profile_address = None
+            postal_code = None
         context = {'user': user, 'profile_address': profile_address, 'postal_code': postal_code}
         return render(request, 'user_management/profile.html', context)
 
 class EditProfile(View):
     def get(self, request):
         user = get_object_or_404(User, id=request.user.id)
-        profile_address = ProfileAddress.objects.get(id=user.profile.id)
-        postal_code = PostalCode.objects.get(id=profile_address.id)
+        try:
+            profile_address = ProfileAddress.objects.get(id=user.profile.id)
+            postal_code = PostalCode.objects.get(id=profile_address.id)
+        except:
+            profile_address = None
+            postal_code = None
         context = {'user': user, 'profile_address': profile_address, 'postal_code': postal_code}
         return render(request, 'user_management/editprofile.html', context)
