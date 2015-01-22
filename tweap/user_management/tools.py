@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
-from user_management.models import Profile
 from django.contrib.auth import authenticate, login as django_login
+from user_management.models import Profile
+from django.utils.translation import ugettext
 import re
 
 bad_passwords = ('123', 'abc',)  # TODO: füllen
@@ -20,23 +21,23 @@ def validate_registration_form(form):
         if credentials['username'] and credentials['email'] and credentials['password']:
 
             if User.objects.filter(username=credentials['username']).exists():
-                errors['username'] = "Benutzername ist nicht verfügbar"  # TODO: Lokalisierung
+                errors['username'] = ugettext("The username isn't available")
             if re.match("[^@]+@[^@]+\.[^@]+", credentials['username']):
-                errors['username'] = "Benutzername darf keine E-Mail-Adresse sein"  # TODO: Lokalisierung
+                errors['username'] = ugettext("The username must not be an email address")
             if not re.match("[^@]+@[^@]+\.[^@]+", credentials['email']):
-                errors['email'] = "Die eingegebene E-Mail-Adresse ist keine gültige E-Mail-Adresse"  # TODO: Lokalisierung
+                errors['email'] = ugettext("The email address isn't valid")
             if User.objects.filter(email=credentials['email']).exists():
-                errors['email'] = "E-Mail-Adresse wird bereits für einen anderen Account verwendet"  # TODO: Lokalisierung
+                errors['email'] = ugettext("The email address is already in use")
             if credentials['password'] in bad_passwords or \
                credentials['password'] == credentials['username'] or \
                credentials['password'] == credentials['email']:
-                errors['password'] = "Das gewählte Passwort ist zu unsicher!"  # TODO: Lokalisierung
+                errors['password'] = ugettext("The password is super weak")
 
         else:
-            errors['blank'] = "Es müssen alle Felder ausgefüllt werden"  # TODO: Lokalisierung
+            errors['blank'] = ugettext("All fields must be filled out")
 
     else:
-        errors['form'] = "Es ist ein Fehler bei der Übertragung des Formulars aufgetreten"  # TODO: Lokalisierung
+        errors['form'] = ugettext("An error occurred during form transfer")
 
     return credentials, errors
 
