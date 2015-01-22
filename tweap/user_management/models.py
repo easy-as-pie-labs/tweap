@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # default charfield length 50 chars, just to be safe
 
 class PostalCode(models.Model):
@@ -24,13 +24,13 @@ class ProfileAddress(models.Model):
         return self.street + " " + self.house_number + ", " + str(self.PostalCode_id)
 
 class Profile(models.Model):
+    user_id = models.OneToOneField(User)
+
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
 
     # leading zeros etc
     telephone = models.CharField(max_length=50, blank=True)
-
-    email = models.CharField(max_length=50, null=True, blank=True)
     address_id = models.ForeignKey(ProfileAddress, null=True, blank=True)
     picture = models.CharField(max_length=50, null=True, blank=True)
 
