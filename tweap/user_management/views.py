@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.generic import View
@@ -13,6 +13,8 @@ from django.contrib.auth.models import User
 class Register(View):
 
     def get(self, request):
+        if request.user.is_authenticated():
+            return redirect(reverse(settings.LOGIN_REDIRECT_URL))
         return render(request, 'user_management/register.html', {})
 
     def post(self, request):
@@ -32,6 +34,8 @@ class Register(View):
 
 class Login(View):
     def get(self, request):
+        if request.user.is_authenticated():
+            return redirect(reverse(settings.LOGIN_REDIRECT_URL))
         context = {'redirect': request.GET.get('next', '')}
         return render(request, 'user_management/login.html', context)
 
