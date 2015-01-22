@@ -10,5 +10,6 @@ urlpatterns = patterns(
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^profile/(?P<user_id>\d+)/$', views.ViewProfile.as_view(), name='profile'),
     url(r'^profile/$', views.ViewProfile.as_view(), name='profile'),
+    url(r'^editprofile/$', views.EditProfile.as_view(), name='profile'),
 
 )

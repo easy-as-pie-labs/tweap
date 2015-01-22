@@ -33,7 +33,7 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=50, null=True, blank=True)
 
     # leading zeros etc
-    telephone = models.CharField(max_length=50, blank=True)
+    telephone = models.CharField(max_length=50, null=True, blank=True)
     address = models.ForeignKey(ProfileAddress, null=True, blank=True)
     picture = models.CharField(max_length=50, null=True, blank=True)
 
