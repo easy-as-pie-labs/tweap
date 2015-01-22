@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from user_management.models import Profile
 from django.contrib.auth import authenticate, login as django_login
 import re
 
@@ -37,7 +38,9 @@ def validate_registration_form(form):
 
 
 def register_and_login(credentials, request):
-    User.objects.create_user(credentials['username'], credentials['email'], credentials['password'])
+    user = User.objects.create_user(credentials['username'], credentials['email'], credentials['password'])
+    profile = Profile.create(user)
+    profile.save()
     login(credentials['username'], credentials['password'], request)
 
 
