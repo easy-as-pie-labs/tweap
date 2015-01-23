@@ -6,7 +6,9 @@
 <div class="row">
     <div class="col-md-4 col-md-offset-3">
         <h1>Login</h1>
-        {{ error_message }}
+        {% if error_message %}
+        <div class="alert alert-danger">{{ error_message }}</div>
+        {% endif %}
         <form class="form-row" method="post" action="{% url 'user_management:login' %}">
             {% csrf_token %}
             <div>
