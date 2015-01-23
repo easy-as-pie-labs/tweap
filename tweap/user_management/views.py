@@ -71,7 +71,7 @@ class Home(View):
 
 
 class ViewProfile(View):
-    def get(self, request, user_id = None):
+    def get(self, request, user_id=None):
         if user_id == None:
             user_id = request.user.id
         user = get_object_or_404(User, id=user_id)
@@ -88,8 +88,8 @@ class EditProfile(View):
     def get(self, request):
         user = get_object_or_404(User, id=request.user.id)
         try:
-            profile_address = ProfileAddress.objects.get(id=user.profile.id)
-            postal_code = PostalCode.objects.get(id=profile_address.id)
+            profile_address = ProfileAddress.objects.get(id=user.profile.address.id)
+            postal_code = PostalCode.objects.get(id=profile_address.postal_code.id)
         except:
             profile_address = None
             postal_code = None
