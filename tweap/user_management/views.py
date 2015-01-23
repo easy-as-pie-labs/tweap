@@ -126,6 +126,10 @@ class EditProfile(View):
         city = request.POST.get('city')
         zip = request.POST.get('zip')
 
+        # if one of the address fields is empty, ignore the address change for the time being
+        if street == "" or house_number == "" or city == "" or zip == "":
+            return HttpResponseRedirect(reverse('user_management:profile'))
+
         try:
             postal_code = PostalCode.objects.get(postal_code=zip)
         except:
