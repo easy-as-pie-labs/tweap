@@ -106,9 +106,19 @@ class EditProfile(View):
         password_repeat = request.POST.get('passwordrepeat')
 
 
-
         user = User.objects.get(id=request.user.id)
-        user.email = email
+
+        user_check = None
+        try:
+            user_check = User.objects.get(email=email)
+        except:
+            pass
+
+        if user_check is not None:
+            # TODO: error => email already in use
+            pass
+        else:
+            user.email = email
         user.profile.first_name = first_name
         user.profile.last_name = last_name
         user.profile.telephone = phone
@@ -116,6 +126,9 @@ class EditProfile(View):
         if password != "" and password is not None:
             if password == password_repeat:
                 user.set_password(password)
+            else:
+                #TODO: error => passwords not identical
+                pass
 
         user.save()
         user.profile.save()
