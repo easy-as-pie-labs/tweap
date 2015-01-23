@@ -110,4 +110,28 @@ class EditProfile(View):
         user.save()
         user.profile.save()
 
+        street = request.POST.get('street')
+        house_number = request.POST.get('housenumber')
+
+        user.profile.address.street = street
+        user.profile.address.house_number = house_number
+        user.profile.address.save()
+
+        city = request.POST.get('city')
+        zip = request.POST.get('zip')
+
+        try:
+            postal_code = PostalCode.objects.get(postal_code=zip)
+        except:
+            postal_code = PostalCode.create(zip, city)
+            postal_code.save()
+
+        user.profile.address.postal_code = postal_code
+        user.profile.address.save()
+
+
+
+
+
+
         return HttpResponseRedirect(reverse('user_management:profile'))

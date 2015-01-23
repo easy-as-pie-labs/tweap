@@ -13,6 +13,11 @@ class PostalCode(models.Model):
     def __str__(self):
         return self.postal_code + " " + self.city
 
+    @classmethod
+    def create(cls, postal_code, city):
+        postal_code_object = cls(postal_code=postal_code, city=city)
+        return postal_code_object
+
 
 class ProfileAddress(models.Model):
     street = models.CharField(max_length=100)
