@@ -46,9 +46,9 @@ class UserManagementTest(TestCase):
         self.assertFalse('username' in resp.context)
         self.assertEqual('test2@test.de', resp.context['email'])
 
-        # username is an email address
-        print("Test: username is email address")
-        resp = self.client.post('/users/register/', {'username': 'test3@test.de', 'email': 'test2@test.de', 'password': 'testpw'})
+        # username contains non alphanumerical symbols
+        print("Test: username contains non alphanumerical symbols")
+        resp = self.client.post('/users/register/', {'username': 'tes@t!', 'email': 'test2@test.de', 'password': 'testpw'})
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('username' in resp.context['error_messages'])
         self.assertFalse('email' in resp.context['error_messages'])
