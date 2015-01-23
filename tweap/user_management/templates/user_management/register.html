@@ -2,17 +2,22 @@
 {% block content %}
 {# TODO: hier localization nutzen #}
 {% load i18n %}
-    <h1>{% trans "Registration" %}</h1>
-    {% for error, message in error_messages.items %}
-        {{ message }}<br>
-    {%  endfor %}
-    <form method="post" action="{% url 'user_management:register' %}">
-        {% csrf_token %}
-        <div class="input-group">
-            <input class="form-control" type="text" name="username" placeholder="Username" value="{{ username }}" required>
-            <input class="form-control" type="email" name="email" placeholder="eMail" value="{{ email }}" required>
-            <input class="form-control" type="password" name="password" placeholder="Password" required>
-        </div>
-        <input class="btn btn-success btn-lg" type="submit" value="Registrieren">
-    </form>
+<div class="row">
+    <div class="col-md-4 col-md-offset-3">
+        <h1>{% trans "Registration" %}</h1>
+        {% for error, message in error_messages.items %}
+            <div class="alert alert-danger">{{ message }}</div><br>
+        {%  endfor %}
+        <form method="post" action="{% url 'user_management:register' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <input class="form-control" type="text" name="username" placeholder="Username" value="{{ username }}" required>
+                <input class="form-control" type="email" name="email" placeholder="eMail" value="{{ email }}" required>
+                <input class="form-control" type="password" name="password" placeholder="Password" required>
+            </div>
+            <input class="btn btn-success btn-lg" type="submit" value="Registrieren">
+        </form>
+    </div>
+</div>
+
 {% endblock %}
