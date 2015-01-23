@@ -21,118 +21,118 @@ msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:9
 msgid "Your Userprofile"
-msgstr ""
+msgstr "Twój profil użytkownika"
 
 #: user_management/templates/user_management/editprofile.html:14
 #: user_management/templates/user_management/profile.html:12
 msgid "Username"
-msgstr ""
+msgstr "Imię użytkownika"
 
 #: user_management/templates/user_management/editprofile.html:18
 #: user_management/templates/user_management/profile.html:16
 msgid "E-Mail"
-msgstr ""
+msgstr "Adres E-Mail"
 
 #: user_management/templates/user_management/editprofile.html:22
 msgid "Password"
-msgstr ""
+msgstr "Hasło"
 
 #: user_management/templates/user_management/editprofile.html:26
 msgid "Repeat Password"
-msgstr ""
+msgstr "Powtórz Hasło"
 
 #: user_management/templates/user_management/editprofile.html:30
 #: user_management/templates/user_management/profile.html:24
 msgid "First name"
-msgstr ""
+msgstr "Imię"
 
 #: user_management/templates/user_management/editprofile.html:34
 #: user_management/templates/user_management/profile.html:28
 msgid "Last name"
-msgstr ""
+msgstr "Nazwisko"
 
 #: user_management/templates/user_management/editprofile.html:38
 #: user_management/templates/user_management/profile.html:32
 msgid "Phone"
-msgstr ""
+msgstr "Numer telefonu"
 
 #: user_management/templates/user_management/editprofile.html:42
 #: user_management/templates/user_management/profile.html:36
 msgid "City"
-msgstr ""
+msgstr "Miasto"
 
 #: user_management/templates/user_management/editprofile.html:46
 msgid "ZIP-Code"
-msgstr ""
+msgstr "Kod pocztowy"
 
 #: user_management/templates/user_management/editprofile.html:50
 msgid "Street"
-msgstr ""
+msgstr "Ulica"
 
 #: user_management/templates/user_management/editprofile.html:54
 msgid "Housenumber"
-msgstr ""
+msgstr "Numer domu"
 
 #: user_management/templates/user_management/editprofile.html:57
 msgid "Save Changes"
-msgstr ""
+msgstr "Zapisz"
 
 #: user_management/templates/user_management/logout.html:11
 msgid "Logged out"
-msgstr ""
+msgstr "Wylogowany"
 
 #: user_management/templates/user_management/logout.html:12
 msgid "Back to login."
-msgstr ""
+msgstr "Wróć do zalogowania"
 
 #: user_management/templates/user_management/profile.html:20
 msgid "Latest login"
-msgstr ""
+msgstr "Ostatnie zalogowanie"
 
 #: user_management/templates/user_management/profile.html:40
 msgid "Address"
-msgstr ""
+msgstr "Adres"
 
 #: user_management/templates/user_management/register.html:11
 msgid "Registration"
-msgstr ""
+msgstr "Rejestracja"
 
 #: user_management/tools.py:25
 msgid "The username isn't available"
-msgstr ""
+msgstr "Imię użytkownika nie jest dostępny"
 
 #: user_management/tools.py:27
 msgid "The username must not be an email address"
-msgstr ""
+msgstr "Imię użytkownika nie może być adres mailowy"
 
 #: user_management/tools.py:29
 msgid "The email address isn't valid"
-msgstr ""
+msgstr "Adres mailowy jest błędny"
 
 #: user_management/tools.py:31
 msgid "The email address is already in use"
-msgstr ""
+msgstr "Adres mailowy"
 
 #: user_management/tools.py:35
 msgid "The password is super weak"
-msgstr ""
+msgstr "Hasło jest super kiepski"
 
 #: user_management/tools.py:38
 msgid "All fields must be filled out"
-msgstr ""
+msgstr "Wszystkie pola musza byc wypełniąne"
 
 #: user_management/tools.py:41
 msgid "An error occurred during form transfer"
-msgstr ""
+msgstr "Błąd w transmisji się okazał"
 
 #: user_management/views.py:52
 msgid "Login not successful!"
-msgstr ""
+msgstr "Błąd w zalogowaniu"
 
 #: user_management/views.py:67
 msgid "Home! Hello "
-msgstr ""
+msgstr "Start! Witam "
 
 #: user_management/views.py:69
 msgid "Home! Hello Guest!"
-msgstr ""
+msgstr "Start! Witam Gośćiu"
