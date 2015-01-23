@@ -1,0 +1,31 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<h2>{{ project.name }}</h2>
+    <table>
+        <tr>
+            <td><strong>{% trans "Description" %}: </strong></td>
+            <td>{{ project.username }}</td>
+        </tr>
+        <tr>
+            <td><strong>{% trans "Members" %}:</strong></td>
+            <td>{% for member in members %}
+                {{ member }}
+            {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td><strong>{% trans "Invited" %}:</strong></td>
+            <td>{% for invitation in invitations %}
+                {{ invitation.user.username }}
+            {% endfor %}
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

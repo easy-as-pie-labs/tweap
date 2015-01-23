@@ -32,3 +32,6 @@ class ProjectForm(ModelForm):
 class Invitation(models.Model):
     user = models.ForeignKey(User)
     project = models.ForeignKey(Project)
+
+    def __str__(self):
+        return self.user.username + " invited to " + self.project.name
