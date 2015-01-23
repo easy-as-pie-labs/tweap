@@ -71,10 +71,10 @@ class Home(View):
 
 
 class ViewProfile(View):
-    def get(self, request, user_id=None):
-        if user_id is None:
-            user_id = request.user.id
-        user = get_object_or_404(User, id=user_id)
+    def get(self, request, user_name=None):
+        if user_name is None:
+            user_name = request.user.username
+        user = get_object_or_404(User, username=user_name)
         try:
             profile_address = ProfileAddress.objects.get(id=user.profile.address.id)
             postal_code = PostalCode.objects.get(id=profile_address.postal_code.id)
