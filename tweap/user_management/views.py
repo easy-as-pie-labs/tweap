@@ -72,7 +72,7 @@ class Home(View):
 
 class ViewProfile(View):
     def get(self, request, user_id=None):
-        if user_id == None:
+        if user_id is None:
             user_id = request.user.id
         user = get_object_or_404(User, id=user_id)
         try:
