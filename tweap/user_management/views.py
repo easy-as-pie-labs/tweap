@@ -62,9 +62,7 @@ def logout(request):
 class Home(View):
     def get(self, request):
         if request.user.is_authenticated():
-            user_id = request.user.id
-            user = get_object_or_404(User, id=user_id)
-            welcome_message = ugettext("Home! Hello ") + user.username
+            welcome_message = ugettext("Home! Hello ") + request.user.username
         else:
             welcome_message = ugettext("Home! Hello Guest!")
         return HttpResponse(welcome_message)
