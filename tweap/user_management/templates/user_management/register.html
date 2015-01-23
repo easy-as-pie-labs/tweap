@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 {# TODO: hier localization nutzen #}
-{% load i18n %}
     <h1>{% trans "Registration" %}</h1>
     {% for error, message in error_messages.items %}
         {{ message }}<br>
