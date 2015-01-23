@@ -45,7 +45,7 @@ class Profile(models.Model):
     # leading zeros etc
     telephone = models.CharField(max_length=50, null=True, blank=True)
     address = models.ForeignKey(ProfileAddress, null=True, blank=True)
-    picture = models.CharField(max_length=50, null=True, blank=True)
+    picture = models.ImageField(upload_to='profile_pictures', null=True, blank=True)
 
     def __str__(self):
         if self.first_name is None and self.last_name is None:
