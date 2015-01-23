@@ -1,0 +1,21 @@
+{# TODO: template-inharitance einfügen #}
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <h1>{% trans "Create new project" %}</h1>
+    {% for error, message in error_messages.items %}
+        {{ message }}<br>
+    {%  endfor %}
+    <form method="post" action="{% url 'project_management:create' %}">
+        {% csrf_token %}
+        {{  form }}
+        <input type="text" name="invitations" placeholder="Members">
+        <input type="submit" value="{% trans "Create" %}">
+    </form>
+</body>
+</html>
