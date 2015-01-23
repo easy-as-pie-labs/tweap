@@ -4,6 +4,10 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <h2>{% trans "Your Userprofile" %} </h2>
+
+        <h2>Dein Benutzerprofil</h2>
+        <img src="{{ user.profile.picture.url }}">
+
         <table class="table">
             <tr>
                 <td><strong>{% trans "Username" %}: </strong></td>
@@ -19,23 +23,23 @@
             </tr>
             <tr>
                 <td><strong>{% trans "First name" %}:</strong></td>
-                <td>{% if not user.profile.first_name %}-{% else %}{{ user.profile.first_name }}{% endif %}</td>
+                <td>{{ user.profile.first_name|default:"" }}</td>
             </tr>
             <tr>
                 <td><strong>{% trans "Last name" %}:</strong></td>
-                <td>{% if not user.profile.last_name %}-{% else %}{{ user.profile.last_name }}{% endif %}</td>
+                <td>{{ user.profile.last_name|default:"" }}</td>
             </tr>
             <tr>
                 <td><strong>{% trans "Phone" %}:</strong></td>
-                <td>{% if not user.profile.telephone %}-{% else %}{{ user.profile.telephone }}{% endif %}</td>
+                <td>{{ user.profile.telephone|default:"" }}</td>
             </tr>
             <tr>
                 <td><strong>{% trans "City" %}:</strong></td>
-                <td>{% if not postal_code %}-{% else %}{{ postal_code }}{% endif %}</td>
+                <td>{{ postal_code|default:"" }}</td>
             </tr>
             <tr>
                 <td><strong>{% trans "Address" %}:</strong></td>
-                <td>{% if not profile_address %}-{% else %}{{ profile_address }}{% endif %}</td>
+                <td>{{ profile_address|default:"" }}</td>
             </tr>
         </table>
     </div>

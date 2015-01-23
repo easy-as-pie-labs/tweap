@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.generic import View
-from project_management.models import ProjectForm
+from project_management.models import ProjectForm, Project as ProjectModel, Invitation
 from project_management.tools import invite_users
 
 
@@ -20,8 +20,18 @@ class Create(View):
             project.members.add(request.user)
             project.save()
             if 'invitations' in request.POST:
-                invite_users(request.POST['invitations'])
+                invite_users(request.POST['invitations'], project)
             return HttpResponseRedirect(reverse('project_management:project'))
         else:
             context = {'error_messages': form.errors, 'form': form}
             return render(request, 'project_management/create.html', context)
+
+class Project(View):
+
+    def get(self, request, project_id=None):
+        context = {}
+        project = get_object_or_404(ProjectModel, id=project_id)
+        context['project'] = project
+        context['members'] = project.members.all()
+        context['invitations'] =  Invitation.objects.filter(project=project)
+        return render(request, 'project_management/project.html', context)
