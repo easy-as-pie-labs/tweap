@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as django_login
 from user_management.models import Profile
 from django.utils.translation import ugettext
+from user_management.models import ProfileAddress, PostalCode
 import re
 
 bad_passwords = ('123', 'abc',)  # TODO: füllen
@@ -55,3 +56,15 @@ def login(username, password, request):
         return False
     django_login(request, user)
     return True
+
+
+def cleanup_postal_code(postal_code):
+    '''
+    deletes a postal code if it is not in use anymore
+    :param postal_code: PostalCode object
+    :return:
+    '''
+    ref_count = ProfileAddress.objects.filter(postal_code=postal_code).count()
+
+    if ref_count == 0:
+        postal_code.delete()

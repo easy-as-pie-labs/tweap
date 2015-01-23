@@ -30,6 +30,11 @@ class ProfileAddress(models.Model):
     def __str__(self):
         return self.street + " " + self.house_number + ", " + str(self.postal_code)
 
+    @classmethod
+    def create(cls, street, house_number, postal_code):
+        profile_address = cls(street=street, house_number=house_number, postal_code=postal_code)
+        return profile_address
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User)
@@ -43,7 +48,7 @@ class Profile(models.Model):
     picture = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
-        if self.first_name == None and self.last_name == None:
+        if self.first_name is None and self.last_name is None:
             return str(self.user.id) + ": " + str(self.user.username)
         return str(self.user.id) + ": " + str(self.first_name) + " " + str(self.last_name)
 

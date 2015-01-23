@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-22 16:26+0000\n"
+"POT-Creation-Date: 2015-01-23 14:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,64 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
+#: user_management/templates/user_management/editprofile.html:9
+msgid "Your Userprofile"
+msgstr ""
+
+#: user_management/templates/user_management/editprofile.html:14
+#: user_management/templates/user_management/profile.html:12
+msgid "Username"
+msgstr ""
+
+#: user_management/templates/user_management/editprofile.html:18
+#: user_management/templates/user_management/profile.html:16
+msgid "E-Mail"
+msgstr ""
+
+#: user_management/templates/user_management/editprofile.html:22
+msgid "Password"
+msgstr ""
+
+#: user_management/templates/user_management/editprofile.html:26
+msgid "Repeat Password"
+msgstr ""
+
+#: user_management/templates/user_management/editprofile.html:30
+#: user_management/templates/user_management/profile.html:24
+msgid "First name"
+msgstr ""
+
+#: user_management/templates/user_management/editprofile.html:34
+#: user_management/templates/user_management/profile.html:28
+msgid "Last name"
+msgstr ""
+
+#: user_management/templates/user_management/editprofile.html:38
+#: user_management/templates/user_management/profile.html:32
+msgid "Phone"
+msgstr ""
+
+#: user_management/templates/user_management/editprofile.html:42
+#: user_management/templates/user_management/profile.html:36
+msgid "City"
+msgstr ""
+
+#: user_management/templates/user_management/editprofile.html:46
+msgid "ZIP-Code"
+msgstr ""
+
+#: user_management/templates/user_management/editprofile.html:50
+msgid "Street"
+msgstr ""
+
+#: user_management/templates/user_management/editprofile.html:54
+msgid "Housenumber"
+msgstr ""
+
+#: user_management/templates/user_management/editprofile.html:57
+msgid "Save Changes"
+msgstr ""
+
 #: user_management/templates/user_management/logout.html:11
 msgid "Logged out"
 msgstr ""
@@ -27,14 +85,54 @@ msgstr ""
 msgid "Back to login."
 msgstr ""
 
-#: user_management/views.py:48
+#: user_management/templates/user_management/profile.html:20
+msgid "Latest login"
+msgstr ""
+
+#: user_management/templates/user_management/profile.html:40
+msgid "Address"
+msgstr ""
+
+#: user_management/templates/user_management/register.html:11
+msgid "Registration"
+msgstr ""
+
+#: user_management/tools.py:25
+msgid "The username isn't available"
+msgstr ""
+
+#: user_management/tools.py:27
+msgid "The username must not be an email address"
+msgstr ""
+
+#: user_management/tools.py:29
+msgid "The email address isn't valid"
+msgstr ""
+
+#: user_management/tools.py:31
+msgid "The email address is already in use"
+msgstr ""
+
+#: user_management/tools.py:35
+msgid "The password is super weak"
+msgstr ""
+
+#: user_management/tools.py:38
+msgid "All fields must be filled out"
+msgstr ""
+
+#: user_management/tools.py:41
+msgid "An error occurred during form transfer"
+msgstr ""
+
+#: user_management/views.py:52
 msgid "Login not successful!"
 msgstr ""
 
-#: user_management/views.py:63
+#: user_management/views.py:67
 msgid "Home! Hello "
 msgstr ""
 
-#: user_management/views.py:65
+#: user_management/views.py:69
 msgid "Home! Hello Guest!"
 msgstr ""
