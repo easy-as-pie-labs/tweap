@@ -5,7 +5,7 @@ from django.views.generic import View
 from django.conf import settings
 from django.contrib.auth import logout as django_logout
 from user_management.models import ProfileAddress, PostalCode
-from user_management.tools import validate_registration_form, register_and_login, login
+from user_management.tools import validate_registration_form, register_and_login, login, cleanup_postal_code
 from django.utils.translation import ugettext
 from django.contrib.auth.models import User
 
@@ -157,7 +157,14 @@ class EditProfile(View):
         else:
             user.profile.address.street = street
             user.profile.address.house_number = house_number
+
+            # check if old postal code is not in use anymore and can be deleted
+            old_postal = user.profile.address.postal_code
+
             user.profile.address.postal_code = postal_code
             user.profile.address.save()
+
+            #delete old postal code if it isn't needed anymore
+            cleanup_postal_code(old_postal)
 
         return HttpResponseRedirect(reverse('user_management:profile'))
