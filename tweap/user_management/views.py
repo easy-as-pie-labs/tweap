@@ -84,6 +84,7 @@ class ViewProfile(View):
         context = {'user': user, 'profile_address': profile_address, 'postal_code': postal_code}
         return render(request, 'user_management/profile.html', context)
 
+
 class EditProfile(View):
     def get(self, request):
         user = get_object_or_404(User, id=request.user.id)
@@ -101,21 +102,26 @@ class EditProfile(View):
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         phone = request.POST.get('phone')
+        password = request.POST.get('password')
+        password_repeat = request.POST.get('passwordrepeat')
+
+
 
         user = User.objects.get(id=request.user.id)
         user.email = email
         user.profile.first_name = first_name
         user.profile.last_name = last_name
         user.profile.telephone = phone
+
+        if password != "" and password is not None:
+            if password == password_repeat:
+                user.set_password(password)
+
         user.save()
         user.profile.save()
 
         street = request.POST.get('street')
         house_number = request.POST.get('housenumber')
-
-        user.profile.address.street = street
-        user.profile.address.house_number = house_number
-        user.profile.address.save()
 
         city = request.POST.get('city')
         zip = request.POST.get('zip')
@@ -126,7 +132,15 @@ class EditProfile(View):
             postal_code = PostalCode.create(zip, city)
             postal_code.save()
 
-        user.profile.address.postal_code = postal_code
-        user.profile.address.save()
+        if user.profile.address is None:
+            address = ProfileAddress.create(street, house_number, postal_code)
+            address.save()
+            user.profile.address = address
+            user.profile.save()
+        else:
+            user.profile.address.street = street
+            user.profile.address.house_number = house_number
+            user.profile.address.postal_code = postal_code
+            user.profile.address.save()
 
         return HttpResponseRedirect(reverse('user_management:profile'))

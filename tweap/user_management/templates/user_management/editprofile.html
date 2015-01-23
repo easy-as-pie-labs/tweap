@@ -19,6 +19,14 @@
             <td><input type="text" name="email" value="{{ user.email }}"></td>
         </tr>
         <tr>
+            <td><strong>{% trans "Password" %}:</strong></td>
+            <td><input type="password" name="password" value=""></td>
+        </tr>
+        <tr>
+            <td><strong>{% trans "Repeat Password" %}:</strong></td>
+            <td><input type="password" name="passwordrepeat" value=""></td>
+        </tr>
+        <tr>
             <td><strong>{% trans "First name" %}:</strong></td>
             <td><input type="text" name="first_name" value="{% if not user.profile.first_name %}{% else %}{{ user.profile.first_name }}{% endif %}"></td>
         </tr>
@@ -32,19 +40,19 @@
         </tr>
         <tr>
             <td><strong>{% trans "City" %}:</strong></td>
-            <td><input type="text" name="city" value="{{ postal_code.city }}"></td>
+            <td><input type="text" name="city" value="{% if not postal_code.city %}{% else %}{{ postal_code.city }}{% endif %}"></td>
         </tr>
         <tr>
             <td><strong>{% trans "ZIP-Code" %}:</strong></td>
-            <td><input type="text" name="zip" value="{{ postal_code.postal_code }}"></td>
+            <td><input type="text" name="zip" value="{% if not postal_code.postal_code %}{% else %}{{ postal_code.postal_code }}{% endif %}"></td>
         </tr>
         <tr>
             <td><strong>{% trans "Street" %}:</strong></td>
-            <td><input type="text" name="street" value="{{ profile_address.street }}"></td>
+            <td><input type="text" name="street" value="{% if not profile_address.street %}{% else %}{{ profile_address.street }}{% endif %}"></td>
         </tr>
         <tr>
             <td><strong>{% trans "Housenumber" %}:</strong></td>
-            <td><input type="text" name="housenumber" value="{{ profile_address.house_number }}"></td>
+            <td><input type="text" name="housenumber" value="{% if not profile_address.house_number %}{% else %}{{ profile_address.house_number }}{% endif %}"></td>
         </tr>
             <button>{% trans "Save Changes" %}</button>
     </table>
