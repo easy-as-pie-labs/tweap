@@ -33,5 +33,19 @@ class Invitation(models.Model):
     user = models.ForeignKey(User)
     project = models.ForeignKey(Project)
 
+    def accept(self):
+        project = Project.objects.get(id=self.project.id)
+        user = User.objects.get(id=self.user.id)
+        project.members.add(user)
+        project.save()
+        self.delete()
+
+    def reject(self):
+        self.delete()
+
+    @classmethod
+    def get_for_user(cls, user):
+        return cls.objects.filter(user__id=user.id)
+
     def __str__(self):
         return self.user.username + " invited to " + self.project.name

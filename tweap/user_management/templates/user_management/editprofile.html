@@ -13,7 +13,7 @@
             </tr>
             <tr>
                 <td><strong>{% trans "E-Mail" %}:</strong></td>
-                <td><input class="form-control" type="text" name="email" value="{{ user.email }}"></td>
+                <td><input class="form-control" type="email" name="email" value="{{ user.email }}"></td>
             </tr>
             <tr>
                 <td><strong>{% trans "Password" %}:</strong></td>
@@ -33,7 +33,7 @@
             </tr>
             <tr>
                 <td><strong>{% trans "Phone" %}:</strong></td>
-                <td><input class="form-control" type="text" name="phone" value="{% if not user.profile.telephone %}{% else %}{{ user.profile.telephone }}{% endif %}"></td>
+                <td><input class="form-control" type="number" name="phone" value="{% if not user.profile.telephone %}{% else %}{{ user.profile.telephone }}{% endif %}"></td>
             </tr>
             <tr>
                 <td><strong>{% trans "City" %}:</strong></td>
@@ -49,7 +49,7 @@
             </tr>
             <tr>
                 <td><strong>{% trans "Housenumber" %}:</strong></td>
-                <td><input class="form-control" type="text" name="housenumber" value="{% if not profile_address.house_number %}{% else %}{{ profile_address.house_number }}{% endif %}"></td>
+                <td><input class="form-control" type="number" name="housenumber" value="{% if not profile_address.house_number %}{% else %}{{ profile_address.house_number }}{% endif %}"></td>
             </tr>
         </table>
             <button class="btn btn-success btn-lg">{% trans "Save Changes" %}</button>
