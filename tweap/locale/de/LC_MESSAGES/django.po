@@ -2,23 +2,24 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-23 14:54+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2015-01-23 18:08+0100\n"
+"Last-Translator: b'  <dev@goggelz.de>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Translated-Using: django-rosetta 0.7.4\n"
 
-#: user_management/templates/user_management/editprofile.html:9
+#: user_management/templates/user_management/editprofile.html:7
 msgid "Your Userprofile"
 msgstr "Dein Userprofil"
 
@@ -85,10 +86,9 @@ msgid "Back to login."
 msgstr "Zurück zum login"
 
 #: user_management/templates/user_management/profile.html:20
-#, fuzzy
 #| msgid "Back to login."
 msgid "Latest login"
-msgstr "Zurück zum login"
+msgstr "Letzter login"
 
 #: user_management/templates/user_management/profile.html:40
 msgid "Address"
@@ -131,10 +131,9 @@ msgid "Login not successful!"
 msgstr "Login nicht erfolgreich"
 
 #: user_management/views.py:67
-#, fuzzy
 #| msgid "Home! Hello User!"
 msgid "Home! Hello "
-msgstr "Home! Hallo User!"
+msgstr "Home! Hallo "
 
 #: user_management/views.py:69
 msgid "Home! Hello Guest!"
