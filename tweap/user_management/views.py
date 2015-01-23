@@ -129,9 +129,4 @@ class EditProfile(View):
         user.profile.address.postal_code = postal_code
         user.profile.address.save()
 
-
-
-
-
-
         return HttpResponseRedirect(reverse('user_management:profile'))
