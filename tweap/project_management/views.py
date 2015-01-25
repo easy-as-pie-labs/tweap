@@ -21,7 +21,7 @@ class Create(View):
             project.save()
             if 'invitations' in request.POST:
                 invite_users(request.POST['invitations'], project)
-            return HttpResponseRedirect(reverse('project_management:project'))
+            return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))
         else:
             context = {'error_messages': form.errors, 'form': form}
             return render(request, 'project_management/create.html', context)

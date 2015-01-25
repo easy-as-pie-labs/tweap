@@ -13,7 +13,8 @@ def invite_users(users, project):
             else:
                 user_object = User.objects.get(username=user)
 
-            Invitation(user=user_object, project=project).save()
+            if not Invitation.objects.filter(user__id=user_object.id, project__id=project.id).exists() and user_object not in project.members.all():
+                Invitation(user=user_object, project=project).save()
 
         except User.DoesNotExist:
             pass
