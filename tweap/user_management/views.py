@@ -91,7 +91,11 @@ class EditProfile(View):
         except:
             profile_address = None
             postal_code = None
-        context = {'user': user, 'profile_address': profile_address, 'postal_code': postal_code}
+
+
+        from user_management.forms import ImageUploadForm
+        form = ImageUploadForm() # A empty, unbound form
+        context = {'user': user, 'profile_address': profile_address, 'postal_code': postal_code, 'form': form}
         return render(request, 'user_management/editprofile.html', context)
 
     def post(self, request):
@@ -101,7 +105,6 @@ class EditProfile(View):
         phone = request.POST.get('phone')
         password = request.POST.get('password')
         password_repeat = request.POST.get('passwordrepeat')
-
 
         user = User.objects.get(id=request.user.id)
 
@@ -116,6 +119,10 @@ class EditProfile(View):
             pass
         else:
             user.email = email
+
+
+        picture = request.FILES['docfile']
+        user.profile.picture.save(picture.name, picture)
         user.profile.first_name = first_name
         user.profile.last_name = last_name
         user.profile.telephone = phone
@@ -165,3 +172,15 @@ class EditProfile(View):
             cleanup_postal_code(old_postal)
 
         return HttpResponseRedirect(reverse('user_management:profile'))
+
+def upload_picture(request):
+    from user_management.forms import ImageUploadForm
+    # Handle file upload
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_image = request.FILES['picture']
+            user = User.objects.get(id=request.user.id)
+            user.profile.add_picture(new_image)
+
+            return HttpResponseRedirect(reverse('user_management:edit_profile'))

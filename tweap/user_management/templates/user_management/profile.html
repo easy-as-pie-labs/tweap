@@ -3,9 +3,9 @@
 {% block user_management %}
 {% load  static %}
         <h2>{% trans "Your profile" %}</h2>
-        <img src="{{ user.profile.picture.url|default:'' }}">
-
+        <img class="col-md-6" src="{{ user.profile.picture.url|default:'' }}">
         <table class="table">
+
             <tr>
                 <td><strong>{% trans "Username" %}: </strong></td>
                 <td>{{ user.username }}</td>

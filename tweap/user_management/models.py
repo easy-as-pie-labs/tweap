@@ -47,6 +47,13 @@ class Profile(models.Model):
     address = models.ForeignKey(ProfileAddress, null=True, blank=True)
     picture = models.ImageField(upload_to='profile_pictures', null=True, blank=True)
 
+    def add_picture(self, picture):
+        self.picture = picture
+
+        self.save()
+        #self.picture.url = "123.png"
+        #self.save()
+
     def __str__(self):
         if self.first_name is None and self.last_name is None:
             return str(self.user.id) + ": " + str(self.user.username)

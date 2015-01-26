@@ -9,7 +9,19 @@
 {% endblock %}
 {% block profile %}
         <h2>{% trans "Your profile" %}</h2>
-        <form class="form-group" action="{% url 'user_management:edit_profile' %}" method="POST">
+        <img class="col-md-6 col-xs-12" src="{{ user.profile.picture.url|default:'' }}">
+        <form action="{% url 'user_management:upload_picture' %}" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<p>{{ form.non_field_errors }}</p>
+			<p><strong>{{ form.picture.label }}</strong></p>
+			<p>
+				{{ form.picture.errors }}
+				{{ form.picture }}
+			</p>
+			<p><input type="submit" value="{% trans "Upload image" %}" /></p>
+		</form>
+        <br>
+        <form class="form-group" action="{% url 'user_management:edit_profile' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
         <table class="table">
             <tr>
