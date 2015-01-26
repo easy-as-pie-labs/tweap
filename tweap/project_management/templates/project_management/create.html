@@ -1,6 +1,6 @@
-{% extends "project_management.html" %}
+{% extends "project_management_template.html" %}
 {% load i18n %}
-{% block project_management %}
+{% block project_management_template %}
     <h1>{% trans "Create new project" %}</h1>
     {% for error, message in error_messages.items %}
         {{ message }}<br>

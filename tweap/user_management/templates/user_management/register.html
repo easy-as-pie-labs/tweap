@@ -1,11 +1,6 @@
-{% extends "user_management.html" %}
+{% extends "no_session.html" %}
 {% load i18n %}
-{% block navigation %}
-        <li><a href="{% url 'user_management:home' %}">{% trans "Home" %}</a></li>
-        <li><a href="{% url 'user_management:login' %}">{% trans "Login" %}</a></li>
-        <li class="active"><a href="{% url 'user_management:register' %}">{% trans "Register" %}</a></li>
-{% endblock %}
-{% block user_management %}
+{% block no_session %}
         <h1>{% trans "Registration" %}</h1>
         {% for error, message in error_messages.items %}
         <div class="alert alert-danger">{{ message }}</div><br>

@@ -1,6 +1,6 @@
-{% extends "user_management_profile.html" %}
+{% extends "user_management_template.html" %}
 {% load i18n %}
-{% block user_management_profile %}
+{% block user_management_template %}
         <h2>{% trans "Your profile" %}</h2>
         <img class="col-md-6 col-xs-12" src="{{ user.profile.picture.url|default:'' }}">
         <form action="{% url 'user_management:upload_picture' %}" method="post" enctype="multipart/form-data">
