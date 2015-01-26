@@ -1,7 +1,7 @@
 {% extends "user_management.html" %}
 {% load i18n %}
 {% block user_management %}
-{# TODO: hier localization nutzen #}
+{% block content %}
         <h1>{% trans "Registration" %}</h1>
         {% for error, message in error_messages.items %}
         <div class="alert alert-danger">{{ message }}</div><br>

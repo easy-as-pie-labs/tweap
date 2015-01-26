@@ -1,8 +1,7 @@
 {% extends "user_management.html" %}
 {% load i18n %}
 {% block user_management %}
-{# TODO: template-inharitance einfügen #}
-{# TODO: hier localization nutzen #}
+{% block content %}
         <h1>Login</h1>
         {% if error_message %}
         <div class="alert alert-danger">{{ error_message }}</div>

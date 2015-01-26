@@ -1,8 +1,10 @@
 {% extends "user_management.html" %}
 {% load i18n %}
 {% block user_management %}
+{% block content %}
+{% load  static %}
         <h2>{% trans "Your profile" %}</h2>
-        <img src="{{ user.profile.picture.url }}">
+        <img src="{{ user.profile.picture.url|default:'' }}">
 
         <table class="table">
             <tr>

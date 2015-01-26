@@ -26,6 +26,11 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# URL that handles the media served from MEDIA_ROOT. Make sure to use a
+# trailing slash if there is a path component (optional in other cases).
+# Examples: "http://media.lawrence.com", "http://example.com/media/"
+MEDIA_URL = 'http://127.0.0.1:8000/media/'
+#TODO: ja, hier muss irgendwie der lokale Pfad vom Server stehen
 
 # Application definition
 
@@ -106,4 +111,10 @@ LOGIN_URL = 'user_management:login'
 LOCALE_PATHS = (
     "",
     os.path.join(BASE_DIR, 'locale'),
+)
+
+LANGUAGES = (
+    ("en", "English"),
+    ("de", "Deutsch"),
+    ("pl", "Polski"),
 )
