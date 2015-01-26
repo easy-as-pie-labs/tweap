@@ -49,7 +49,6 @@ class Profile(models.Model):
 
     def add_picture(self, picture):
         self.picture = picture
-
         self.save()
         #self.picture.url = "123.png"
         #self.save()
