@@ -35,7 +35,7 @@ class Project(View):
         context['project'] = project
         context['members'] = project.members.all()
         context['invitations'] = Invitation.objects.filter(project=project)
-        if ProjectModel.objects.filter(members=request.user.id):
+        if ProjectModel.objects.filter(members=request.user.id, id=project.id):
             return render(request, 'project_management/project.html', context)
         else:
             raise Http404
