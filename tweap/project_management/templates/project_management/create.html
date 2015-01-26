@@ -14,8 +14,8 @@
     {%  endfor %}
     <form method="post" action="{% url 'project_management:create' %}">
         {% csrf_token %}
-        {{  form }}
-        <input type="text" name="invitations" placeholder="Members">
+        {{ form }}
+        <input type="text" name="invitations" placeholder="{% trans "Members" %}">
         <input type="submit" value="{% trans "Create" %}">
     </form>
 </body>
