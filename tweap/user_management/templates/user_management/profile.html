@@ -3,7 +3,7 @@
 {% block user_management_template %}
 {% load  static %}
         <h2>{% trans "Your profile" %}</h2>
-        <img class="col-md-6" src="{{ user.profile.picture.url|default:'' }}">
+        <img class="col-md-6 col-xs-12" src="{{ user.profile.picture.url|default:'' }}">
         <table class="table">
 
             <tr>
