@@ -2,3 +2,15 @@
     width:100%;
     margin-top:10px;
 }
+
+.margin-nav{
+    margin-top:3px;
+}
+
+.no-wrap-element{
+    white-space:nowrap;
+}
+
+.valign-form{
+    margin-top:9px;
+}
