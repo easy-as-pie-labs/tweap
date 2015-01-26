@@ -1,10 +1,5 @@
 {% extends "user_management.html" %}
 {% load i18n %}
-{% block navigation %}
-        <li><a href="{% url 'user_management:home' %}">{% trans "Home" %}</a></li>
-        <li class="active"><a href="{% url 'user_management:login' %}">{% trans "Login" %}</a></li>
-        <li><a href="{% url 'user_management:register' %}">{% trans "Register" %}</a></li>
-{% endblock %}
 {% block user_management %}
         <h1>{% trans "Login" %}</h1>
         {% if error_message %}

@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% block navigation %}
+        <li><a href="{% url 'user_management:home' %}">{% trans "Home" %}</a></li>
+        <li><a href="{% url 'user_management:login' %}">{% trans "Login" %}</a></li>
+        <li><a href="{% url 'user_management:register' %}">{% trans "Register" %}</a></li>
+{% endblock %}
 {% block content %}
 <div class="row">
     <div class="col-md-4 col-md-offset-4">

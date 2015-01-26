@@ -1,13 +1,6 @@
 {% extends "user_management_profile.html" %}
 {% load i18n %}
-{% block navigation %}
-        <li><a href="{% url 'user_management:home' %}">{% trans "Dashboard" %}</a></li>
-        <li><a href="{% url 'project_management:create' %}">{% trans "new Project" %}</a></li>
-        <li><a href="">{% trans "Projects" %}</a></li>
-        <li class="active"><a href="{% url 'user_management:profile' %}">{% trans "Profile" %}</a></li>
-        <li><a href="{% url 'user_management:logout' %}">{% trans "Logout" %}</a></li>
-{% endblock %}
-{% block profile %}
+{% block user_management_profile %}
         <h2>{% trans "Your profile" %}</h2>
         <form class="form-group" action="{% url 'user_management:edit_profile' %}" method="POST">
             {% csrf_token %}
