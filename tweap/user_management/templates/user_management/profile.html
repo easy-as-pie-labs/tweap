@@ -1,8 +1,6 @@
-{% extends "base.html" %}
+{% extends "user_management.html" %}
 {% load i18n %}
-{% block content %}
-<div class="row">
-    <div class="col-md-6 col-md-offset-3">
+{% block user_management %}
         <h2>{% trans "Your profile" %}</h2>
         <img src="{{ user.profile.picture.url }}">
 
@@ -40,6 +38,4 @@
                 <td>{{ profile_address|default:"" }}</td>
             </tr>
         </table>
-    </div>
-</div>
 {% endblock %}
