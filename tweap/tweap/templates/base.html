@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="container">
-            <form action="{% url 'set_language' %}" method="post">
+        <form action="{% url 'set_language' %}" method="post">
                 {% csrf_token %}
                 <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}" />
                 <select name="language">
