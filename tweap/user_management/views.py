@@ -78,7 +78,7 @@ class ViewProfile(View):
         except:
             profile_address = None
             postal_code = None
-        context = {'user': user, 'profile_address': profile_address, 'postal_code': postal_code}
+        context = {'user': user, 'request_user': request.user, 'profile_address': profile_address, 'postal_code': postal_code}
         return render(request, 'user_management/profile.html', context)
 
 
@@ -120,9 +120,6 @@ class EditProfile(View):
         else:
             user.email = email
 
-
-        picture = request.FILES['docfile']
-        user.profile.picture.save(picture.name, picture)
         user.profile.first_name = first_name
         user.profile.last_name = last_name
         user.profile.telephone = phone

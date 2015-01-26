@@ -45,7 +45,7 @@ class Profile(models.Model):
     # leading zeros etc
     telephone = models.CharField(max_length=50, null=True, blank=True)
     address = models.ForeignKey(ProfileAddress, null=True, blank=True)
-    picture = models.ImageField(upload_to='profile_pictures', null=True, blank=True)
+    picture = models.ImageField(upload_to='profile_pictures/%Y/%m/%d', null=True, blank=True)
 
     def add_picture(self, picture):
         self.picture = picture
