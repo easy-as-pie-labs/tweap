@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 from project_management.models import ProjectForm, Project as ProjectModel, Invitation
@@ -26,6 +26,7 @@ class Create(View):
             context = {'error_messages': form.errors, 'form': form}
             return render(request, 'project_management/create.html', context)
 
+
 class Project(View):
 
     def get(self, request, project_id=None):
@@ -34,7 +35,10 @@ class Project(View):
         context['project'] = project
         context['members'] = project.members.all()
         context['invitations'] = Invitation.objects.filter(project=project)
-        return render(request, 'project_management/project.html', context)
+        if ProjectModel.objects.filter(members=request.user.id):
+            return render(request, 'project_management/project.html', context)
+        else:
+            raise Http404
 
 class ViewAll(View):
     def get(self, request):
@@ -42,3 +46,4 @@ class ViewAll(View):
         projects = ProjectModel.objects.all()
         context = {'projects': projects}
         return render(request, 'project_management/view_all.html', context)
+
