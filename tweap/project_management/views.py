@@ -42,8 +42,6 @@ class Project(View):
 
 class ViewAll(View):
     def get(self, request):
-        user = request.user
-        projects = ProjectModel.objects.all()
-        context = {'projects': projects}
+        context = {'projects': ProjectModel.objects.filter(members=request.user.id)}
         return render(request, 'project_management/view_all.html', context)
 
