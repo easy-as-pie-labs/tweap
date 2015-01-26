@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-23 14:54+0000\n"
-"PO-Revision-Date: 2015-01-26 14:59+0100\n"
+"PO-Revision-Date: 2015-01-26 16:48+0100\n"
 "Last-Translator: b'  <dev@goggelz.de>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -130,12 +130,12 @@ msgid "Login not successful!"
 msgstr "Błąd w zalogowaniu"
 
 #: user_management/views.py:67
-msgid "Home! Hello "
-msgstr "Start! Witam "
+msgid "Welcome "
+msgstr "Witam "
 
 #: user_management/views.py:69
-msgid "Home! Hello Guest!"
-msgstr "Start! Witam Gośćiu"
+msgid "Welcome Guest!"
+msgstr "Witam Gośćiu!"
 
 #: tweap/templates/base.html:26
 msgid "change"
