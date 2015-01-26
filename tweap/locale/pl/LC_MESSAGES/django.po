@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-23 14:54+0000\n"
-"PO-Revision-Date: 2015-01-23 18:15+0100\n"
+"PO-Revision-Date: 2015-01-26 14:59+0100\n"
 "Last-Translator: b'  <dev@goggelz.de>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,8 +20,8 @@ msgstr ""
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
 #: user_management/templates/user_management/editprofile.html:9
-msgid "Your Userprofile"
-msgstr "Twój profil użytkownika"
+msgid "Your profile"
+msgstr "Twój profil"
 
 #: user_management/templates/user_management/editprofile.html:14
 #: user_management/templates/user_management/profile.html:12
@@ -136,3 +136,7 @@ msgstr "Start! Witam "
 #: user_management/views.py:69
 msgid "Home! Hello Guest!"
 msgstr "Start! Witam Gośćiu"
+
+#: tweap/templates/base.html:26
+msgid "change"
+msgstr "zmień"

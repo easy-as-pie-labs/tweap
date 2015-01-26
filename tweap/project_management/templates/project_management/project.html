@@ -1,13 +1,13 @@
-{% extends "base.html" %}
+{% extends "project_management.html" %}
 {% load i18n %}
-{% block content %}
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+{% block navigation %}
+        <li><a href="{% url 'user_management:home' %}">{% trans "Dashboard" %}</a></li>
+        <li><a href="{% url 'project_management:create" %}">{% trans "new Project" %}</a></li>
+        <li class="active"><a href="">{% trans "Projects" %}</a></li>
+        <li><a href="{% url 'user_management:profile' %}">{% trans "Profile" %}</a></li>
+        <li><a href="{% url 'user_management:logout' %}">{% trans "Logout" %}</a></li>
+{% endblock %}
+{% block project_management %}
 <h2>{{ project.name }}</h2>
     <table>
         <tr>

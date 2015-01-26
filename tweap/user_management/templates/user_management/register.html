@@ -1,22 +1,20 @@
-{% extends "base.html" %}
+{% extends "user_management.html" %}
 {% load i18n %}
-{% block content %}
-<div class="row">
-    <div class="col-md-4 col-md-offset-3">
+{% block navigation %}
+        <li><a href="{% url 'user_management:home' %}">{% trans "Home" %}</a></li>
+        <li><a href="{% url 'user_management:login' %}">{% trans "Login" %}</a></li>
+        <li class="active"><a href="{% url 'user_management:register' %}">{% trans "Register" %}</a></li>
+{% endblock %}
+{% block user_management %}
         <h1>{% trans "Registration" %}</h1>
         {% for error, message in error_messages.items %}
-            <div class="alert alert-danger">{{ message }}</div><br>
-        {%  endfor %}
-        <form method="post" action="{% url 'user_management:register' %}">
+        <div class="alert alert-danger">{{ message }}</div><br>
+        {% endfor %}
+        <form class="input-group input-group-lg" method="post" action="{% url 'user_management:register' %}">
             {% csrf_token %}
-            <div class="input-group">
-                <input class="form-control" type="text" name="username" placeholder="Username" value="{{ username }}" required>
-                <input class="form-control" type="email" name="email" placeholder="eMail" value="{{ email }}" required>
-                <input class="form-control" type="password" name="password" placeholder="Password" required>
-            </div>
-            <input class="btn btn-success btn-lg" type="submit" value="Registrieren">
+            <input class="form-control" type="text" name="username" placeholder="{% trans "Username" %}" value="{{ username }}" required>
+            <input class="form-control" type="email" name="email" placeholder="{% trans "eMail" %}" value="{{ email }}" required>
+            <input class="form-control" type="password" name="password" placeholder="{% trans "Password" %}" required>
+            <input class="btn btn-primary btn-lg btn-middle" type="submit" value="{% trans "Register" %}">
         </form>
-    </div>
-</div>
-
 {% endblock %}

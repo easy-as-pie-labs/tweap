@@ -1,9 +1,13 @@
-{% extends "base.html" %}
+{% extends "user_management_profile.html" %}
 {% load i18n %}
-{% block content %}
-
-<div class="row">
-    <div class="col-md-6 col-md-offset-3">
+{% block navigation %}
+        <li><a href="{% url 'user_management:home' %}">{% trans "Dashboard" %}</a></li>
+        <li><a href="{% url 'project_management:create' %}">{% trans "new Project" %}</a></li>
+        <li><a href="">{% trans "Projects" %}</a></li>
+        <li class="active"><a href="{% url 'user_management:profile' %}">{% trans "Profile" %}</a></li>
+        <li><a href="{% url 'user_management:logout' %}">{% trans "Logout" %}</a></li>
+{% endblock %}
+{% block profile %}
         <h2>{% trans "Your profile" %}</h2>
         <img class="col-md-6 col-xs-12" src="{{ user.profile.picture.url|default:'' }}">
         <form action="{% url 'user_management:upload_picture' %}" method="post" enctype="multipart/form-data">
@@ -65,7 +69,7 @@
                 <td><input class="form-control" type="number" name="housenumber" value="{% if not profile_address.house_number %}{% else %}{{ profile_address.house_number }}{% endif %}"></td>
             </tr>
         </table>
-            <button class="btn btn-success btn-lg">{% trans "Save Changes" %}</button>
+            <button class="btn btn-primary btn-lg">{% trans "Save Changes" %}</button>
         </form>
     </div>
 </div>

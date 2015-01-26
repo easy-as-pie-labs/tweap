@@ -62,10 +62,9 @@ def logout(request):
 class Home(View):
     def get(self, request):
         if request.user.is_authenticated():
-            welcome_message = ugettext("Home! Hello ") + request.user.username
+            return render(request, 'user_management/dashboard.html')
         else:
-            welcome_message = ugettext("Home! Hello Guest!")
-        return HttpResponse(welcome_message)
+            return render(request, 'user_management/home.html')
 
 
 class ViewProfile(View):
