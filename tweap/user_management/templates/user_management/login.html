@@ -1,6 +1,6 @@
-{% extends "user_management.html" %}
+{% extends "no_session.html" %}
 {% load i18n %}
-{% block user_management %}
+{% block no_session %}
     <h1>{% trans "Login" %}</h1>
     {% if error_message %}
         <div class="alert alert-danger">{{ error_message }}</div>
@@ -10,6 +10,6 @@
         <input class="form-control" type="text" name="username" placeholder="{% trans "Username" %}" required>
         <input class="form-control" type="password" name="password" placeholder="{% trans "Password" %}" required>
         <input type="hidden" name="next" value="{{ redirect }}">
-        <input class="btn btn-lg btn-success btn-middle" type="submit" value="{% trans "Login" %}" class="btn btn-success">
+        <input class="btn btn-lg btn-primary btn-middle" type="submit" value="{% trans "Login" %}" class="btn btn-success">
     </form>
 {% endblock %}

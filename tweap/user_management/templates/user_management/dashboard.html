@@ -1,6 +1,6 @@
-{% extends "user_management_session.html" %}
+{% extends "user_management_template.html" %}
 {% load i18n %}
-{% block user_management_session %}
+{% block user_management_template %}
     <h1>{% trans "Dashboard" %}</h1>
     <div>{% trans "Welcome" %} {{ user.get_username }}!</div>
 {% endblock %}

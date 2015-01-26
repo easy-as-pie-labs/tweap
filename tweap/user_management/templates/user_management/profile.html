@@ -1,6 +1,6 @@
-{% extends "user_management_profile.html" %}
+{% extends "user_management_template.html" %}
 {% load i18n %}
-{% block user_management_profile %}
+{% block user_management_template %}
 {% load  static %}
         <h2>{% trans "Your profile" %}</h2>
         <img class="col-md-6" src="{{ user.profile.picture.url|default:'' }}">

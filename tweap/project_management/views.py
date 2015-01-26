@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 from project_management.models import ProjectForm, Project as ProjectModel, Invitation
@@ -33,5 +33,12 @@ class Project(View):
         project = get_object_or_404(ProjectModel, id=project_id)
         context['project'] = project
         context['members'] = project.members.all()
-        context['invitations'] =  Invitation.objects.filter(project=project)
+        context['invitations'] = Invitation.objects.filter(project=project)
         return render(request, 'project_management/project.html', context)
+
+class ViewAll(View):
+    def get(self, request):
+        user = request.user
+        projects = ProjectModel.objects.all()
+        context = {'projects': projects}
+        return render(request, 'project_management/view_all.html', context)
