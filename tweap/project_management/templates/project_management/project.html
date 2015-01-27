@@ -24,8 +24,11 @@
     </table>
     <form class="form-group" action="{% url 'project_management:leave_group' project.id %}" method="POST">
     {% csrf_token %}
-        <button type="submit" class="btn btn-danger">{% trans "Leave Group" %}</button>
+        <button type="submit" class="btn btn-danger">{% trans "leave group" %}</button>
     </form>
+    <a href="{% url 'project_management:edit' project.id %}">
+        <button type="submit" class="btn btn-success">{% trans "edit group" %}</button>
+    </a>
 
 </body>
 </html>

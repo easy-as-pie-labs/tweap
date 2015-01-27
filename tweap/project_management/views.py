@@ -29,6 +29,39 @@ class Create(View):
             return render(request, 'project_management/create.html', context)
 
 
+class Edit(View):
+    """
+    View class for editing an existing project
+    """
+    def get(self, request, project_id=None):
+        project = get_object_or_404(ProjectModel, id=project_id)
+        if request.user in project.members.all():
+            context = {
+                'form': ProjectForm(instance=project),
+                'project': project,
+                'members': project.members.all(),
+                'invitations': Invitation.objects.filter(project=project)
+            }
+
+            return render(request, 'project_management/edit.html', context)
+        else:
+            raise Http404
+
+    def post(self, request, project_id=None):
+        project = get_object_or_404(ProjectModel, id=project_id)
+        if request.user in project.members.all():
+            form = ProjectForm(request.POST, instance=project)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))
+            else:
+                context = {'error_messages': form.errors, 'form': form, 'project': project}
+                return render(request, 'project_management/edit.html', context)
+        else:
+            raise Http404
+
+
+
 class Project(View):
     """
     View class for viewwing a project
