@@ -1,6 +1,6 @@
 {% extends "no_session_template.html" %}
 {% load i18n %}
-{% block no_session %}
+{% block no_session_template %}
 <h1>{% trans "Logged out" %}</h1>
 <p><a href="{% url 'user_management:login' %}">{% trans "Back to login." %}</a></p>
 {% endblock %}
