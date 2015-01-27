@@ -1,6 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
+from os.path import splitext
+import random, hashlib
 # default charfield length 50 chars, just to be safe
+
+# generates filename from user id + random seed md5 hashed
+def get_filename(instance, filename):
+    filename, file_extension = splitext(filename)
+    filename = hashlib.md5(str(str(instance.user.id) + str(random.randint(1000, 9999))).encode('utf-8')).hexdigest()
+    return 'profile_pictures/' + filename + file_extension
 
 
 class PostalCode(models.Model):
@@ -45,13 +53,13 @@ class Profile(models.Model):
     # leading zeros etc
     telephone = models.CharField(max_length=50, null=True, blank=True)
     address = models.ForeignKey(ProfileAddress, null=True, blank=True)
-    picture = models.ImageField(upload_to='profile_pictures/%Y/%m/%d', null=True, blank=True)
+    picture = models.ImageField(upload_to=get_filename, null=True, blank=True)
 
     def add_picture(self, picture):
+        # remove old picture
+        self.picture.delete(save=False)
         self.picture = picture
         self.save()
-        #self.picture.url = "123.png"
-        #self.save()
 
     def __str__(self):
         if self.first_name is None and self.last_name is None:
@@ -62,3 +70,11 @@ class Profile(models.Model):
     def create(cls, user):
         profile = cls(user=user)
         return profile
+
+
+
+
+
+
+
+
