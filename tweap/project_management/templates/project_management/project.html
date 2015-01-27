@@ -10,18 +10,23 @@
         <tr>
             <td><strong>{% trans "Members" %}:</strong></td>
             <td>{% for member in members %}
-                {{ member }}
+                {{ member }},
             {% endfor %}
             </td>
         </tr>
         <tr>
             <td><strong>{% trans "Invited" %}:</strong></td>
             <td>{% for invitation in invitations %}
-                {{ invitation.user.username }}
+                {{ invitation.user.username }},
             {% endfor %}
             </td>
         </tr>
     </table>
+    <form class="form-group" action="{% url 'project_management:leave_group' project.id %}" method="POST">
+    {% csrf_token %}
+        <button type="submit" class="btn btn-danger">{% trans "Leave Group" %}</button>
+    </form>
+
 </body>
 </html>
 {% endblock %}

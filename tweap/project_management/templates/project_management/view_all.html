@@ -1,6 +1,7 @@
 {% extends "project_management_template.html" %}
 {% load i18n %}
 {% block project_management_template %}
+    <h1>{% trans "Your projects" %}</h1>
     {% for project in projects %}
         <ul>
             <li><a href="{% url 'project_management:project' project.id %}">{{ project }}</a></li>

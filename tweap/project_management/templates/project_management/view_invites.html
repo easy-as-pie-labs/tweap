@@ -1,0 +1,18 @@
+{% extends "project_management_template.html" %}
+{% load i18n %}
+{% block project_management_template %}
+    <h1>{% trans "Your invites" %}</h1>
+    {% for project in projects %}
+        <p><strong>{{ project.name }}</strong></p>
+        <p>{{ project.description }}</p>
+        <form class="form-group" action="{% url 'project_management:accept_invite' project.id %}" method="POST">
+        {% csrf_token %}
+            <button type="submit" class="btn btn-success">{% trans "accept" %}</button>
+        </form>
+        <form class="form-group" action="{% url 'project_management:reject_invite' project.id %}" method="POST">
+        {% csrf_token %}
+            <button type="submit" class="btn btn-danger">{% trans "reject" %}</button>
+        </form>
+        <hr>
+    {% endfor %}
+{% endblock %}

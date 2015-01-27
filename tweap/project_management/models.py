@@ -12,12 +12,25 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
+    def leave(self, user):
+        self.members.remove(user)
+
+        #TODO: besprechen ob wir das so wollen
+        if self.members.count() == 0:
+            if not Invitation.objects.filter(project=self):
+                self.delete()
+                return
+
+        self.save()
+
 
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
         fields = ('name', 'description')
-        widgets = {'description': Textarea()}
+        widgets = {
+            'description': Textarea(attrs={'class': 'form-control'})
+        }
         labels = {
             'name': ugettext('Name'),
             'description': ugettext('Description')

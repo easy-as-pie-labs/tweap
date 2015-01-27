@@ -8,6 +8,7 @@ from user_management.models import ProfileAddress, PostalCode
 from user_management.tools import validate_registration_form, register_and_login, login, cleanup_postal_code
 from django.utils.translation import ugettext
 from django.contrib.auth.models import User
+from project_management.models import ProjectForm, Project as ProjectModel, Invitation
 
 
 class Register(View):
@@ -62,7 +63,12 @@ def logout(request):
 class Home(View):
     def get(self, request):
         if request.user.is_authenticated():
-            return render(request, 'user_management/dashboard.html')
+            invites = Invitation.objects.filter(user=request.user.id)
+            projects = []
+            for invite in invites:
+                projects.append(ProjectModel.objects.get(id=invite.project.id))
+            context = {'no_of_invites': len(projects)}
+            return render(request, 'user_management/dashboard.html', context)
         else:
             return render(request, 'user_management/home.html')
 
