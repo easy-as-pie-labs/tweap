@@ -1,0 +1,11 @@
+{% load i18n %}
+{% if user.is_authenticated %}
+    <li><a href="{% url 'project_management:create' %}">{% trans "new Project" %}</a></li>
+    <li><a href="{% url 'project_management:view_all' %}">{% trans "Projects" %}</a></li>
+    <li><a href="{% url 'project_management:view_invites' %}">{% trans "Invites" %} ({{ no_of_invites }})</a></li>
+    <li><a href="{% url 'user_management:profile' %}">{% trans "Profile" %}</a></li>
+    <li><a href="{% url 'user_management:logout' %}">{% trans "Logout" %}</a></li>
+{% else %}
+    <li><a href="{% url 'user_management:login' %}">{% trans "Login" %}</a></li>
+    <li><a href="{% url 'user_management:register' %}">{% trans "Register" %}</a></li>
+{% endif %}
