@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from easy_thumbnails.conf import Settings as ThumbnailSettings
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -44,6 +45,8 @@ INSTALLED_APPS = (
     'user_management',
     'project_management',
     'rosetta',
+    'image_cropping',
+    'easy_thumbnails',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -118,3 +121,7 @@ LANGUAGES = (
     ("de", "Deutsch"),
     ("pl", "Polski"),
 )
+
+THUMBNAIL_PROCESSORS = (
+    'image_cropping.thumbnail_processors.crop_corners',
+) + ThumbnailSettings.THUMBNAIL_PROCESSORS

@@ -1,9 +1,11 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
+from django.http import HttpResponseRedirect
 
 urlpatterns = patterns(
     '',
+    url(r'^$', lambda r: HttpResponseRedirect('users/home')),
     url(r'^users/', include('user_management.urls', namespace='user_management')),
     url(r'^projects/', include('project_management.urls', namespace='project_management')),
     url(r'^admin/', include(admin.site.urls)),
