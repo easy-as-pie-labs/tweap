@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 from django.views.generic import View
@@ -80,6 +80,8 @@ class ViewProfile(View):
         if user_name is None:
             user_name = request.user.username
         user = get_object_or_404(User, username=user_name)
+        if user not in request.user.profile.get_connected_users():
+            raise Http404
         try:
             profile_address = ProfileAddress.objects.get(id=user.profile.address.id)
             postal_code = PostalCode.objects.get(id=profile_address.postal_code.id)
