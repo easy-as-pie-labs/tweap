@@ -1,11 +1,12 @@
 {% extends "user_management_template.html" %}
 {% load i18n %}
+{% load static %}
 {% block user_management_template %}
-{% load  static %}
         <h2>{% trans "Your profile" %}</h2>
-        <img class="col-md-6 col-xs-12" src="{{ user.profile.picture.url|default:'' }}">
+        {% if user.profile.picture %}
+            <img class="col-md-6 col-xs-12" src="{{ user.profile.picture.url}}">
+        {% endif %}
         <table class="table">
-
             <tr>
                 <td><strong>{% trans "Username" %}: </strong></td>
                 <td>{{ user.username }}</td>

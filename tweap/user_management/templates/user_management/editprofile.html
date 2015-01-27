@@ -2,7 +2,9 @@
 {% load i18n %}
 {% block user_management_template %}
         <h2>{% trans "Your profile" %}</h2>
-        <img class="col-md-6 col-xs-12" src="{{ user.profile.picture.url|default:'' }}">
+        {% if user.profile.picture %}
+            <img class="col-md-6 col-xs-12" src="{{ user.profile.picture.url}}">
+        {% endif %}
         <form action="{% url 'user_management:upload_picture' %}" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
 			<p>{{ form.non_field_errors }}</p>

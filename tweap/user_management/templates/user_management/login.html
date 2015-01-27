@@ -1,6 +1,6 @@
-{% extends "no_session.html" %}
+{% extends "no_session_template.html" %}
 {% load i18n %}
-{% block no_session %}
+{% block no_session_template %}
     <h1>{% trans "Login" %}</h1>
     {% if error_message %}
         <div class="alert alert-danger">{{ error_message }}</div>
