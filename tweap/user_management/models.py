@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from os.path import splitext
+from project_management.models import Project
 import random, hashlib
 # default charfield length 50 chars, just to be safe
+
 
 # generates filename from user id + random seed md5 hashed
 def get_filename(instance, filename):
@@ -56,10 +58,18 @@ class Profile(models.Model):
     picture = models.ImageField(upload_to=get_filename, null=True, blank=True)
 
     def add_picture(self, picture):
-        # remove old picture
-        self.picture.delete(save=False)
         self.picture = picture
         self.save()
+
+    def get_connected_users(self):
+        connected_users = [self.user]
+        projects = Project.objects.filter(members=self.user.id)
+        for project in projects:
+            members = project.members.all()
+            for member in members:
+                if member not in connected_users:
+                    connected_users.append(member)
+        return connected_users
 
     def __str__(self):
         if self.first_name is None and self.last_name is None:
