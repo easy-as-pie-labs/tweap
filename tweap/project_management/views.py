@@ -7,7 +7,9 @@ from project_management.tools import invite_users
 
 
 class Create(View):
-
+    """
+    View class for creating a new project
+    """
     def get(self, request):
         form = ProjectForm()
         context = {'form': form}
@@ -28,7 +30,9 @@ class Create(View):
 
 
 class Project(View):
-
+    """
+    View class for viewwing a project
+    """
     def get(self, request, project_id=None):
         context = {}
         project = get_object_or_404(ProjectModel, id=project_id)
@@ -41,12 +45,20 @@ class Project(View):
             raise Http404
 
 class ViewAll(View):
+    """
+    View class for displaying all projects of an user
+    """
     def get(self, request):
         context = {'projects': ProjectModel.objects.filter(members=request.user.id)}
         return render(request, 'project_management/view_all.html', context)
 
 
 def view_invites(request):
+    """
+    View function for displaying all invitations of an user
+    :param request:
+    :return:
+    """
     invites = Invitation.objects.filter(user=request.user.id)
     projects = []
     for invite in invites:

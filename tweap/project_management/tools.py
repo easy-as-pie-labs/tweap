@@ -4,6 +4,12 @@ import re, json
 
 
 def invite_users(users, project):
+    """
+    invites one or more user to a project
+    :param users: a list of user names and/or email addresses as JSON string
+    :param project: the project to which the users should be invited
+    :return:
+    """
     if users:
         users = json.loads(users)
         for user in users:

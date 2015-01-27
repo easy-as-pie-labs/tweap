@@ -14,13 +14,26 @@ import json
 
 
 class Register(View):
+    """
+    View class for registration
+    """
 
     def get(self, request):
+        """
+        handles get requests
+        :param request:
+        :return:
+        """
         if request.user.is_authenticated():
             return redirect(reverse(settings.LOGIN_REDIRECT_URL))
         return render(request, 'user_management/register.html', {})
 
     def post(self, request):
+        """
+        handles post requests
+        :param request:
+        :return:
+        """
         credentials, errors = validate_registration_form(request.POST)
         if not errors:
             register_and_login(credentials, request)
@@ -36,13 +49,26 @@ class Register(View):
 
 
 class Login(View):
+    """
+    View class for logging in an user
+    """
     def get(self, request):
+        """
+        handles get requests
+        :param request:
+        :return:
+        """
         if request.user.is_authenticated():
             return redirect(reverse(settings.LOGIN_REDIRECT_URL))
         context = {'redirect': request.GET.get('next', '')}
         return render(request, 'user_management/login.html', context)
 
     def post(self, request):
+        """
+        handles post requests
+        :param request:
+        :return:
+        """
         redirect = request.POST.get('next', '')
         if not redirect:
             redirect = reverse(settings.LOGIN_REDIRECT_URL)
@@ -57,12 +83,20 @@ class Login(View):
 
 
 def logout(request):
+    """
+    View function for loging out an user
+    :param request:
+    :return:
+    """
     django_logout(request)
     context = {'redirect': request.GET.get('next', '')}
     return render(request, 'user_management/logout.html', context)
 
 
 class Home(View):
+    """
+    View function for the home
+    """
     def get(self, request):
         if request.user.is_authenticated():
             return render(request, 'user_management/dashboard.html', {})
@@ -71,7 +105,16 @@ class Home(View):
 
 
 class ViewProfile(View):
+    """
+    View class for profile viewing
+    """
     def get(self, request, user_name=None):
+        """
+        handles get requests
+        :param request:
+        :param user_name: the user name of the profile that should be displayed
+        :return:
+        """
         if user_name is None:
             user_name = request.user.username
         user = get_object_or_404(User, username=user_name)
@@ -88,7 +131,15 @@ class ViewProfile(View):
 
 
 class EditProfile(View):
+    """
+    View class for editing a user profile
+    """
     def get(self, request):
+        """
+        handles get requests
+        :param request:
+        :return:
+        """
         user = get_object_or_404(User, id=request.user.id)
         try:
             profile_address = ProfileAddress.objects.get(id=user.profile.address.id)
@@ -104,6 +155,11 @@ class EditProfile(View):
         return render(request, 'user_management/editprofile.html', context)
 
     def post(self, request):
+        """
+        handles post requests
+        :param request:
+        :return:
+        """
         email = request.POST.get('email')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -177,6 +233,11 @@ class EditProfile(View):
 
 
 def upload_picture(request):
+    """
+    view function for uploading a new picture to an user profile
+    :param request:
+    :return:
+    """
     from user_management.forms import ImageUploadForm
     # Handle file upload
     if request.method == 'POST':
@@ -190,6 +251,11 @@ def upload_picture(request):
 
 
 def user_suggestion(request):
+    """
+    view function for searching users by user name or email address
+    :param request:
+    :return: list of users as JSON string
+    """
     if request.method == 'GET':
         result = []
         search = request.GET.get('search', '')

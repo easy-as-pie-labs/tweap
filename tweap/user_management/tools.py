@@ -9,7 +9,11 @@ bad_passwords = ('123', 'abc',)  # TODO: füllen
 
 
 def validate_registration_form(form):
-
+    """
+    validates the registration form
+    :param form: the registration form received via POST
+    :return: a list of errors and the cleaned credentials
+    """
     errors = {}
     credentials = {}
 
@@ -44,6 +48,12 @@ def validate_registration_form(form):
 
 
 def register_and_login(credentials, request):
+    """
+    creates an user and performs log in for that new user
+    :param credentials: the credentials (username, email, password) for the new user
+    :param request: the request object for log in
+    :return:
+    """
     user = User.objects.create_user(credentials['username'], credentials['email'], credentials['password'])
     profile = Profile.create(user)
     profile.save()
@@ -51,6 +61,13 @@ def register_and_login(credentials, request):
 
 
 def login(username, password, request):
+    """
+    logs in an user
+    :param username: the username
+    :param password: the password
+    :param request: the request
+    :return: True if log in was succesfull, otherwise False
+    """
     user = authenticate(username=username, password=password)
     if user is None:
         return False
@@ -59,11 +76,11 @@ def login(username, password, request):
 
 
 def cleanup_postal_code(postal_code):
-    '''
+    """
     deletes a postal code if it is not in use anymore
     :param postal_code: PostalCode object
     :return:
-    '''
+    """
     ref_count = ProfileAddress.objects.filter(postal_code=postal_code).count()
 
     if ref_count == 0:
