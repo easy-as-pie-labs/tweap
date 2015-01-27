@@ -15,7 +15,7 @@ class Project(models.Model):
     def leave(self, user):
         self.members.remove(user)
 
-        #TODO: besprechen ob wir das so wollen
+        # TODO: besprechen ob wir das so wollen
         if self.members.count() == 0:
             if not Invitation.objects.filter(project=self):
                 self.delete()
