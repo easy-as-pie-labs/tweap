@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from os.path import splitext
 from project_management.models import Project
-import random, hashlib
+import random
+import hashlib
 # default charfield length 50 chars, just to be safe
 
 
@@ -58,6 +59,7 @@ class Profile(models.Model):
     picture = models.ImageField(upload_to=get_filename, null=True, blank=True)
 
     def add_picture(self, picture):
+        self.picture.delete(save=False)
         self.picture = picture
         self.save()
 
