@@ -11,8 +11,16 @@
         {% for field in form %}
             {{field.label_tag}}{{ field|addcss:'form-control' }}<br>
         {% endfor %}
-        <label for="add_members" class="control-label">{% trans "Add Members" %}</label>
-        <input type="text" id="add_members" name="invitations" class="form-control" placeholder="{% trans "Members" %}"><br>
+        <label for="newInputs" class="control-label">{% trans "Add Members" %}</label>
+        <div id="suggestions">
+        </div>
+        <div id="newInputs">
+            <div class="form-group">
+                <div class="input-group date">
+                    <input id="users" type="text" placeholder="Username oder Email angeben" class="form-control"><span class="input-group-addon addUserButton focus-pointer"><i class="glyphicon glyphicon-plus-sign"></i></span>
+                </div>
+            </div>
+        </div>
         <input type="submit" class="btn btn-primary" value="{% trans "Create" %}">
     </form>
 {% endblock %}

@@ -11,6 +11,28 @@
     white-space:nowrap;
 }
 
+#invites{
+    margin-bottom:5px;
+}
+
 .valign-form{
     margin-top:9px;
+}
+
+.margin-form
+{
+    margin-bottom:5px;
+}
+
+.focus-pointer{
+    cursor:pointer;
+}
+
+#suggestions{
+    margin-bottom:10px;
+}
+
+.suggestion{
+    display:inline;
+    margin-right:5px;
 }
