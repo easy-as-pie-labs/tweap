@@ -1,6 +1,7 @@
 {% extends "user_management_template.html" %}
 {% load i18n %}
 {% block user_management_template %}
+        {% if error_message %}<div class="alert alert-danger">{{ error_message }}</div>{% endif %}
         <h2>{% trans "Your profile" %}</h2>
         {% if user.profile.picture %}
             <img class="col-md-6 col-xs-12" src="{{ user.profile.picture.url}}">

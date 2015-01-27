@@ -169,16 +169,14 @@ class EditProfile(View):
 
         user = User.objects.get(id=request.user.id)
 
-        user_check = None
+        if email == "":
+            return render(request, 'user_management/editprofile.html', {'error_message':ugettext("eMail must not be empty!")})
+
         try:
             user_check = User.objects.get(email=email)
+            if user_check != request.user:
+                return render(request, 'user_management/editprofile.html', {'error_message':ugettext("eMail is already in use!")})
         except:
-            pass
-
-        if user_check is not None:
-            # TODO: error => email already in use
-            pass
-        else:
             user.email = email
 
         user.profile.first_name = first_name
@@ -189,7 +187,7 @@ class EditProfile(View):
             if password == password_repeat:
                 user.set_password(password)
             else:
-                #TODO: error => passwords not identical
+                return render(request, 'user_management/editprofile.html', {'error_message':ugettext("The Passwords are not identically!")})
                 pass
 
         user.save()
