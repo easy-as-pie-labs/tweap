@@ -9,7 +9,7 @@ from user_management.models import ProfileAddress, PostalCode
 from user_management.tools import validate_registration_form, register_and_login, login, cleanup_postal_code
 from django.utils.translation import ugettext
 from django.contrib.auth.models import User
-from project_management.models import ProjectForm, Project as ProjectModel, Invitation
+from project_management.models import Project as ProjectModel, Invitation
 import json
 
 
