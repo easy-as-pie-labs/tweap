@@ -112,7 +112,6 @@ LOGIN_REDIRECT_URL = 'user_management:home'  # TODO: auf dashboard abändern
 LOGIN_URL = 'user_management:login'
 
 LOCALE_PATHS = (
-    '',
     os.path.join(BASE_DIR, 'locale'),
 )
 
