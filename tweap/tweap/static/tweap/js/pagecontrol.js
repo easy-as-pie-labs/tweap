@@ -28,7 +28,7 @@ $(document).on('click', '.addUserButton', function() {
             $('.removeUserButton').parent().parent().removeClass('has-error');
 
             $('#newInputs').prepend(
-                    "<div class='form-group'><div class='input-group date'><input id='users' type='text' placeholder='Username oder Email angeben' class='form-control'><span class='input-group-addon addUserButton focus-pointer'><i class='glyphicon glyphicon-plus-sign'></i></span></div></div>"
+                    "<div class='form-group'><div class='input-group date'><input id='users' type='text' placeholder='Username oder Email angeben' class='form-control member'><span class='input-group-addon addUserButton focus-pointer'><i class='glyphicon glyphicon-plus-sign'></i></span></div></div>"
             );
 
             $('.removeUserButton').click(function(){
@@ -43,7 +43,7 @@ $(document).on('keyup', '#users', function(){
     //xml-request:
     data = {search:typedText};
     $.get("./../../users/user_suggestion", data, function(output){
-        addSuggestionToContent(output);
+        manageUserSuggestionAjaxRequest(output)
     })
 
 });
@@ -52,14 +52,30 @@ $(document).on('keyup', '#users', function(){
 $(document).on('click', '.suggestion', function() {
     suggestionId = $(this).attr('id');
     firstInput = $('#newInputs').find('input[type=text]').filter(':visible:first')
-    console.log(firstInput);
     firstInput.val(suggestionId);
 });
 
-function addSuggestionToContent(id){
+function manageUserSuggestionAjaxRequest(data){
+    $('#suggestions').empty();
+    for(i=0;i<data.length;i++){
+        addSuggestionToContent(data[i]);
+    }
+}
+
+function addSuggestionToContent(id) {
     $('#suggestions').append(
-                    '<h3 class="suggestion" id="' + id + '"><span class="label label-info focus-pointer">' + id + '</span></h3>'
-            );
+        '<h3 class="suggestion" id="' + id + '"><span class="label label-info focus-pointer">' + id + '</span></h3>'
+    );
+}
+
+function insertHiddenValues(){
+    inputMemberArr = $("#newInputs .member");
+
+    for(i=0;i<inputMemberArr.length;i++){
+        newMembers.addUser(inputMemberArr.eq(i).val());
+    }
+
+    console.log(newMembers.getUsersString());
 }
 
 var Members = function(){
@@ -69,9 +85,7 @@ var Members = function(){
         this.Users.push(added_user)
     }
 
-    this.print_users = function(){
-        for(i=0;i<this.Users.length;i++){
-            console.log(this.Users[i]);
-        }
+    this.getUsersString = function() {
+        return JSON.stringify(this.Users);
     }
 }
