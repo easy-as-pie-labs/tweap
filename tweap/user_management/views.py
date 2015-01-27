@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+from django.db.models import Q
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.conf import settings
@@ -8,7 +9,8 @@ from user_management.models import ProfileAddress, PostalCode
 from user_management.tools import validate_registration_form, register_and_login, login, cleanup_postal_code
 from django.utils.translation import ugettext
 from django.contrib.auth.models import User
-from project_management.models import ProjectForm, Project as ProjectModel, Invitation
+from project_management.models import Project as ProjectModel, Invitation
+import json
 
 
 class Register(View):
@@ -176,6 +178,7 @@ class EditProfile(View):
 
         return HttpResponseRedirect(reverse('user_management:profile'))
 
+
 def upload_picture(request):
     from user_management.forms import ImageUploadForm
     # Handle file upload
@@ -187,3 +190,14 @@ def upload_picture(request):
             user.profile.add_picture(new_image)
 
             return HttpResponseRedirect(reverse('user_management:edit_profile'))
+
+
+def user_suggestion(request):
+    if request.method == 'GET':
+        result = []
+        search = request.GET.get('search', '')
+        if len(search) > 1:
+            users = User.objects.filter(Q(username__icontains=search) | Q(email__icontains=search))[:5]
+            for user in users:
+                result.append(user.username)
+        return HttpResponse(json.dumps(result), content_type="application/json")
