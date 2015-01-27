@@ -124,3 +124,8 @@ LANGUAGES = (
 THUMBNAIL_PROCESSORS = (
     'image_cropping.thumbnail_processors.crop_corners',
 ) + ThumbnailSettings.THUMBNAIL_PROCESSORS
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "user_management.context_processors.user_info"
+)

@@ -65,12 +65,7 @@ def logout(request):
 class Home(View):
     def get(self, request):
         if request.user.is_authenticated():
-            invites = Invitation.objects.filter(user=request.user.id)
-            projects = []
-            for invite in invites:
-                projects.append(ProjectModel.objects.get(id=invite.project.id))
-            context = {'no_of_invites': len(projects)}
-            return render(request, 'user_management/dashboard.html', context)
+            return render(request, 'user_management/dashboard.html', {})
         else:
             return render(request, 'user_management/home.html')
 
@@ -201,5 +196,6 @@ def user_suggestion(request):
         if len(search) > 1:
             users = User.objects.filter(Q(username__icontains=search) | Q(email__icontains=search))[:5]
             for user in users:
-                result.append(user.username)
+                if user != request.user:
+                    result.append(user.username)
         return HttpResponse(json.dumps(result), content_type="application/json")
