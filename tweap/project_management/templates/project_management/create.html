@@ -10,39 +10,19 @@ $(document).ready(function(){
 //Adds new Inputfields
 $(document).on('click', '.addUserButton', function() {
 
-        // if input is empty, prevent user adding
-        if(!$(this).prev().val()) {
+    // if input is empty, prevent user adding
+    if(!$(this).prev().val()) {
+        // focus on empty field and give error message
+        $(this).prev().focus();
+        $(this).prev().attr("placeholder", "{% trans 'Username or eMail' %}");
+        $(this).parent().parent().addClass('has-error');
+    }
+    else {
+        addMemberInput()
+    }
+});
 
-            // focus on empty field and give error message
-            $(this).prev().focus();
-            $(this).prev().attr("placeholder", "{% trans 'Username or eMail' %}");
-            $(this).parent().parent().addClass('has-error');
-        }
-
-        // if input is there add new field, make old field uneditable and removable
-        else {
-
-            $('.addUserButton').addClass('removeUserButton');
-            $('.addUserButton').removeClass('addUserButton');
-
-            $('.removeUserButton').children().first().removeClass('glyphicon-plus-sign');
-            $('.removeUserButton').children().first().addClass('glyphicon-minus-sign');
-
-            $('.removeUserButton').prev().attr("disabled", true);
-
-            $('.removeUserButton').parent().parent().removeClass('has-error');
-
-            $('#newInputs').prepend(
-                    "<div class='form-group'><div class='input-group date'><input id='users' type='text' placeholder='{% trans "Username or eMail" %}' class='form-control member'><span class='input-group-addon addUserButton focus-pointer'><i class='glyphicon glyphicon-plus-sign'></i></span></div></div>"
-            );
-
-            $('.removeUserButton').click(function(){
-                $(this).parent().parent().remove();
-            })
-        }
-    });
-
-//adds a new inputfield
+// if input is there add new field, make old field uneditable and removable
 function addMemberInput(){
     $('.addUserButton').addClass('removeUserButton');
     $('.addUserButton').removeClass('addUserButton');
@@ -57,6 +37,9 @@ function addMemberInput(){
     $('#newInputs').prepend(
         "<div class='form-group'><div class='input-group date'><input id='users' type='text' placeholder='{% trans "Username or eMail" %}' class='form-control member'><span class='input-group-addon addUserButton focus-pointer'><i class='glyphicon glyphicon-plus-sign'></i></span></div></div>"
     );
+
+    $('#suggestions').remove();
+    $('#newInputs div:first-child').after("<div id='suggestions'></div>");
 
     $('.removeUserButton').click(function(){
         $(this).parent().parent().remove();
@@ -142,12 +125,13 @@ var Members = function(){
         {% endfor %}
         <input type="hidden" id="hiddenValues" name="invitations" />
         <label for="newInputs" class="control-label">{% trans "Add Members" %}</label>
-        <div id="suggestions">
-        </div>
+
         <div id="newInputs">
             <div class="form-group">
                 <div class="input-group date">
                     <input id="users" type="text" placeholder='{% trans "Username or eMail" %}' class="form-control member"><span class="input-group-addon addUserButton focus-pointer"><i class="glyphicon glyphicon-plus-sign"></i></span>
+                </div>
+                <div id="suggestions">
                 </div>
             </div>
         </div>

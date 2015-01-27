@@ -114,7 +114,7 @@ def accept_invite(request, project_id):
     invitation.accept()
 
     #TODO: this isn't OK
-    return redirect('../all', permanent=True)
+    return redirect('../' + str(project_id), permanent=True)
 
 
 def reject_invite(request, project_id):
