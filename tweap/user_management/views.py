@@ -97,15 +97,14 @@ class ViewProfile(View):
     """
     View class for profile viewing
     """
-    def get(self, request, user_name=None):
+    def get(self, request, user_name):
         """
         handles get requests
         :param request:
         :param user_name: the user name of the profile that should be displayed
         :return:
         """
-        if user_name is None:
-            user_name = request.user.username
+
         user = get_object_or_404(User, username=user_name)
         if user not in request.user.profile.get_connected_users():
             raise Http404

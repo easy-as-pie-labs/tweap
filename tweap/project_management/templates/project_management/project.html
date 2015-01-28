@@ -1,35 +1,40 @@
 {% extends "project_management_template.html" %}
 {% load i18n %}
 {% block project_management_template %}
-<h2>{{ project.name }}</h2>
-    <table>
-        <tr>
-            <td><strong>{% trans "Description" %}: </strong></td>
-            <td>{{ project.description }}</td>
-        </tr>
-        <tr>
-            <td><strong>{% trans "Members" %}:</strong></td>
-            <td>{% for member in members %}
-                {{ member }},
-            {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <td><strong>{% trans "Invited" %}:</strong></td>
-            <td>{% for invitation in invitations %}
-                {{ invitation.user.username }},
-            {% endfor %}
-            </td>
-        </tr>
-    </table>
-    <form class="form-group" action="{% url 'project_management:leave_group' project.id %}" method="POST">
-    {% csrf_token %}
-        <button type="submit" class="btn btn-danger">{% trans "leave group" %}</button>
-    </form>
-    <a href="{% url 'project_management:edit' project.id %}">
-        <button type="submit" class="btn btn-success">{% trans "edit group" %}</button>
-    </a>
-
+    <h2>{% trans "Your Project" %}</h2>
+    <div class="panel panel-primary">
+        <div class="panel-heading panel-heading-bigger">{{ project.name }}</div>
+        <div class="panel-body">
+            <p>
+                {{ project.description }}
+            </p>
+            <table class="table">
+                <tr>
+                    <td><strong>{% trans "Members" %}:</strong></td>
+                    <td>{% for member in members %}
+                        <a href="{% url 'user_management:profile' member %}"><span class="label label-success">{{ member }}</span></a>
+                    {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>{% trans "Invited" %}:</strong></td>
+                    <td>{% for invitation in invitations %}
+                       <span class="bigger-label"><span class="label label-warning">{{ invitation.user.username }}</span></span>
+                    {% endfor %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="panel-footer">
+            <form class="form-group inline-form" action="{% url 'project_management:leave_group' project.id %}" method="POST">
+            {% csrf_token %}
+                <button type="submit" class="btn btn-danger">{% trans "leave group" %}</button>
+            </form>
+            <a href="{% url 'project_management:edit' project.id %}">
+                <button type="submit" class="btn btn-success">{% trans "edit group" %}</button>
+            </a>
+        </div>
+    </div>
 </body>
 </html>
 {% endblock %}

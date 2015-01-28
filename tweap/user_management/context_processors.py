@@ -8,4 +8,5 @@ def user_info(request):
 
     return {
         'no_of_invites': no_of_invites,
+        'username': request.user.username,
     }

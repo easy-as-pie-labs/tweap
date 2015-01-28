@@ -40,3 +40,19 @@
     display:inline;
     margin-right:5px;
 }
+
+.inline-form{
+    display:inline;
+}
+
+.panel-heading-bigger{
+    font-size:20px;
+    font-weight: bold;
+}
+
+.bigger-label{
+    font-size: 16px;
+}
+
+.panel a{color:white;font-size:16px;}
+.panel a:hover{color:white;text-decoration: none}
