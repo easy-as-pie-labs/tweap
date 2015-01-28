@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'rosetta',
     'image_cropping',
     'easy_thumbnails',
+    'dashboard',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -107,7 +108,7 @@ TEMPLATE_DIRS = (
 
 # non standard values
 
-LOGIN_REDIRECT_URL = 'user_management:home'  # TODO: auf dashboard abändern
+LOGIN_REDIRECT_URL = 'dashboard:home'
 
 LOGIN_URL = 'user_management:login'
 
