@@ -1,6 +1,9 @@
 {% extends "project_management_template.html" %}
 {% load i18n %}
 {% load myfilters %}
+{% block js %}
+    {% include "js.project_form:control.html" %}
+{% endblock %}
 {% block project_management_template %}
     <h1>{% trans "Edit project" %}</h1>
     {% for error, message in error_messages.items %}
@@ -13,12 +16,12 @@
         {% endfor %}
         <input type="hidden" id="hiddenValues" name="invitations" />
         <label for="newInputs" class="control-label">{% trans "Add Members" %}</label>
-        <div id="suggestions">
-        </div>
         <div id="newInputs">
             <div class="form-group">
                 <div class="input-group date">
                     <input id="users" type="text" placeholder="Username oder Email angeben" class="form-control member"><span class="input-group-addon addUserButton focus-pointer"><i class="glyphicon glyphicon-plus-sign"></i></span>
+                </div>
+                <div id="suggestions">
                 </div>
             </div>
         </div>
