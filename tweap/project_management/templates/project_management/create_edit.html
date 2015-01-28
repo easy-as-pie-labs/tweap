@@ -9,6 +9,7 @@
     {% for error, message in error_messages.items %}
         {{ message }}<br>
     {%  endfor %}
+    <div class="jumbotron">
     <form method="post" autocomplete="off" class="form-group" action="{% if project %} {% url 'project_management:edit' project.id %} {% else %} {% url 'project_management:create' %} {% endif %}">
         {% csrf_token %}
         {% for field in form %}
@@ -55,4 +56,5 @@
 
         <input onClick="insertHiddenValues()" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
     </form>
+        </div>
 {% endblock %}
