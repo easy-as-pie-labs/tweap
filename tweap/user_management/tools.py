@@ -46,6 +46,43 @@ def validate_registration_form(form):
 
     return credentials, errors
 
+def validate_edit_profile(form, request):
+
+    errors = {}
+    credentials = {}
+
+    if 'email' in form and\
+            'password' in form and\
+            'passwordrepeat' in form and\
+            'first_name' in form and\
+            'last_name' in form and\
+            'phone' in form and\
+            'city' in form and\
+            'zip' in form and\
+            'street' in form and\
+            'housenumber' in form:
+
+        credentials['email'] = form['email'].strip().lower()
+        credentials['password'] = str(form['password'].strip())
+        credentials['passwordrepeat'] = str(form['passwordrepeat'].strip())
+
+        if credentials['password'] != credentials['passwordrepeat']:
+            errors['password'] = ugettext("Passwords do not match!")
+        if credentials['password'] and credentials['passwordrepeat']:
+            if credentials['password'] in bad_passwords or credentials['password'] == request.user.username or\
+                            credentials['password'] == credentials['email']:
+                errors['password'] = ugettext("The password is super weak")
+
+        if not re.match("[^@]+@[^@]+\.[^@]+", credentials['email']):
+            errors['email'] = ugettext("The email address isn't valid")
+        else:
+            if User.objects.filter(email=credentials['email']).exists():
+                if User.objects.get(email=credentials['email']) != request.user:
+                    errors['email'] = ugettext("This email is already in use")
+    else:
+        errors['form'] = ugettext("An error occurred during form transfer")
+
+    return errors
 
 def register_and_login(credentials, request):
     """

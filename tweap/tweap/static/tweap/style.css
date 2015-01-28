@@ -28,6 +28,10 @@
     cursor:pointer;
 }
 
+.no-margin-element{
+    margin-bottom:0px;
+}
+
 #suggestions{
     margin-top:5px;
 }

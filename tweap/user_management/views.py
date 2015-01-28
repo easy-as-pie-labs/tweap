@@ -6,7 +6,7 @@ from django.views.generic import View
 from django.conf import settings
 from django.contrib.auth import logout as django_logout
 from user_management.models import ProfileAddress
-from user_management.tools import validate_registration_form, register_and_login, login
+from user_management.tools import validate_registration_form, register_and_login, login, validate_edit_profile
 from django.utils.translation import ugettext
 from django.contrib.auth.models import User
 from project_management.models import Project as ProjectModel, Invitation
@@ -145,6 +145,18 @@ class EditProfile(View):
         :param request:
         :return:
         """
+
+        errors = validate_edit_profile(request.POST, request)
+
+        if errors:
+            context = {'error_messages': errors}
+            return render(request, 'user_management/editprofile.html', context)
+
+        '''if 'form' not in errors:
+           if 'email' not in errors:
+               context['email'] = credentials['email']'''
+
+
         email = request.POST.get('email')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -154,26 +166,14 @@ class EditProfile(View):
 
         user = User.objects.get(id=request.user.id)
 
-        if email == "":
-            return render(request, 'user_management/editprofile.html', {'error_message':ugettext("eMail must not be empty!")})
+        user.email = email
 
-        try:
-            user_check = User.objects.get(email=email)
-            if user_check != request.user:
-                return render(request, 'user_management/editprofile.html', {'error_message':ugettext("eMail is already in use!")})
-        except:
-            user.email = email
+        if password:
+            user.set_password(password)
 
         user.profile.first_name = first_name
         user.profile.last_name = last_name
         user.profile.telephone = phone
-
-        if password != "" and password is not None:
-            if password == password_repeat:
-                user.set_password(password)
-            else:
-                return render(request, 'user_management/editprofile.html', {'error_message':ugettext("The Passwords are not identically!")})
-                pass
 
         user.save()
         user.profile.save()
