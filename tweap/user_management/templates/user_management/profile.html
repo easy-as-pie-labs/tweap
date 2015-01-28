@@ -38,7 +38,6 @@
         </table>
         {% if user.id == request_user.id %}
         <form class="form-group" action="{% url 'user_management:edit_profile' %}" method="GET">
-            {% csrf_token %}
             <button type="submit" class="btn btn-primary btn-lg">{% trans "Make Changes" %}</button>
         </form>
         {% endif %}

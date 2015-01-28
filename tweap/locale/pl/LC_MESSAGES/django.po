@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-27 15:50+0100\n"
-"PO-Revision-Date: 2015-01-27 16:16+0100\n"
-"Last-Translator: b'  <dev@goggelz.de>'\n"
+"POT-Creation-Date: 2015-01-28 16:16+0100\n"
+"PO-Revision-Date: 2015-01-28 16:30+0100\n"
+"Last-Translator: b'  <root@root.root>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,47 +19,83 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
-#: .\project_management\models.py:35
+#: .\dashboard\templates\dashboard\dashboard.html:4
+msgid "Dashboard"
+msgstr "Widok"
+
+#: .\dashboard\templates\dashboard\dashboard.html:5
+msgid "Welcome"
+msgstr "Witaj"
+
+#: .\dashboard\templates\dashboard\home.html:5
+msgid ""
+"Welcome Guest! This is Tweap. Here we will introduce you into our project."
+msgstr "Witaj gościu"
+
+#: .\project_management\models.py:47
 msgid "Name"
 msgstr "Imię"
 
-#: .\project_management\models.py:36
+#: .\project_management\models.py:48
 #: .\project_management\templates\project_management\project.html:7
-#| msgid "Registration"
 msgid "Description"
 msgstr "Opisowanie"
 
-#: .\project_management\models.py:40
+#: .\project_management\models.py:52
 msgid "The name of the project is too long."
 msgstr "Imię od projektu jest za długi."
 
-#: .\project_management\templates\project_management\create.html:5
+#: .\project_management\templates\project_management\create.html:8
+#: .\project_management\views.py:20 .\project_management\views.py:46
 msgid "Create new project"
 msgstr "Otwórz nowy projekt"
 
-#: .\project_management\templates\project_management\create.html:14
+#: .\project_management\templates\project_management\create.html:18
 msgid "Add Members"
 msgstr "Dodaj członki"
 
-#: .\project_management\templates\project_management\create.html:15
+#: .\project_management\templates\project_management\create.html:22
+#: .\project_management\templates\project_management\create_edit.html:22
+#: .\tweap\templates\js.project_form_control.html:14
+#: .\tweap\templates\js.project_form_control.html:35
+#| msgid "Username"
+msgid "Username or eMail"
+msgstr "Imię użytkownika albo adres mailowy"
+
+#: .\project_management\templates\project_management\create.html:28
+#: .\project_management\templates\project_management\create_edit.html:56
+msgid "Create"
+msgstr "Otwórz"
+
+#: .\project_management\templates\project_management\create_edit.html:18
+#| msgid "Members"
+msgid "Invite Members"
+msgstr "Zaproś członków"
+
+#: .\project_management\templates\project_management\create_edit.html:30
 #: .\project_management\templates\project_management\project.html:11
 msgid "Members"
 msgstr "Członki"
 
-#: .\project_management\templates\project_management\create.html:16
-msgid "Create"
-msgstr "Otwórz"
-
+#: .\project_management\templates\project_management\create_edit.html:43
 #: .\project_management\templates\project_management\project.html:18
 msgid "Invited"
 msgstr "Zaproszeni"
 
+#: .\project_management\templates\project_management\create_edit.html:56
+msgid "Save"
+msgstr "Zapisz"
+
 #: .\project_management\templates\project_management\project.html:27
-msgid "Leave Group"
+#| msgid "Leave Group"
+msgid "leave group"
 msgstr "Wyjdz z grupy"
 
+#: .\project_management\templates\project_management\project.html:30
+msgid "edit group"
+msgstr "Edytuj grupę"
+
 #: .\project_management\templates\project_management\view_all.html:4
-#| msgid "Your profile"
 msgid "Your projects"
 msgstr "Twoje projekty"
 
@@ -72,9 +108,13 @@ msgid "accept"
 msgstr "akceptuj"
 
 #: .\project_management\templates\project_management\view_invites.html:14
-#| msgid "Street"
 msgid "reject"
 msgstr "odrzuć"
+
+#: .\project_management\views.py:30 .\project_management\views.py:54
+#| msgid "Your projects"
+msgid "Edit project"
+msgstr "Edytuj projekt"
 
 #: .\tweap\templates\navigation.html:3
 msgid "new Project"
@@ -89,12 +129,10 @@ msgid "Invites"
 msgstr "Zaproszenia"
 
 #: .\tweap\templates\navigation.html:6
-#| msgid "Your profile"
 msgid "Profile"
 msgstr "Profil"
 
 #: .\tweap\templates\navigation.html:7
-#| msgid "Logged out"
 msgid "Logout"
 msgstr "Wylogowanie"
 
@@ -106,7 +144,6 @@ msgstr "Zalogowanie"
 
 #: .\tweap\templates\navigation.html:10
 #: .\user_management\templates\user_management\register.html:13
-#| msgid "Registration"
 msgid "Register"
 msgstr "Rejestruj śię"
 
@@ -114,14 +151,14 @@ msgstr "Rejestruj śię"
 msgid "Change profile picture"
 msgstr "Zmień zdjęcie profilowy"
 
-#: .\user_management\templates\user_management\dashboard.html:4
-msgid "Dashboard"
-msgstr "Widok"
+#: .\user_management\forms.py:8
+msgid "No file selected"
+msgstr "Nie wybrałeś żadnego pliku"
 
-#: .\user_management\templates\user_management\dashboard.html:5
-#| msgid "Welcome "
-msgid "Welcome"
-msgstr "Witaj"
+#: .\user_management\models.py:60 .\user_management\models.py:64
+#| msgid "Members"
+msgid "Number"
+msgstr "Numer domu"
 
 #: .\user_management\templates\user_management\editprofile.html:4
 #: .\user_management\templates\user_management\profile.html:5
@@ -132,68 +169,62 @@ msgstr "Twój profil"
 msgid "Upload image"
 msgstr "Przesłać zdjecie"
 
-#: .\user_management\templates\user_management\editprofile.html:23
+#: .\user_management\templates\user_management\editprofile.html:26
 #: .\user_management\templates\user_management\login.html:10
 #: .\user_management\templates\user_management\profile.html:11
 #: .\user_management\templates\user_management\register.html:10
 msgid "Username"
 msgstr "Imię użytkownika"
 
-#: .\user_management\templates\user_management\editprofile.html:27
+#: .\user_management\templates\user_management\editprofile.html:30
 #: .\user_management\templates\user_management\profile.html:15
 msgid "E-Mail"
 msgstr "Adres mailowy"
 
-#: .\user_management\templates\user_management\editprofile.html:31
+#: .\user_management\templates\user_management\editprofile.html:34
 #: .\user_management\templates\user_management\login.html:11
 #: .\user_management\templates\user_management\register.html:12
 msgid "Password"
 msgstr "Hasło"
 
-#: .\user_management\templates\user_management\editprofile.html:35
+#: .\user_management\templates\user_management\editprofile.html:38
 msgid "Repeat Password"
-msgstr "Powtórz Hasło"
+msgstr "Powtórz hasło"
 
-#: .\user_management\templates\user_management\editprofile.html:39
+#: .\user_management\templates\user_management\editprofile.html:42
 #: .\user_management\templates\user_management\profile.html:23
 msgid "First name"
 msgstr "Imię"
 
-#: .\user_management\templates\user_management\editprofile.html:43
+#: .\user_management\templates\user_management\editprofile.html:46
 #: .\user_management\templates\user_management\profile.html:27
 msgid "Last name"
 msgstr "Nazwisko"
 
-#: .\user_management\templates\user_management\editprofile.html:47
+#: .\user_management\templates\user_management\editprofile.html:50
 #: .\user_management\templates\user_management\profile.html:31
 msgid "Phone"
 msgstr "Numer telefonu"
 
-#: .\user_management\templates\user_management\editprofile.html:51
-#: .\user_management\templates\user_management\profile.html:35
+#: .\user_management\templates\user_management\editprofile.html:54
 msgid "City"
 msgstr "Miasto"
 
-#: .\user_management\templates\user_management\editprofile.html:55
+#: .\user_management\templates\user_management\editprofile.html:58
 msgid "ZIP-Code"
 msgstr "Kod pocztowy"
 
-#: .\user_management\templates\user_management\editprofile.html:59
+#: .\user_management\templates\user_management\editprofile.html:62
 msgid "Street"
 msgstr "Ulica"
 
-#: .\user_management\templates\user_management\editprofile.html:63
+#: .\user_management\templates\user_management\editprofile.html:66
 msgid "Housenumber"
 msgstr "Numer domu"
 
-#: .\user_management\templates\user_management\editprofile.html:67
+#: .\user_management\templates\user_management\editprofile.html:70
 msgid "Save Changes"
 msgstr "Zapisz"
-
-#: .\user_management\templates\user_management\home.html:5
-msgid ""
-"Welcome Guest! This is Tweap. Here we will introduce you into our project."
-msgstr "Witaj gościu"
 
 #: .\user_management\templates\user_management\logout.html:4
 msgid "Logged out"
@@ -204,57 +235,63 @@ msgid "Back to login."
 msgstr "Wróć do zalogowania."
 
 #: .\user_management\templates\user_management\profile.html:19
-#| msgid "Latest login"
 msgid "Last login"
 msgstr "Ostatnie zalogowanie"
 
-#: .\user_management\templates\user_management\profile.html:39
+#: .\user_management\templates\user_management\profile.html:35
 msgid "Address"
 msgstr "Adres"
 
-#: .\user_management\templates\user_management\profile.html:46
-#| msgid "Save Changes"
+#: .\user_management\templates\user_management\profile.html:41
 msgid "Make Changes"
-msgstr "Zapisz"
+msgstr "Edytuj"
 
 #: .\user_management\templates\user_management\register.html:4
 msgid "Registration"
 msgstr "Rejestracja"
 
 #: .\user_management\templates\user_management\register.html:11
-#| msgid "E-Mail"
 msgid "eMail"
 msgstr "Adres mailowy"
 
-#: .\user_management\tools.py:25
+#: .\user_management\tools.py:29
 msgid "The username isn't available"
 msgstr "Imię użytkownika nie jest dostępny"
 
-#: .\user_management\tools.py:27
+#: .\user_management\tools.py:31
 msgid "The username can only contain letters and numbers"
 msgstr "Imię użytkownika nie jest dostępny"
 
-#: .\user_management\tools.py:29
+#: .\user_management\tools.py:33 .\user_management\tools.py:77
 msgid "The email address isn't valid"
 msgstr "Adres mailowy jest błędny"
 
-#: .\user_management\tools.py:31
+#: .\user_management\tools.py:35
 msgid "The email address is already in use"
 msgstr "Adres mailowy jest już zajęty"
 
-#: .\user_management\tools.py:35
+#: .\user_management\tools.py:39 .\user_management\tools.py:74
 msgid "The password is super weak"
 msgstr "Hasło jest super kiepski"
 
-#: .\user_management\tools.py:38
+#: .\user_management\tools.py:42
 msgid "All fields must be filled out"
 msgstr "Wszystkie pola musza byc wypełniąne"
 
-#: .\user_management\tools.py:41
+#: .\user_management\tools.py:45 .\user_management\tools.py:83
 msgid "An error occurred during form transfer"
 msgstr "Błąd w transmisji się okazał"
 
-#: .\user_management\views.py:55
+#: .\user_management\tools.py:70
+msgid "Passwords do not match!"
+msgstr "Oba hasła muszą być identyczne"
+
+#: .\user_management\tools.py:81
+#| msgid "The email address is already in use"
+msgid "This email is already in use"
+msgstr "Adres mailowy jest już zajęty"
+
+#: .\user_management\views.py:81
 msgid "Login not successful!"
 msgstr "Błąd w zalogowaniu"
 

@@ -150,6 +150,8 @@ class EditProfile(View):
 
         if errors:
             context = {'error_messages': errors}
+            from user_management.forms import ImageUploadForm
+            context['form'] = ImageUploadForm
             return render(request, 'user_management/editprofile.html', context)
 
         '''if 'form' not in errors:
