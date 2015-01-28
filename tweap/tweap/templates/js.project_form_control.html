@@ -48,7 +48,7 @@ $(document).on('keyup', '#users', function(){
     typedText = (this).value
     //AJAX-Request:
     data = {search:typedText};
-    $.get("./../../users/user_suggestion", data, function(output){
+    $.get("{% url 'user_management:user_suggestion' %}", data, function(output){
         manageUserSuggestionAjaxRequest(output)
     })
 

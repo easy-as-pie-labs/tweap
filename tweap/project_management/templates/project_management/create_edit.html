@@ -2,14 +2,14 @@
 {% load i18n %}
 {% load myfilters %}
 {% block js %}
-    {% include "js.project_form:control.html" %}
+    {% include "js.project_form_control.html" %}
 {% endblock %}
 {% block project_management_template %}
-    <h1>{% trans "Edit project" %}</h1>
+    <h1>{{ headline }}</h1>
     {% for error, message in error_messages.items %}
         {{ message }}<br>
     {%  endfor %}
-    <form method="post" class="form-group" action="{% url 'project_management:edit' project.id %}">
+    <form method="post" autocomplete="off" class="form-group" action="{% if project %} {% url 'project_management:edit' project.id %} {% else %} {% url 'project_management:create' %} {% endif %}">
         {% csrf_token %}
         {% for field in form %}
             {{field.label_tag}}{{ field|addcss:'form-control' }}<br>
@@ -19,12 +19,12 @@
         <div id="newInputs">
             <div class="form-group">
                 <div class="input-group date">
-                    <input id="users" type="text" placeholder="Username oder Email angeben" class="form-control member"><span class="input-group-addon addUserButton focus-pointer"><i class="glyphicon glyphicon-plus-sign"></i></span>
+                    <input id="users" type="text" placeholder='{% trans "Username or eMail" %}' class="form-control member"><span class="input-group-addon addUserButton focus-pointer"><i class="glyphicon glyphicon-plus-sign"></i></span>
                 </div>
                 <div id="suggestions">
                 </div>
             </div>
         </div>
-        <input onClick="insertHiddenValues()" type="submit" class="btn btn-primary" value="{% trans "Save" %}">
+        <input onClick="insertHiddenValues()" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
     </form>
 {% endblock %}
