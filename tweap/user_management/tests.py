@@ -5,7 +5,7 @@ from user_management.models import Profile, ProfileAddress
 
 class UserManagementTest(TestCase):
     def test_home(self):
-        resp = self.client.get('/users/')
+        resp = self.client.get('/dashboard/')
         self.assertEqual(resp.status_code, 200)
 
     def test_register(self):
@@ -199,7 +199,9 @@ class UserManagementTest(TestCase):
 
     def test_edit_profile(self):
         # create test user
-        User.objects.create_user('my_username', 'me@test.de', 'correct_password')
+        user = User.objects.create_user('my_username', 'me@test.de', 'correct_password')
+        profile = Profile.create(user)
+        profile.save()
         User.objects.create_user('antoher_dude', 'used@test.de', 'correct_password')
 
         # correct login
@@ -217,57 +219,64 @@ class UserManagementTest(TestCase):
 
         print('profile was edited succesfully')
         resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': 'meinPasswort', 'passwordrepeat': 'meinPasswort'})
-        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(resp.status_code, 200)
 
         print('profile was edited succesfully, password not changed')
         resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': '', 'passwordrepeat': ''})
-        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(resp.status_code, 200)
 
         print('email address already in use')
-        resp = self.client.post('/users/editprofile/', {'email': 'used@test.de', 'password': 'meinPasswort', 'passwordrepeat': 'meinPasswort'})
+        resp = self.client.post('/users/editprofile/', {'email': 'used@test.de', 'password': 'meinPasswort', 'passwordrepeat': 'meinPasswort', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('email' in resp.context['error_messages'])
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
 
         print('email address blank')
-        resp = self.client.post('/users/editprofile/', {'email': '', 'password': 'meinPasswort', 'passwordrepeat': 'meinPasswort'})
+        resp = self.client.post('/users/editprofile/', {'email': '', 'password': 'meinPasswort', 'passwordrepeat': 'meinPasswort', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('email' in resp.context['error_messages'])
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
 
         print('email address invalid')
-        resp = self.client.post('/users/editprofile/', {'email': 'thisisnotanemailaddress', 'password': 'meinPasswort', 'passwordrepeat': 'meinPasswort'})
+        resp = self.client.post('/users/editprofile/', {'email': 'thisisnotanemailaddress', 'password': 'meinPasswort', 'passwordrepeat': 'meinPasswort', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('email' in resp.context['error_messages'])
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
 
         print('passwords do not match')
-        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': 'meinPasswort', 'passwordrepeat': 'meinPasswortNichtGleich'})
+        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': 'meinPasswort', 'passwordrepeat': 'meinPasswortNichtGleich', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('password' in resp.context['error_messages'])
         self.assertFalse('email' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
 
         print('passwords do not match, second is blank')
-        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': 'meinPasswort', 'passwordrepeat': ''})
+        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': 'meinPasswort', 'passwordrepeat': '', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('password' in resp.context['error_messages'])
         self.assertFalse('email' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
 
         print('passwords do not match, first is blank')
-        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': '', 'passwordrepeat': 'eshrherher'})
+        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': '', 'passwordrepeat': 'eshrherher', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('password' in resp.context['error_messages'])
         self.assertFalse('email' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
 
         print('password cannot be username')
-        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': 'my_username', 'passwordrepeat': 'my_username'})
+        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': 'my_username', 'passwordrepeat': 'my_username', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('password' in resp.context['error_messages'])
         self.assertFalse('email' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
+
+        print('form has been tempered with')
+        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': 'my_username', 'passwordrepeat': 'my_username', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
+        self.assertEqual(resp.status_code, 200)
+        self.assertFalse('password' in resp.context['error_messages'])
+        self.assertFalse('email' in resp.context['error_messages'])
+        self.assertTrue('form' in resp.context['error_messages'])
