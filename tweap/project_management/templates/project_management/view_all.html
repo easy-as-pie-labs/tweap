@@ -2,9 +2,11 @@
 {% load i18n %}
 {% block project_management_template %}
     <h1>{% trans "Your projects" %}</h1>
-    {% for project in projects %}
-        <ul>
-            <li><a href="{% url 'project_management:project' project.id %}">{{ project }}</a></li>
-        </ul>
-    {% endfor %}
+    {% if projects %}
+    <div class="list-group">
+        {% for project in projects %}
+        <a href="{% url 'project_management:project' project.id %}" class="list-group-item" ><h4>{{ project }}</h4>{{ project.description }}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
 {% endblock %}
