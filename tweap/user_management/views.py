@@ -6,7 +6,7 @@ from django.views.generic import View
 from django.conf import settings
 from django.contrib.auth import logout as django_logout
 from user_management.models import ProfileAddress
-from user_management.tools import validate_registration_form, register_and_login, login, validate_edit_profile
+from user_management.tools import validate_registration_form, register_and_login, login, validate_profile_form
 from django.utils.translation import ugettext
 from django.contrib.auth.models import User
 from project_management.models import Project as ProjectModel, Invitation
@@ -146,7 +146,7 @@ class EditProfile(View):
         :return:
         """
 
-        errors = validate_edit_profile(request.POST, request)
+        errors = validate_profile_form(request.POST, request)
 
         if errors:
             context = {'error_messages': errors}
@@ -178,6 +178,9 @@ class EditProfile(View):
         user.save()
         user.profile.save()
 
+        if password:
+            login(user.username, password, request)
+
         street = request.POST.get('street')
         house_number = request.POST.get('housenumber')
 
@@ -197,7 +200,7 @@ class EditProfile(View):
             user.profile.address.city = city
             user.profile.address.save()
 
-        login(user.username, password, request)
+
         return HttpResponseRedirect(reverse('user_management:profile'))
 
 
