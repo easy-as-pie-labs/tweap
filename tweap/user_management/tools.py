@@ -46,7 +46,7 @@ def validate_registration_form(form):
 
     return credentials, errors
 
-def validate_edit_profile(form, request):
+def validate_profile_form(form, request):
 
     errors = {}
     credentials = {}
@@ -83,6 +83,7 @@ def validate_edit_profile(form, request):
         errors['form'] = ugettext("An error occurred during form transfer")
 
     return errors
+
 
 def register_and_login(credentials, request):
     """
