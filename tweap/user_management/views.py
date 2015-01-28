@@ -93,17 +93,6 @@ def logout(request):
     return render(request, 'user_management/logout.html', context)
 
 
-class Home(View):
-    """
-    View function for the home
-    """
-    def get(self, request):
-        if request.user.is_authenticated():
-            return render(request, 'user_management/dashboard.html', {})
-        else:
-            return render(request, 'user_management/home.html')
-
-
 class ViewProfile(View):
     """
     View class for profile viewing
