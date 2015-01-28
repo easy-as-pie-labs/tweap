@@ -50,11 +50,11 @@
             </tr>
             <tr>
                 <td><strong>{% trans "City" %}:</strong></td>
-                <td><input class="form-control" type="text" name="city" value="{% if not postal_code.city %}{% else %}{{ postal_code.city }}{% endif %}"></td>
+                <td><input class="form-control" type="text" name="city" value="{% if not profile_address.city %}{% else %}{{ profile_address.city }}{% endif %}"></td>
             </tr>
             <tr>
                 <td><strong>{% trans "ZIP-Code" %}:</strong></td>
-                <td><input class="form-control" type="text" name="zip" value="{% if not postal_code.postal_code %}{% else %}{{ postal_code.postal_code }}{% endif %}"></td>
+                <td><input class="form-control" type="text" name="zip" value="{% if not profile_address.postal_code %}{% else %}{{ profile_address.postal_code }}{% endif %}"></td>
             </tr>
             <tr>
                 <td><strong>{% trans "Street" %}:</strong></td>

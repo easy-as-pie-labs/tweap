@@ -5,8 +5,8 @@ from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.conf import settings
 from django.contrib.auth import logout as django_logout
-from user_management.models import ProfileAddress, PostalCode
-from user_management.tools import validate_registration_form, register_and_login, login, cleanup_postal_code
+from user_management.models import ProfileAddress
+from user_management.tools import validate_registration_form, register_and_login, login
 from django.utils.translation import ugettext
 from django.contrib.auth.models import User
 from project_management.models import Project as ProjectModel, Invitation
@@ -122,11 +122,9 @@ class ViewProfile(View):
             raise Http404
         try:
             profile_address = ProfileAddress.objects.get(id=user.profile.address.id)
-            postal_code = PostalCode.objects.get(id=profile_address.postal_code.id)
         except:
             profile_address = None
-            postal_code = None
-        context = {'user': user, 'request_user': request.user, 'profile_address': profile_address, 'postal_code': postal_code}
+        context = {'user': user, 'request_user': request.user, 'profile_address': profile_address}
         return render(request, 'user_management/profile.html', context)
 
 
@@ -143,15 +141,13 @@ class EditProfile(View):
         user = get_object_or_404(User, id=request.user.id)
         try:
             profile_address = ProfileAddress.objects.get(id=user.profile.address.id)
-            postal_code = PostalCode.objects.get(id=profile_address.postal_code.id)
         except:
             profile_address = None
-            postal_code = None
 
 
         from user_management.forms import ImageUploadForm
         form = ImageUploadForm() # A empty, unbound form
-        context = {'user': user, 'profile_address': profile_address, 'postal_code': postal_code, 'form': form}
+        context = {'user': user, 'profile_address': profile_address, 'form': form}
         return render(request, 'user_management/editprofile.html', context)
 
     def post(self, request):
@@ -197,35 +193,20 @@ class EditProfile(View):
         house_number = request.POST.get('housenumber')
 
         city = request.POST.get('city')
-        zip = request.POST.get('zip')
+        postal_code = request.POST.get('zip')
 
-        # if one of the address fields is empty, ignore the address change for the time being
-        if street == "" or house_number == "" or city == "" or zip == "":
-            return HttpResponseRedirect(reverse('user_management:profile'))
-
-        try:
-            postal_code = PostalCode.objects.get(postal_code=zip)
-        except:
-            postal_code = PostalCode.create(zip, city)
-            postal_code.save()
 
         if user.profile.address is None:
-            address = ProfileAddress.create(street, house_number, postal_code)
+            address = ProfileAddress.create(street, house_number, postal_code, city)
             address.save()
             user.profile.address = address
             user.profile.save()
         else:
             user.profile.address.street = street
             user.profile.address.house_number = house_number
-
-            # check if old postal code is not in use anymore and can be deleted
-            old_postal = user.profile.address.postal_code
-
             user.profile.address.postal_code = postal_code
+            user.profile.address.city = city
             user.profile.address.save()
-
-            #delete old postal code if it isn't needed anymore
-            cleanup_postal_code(old_postal)
 
         return HttpResponseRedirect(reverse('user_management:profile'))
 

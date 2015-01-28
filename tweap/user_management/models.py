@@ -4,6 +4,7 @@ from os.path import splitext
 from project_management.models import Project
 import random
 import hashlib
+from django.utils.translation import ugettext
 # default charfield length 50 chars, just to be safe
 
 
@@ -20,47 +21,64 @@ def get_filename(instance, filename):
     return 'profile_pictures/' + filename + file_extension
 
 
-class PostalCode(models.Model):
-    """
-    Model for a postal code
-    """
-    # international postal codes may have dashes and letters
-    postal_code = models.CharField(max_length=50)
-
-    # the longest city name has 97 letters (in New Zealand)
-    city = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.postal_code + " " + self.city
-
-    @classmethod
-    def create(cls, postal_code, city):
-        """
-        creates an instance of this class
-        :param postal_code: the postal code
-        :param city: the city name
-        :return: the created instance
-        """
-        postal_code_object = cls(postal_code=postal_code, city=city)
-        return postal_code_object
-
-
 class ProfileAddress(models.Model):
     """
     Model for a profile address
     """
-    street = models.CharField(max_length=100)
+    street = models.CharField(max_length=100, null=True, blank=True)
 
     # could be something like 50A
-    house_number = models.CharField(max_length=50)
+    house_number = models.CharField(max_length=50, null=True, blank=True)
 
-    postal_code = models.ForeignKey(PostalCode)
+    # international postal codes may have dashes and letters
+    postal_code = models.CharField(max_length=50, null=True, blank=True)
 
+    # the longest city name has 97 letters (in New Zealand)
+    city = models.CharField(max_length=100, null=True, blank=True)
+
+    # TODO: can someone please improve this?
     def __str__(self):
-        return self.street + " " + self.house_number + ", " + str(self.postal_code)
+        string = ""
+        if self.city is not None and self.city != "":
+            string += self.city
+        if self.postal_code is not None and self.postal_code != "":
+            string = self.postal_code + " " + string
+        if self.house_number is not None and self.house_number != "":
+            if self.street is not None and self.street != "":
+                if string != "":
+                    # street and house number are set and at least city or zip code
+                    # myStreet 23, city / myStreet 23, 24941 / myStreet 23, 24941 Flensburg
+                    return self.street + " " + self.house_number + ", " + string
+                else:
+                    # street and house number are set nut neither city nor zip code
+                    # myStreet 23
+                    return self.street + " " + self.house_number
+            else:
+                if string != "":
+                    # street isn't set, but city or zip
+                    # Number 23, Flensburg
+                    return ugettext("Number") + ": " + self.house_number + ", " + string
+                else:
+                    # street isn't set, neither are city or zip
+                    # Number 23
+                    return ugettext("Number") + ": " + self.house_number
+        elif self.street is not None and self.street != "":
+            # house number not set, but street and city or zip
+            # myStreet, Flensburg
+            if string != "":
+                return self.street + ", " + string
+            else:
+                # city zip not set
+                # myStreet
+                return self.street
+        else:
+            # house_number and street not set
+            # city or zip might be set
+            # Flensburg / 24941 Flensburg / 24941 / ""
+            return string
 
     @classmethod
-    def create(cls, street, house_number, postal_code):
+    def create(cls, street, house_number, postal_code, city):
         """
         creates an instance of this class
         :param street: the street name
@@ -68,7 +86,7 @@ class ProfileAddress(models.Model):
         :param postal_code: reference to a postal code object
         :return: the created instance
         """
-        profile_address = cls(street=street, house_number=house_number, postal_code=postal_code)
+        profile_address = cls(street=street, house_number=house_number, postal_code=postal_code, city=city)
         return profile_address
 
 
