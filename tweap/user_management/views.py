@@ -197,6 +197,7 @@ class EditProfile(View):
             user.profile.address.city = city
             user.profile.address.save()
 
+        login(user.username, password, request)
         return HttpResponseRedirect(reverse('user_management:profile'))
 
 
