@@ -15,7 +15,7 @@
             {{field.label_tag}}{{ field|addcss:'form-control' }}<br>
         {% endfor %}
         <input type="hidden" id="hiddenValues" name="invitations" />
-        <label for="newInputs" class="control-label">{% trans "Add Members" %}</label>
+        <label for="newInputs" class="control-label">{% trans "Invite Members" %}</label>
         <div id="newInputs">
             <div class="form-group">
                 <div class="input-group date">
@@ -25,6 +25,34 @@
                 </div>
             </div>
         </div>
+
+        {% if members %}
+            <label for="members" class="control-label">{% trans "Members" %}</label>
+            {% for member in members %}
+                <div id="members">
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <input id="users" type="text" class="form-control" disabled="disabled" value="{{ member }}">
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if invitations %}
+            <label for="invitations" class="control-label">{% trans "Invited" %}</label>
+            {% for invitation in invitations %}
+                <div id="invitations">
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <input id="users" type="text" class="form-control" disabled="disabled" value="{{ invitation.user.username }}">
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+
         <input onClick="insertHiddenValues()" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
     </form>
 {% endblock %}
