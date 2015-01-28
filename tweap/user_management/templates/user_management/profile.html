@@ -2,7 +2,11 @@
 {% load i18n %}
 {% load static %}
 {% block user_management_template %}
-        <h2>{% trans "Your profile" %}</h2>
+        {% if user.id == request.user.id %}
+            <h2>{% trans "Your profile" %}</h2>
+        {% else %}
+            <h2>{{user.username}}'s {% trans "profile" %}</h2>
+        {% endif %}
         {% if user.profile.picture %}
             <img class="col-md-6 col-xs-12" src="{{ user.profile.picture.url}}">
         {% endif %}

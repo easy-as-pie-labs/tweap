@@ -2,5 +2,8 @@
 {% load i18n %}
 {% block user_management_template %}
     <h1>{% trans "Dashboard" %}</h1>
-    <div>{% trans "Welcome" %} {{ user.get_username }}!</div>
+    <div>
+        <p class="lead">{% trans "Welcome" %} {{ user.get_username }}!</p>
+        <p>{% trans "Soon(ish) this is where you'll find your most needed information: Upcoming todo's, calendar events, project invites and the most important updates from your projects. You'll love it!" %}</p>
+    </div>
 {% endblock %}

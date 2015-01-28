@@ -202,7 +202,7 @@ class EditProfile(View):
             user.profile.address.save()
 
 
-        return HttpResponseRedirect(reverse('user_management:profile'))
+        return HttpResponseRedirect(reverse('user_management:profile', kwargs={'user_name': request.user.username}))
 
 
 def upload_picture(request):
