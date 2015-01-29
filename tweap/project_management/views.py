@@ -92,7 +92,7 @@ class ViewAll(View):
     View class for displaying all projects of an user
     """
     def get(self, request):
-        context = {'projects': ProjectModel.objects.filter(members=request.user.id)}
+        context = {'projects': ProjectModel.objects.filter(members=request.user)}
         return render(request, 'project_management/view_all.html', context)
 
 
@@ -102,11 +102,8 @@ def view_invites(request):
     :param request:
     :return:
     """
-    invites = Invitation.objects.filter(user=request.user.id)
-    projects = []
-    for invite in invites:
-        projects.append(ProjectModel.objects.get(id=invite.project.id))
-    context = {'projects': projects}
+    invitations = Invitation.objects.filter(user=request.user)
+    context = {'invitations': invitations}
     return render(request, 'project_management/view_invites.html', context)
 
 
