@@ -229,20 +229,20 @@ class UserManagementTest(TestCase):
         self.assertEqual(resp.status_code, 200)
 
         print('unknown person\'s profile is not viewable')
-        resp = self.client.get('/users/profile/another dude')
-        self.assertEqual(resp.status_code, 404)
+        resp = self.client.get('/users/profile/anotherdude')
+        self.assertEqual(resp.status_code, 301)
 
         print('site is editable')
         resp = self.client.get('/users/editprofile/')
         self.assertEqual(resp.status_code, 200)
 
         print('profile was edited succesfully')
-        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': 'meinPasswort', 'passwordrepeat': 'meinPasswort'})
-        self.assertEqual(resp.status_code, 200)
+        resp = self.client.post('/users/editprofile/', {'email': 'new@test.de', 'password': 'meinPasswort', 'passwordrepeat': 'meinPasswort', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
+        self.assertEqual(resp.status_code, 302)
 
         print('profile was edited succesfully, password not changed')
-        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': '', 'passwordrepeat': ''})
-        self.assertEqual(resp.status_code, 200)
+        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': '', 'passwordrepeat': '', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
+        self.assertEqual(resp.status_code, 302)
 
         print('email address already in use')
         resp = self.client.post('/users/editprofile/', {'email': 'used@test.de', 'password': 'meinPasswort', 'passwordrepeat': 'meinPasswort', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
@@ -322,12 +322,11 @@ class UserManagementTest(TestCase):
         resp = self.client.post('/users/login/', {'username': 'usertobedeleted', 'password': 'correct_password'})
         self.assertEqual(resp.status_code, 302)
 
-        '''
         print("Test: delete account, checkbox not checked")
         resp = self.client.post('/users/delete/', {})
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(User.objects.filter(username='user_to_be_deleted').count(), 1)
-        '''
+        self.assertEqual(User.objects.filter(username='usertobedeleted').count(), 1)
+
         print("Test: delete account, checkbox checked")
         resp = self.client.post('/users/delete/', {'confirm': 'i am sure'})
         self.assertEqual(resp.status_code, 302)
@@ -335,6 +334,7 @@ class UserManagementTest(TestCase):
         self.assertEqual(Profile.objects.filter(user=user).count(), 0)
         self.assertEqual(ProfileAddress.objects.filter(id=address_id).count(), 0)
         self.assertEqual(Project.objects.filter(members=user).count(), 0)
+        self.assertEqual(Project.objects.filter(id=project.id).count(), 0)
 
         resp = self.client.post('/users/register/', {'username': 'usertobedeleted', 'email': 'usertobedeleted@test.de', 'password': 'correct_password'})
         self.assertEqual(resp.status_code, 302)
@@ -351,6 +351,10 @@ class UserManagementTest(TestCase):
         project.members.add(user2)
         project.save()
 
+        project2 = Project.objects.create()
+        project2.members.add(user)
+        project2.save()
+
         # correct login
         print("Test: correct login")
         resp = self.client.post('/users/login/', {'username': 'usertobedeleted', 'password': 'correct_password'})
@@ -364,6 +368,7 @@ class UserManagementTest(TestCase):
         self.assertEqual(Project.objects.filter(id=project.id).count(), 1)
         self.assertEqual(ProfileAddress.objects.filter(id=address_id).count(), 0)
         self.assertEqual(Project.objects.filter(members=user).count(), 0)
+        self.assertEqual(Project.objects.filter(id=project2.id).count(), 0)
 
 
 class ViewTest(TestCase):

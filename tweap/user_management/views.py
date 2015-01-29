@@ -103,7 +103,7 @@ class ViewProfile(View):
         :param user_name: the user name of the profile that should be displayed
         :return:
         """
-        
+
         user = get_object_or_404(User, username=user_name)
         if user not in request.user.profile.get_connected_users():
             raise Http404
@@ -186,19 +186,11 @@ class EditProfile(View):
         city = request.POST.get('city')
         postal_code = request.POST.get('zip')
 
-
-        if user.profile.address is None:
-            address = ProfileAddress.create(street, house_number, postal_code, city)
-            address.save()
-            user.profile.address = address
-            user.profile.save()
-        else:
-            user.profile.address.street = street
-            user.profile.address.house_number = house_number
-            user.profile.address.postal_code = postal_code
-            user.profile.address.city = city
-            user.profile.address.save()
-
+        user.profile.address.street = street
+        user.profile.address.house_number = house_number
+        user.profile.address.postal_code = postal_code
+        user.profile.address.city = city
+        user.profile.address.save()
 
         return HttpResponseRedirect(reverse('user_management:profile', kwargs={'user_name': request.user.username}))
 
@@ -215,9 +207,13 @@ def upload_picture(request):
         form = ImageUploadForm(request.POST, request.FILES)
         if form.is_valid():
             new_image = request.FILES['picture']
+            #TODO: check mimetype to make sure it was an image
             user = User.objects.get(id=request.user.id)
             user.profile.add_picture(new_image)
 
+            return HttpResponseRedirect(reverse('user_management:edit_profile'))
+        else:
+            #TODO: upload failed
             return HttpResponseRedirect(reverse('user_management:edit_profile'))
 
 
