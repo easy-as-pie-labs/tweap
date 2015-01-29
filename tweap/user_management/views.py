@@ -163,7 +163,6 @@ class EditProfile(View):
         last_name = request.POST.get('last_name')
         phone = request.POST.get('phone')
         password = request.POST.get('password')
-        password_repeat = request.POST.get('passwordrepeat')
 
         user = User.objects.get(id=request.user.id)
 
