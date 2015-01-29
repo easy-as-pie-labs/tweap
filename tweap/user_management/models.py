@@ -38,44 +38,30 @@ class ProfileAddress(models.Model):
 
     # TODO: can someone please improve this?
     def __str__(self):
-        string = ""
-        if self.city is not None and self.city != "":
-            string += self.city
-        if self.postal_code is not None and self.postal_code != "":
-            string = self.postal_code + " " + string
-        if self.house_number is not None and self.house_number != "":
-            if self.street is not None and self.street != "":
-                if string != "":
-                    # street and house number are set and at least city or zip code
-                    # myStreet 23, city / myStreet 23, 24941 / myStreet 23, 24941 Flensburg
-                    return self.street + " " + self.house_number + ", " + string
-                else:
-                    # street and house number are set nut neither city nor zip code
-                    # myStreet 23
-                    return self.street + " " + self.house_number
-            else:
-                if string != "":
-                    # street isn't set, but city or zip
-                    # Number 23, Flensburg
-                    return ugettext("Number") + ": " + self.house_number + ", " + string
-                else:
-                    # street isn't set, neither are city or zip
-                    # Number 23
-                    return ugettext("Number") + ": " + self.house_number
-        elif self.street is not None and self.street != "":
-            # house number not set, but street and city or zip
-            # myStreet, Flensburg
-            if string != "":
-                return self.street + ", " + string
-            else:
-                # city zip not set
-                # myStreet
-                return self.street
+        if self.street is None:
+            self.street = ''
+        if self.house_number is None:
+            self.house_number = ''
+        if self.postal_code is None:
+            self.postal_code = ''
+        if self.city is None:
+            self.city = ''
+
+        address = ""
+
+        # if there is at least the street or house_number AND postal_code or city, add a colon (,) between the two parts
+        if (self.street != "" or self.house_number) != "" and (self.postal_code != "" or self.city != ""):
+            address += self.street + " " + self.house_number + ", " + self.postal_code + " " + self.city
+            colon_index = address.index(',')
+
+            # if there's no house_number, there is a space between street and second part, let's remove that
+            if address[colon_index-1] == ' ':
+                address = address[0:colon_index-1] + address[colon_index:]
+        # if one of the two separated parts is empty, we don't need a colon
         else:
-            # house_number and street not set
-            # city or zip might be set
-            # Flensburg / 24941 Flensburg / 24941 / ""
-            return string
+            address += self.street + " " + self.house_number + " " + self.postal_code + " " + self.city
+
+        return address
 
     @classmethod
     def create(cls, street, house_number, postal_code, city):
