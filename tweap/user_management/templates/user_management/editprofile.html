@@ -69,6 +69,7 @@
         </table>
             <button class="btn btn-primary btn-lg">{% trans "Save Changes" %}</button>
         </form>
+    <a href="{% url 'user_management:delete_account' %}"><button class="btn btn-danger btn-lg">{% trans "Delete account" %}</button></a>
     </div>
 </div>
 {% endblock %}

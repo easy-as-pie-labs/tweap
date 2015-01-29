@@ -5,13 +5,17 @@
 
     <h2>{% trans "Do you really want to delete your tweap account?" %}</h2>
     {% if error %}
-    <div class="alert alert-danger no-margin-element">{{ error }}</div><br>
+        <div class="alert alert-danger no-margin-element">{{ error }}</div>
     {%  endif %}
-        <form class="form-group" action="{% url 'user_management:delete_account' %}" method="POST">
+    <form class="form-group" action="{% url 'user_management:delete_account' %}" method="POST">
         {% csrf_token %}
-
-            <label><input type="checkbox" name="confirm" value="i am sure">{% trans "Yes I am sure!" %}</label><br>
-            <button type="submit" class="btn btn-primary btn-lg">{% trans "Delete account" %}</button>
-        </form>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="confirm" value="i am sure">
+            {% trans "I am sure" %}
+          </label>
+        </div>
+        <button type="submit" class="btn btn-danger btn-lg">{% trans "Delete account" %}</button>
+    </form>
 
 {% endblock %}
