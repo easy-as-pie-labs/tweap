@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.utils.translation import ugettext
+from django.views.decorators.csrf import csrf_exempt
 from project_management.models import ProjectForm, Project as ProjectModel, Invitation
 from project_management.tools import invite_users
 import json
@@ -125,6 +126,7 @@ def leave(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@csrf_exempt
 def invitation_handler(request):
     """
     view function for handling invitation actions (accept, reject)

@@ -112,4 +112,34 @@ class ToolsTest(TestCase):
 
 
 class ViewsTest(TestCase):
-    pass
+
+    def setup_login(self):
+        User.objects.create_user('user', 'user@test.de', 'testpw')
+        self.client.post('/users/login/', {'username': 'user', 'password': 'testpw'})
+
+    def test_project_create(self):
+        self.setup_login()
+        # test if page is available
+        resp = self.client.get('/projects/new/')
+        self.assertEquals(resp.status_code, 200)
+
+        # test if validation works
+        resp = self.client.post('/projects/new/', {})
+        self.assertEquals(resp.status_code, 200)
+        self.assertTrue(resp.context['error_messages'])
+
+        # test if project with name only can be created
+        resp = self.client.post('/projects/new/', {'name': 'TestCreateProject'})
+        self.assertEquals(resp.status_code, 302)
+        project_exist = Project.objects.filter(name='TestCreateproject').exists()
+        self.assertTrue(project_exist)
+
+        # test if project with name and description can be created
+        resp = self.client.post('/projects/new/', {'name': 'TestCreateProject2', 'description': 'I am a test project'})
+        self.assertEquals(resp.status_code, 302)
+        project_exist = Project.objects.filter(name='TestCreateproject2').exists()
+        self.assertTrue(project_exist)
+        project = Project.objects.get(name='TestCreateproject2')
+        self.assertEquals(project.description, 'I am a test project')
+
+
