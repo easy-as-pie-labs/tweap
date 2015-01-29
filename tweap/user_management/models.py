@@ -36,7 +36,6 @@ class ProfileAddress(models.Model):
     # the longest city name has 97 letters (in New Zealand)
     city = models.CharField(max_length=100, null=True, blank=True)
 
-    # TODO: can someone please improve this?
     def __str__(self):
 
         address = ""
