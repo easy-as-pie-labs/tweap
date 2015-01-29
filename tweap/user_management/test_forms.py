@@ -284,16 +284,17 @@ class UserManagementTest(TestCase):
 
     def delete_account(self):
         # create test user
-        user = User.objects.create_user('user_to_be_deleted', 'user_to_be_deleted@test.de', 'correct_password')
-        profile = Profile.create(user)
-        address = ProfileAddress.create("", "", "", "")
-        address.save()
-        profile.address = address
-        profile.save()
+        resp = self.client.post('/users/register/', {'username': 'usertobedeleted', 'email': 'usertobedeleted@test.de', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
+        user = User.objects.get(username='usertobedeleted')
 
-        # correct login
-        print("Test: correct login")
-        resp = self.client.post('/users/login/', {'username': 'user_to_be_deleted', 'password': 'correct_password'})
+        address_id = user.profile.address.id
+
+        project = Project.objects.create()
+        project.members.add(user)
+        project.save()
+
+        resp = self.client.post('/users/login/', {'username': 'usertobedeleted', 'password': 'correct_password'})
         self.assertEqual(resp.status_code, 302)
 
         '''
@@ -302,11 +303,39 @@ class UserManagementTest(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(User.objects.filter(username='user_to_be_deleted').count(), 1)
         '''
+        print("Test: delete account, checkbox checked")
+        resp = self.client.post('/users/delete/', {'confirm': 'i am sure'})
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(User.objects.filter(username='usertobedeleted').count(), 0)
+        self.assertEqual(Profile.objects.filter(user=user).count(), 0)
+        self.assertEqual(ProfileAddress.objects.filter(id=address_id).count(), 0)
+        self.assertEqual(Project.objects.filter(members=user).count(), 0)
+
+        resp = self.client.post('/users/register/', {'username': 'usertobedeleted', 'email': 'usertobedeleted@test.de', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
+        resp = self.client.post('/users/register/', {'username': 'anotheruser', 'email': 'anotheruser@test.de', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
+
+        user = User.objects.get(username='usertobedeleted')
+        user2 = User.objects.get(username='anotheruser')
+
+        address_id = user.profile.address.id
+
+        project = Project.objects.create()
+        project.members.add(user)
+        project.members.add(user2)
+        project.save()
+
+        # correct login
+        print("Test: correct login")
+        resp = self.client.post('/users/login/', {'username': 'usertobedeleted', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
 
         print("Test: delete account, checkbox checked")
         resp = self.client.post('/users/delete/', {'confirm': 'i am sure'})
         self.assertEqual(resp.status_code, 302)
-        self.assertEqual(User.objects.filter(username='user_to_be_deleted').count(), 0)
+        self.assertEqual(User.objects.filter(username='usertobedeleted').count(), 0)
         self.assertEqual(Profile.objects.filter(user=user).count(), 0)
-        self.assertEqual(ProfileAddress.objects.filter(id=address.id).count(), 0)
-        self.assertEqual(Project.objects.filter(members=user.id).count(), 0)
+        self.assertEqual(Project.objects.filter(id=project.id).count(), 1)
+        self.assertEqual(ProfileAddress.objects.filter(id=address_id).count(), 0)
+        self.assertEqual(Project.objects.filter(members=user).count(), 0)
