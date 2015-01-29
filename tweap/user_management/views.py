@@ -6,10 +6,9 @@ from django.views.generic import View
 from django.conf import settings
 from django.contrib.auth import logout as django_logout
 from user_management.models import ProfileAddress
-from user_management.tools import validate_registration_form, register_and_login, login, validate_profile_form
+from user_management.tools import validate_registration_form, register_and_login, login, validate_profile_form, delete_user
 from django.utils.translation import ugettext
 from django.contrib.auth.models import User
-from project_management.models import Project as ProjectModel, Invitation
 import json
 
 
@@ -224,26 +223,19 @@ def upload_picture(request):
 
 
 def delete_account(request):
-
+    """
+    view function for deleting an user account
+    :param request:
+    :return:
+    """
     context = {}
     if request.method == 'POST':
         if request.POST.get('confirm', '') == 'i am sure':
-
-            # remove user from projects and delete invitations of the user
-            projects = ProjectModel.objects.filter(members=request.user)
-            for project in projects:
-                project.leave(request.user)
-            invitations = Invitation.objects.filter(user=request.user)
-            for invitation in invitations:
-                invitation.delete()
-
-            # delete user and log out
-            request.user.delete()
+            delete_user(request.user)
             django_logout(request)
             return HttpResponseRedirect(reverse('dashboard:home'))
         else:
             context['error'] = ugettext("Checkbox for confirmation must be checked!")
-
     return render(request, 'user_management/delete_account.html', context)
 
 

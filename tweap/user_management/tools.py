@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as django_login
 from user_management.models import Profile
+from project_management.models import Project, Invitation
 from django.utils.translation import ugettext
 from user_management.models import ProfileAddress
 import re
@@ -111,3 +112,17 @@ def login(username, password, request):
         return False
     django_login(request, user)
     return True
+
+
+def delete_user(user):
+    # remove user from projects and delete invitations of the user
+    projects = Project.objects.filter(members=user)
+    for project in projects:
+        project.leave(user)
+    invitations = Invitation.objects.filter(user=user)
+    for invitation in invitations:
+        invitation.delete()
+
+    # delete user and log out
+    user.profile.address.delete()
+    user.delete()
