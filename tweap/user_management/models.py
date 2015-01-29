@@ -38,14 +38,6 @@ class ProfileAddress(models.Model):
 
     # TODO: can someone please improve this?
     def __str__(self):
-        if self.street is None:
-            self.street = ''
-        if self.house_number is None:
-            self.house_number = ''
-        if self.postal_code is None:
-            self.postal_code = ''
-        if self.city is None:
-            self.city = ''
 
         address = ""
 
