@@ -1,5 +1,4 @@
 {% load i18n %}
-<script type="text/javascript">
 $(document).ready(function(){
    newMembers = new Members();
 });
@@ -108,4 +107,3 @@ var Members = function(){
         return JSON.stringify(this.Users);
     }
 }
-</script>

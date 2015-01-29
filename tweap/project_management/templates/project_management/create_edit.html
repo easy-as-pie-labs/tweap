@@ -2,7 +2,9 @@
 {% load i18n %}
 {% load myfilters %}
 {% block js %}
-    {% include "js.project_form_control.html" %}
+<script type="text/javascript">
+    {% include "edit_project_form_control.js" %}
+</script>
 {% endblock %}
 {% block project_management_template %}
     <h1>{{ headline }}</h1>

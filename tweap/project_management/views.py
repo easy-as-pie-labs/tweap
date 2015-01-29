@@ -111,11 +111,11 @@ def view_invites(request):
 def leave(request):
     if request.method == 'POST':
         project_id = request.POST.get('project_id', '')
-        if request.POST.get('confirm', '') == 'i am sure' and project_id:
+        if project_id:
             project = get_object_or_404(ProjectModel, id=project_id)
             if request.user in project.members.all():
                 project.leave(request.user)
-                return HttpResponseRedirect(reverse('project_management:all'))
+                return HttpResponseRedirect(reverse('project_management:view_all'))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 

@@ -25,15 +25,33 @@
             </table>
         </div>
         <div class="panel-footer">
-            <form class="form-group inline-form" action="{% url 'project_management:leave_group' project.id %}" method="POST">
-            {% csrf_token %}
-                <button type="submit" class="btn btn-danger">{% trans "leave group" %}</button>
-            </form>
+            <div class="form-group inline-form" >
+                <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#leaveGroupModal">{% trans "leave group" %}</button>
+            </div>
             <a href="{% url 'project_management:edit' project.id %}">
                 <button type="submit" class="btn btn-success">{% trans "edit group" %}</button>
             </a>
         </div>
     </div>
-</body>
-</html>
+    <div class="modal fade" id="leaveGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{% trans "Leave group" %}</h4>
+          </div>
+          <div class="modal-body">
+            {% trans "Are you sure, you want to leave this group?" %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Don't leave group" %}</button>
+            <form class="form-group inline-form" action="{% url 'project_management:leave' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="project_id" value="{{ project.id }}">
+                <input type="submit" class="btn btn-danger" value="{% trans "Leave Group" %}">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock %}
