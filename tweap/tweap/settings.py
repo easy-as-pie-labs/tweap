@@ -59,6 +59,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'tweap.middleware.RequireLoginMiddleware',
 )
 
 ROOT_URLCONF = 'tweap.urls'
@@ -111,6 +112,14 @@ TEMPLATE_DIRS = (
 LOGIN_REDIRECT_URL = 'dashboard:home'
 
 LOGIN_URL = 'user_management:login'
+
+LOGIN_REQUIRED_URLS = (
+    r'/projects/(.*)$',
+)
+
+LOGIN_REQUIRED_URLS_EXCEPTIONS = (
+    r'/users/login$',
+)
 
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
