@@ -95,6 +95,9 @@ def register_and_login(credentials, request):
     """
     user = User.objects.create_user(credentials['username'], credentials['email'], credentials['password'])
     profile = Profile.create(user)
+    address = ProfileAddress.create("", "", "", "")
+    address.save()
+    profile.address = address
     profile.save()
     login(credentials['username'], credentials['password'], request)
 

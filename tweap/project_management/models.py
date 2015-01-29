@@ -1,7 +1,7 @@
 from django.db import models
 from django.forms import ModelForm, Textarea
 from django.contrib.auth.models import User
-from django.utils.translation import ugettext
+from django.utils.translation import ugettext_lazy
 
 
 class Project(models.Model):
@@ -44,12 +44,12 @@ class ProjectForm(ModelForm):
             'description': Textarea(attrs={'class': 'form-control'})
         }
         labels = {
-            'name': ugettext('Name'),
-            'description': ugettext('Description')
+            'name': ugettext_lazy('Name'),
+            'description': ugettext_lazy('Description')
         }
         error_messages = {
             'name': {
-                'max_length': ugettext('The name of the project is too long.')
+                'max_length': ugettext_lazy('The name of the project is too long.')
             }
         }
 
