@@ -5,6 +5,7 @@ from django.views.generic import View
 from django.utils.translation import ugettext
 from project_management.models import ProjectForm, Project as ProjectModel, Invitation
 from project_management.tools import invite_users
+import json
 
 
 class CreateEdit(View):
@@ -106,6 +107,11 @@ def view_invites(request):
 
 
 def leave(request):
+    """
+    view function for leaving a project
+    :param request:
+    :return:
+    """
     if request.method == 'POST':
         project_id = request.POST.get('project_id', '')
         if project_id:
@@ -114,6 +120,30 @@ def leave(request):
                 project.leave(request.user)
                 return HttpResponseRedirect(reverse('project_management:view_all'))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def invitation_handler(request):
+    """
+    view function for handling invitation actions (accept, reject)
+    :param request:
+    :return:
+    """
+    result = {'message': 'An error occured', 'url': ''}
+    if request.method == 'POST':
+        invitation_id = request.POST.get('invitation_id', '')
+        action = request.POST.get('action', '')
+        if invitation_id:
+            invitation = Invitation.objects.get(id=invitation_id)
+            if invitation.user == request.user:
+                if action == 'accept':
+                    invitation.accept()
+                    result['message'] = ugettext("Invitation was accepted")
+                    result['url'] = reverse('project_management:project', args=(invitation.project.id,))
+                if action == 'reject':
+                    invitation.reject()
+                    result['message'] = ugettext("Invitation was rejected")
+
+    return HttpResponse(json.dumps(result), content_type="application/json")
 
 
 def accept_invite(request, project_id):
