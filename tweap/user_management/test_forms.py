@@ -175,23 +175,23 @@ class UserManagementTest(TestCase):
         self.assertEqual(resp.status_code, 200)
 
         # create test user
-        User.objects.create_user('correct_username', 'logintest@test.de', 'correct_password')
+        User.objects.create_user('correctusername', 'logintest@test.de', 'correct_password')
 
         # correct login
         print("Test: correct login")
-        resp = self.client.post('/users/login/', {'username': 'correct_username', 'password': 'correct_password'})
+        resp = self.client.post('/users/login/', {'username': 'correctusername', 'password': 'correct_password'})
         self.assertEqual(resp.status_code, 302)
         # self.assertEqual(resp.context['username'], 'test')  # TODO: anpassen auf Dashboard
 
         # incorrect password
         print("Test: incorrect password")
-        resp = self.client.post('/users/login/', {'username': 'correct_username', 'password': 'incorrect_password'})
+        resp = self.client.post('/users/login/', {'username': 'correctusername', 'password': 'incorrect_password'})
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('error_message' in resp.context)
 
         # incorrect username
         print("Test: incorrect username")
-        resp = self.client.post('/users/login/', {'username': 'incorrect_username', 'password': ''})
+        resp = self.client.post('/users/login/', {'username': 'incorrectusername', 'password': ''})
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('error_message' in resp.context)
 
