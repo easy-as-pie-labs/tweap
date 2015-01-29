@@ -2,325 +2,330 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-28 19:09+0000\n"
-"PO-Revision-Date: 2015-01-28 16:21+0100\n"
+"POT-Creation-Date: 2015-01-29 11:10+0100\n"
+"PO-Revision-Date: 2015-01-29 11:12+0100\n"
 "Last-Translator: b'  <root@root.root>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
-#: dashboard/templates/dashboard/dashboard.html:4
+#: .\dashboard\templates\dashboard\dashboard.html:4
 msgid "Dashboard"
 msgstr "Übersicht"
 
-#: dashboard/templates/dashboard/dashboard.html:6
+#: .\dashboard\templates\dashboard\dashboard.html:6
 msgid "Welcome"
 msgstr "Willkommen "
 
-#: dashboard/templates/dashboard/dashboard.html:7
+#: .\dashboard\templates\dashboard\dashboard.html:7
 msgid ""
 "Soon(ish) this is where you'll find your most needed information: Upcoming "
-"todo's, calendar events, project invites and the most important updates from "
-"your projects. You'll love it!"
-msgstr "Bald findest du here deine meistgebrauchten Informationen: Anstehende todo's, Termine, Projekteinladungen und die wichtigsten Updates aus deinen Projekten. Du wirst es lieben!"
+"todo's, calendar events, project invites and the most important updates from"
+" your projects. You'll love it!"
+msgstr ""
+"Bald findest du here deine meistgebrauchten Informationen: Anstehende "
+"todo's, Termine, Projekteinladungen und die wichtigsten Updates aus deinen "
+"Projekten. Du wirst es lieben!"
 
-#: dashboard/templates/dashboard/home.html:7
+#: .\dashboard\templates\dashboard\home.html:7
 msgid "Hey! Welcome to tweap"
 msgstr "Hey! Willkommen bei tweap"
 
-#: dashboard/templates/dashboard/home.html:8
+#: .\dashboard\templates\dashboard\home.html:8
 msgid ""
 "tweap is teamwork - easy as pie! We strive to make an awesome and "
 "streamlined project management software that allows you to seamlessly "
 "create, manage and rock projects!"
-msgstr "tweap ist teamwork - easy as pie! Wir streben es an ein cooles, schnittiges Projekt Management Tool zu kreieren, das es dir erlaubt einfach und ohne viel Arbeit Projekt anzulegen, zu verwalten und zu rocken! "
+msgstr ""
+"tweap ist teamwork - easy as pie! Wir streben es an ein cooles, schnittiges "
+"Projekt Management Tool zu kreieren, das es dir erlaubt einfach und ohne "
+"viel Arbeit Projekt anzulegen, zu verwalten und zu rocken! "
 
-#: dashboard/templates/dashboard/home.html:10
+#: .\dashboard\templates\dashboard\home.html:10
 msgid "Once you register and login..."
 msgstr "Bist du einmal registriert und eingeloggt..."
 
-#: dashboard/templates/dashboard/home.html:14
+#: .\dashboard\templates\dashboard\home.html:14
 msgid "...you can currently view someone's profile..."
 msgstr "...kannst du zur Zeit Profile betrachten..."
 
-#: dashboard/templates/dashboard/home.html:17
+#: .\dashboard\templates\dashboard\home.html:17
 msgid "...edit your own profile..."
 msgstr "...dein eigenes Profil bearbeiten..."
 
-#: dashboard/templates/dashboard/home.html:20
+#: .\dashboard\templates\dashboard\home.html:20
 msgid "...create projects and invite other people..."
 msgstr "...Projekte erstellen und andere Leute dazu einladen..."
 
-#: dashboard/templates/dashboard/home.html:23
+#: .\dashboard\templates\dashboard\home.html:23
 msgid "...view, accept and reject pending project invites..."
 msgstr "...Projekteinladungen einsehen, annehmen und ablehnen..."
 
-#: dashboard/templates/dashboard/home.html:26
+#: .\dashboard\templates\dashboard\home.html:26
 msgid "...and of course check out your projects..."
 msgstr "...und natürlich deine aktuellen Projekte betrachen..."
 
-#: project_management/models.py:47
+#: .\project_management\models.py:47
 msgid "Name"
 msgstr "Name"
 
-#: project_management/models.py:48
+#: .\project_management\models.py:48
 msgid "Description"
 msgstr "Beschreibung"
 
-#: project_management/models.py:52
+#: .\project_management\models.py:52
 msgid "The name of the project is too long."
 msgstr "Der Name des Projekts ist zu lang"
 
-#: project_management/templates/project_management/create_edit.html:19
+#: .\project_management\templates\project_management\create_edit.html:19
 msgid "Invite Members"
 msgstr "Mitglieder einladen"
 
-#: project_management/templates/project_management/create_edit.html:23
-#: tweap/templates/js.project_form_control.html:14
-#: tweap/templates/js.project_form_control.html:35
+#: .\project_management\templates\project_management\create_edit.html:23
+#: .\tweap\templates\js.project_form_control.html:14
+#: .\tweap\templates\js.project_form_control.html:35
 msgid "Username or eMail"
 msgstr "Benutzername oder E-Mail"
 
-#: project_management/templates/project_management/create_edit.html:31
-#: project_management/templates/project_management/project.html:12
+#: .\project_management\templates\project_management\create_edit.html:31
+#: .\project_management\templates\project_management\project.html:12
 msgid "Members"
 msgstr "Mitglieder"
 
-#: project_management/templates/project_management/create_edit.html:44
-#: project_management/templates/project_management/project.html:19
+#: .\project_management\templates\project_management\create_edit.html:44
+#: .\project_management\templates\project_management\project.html:19
 msgid "Invited"
 msgstr "Eingeladen"
 
-#: project_management/templates/project_management/create_edit.html:57
+#: .\project_management\templates\project_management\create_edit.html:57
 msgid "Save"
 msgstr "Speichern"
 
-#: project_management/templates/project_management/create_edit.html:57
+#: .\project_management\templates\project_management\create_edit.html:57
 msgid "Create"
 msgstr "Erstellen"
 
-#: project_management/templates/project_management/project.html:30
+#: .\project_management\templates\project_management\project.html:30
 msgid "leave group"
 msgstr "Gruppe verlassen"
 
-#: project_management/templates/project_management/project.html:33
+#: .\project_management\templates\project_management\project.html:33
 msgid "edit group"
 msgstr "Gruppe bearbeiten"
 
-#: project_management/templates/project_management/view_all.html:4
+#: .\project_management\templates\project_management\view_all.html:4
 msgid "Your projects"
 msgstr "Deine Projekte"
 
-#: project_management/templates/project_management/view_invites.html:4
+#: .\project_management\templates\project_management\view_invites.html:4
 msgid "Your invites"
 msgstr "Deine Einladungen"
 
-#: project_management/templates/project_management/view_invites.html:10
+#: .\project_management\templates\project_management\view_invites.html:10
 msgid "accept"
 msgstr "akzeptieren"
 
-#: project_management/templates/project_management/view_invites.html:14
+#: .\project_management\templates\project_management\view_invites.html:14
 msgid "reject"
 msgstr "ablehnen"
 
-#: project_management/views.py:20 project_management/views.py:46
+#: .\project_management\views.py:20 .\project_management\views.py:46
 msgid "Create new project"
 msgstr "Neues Projekt erstellen"
 
-#: project_management/views.py:30 project_management/views.py:54
+#: .\project_management\views.py:30 .\project_management\views.py:54
 msgid "Edit project"
 msgstr "Projekt bearbeiten"
 
-#: tweap/templates/navigation.html:3
+#: .\tweap\templates\navigation.html:3
 msgid "new Project"
 msgstr "neues Projekt"
 
-#: tweap/templates/navigation.html:4
+#: .\tweap\templates\navigation.html:4
 msgid "Projects"
 msgstr "Projekte"
 
-#: tweap/templates/navigation.html:5
+#: .\tweap\templates\navigation.html:5
 msgid "Invites"
 msgstr "Einladungen"
 
-#: tweap/templates/navigation.html:6
+#: .\tweap\templates\navigation.html:6
 msgid "Profile"
 msgstr "Profil"
 
-#: tweap/templates/navigation.html:7
+#: .\tweap\templates\navigation.html:7
 msgid "Logout"
 msgstr "Ausloggen"
 
-#: tweap/templates/navigation.html:9
-#: user_management/templates/user_management/login.html:5
-#: user_management/templates/user_management/login.html:14
+#: .\tweap\templates\navigation.html:9
+#: .\user_management\templates\user_management\login.html:5
+#: .\user_management\templates\user_management\login.html:14
 msgid "Login"
 msgstr "Einloggen"
 
-#: tweap/templates/navigation.html:10
-#: user_management/templates/user_management/register.html:14
+#: .\tweap\templates\navigation.html:10
+#: .\user_management\templates\user_management\register.html:14
 msgid "Register"
 msgstr "Registrieren"
 
-#: user_management/forms.py:7
+#: .\user_management\forms.py:7
 msgid "Change profile picture"
 msgstr "Profilbild ändern"
 
-#: user_management/forms.py:8
+#: .\user_management\forms.py:8
 msgid "No file selected"
 msgstr "Keine Datei ausgewählt"
 
-#: user_management/models.py:60 user_management/models.py:64
+#: .\user_management\models.py:60 .\user_management\models.py:64
 msgid "Number"
 msgstr "Hausnummer"
 
-#: user_management/templates/user_management/editprofile.html:4
-#: user_management/templates/user_management/profile.html:6
+#: .\user_management\templates\user_management\editprofile.html:4
+#: .\user_management\templates\user_management\profile.html:6
 msgid "Your profile"
 msgstr "Dein Profil"
 
-#: user_management/templates/user_management/editprofile.html:19
+#: .\user_management\templates\user_management\editprofile.html:19
 msgid "Upload image"
 msgstr "Bild hochladen"
 
-#: user_management/templates/user_management/editprofile.html:26
-#: user_management/templates/user_management/login.html:11
-#: user_management/templates/user_management/profile.html:15
-#: user_management/templates/user_management/register.html:11
+#: .\user_management\templates\user_management\editprofile.html:26
+#: .\user_management\templates\user_management\login.html:11
+#: .\user_management\templates\user_management\profile.html:15
+#: .\user_management\templates\user_management\register.html:11
 msgid "Username"
 msgstr "Benutzername"
 
-#: user_management/templates/user_management/editprofile.html:30
-#: user_management/templates/user_management/profile.html:19
+#: .\user_management\templates\user_management\editprofile.html:30
+#: .\user_management\templates\user_management\profile.html:19
 msgid "E-Mail"
 msgstr "E-Mail"
 
-#: user_management/templates/user_management/editprofile.html:34
-#: user_management/templates/user_management/login.html:12
-#: user_management/templates/user_management/register.html:13
+#: .\user_management\templates\user_management\editprofile.html:34
+#: .\user_management\templates\user_management\login.html:12
+#: .\user_management\templates\user_management\register.html:13
 msgid "Password"
 msgstr "Passwort"
 
-#: user_management/templates/user_management/editprofile.html:38
+#: .\user_management\templates\user_management\editprofile.html:38
 msgid "Repeat Password"
 msgstr "Wiederhole Passwort"
 
-#: user_management/templates/user_management/editprofile.html:42
-#: user_management/templates/user_management/profile.html:27
+#: .\user_management\templates\user_management\editprofile.html:42
+#: .\user_management\templates\user_management\profile.html:27
 msgid "First name"
 msgstr "Vorname"
 
-#: user_management/templates/user_management/editprofile.html:46
-#: user_management/templates/user_management/profile.html:31
+#: .\user_management\templates\user_management\editprofile.html:46
+#: .\user_management\templates\user_management\profile.html:31
 msgid "Last name"
 msgstr "Nachname"
 
-#: user_management/templates/user_management/editprofile.html:50
-#: user_management/templates/user_management/profile.html:35
+#: .\user_management\templates\user_management\editprofile.html:50
+#: .\user_management\templates\user_management\profile.html:35
 msgid "Phone"
 msgstr "Telefonnummer"
 
-#: user_management/templates/user_management/editprofile.html:54
+#: .\user_management\templates\user_management\editprofile.html:54
 msgid "City"
 msgstr "Stadt"
 
-#: user_management/templates/user_management/editprofile.html:58
+#: .\user_management\templates\user_management\editprofile.html:58
 msgid "ZIP-Code"
 msgstr "Postleitzahl"
 
-#: user_management/templates/user_management/editprofile.html:62
+#: .\user_management\templates\user_management\editprofile.html:62
 msgid "Street"
 msgstr "Straße"
 
-#: user_management/templates/user_management/editprofile.html:66
+#: .\user_management\templates\user_management\editprofile.html:66
 msgid "Housenumber"
 msgstr "Hausnummer"
 
-#: user_management/templates/user_management/editprofile.html:70
+#: .\user_management\templates\user_management\editprofile.html:70
 msgid "Save Changes"
 msgstr "Änderungen speichern"
 
-#: user_management/templates/user_management/logout.html:5
+#: .\user_management\templates\user_management\logout.html:5
 msgid "Logged out"
 msgstr "Ausgeloggt"
 
-#: user_management/templates/user_management/logout.html:6
+#: .\user_management\templates\user_management\logout.html:6
 msgid "Back to login."
 msgstr "Zurück zum login."
 
-#: user_management/templates/user_management/profile.html:8
-#, fuzzy
+#: .\user_management\templates\user_management\profile.html:8
 #| msgid "Profile"
 msgid "profile"
 msgstr "Profil"
 
-#: user_management/templates/user_management/profile.html:23
+#: .\user_management\templates\user_management\profile.html:23
 msgid "Last login"
 msgstr "Letzter login"
 
-#: user_management/templates/user_management/profile.html:39
+#: .\user_management\templates\user_management\profile.html:39
 msgid "Address"
 msgstr "Adresse"
 
-#: user_management/templates/user_management/profile.html:45
+#: .\user_management\templates\user_management\profile.html:45
 msgid "Make Changes"
 msgstr "Bearbeiten"
 
-#: user_management/templates/user_management/register.html:5
+#: .\user_management\templates\user_management\register.html:5
 msgid "Registration"
 msgstr "Registrierung"
 
-#: user_management/templates/user_management/register.html:12
+#: .\user_management\templates\user_management\register.html:12
 msgid "eMail"
 msgstr "E-Mail"
 
-#: user_management/tools.py:29
+#: .\user_management\tools.py:29
 msgid "The username isn't available"
 msgstr "Der Benutzername ist nicht verfügbar"
 
-#: user_management/tools.py:31
+#: .\user_management\tools.py:31
 msgid "The username can only contain letters and numbers"
 msgstr "Der Benutzername darf nur Buchstaben und Zahlen beinhalten"
 
-#: user_management/tools.py:33 user_management/tools.py:77
+#: .\user_management\tools.py:33 .\user_management\tools.py:77
 msgid "The email address isn't valid"
 msgstr "Die E-Mail Adresse ist nicht gültig"
 
-#: user_management/tools.py:35
+#: .\user_management\tools.py:35
 msgid "The email address is already in use"
 msgstr "Die E-Mail Adresse wird bereits verwendet"
 
-#: user_management/tools.py:39 user_management/tools.py:74
+#: .\user_management\tools.py:39 .\user_management\tools.py:74
 msgid "The password is super weak"
 msgstr "Das Passwort ist super schwach"
 
-#: user_management/tools.py:42
+#: .\user_management\tools.py:42
 msgid "All fields must be filled out"
 msgstr "Alle Felder müssen ausgefüllt sein"
 
-#: user_management/tools.py:45 user_management/tools.py:83
+#: .\user_management\tools.py:45 .\user_management\tools.py:83
 msgid "An error occurred during form transfer"
 msgstr "Es ist ein Fehler während der Übertragung aufgetreten"
 
-#: user_management/tools.py:70
+#: .\user_management\tools.py:70
 msgid "Passwords do not match!"
 msgstr "Passwörter stimmen nicht überein!"
 
-#: user_management/tools.py:81
+#: .\user_management\tools.py:81
 msgid "This email is already in use"
 msgstr "Die E-Mail Adresse wird bereits verwendet"
 
-#: user_management/views.py:81
+#: .\user_management\views.py:81
 msgid "Login not successful!"
 msgstr "Login nicht erfolgreich!"
 
