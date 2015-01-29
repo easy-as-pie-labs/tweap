@@ -3,7 +3,6 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.utils.translation import ugettext
-from django.views.decorators.csrf import csrf_exempt
 from project_management.models import ProjectForm, Project as ProjectModel, Invitation
 from project_management.tools import invite_users
 import json
@@ -122,15 +121,13 @@ def leave(request):
                 return HttpResponseRedirect(reverse('project_management:view_all'))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-
-@csrf_exempt
 def invitation_handler(request):
     """
     view function for handling invitation actions (accept, reject)
     :param request:
     :return:
     """
-    result = {'message': 'An error occured', 'url': ''}
+    result = {'url': '', 'id': ''}
     if request.method == 'POST':
         invitation_id = request.POST.get('invitation_id', '')
         action = request.POST.get('action', '')
@@ -139,28 +136,9 @@ def invitation_handler(request):
             if invitation.user == request.user:
                 if action == 'accept':
                     invitation.accept()
-                    result['message'] = ugettext("Invitation was accepted")
-                    result['url'] = reverse('project_management:project', args=(invitation.project.id,))
+                    result['url'] = request.build_absolute_uri(reverse('project_management:project', args=(invitation.project.id,)))
                 if action == 'reject':
+                    result['id'] = invitation_id
                     invitation.reject()
-                    result['message'] = ugettext("Invitation was rejected")
 
     return HttpResponse(json.dumps(result), content_type="application/json")
-
-
-def accept_invite(request, project_id):
-    project = ProjectModel.objects.get(id=project_id)
-    invitation = Invitation.objects.get(user=request.user, project=project)
-    invitation.accept()
-
-    #TODO: this isn't OK
-    return redirect('../' + str(project_id), permanent=True)
-
-
-def reject_invite(request, project_id):
-    project = ProjectModel.objects.get(id=project_id)
-    invitation = Invitation.objects.get(user=request.user, project=project)
-    invitation.reject()
-
-    #TODO: this isn't OK
-    return redirect('../invites', permanent=True)
