@@ -9,6 +9,17 @@ class UserManagementTest(TestCase):
         resp = self.client.get('/dashboard/')
         self.assertEqual(resp.status_code, 200)
 
+        #register
+        resp = self.client.post('/users/register/', {'username': 'myusername', 'email': 'me@test.de', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
+
+        #login
+        resp = self.client.post('/users/login/', {'username': 'myusername', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
+
+        resp = self.client.get('/dashboard/')
+        self.assertEqual(resp.status_code, 200)
+
     def test_register(self):
 
         print("__Test Regisration__")
@@ -353,3 +364,86 @@ class UserManagementTest(TestCase):
         self.assertEqual(Project.objects.filter(id=project.id).count(), 1)
         self.assertEqual(ProfileAddress.objects.filter(id=address_id).count(), 0)
         self.assertEqual(Project.objects.filter(members=user).count(), 0)
+
+
+class ViewTest(TestCase):
+    def test_view_access_denied(self):
+        # register a user to view
+        resp = self.client.post('/users/register/', {'username': 'theirusername', 'email': 'them@test.de', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
+
+        #register
+        resp = self.client.post('/users/register/', {'username': 'myusername', 'email': 'me@test.de', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
+
+        #login
+        resp = self.client.post('/users/login/', {'username': 'myusername', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
+
+        print('test register redirect when user is already logged in')
+        resp = self.client.get('/users/register/')
+        self.assertEqual(resp.status_code, 302)
+
+        print('test login redirect when user is already logged in')
+        resp = self.client.get('/users/login/')
+        self.assertEqual(resp.status_code, 302)
+
+        print('test: try to view a profile of someone the user is not connected to')
+        resp = self.client.get('/users/profile/theirusername/')
+        self.assertEqual(resp.status_code, 404)
+
+        print('test: try to view a profile of someone who doesn\'t exist')
+        resp = self.client.get('/users/profile/notauser/')
+        self.assertEqual(resp.status_code, 404)
+
+        resp = self.client.get('/users/logout/')
+        self.assertEqual(resp.status_code, 200)
+
+        print('test try to edit profile when not logged in')
+        resp = self.client.get('/users/editprofile/')
+        self.assertEqual(resp.status_code, 302)
+
+        print('test try to view \'own\' profile when not logged in')
+        resp = self.client.get('/users/profile/myusername/')
+        self.assertEqual(resp.status_code, 302)
+
+    def test_view_accessibility(self):
+        resp = self.client.post('/users/register/', {'username': 'connecteduser', 'email': 'anotheruser@test.de', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
+        resp = self.client.post('/users/register/', {'username': 'thirdguy', 'email': 'yetanotheruser@test.de', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
+        resp = self.client.post('/users/register/', {'username': 'activeuser', 'email': 'usertobedeleted@test.de', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
+
+        user = User.objects.get(username='activeuser')
+        user2 = User.objects.get(username='connecteduser')
+
+        project = Project.objects.create()
+        project.members.add(user)
+        project.members.add(user2)
+        project.save()
+
+        #login
+        resp = self.client.post('/users/login/', {'username': 'activeuser', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
+
+        print('test: try to view own profile when logeed in')
+        resp = self.client.get('/users/profile/activeuser/')
+        self.assertEqual(resp.status_code, 200)
+
+        print('test: try to view a profile of someone the user is connected to')
+        resp = self.client.get('/users/profile/connecteduser/')
+        self.assertEqual(resp.status_code, 200)
+
+        print('test: try to edit own profile')
+        resp = self.client.get('/users/editprofile/')
+        self.assertEqual(resp.status_code, 200)
+
+        print('test: try to edit the profile of someone the user is connected to')
+        resp = self.client.get('/users/editprofile/connecteduser')
+        self.assertEqual(resp.status_code, 404)
+
+        print('test: try to edit the profile of someone the user is not connected to')
+        resp = self.client.get('/users/editprofile/thirdguy')
+        self.assertEqual(resp.status_code, 404)
+

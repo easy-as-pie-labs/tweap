@@ -115,6 +115,8 @@ LOGIN_URL = 'user_management:login'
 
 LOGIN_REQUIRED_URLS = (
     r'/projects/(.*)$',
+    r'/users/profile/(.*)$',
+    r'/users/editprofile/$',
 )
 
 LOGIN_REQUIRED_URLS_EXCEPTIONS = (

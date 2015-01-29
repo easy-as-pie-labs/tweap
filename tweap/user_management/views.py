@@ -78,7 +78,6 @@ class Login(View):
             return HttpResponseRedirect(redirect)
         else:
             context['error_message'] = ugettext("Login not successful!")
-            #TODO: irgendwas failed hier
             return render(request, 'user_management/login.html', context)
 
 
@@ -104,7 +103,7 @@ class ViewProfile(View):
         :param user_name: the user name of the profile that should be displayed
         :return:
         """
-
+        
         user = get_object_or_404(User, username=user_name)
         if user not in request.user.profile.get_connected_users():
             raise Http404
