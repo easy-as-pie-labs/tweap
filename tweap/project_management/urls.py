@@ -8,7 +8,7 @@ urlpatterns = patterns(
     url(r'^edit/(?P<project_id>\d+)/$', views.CreateEdit.as_view(), name='edit'),
     url(r'^all/$', views.ViewAll.as_view(), name='view_all'),
     url(r'^invites/$', views.view_invites, name='view_invites'),
-    url(r'^leave_group/(?P<project_id>\d+)/?$', views.leave_group, name='leave_group'),
+    url(r'^leave/$', views.leave, name='leave'),
     url(r'^accept_invite/(?P<project_id>\d+)/?$', views.accept_invite, name='accept_invite'),
     url(r'^reject_invite/(?P<project_id>\d+)/?$', views.reject_invite, name='reject_invite'),
 

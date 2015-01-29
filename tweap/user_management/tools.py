@@ -118,6 +118,11 @@ def login(username, password, request):
 
 
 def delete_user(user):
+    """
+    removes an user account
+    :param user:
+    :return:
+    """
     # remove user from projects and delete invitations of the user
     projects = Project.objects.filter(members=user)
     for project in projects:

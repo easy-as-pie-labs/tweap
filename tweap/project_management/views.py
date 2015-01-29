@@ -108,12 +108,15 @@ def view_invites(request):
     return render(request, 'project_management/view_invites.html', context)
 
 
-def leave_group(request, project_id):
-    project = ProjectModel.objects.get(id=project_id)
-    project.leave(request.user)
-
-    #TODO: this isn't OK
-    return redirect('../all', permanent=True)
+def leave(request):
+    if request.method == 'POST':
+        project_id = request.POST.get('project_id', '')
+        if request.POST.get('confirm', '') == 'i am sure' and project_id:
+            project = get_object_or_404(ProjectModel, id=project_id)
+            if request.user in project.members.all():
+                project.leave(request.user)
+                return HttpResponseRedirect(reverse('project_management:all'))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def accept_invite(request, project_id):
