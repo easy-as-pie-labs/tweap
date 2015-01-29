@@ -5,6 +5,7 @@ from django.views.generic import View
 from django.utils.translation import ugettext
 from project_management.models import ProjectForm, Project as ProjectModel, Invitation
 from project_management.tools import invite_users
+import json
 
 
 class CreateEdit(View):
@@ -90,7 +91,7 @@ class ViewAll(View):
     View class for displaying all projects of an user
     """
     def get(self, request):
-        context = {'projects': ProjectModel.objects.filter(members=request.user.id)}
+        context = {'projects': ProjectModel.objects.filter(members=request.user)}
         return render(request, 'project_management/view_all.html', context)
 
 
@@ -100,15 +101,17 @@ def view_invites(request):
     :param request:
     :return:
     """
-    invites = Invitation.objects.filter(user=request.user.id)
-    projects = []
-    for invite in invites:
-        projects.append(ProjectModel.objects.get(id=invite.project.id))
-    context = {'projects': projects}
+    invitations = Invitation.objects.filter(user=request.user)
+    context = {'invitations': invitations}
     return render(request, 'project_management/view_invites.html', context)
 
 
 def leave(request):
+    """
+    view function for leaving a project
+    :param request:
+    :return:
+    """
     if request.method == 'POST':
         project_id = request.POST.get('project_id', '')
         if project_id:
@@ -116,22 +119,27 @@ def leave(request):
             if request.user in project.members.all():
                 project.leave(request.user)
                 return HttpResponseRedirect(reverse('project_management:view_all'))
+    # TODO: wenn letzter user leaved im frontend auf das aut. löschen der gruppe hinweisen
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+def invitation_handler(request):
+    """
+    view function for handling invitation actions (accept, reject)
+    :param request:
+    :return:
+    """
+    result = {'url': '', 'id': ''}
+    if request.method == 'POST':
+        invitation_id = request.POST.get('invitation_id', '')
+        action = request.POST.get('action', '')
+        if invitation_id:
+            invitation = Invitation.objects.get(id=invitation_id)
+            if invitation.user == request.user:
+                if action == 'accept':
+                    invitation.accept()
+                    result['url'] = request.build_absolute_uri(reverse('project_management:project', args=(invitation.project.id,)))
+                if action == 'reject':
+                    result['id'] = invitation_id
+                    invitation.reject()
 
-def accept_invite(request, project_id):
-    project = ProjectModel.objects.get(id=project_id)
-    invitation = Invitation.objects.get(user=request.user, project=project)
-    invitation.accept()
-
-    #TODO: this isn't OK
-    return redirect('../' + str(project_id), permanent=True)
-
-
-def reject_invite(request, project_id):
-    project = ProjectModel.objects.get(id=project_id)
-    invitation = Invitation.objects.get(user=request.user, project=project)
-    invitation.reject()
-
-    #TODO: this isn't OK
-    return redirect('../invites', permanent=True)
+    return HttpResponse(json.dumps(result), content_type="application/json")
