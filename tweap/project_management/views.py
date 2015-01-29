@@ -120,6 +120,7 @@ def leave(request):
             if request.user in project.members.all():
                 project.leave(request.user)
                 return HttpResponseRedirect(reverse('project_management:view_all'))
+    # TODO: wenn letzter user leaved im frontend auf das aut. löschen der gruppe hinweisen
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
