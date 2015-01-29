@@ -10,11 +10,6 @@ class ModelTest(TestCase):
     project_name = "Testproject"
     project_description = "Testdescription"
 
-    def test_project_model_constructor(self):
-        project = Project(name=self.project_name, description=self.project_description)
-        self.assertEquals(project.name, self.project_name)
-        self.assertEquals(project.description, self.project_description)
-
     def test_project_model_members_and_leave(self):
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
         user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
@@ -102,7 +97,7 @@ class ToolsTest(TestCase):
         user2 = User.objects.create_user('user2', 'user2@test.de', 'testpw')
         user3 = User.objects.create_user('user3', 'user3@test.de', 'testpw')
         # test with username and email
-        user_string = ['user1', 'user2@test.de']
+        user_string = ['user1', 'user2@test.de', 'test']
         user_string = json.dumps(user_string)
         invite_users(user_string, project)
         # test if the both users are invited
@@ -114,3 +109,7 @@ class ToolsTest(TestCase):
         user1.delete()
         user2.delete()
         user3.delete()
+
+
+class ViewsTest(TestCase):
+    pass
