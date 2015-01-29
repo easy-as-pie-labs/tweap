@@ -1,0 +1,21 @@
+{% extends "user_management_template.html" %}
+{% load i18n %}
+{% load static %}
+{% block user_management_template %}
+
+    <h2>{% trans "Do you really want to delete your tweap account?" %}</h2>
+    {% if error %}
+        <div class="alert alert-danger no-margin-element">{{ error }}</div>
+    {%  endif %}
+    <form class="form-group" action="{% url 'user_management:delete_account' %}" method="POST">
+        {% csrf_token %}
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="confirm" value="i am sure">
+            {% trans "I am sure" %}
+          </label>
+        </div>
+        <button type="submit" class="btn btn-danger btn-lg">{% trans "Delete account" %}</button>
+    </form>
+
+{% endblock %}

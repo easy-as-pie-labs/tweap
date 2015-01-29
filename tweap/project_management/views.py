@@ -84,6 +84,7 @@ class Project(View):
         else:
             raise Http404
 
+
 class ViewAll(View):
     """
     View class for displaying all projects of an user

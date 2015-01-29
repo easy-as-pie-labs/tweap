@@ -223,6 +223,32 @@ def upload_picture(request):
             return HttpResponseRedirect(reverse('user_management:edit_profile'))
 
 
+def delete_account(request):
+
+    context = {}
+    if request.method == 'POST':
+        if request.POST.get('confirm', '') == 'i am sure':
+
+            # remove user from projects and delete invitations of the user
+            projects = ProjectModel.objects.filter(members=request.user)
+            for project in projects:
+                project.leave(request.user)
+            invitations = Invitation.objects.filter(user=request.user)
+            for invitation in invitations:
+                invitation.delete()
+
+            # delete user and log out
+            request.user.delete()
+            django_logout(request)
+            return HttpResponseRedirect(reverse('dashboard:home'))
+        else:
+            context['error'] = ugettext("Checkbox for confirmation must be checked!")
+
+    return render(request, 'user_management/delete_account.html', context)
+
+
+
+
 def user_suggestion(request):
     """
     view function for searching users by user name or email address
