@@ -41,9 +41,9 @@ class Register(View):
             context = {'error_messages': errors}
             if 'form' not in errors:
                 if 'username' not in errors:
-                    context['username'] = credentials['username']
+                    context['username_field'] = credentials['username']
                 if 'email' not in errors:
-                    context['email'] = credentials['email']
+                    context['email_field'] = credentials['email']
             return render(request, 'user_management/register.html', context)
 
 
@@ -78,6 +78,7 @@ class Login(View):
             return HttpResponseRedirect(redirect)
         else:
             context['error_message'] = ugettext("Login not successful!")
+            #TODO: irgendwas failed hier
             return render(request, 'user_management/login.html', context)
 
 

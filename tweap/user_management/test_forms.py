@@ -24,17 +24,20 @@ class UserManagementTest(TestCase):
         self.assertEqual(resp.status_code, 302)
         # self.assertEqual(resp.context['username'], 'test')  # TODO: anpassen auf Dashboard
 
+        self.client.get('/users/logout/')
+
         # username and email already in use
         print("Test: username and email already in use")
         resp = self.client.post('/users/register/', {'username': 'test', 'email': 'test@test.de', 'password': 'testpw'})
+
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('username' in resp.context['error_messages'])
         self.assertTrue('email' in resp.context['error_messages'])
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
-        self.assertFalse('username' in resp.context)
-        self.assertFalse('email' in resp.context)
+        self.assertFalse('username_field' in resp.context)
+        self.assertFalse('email_field' in resp.context)
 
         # username already in use
         print("Test: username already in use")
@@ -45,8 +48,8 @@ class UserManagementTest(TestCase):
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
-        self.assertFalse('username' in resp.context)
-        self.assertEqual('test2@test.de', resp.context['email'])
+        self.assertFalse('username_field' in resp.context)
+        self.assertEqual('test2@test.de', resp.context['email_field'])
 
         # username contains non alphanumerical symbols
         print("Test: username contains non alphanumerical symbols")
@@ -57,8 +60,8 @@ class UserManagementTest(TestCase):
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
-        self.assertFalse('username' in resp.context)
-        self.assertEqual('test2@test.de', resp.context['email'])
+        self.assertFalse('username_field' in resp.context)
+        self.assertEqual('test2@test.de', resp.context['email_field'])
 
         # email already in use
         print("Test: email already in use")
@@ -69,8 +72,8 @@ class UserManagementTest(TestCase):
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
-        self.assertEqual('test2', resp.context['username'])
-        self.assertFalse('email' in resp.context)
+        self.assertEqual('test2', resp.context['username_field'])
+        self.assertFalse('email_field' in resp.context)
 
         # email format is not valid
         print("Test: email format is not valid")
@@ -81,8 +84,8 @@ class UserManagementTest(TestCase):
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
-        self.assertEqual('test2', resp.context['username'])
-        self.assertFalse('email' in resp.context)
+        self.assertEqual('test2', resp.context['username_field'])
+        self.assertFalse('email_field' in resp.context)
 
         # password is in bad password list
         print("Test: password is in bad password list")
@@ -93,8 +96,8 @@ class UserManagementTest(TestCase):
         self.assertTrue('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
-        self.assertEqual('test2', resp.context['username'])
-        self.assertEqual('test2@test.de', resp.context['email'])
+        self.assertEqual('test2', resp.context['username_field'])
+        self.assertEqual('test2@test.de', resp.context['email_field'])
 
         # password equals username
         print("Test: password equals username")
@@ -105,8 +108,8 @@ class UserManagementTest(TestCase):
         self.assertTrue('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
-        self.assertEqual('test2', resp.context['username'])
-        self.assertEqual('test2@test.de', resp.context['email'])
+        self.assertEqual('test2', resp.context['username_field'])
+        self.assertEqual('test2@test.de', resp.context['email_field'])
 
         # password equals email
         print("Test: password equals email")
@@ -117,8 +120,8 @@ class UserManagementTest(TestCase):
         self.assertTrue('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
-        self.assertTrue('username' in resp.context)
-        self.assertEqual('test2@test.de', resp.context['email'])
+        self.assertTrue('username_field' in resp.context)
+        self.assertEqual('test2@test.de', resp.context['email_field'])
 
         # username is blank
         print("Test: username is blank")
@@ -159,8 +162,8 @@ class UserManagementTest(TestCase):
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('blank' in resp.context['error_messages'])
         self.assertTrue('form' in resp.context['error_messages'])
-        self.assertFalse('username' in resp.context)
-        self.assertFalse('email' in resp.context)
+        self.assertFalse('username_field' in resp.context)
+        self.assertFalse('email_field' in resp.context)
 
     def test_login(self):
 
@@ -200,19 +203,23 @@ class UserManagementTest(TestCase):
 
     def test_edit_profile(self):
         # create test user
-        user = User.objects.create_user('my_username', 'me@test.de', 'correct_password')
-        profile = Profile.create(user)
-        profile.save()
-        User.objects.create_user('antoher_dude', 'used@test.de', 'correct_password')
+        resp = self.client.post('/users/register/', {'username': 'myusername', 'email': 'me@test.de', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
+        resp = self.client.post('/users/register/', {'username': 'anotherdude', 'email': 'used@test.de', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
 
         # correct login
         print("Test: correct login")
-        resp = self.client.post('/users/login/', {'username': 'my_username', 'password': 'correct_password'})
+        resp = self.client.post('/users/login/', {'username': 'myusername', 'password': 'correct_password'})
         self.assertEqual(resp.status_code, 302)
 
         print('profile is viewable')
-        resp = self.client.get('/users/profile/')
+        resp = self.client.get('/users/profile/myusername/')
         self.assertEqual(resp.status_code, 200)
+
+        print('unknown person\'s profile is not viewable')
+        resp = self.client.get('/users/profile/another dude')
+        self.assertEqual(resp.status_code, 404)
 
         print('site is editable')
         resp = self.client.get('/users/editprofile/')
@@ -269,14 +276,21 @@ class UserManagementTest(TestCase):
         self.assertFalse('form' in resp.context['error_messages'])
 
         print('password cannot be username')
-        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': 'my_username', 'passwordrepeat': 'my_username', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
+        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': 'myusername', 'passwordrepeat': 'my_username', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('password' in resp.context['error_messages'])
         self.assertFalse('email' in resp.context['error_messages'])
         self.assertFalse('form' in resp.context['error_messages'])
 
+        print('password cannot be username, email already taken')
+        resp = self.client.post('/users/editprofile/', {'email': 'used@test.de', 'password': 'myusername', 'passwordrepeat': 'my_username', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue('password' in resp.context['error_messages'])
+        self.assertTrue('email' in resp.context['error_messages'])
+        self.assertFalse('form' in resp.context['error_messages'])
+
         print('form has been tempered with')
-        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': 'my_username', 'passwordrepeat': 'my_username', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
+        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': 'myusername', 'passwordrepeat': 'my_username', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
         self.assertEqual(resp.status_code, 200)
         self.assertFalse('password' in resp.context['error_messages'])
         self.assertFalse('email' in resp.context['error_messages'])

@@ -8,8 +8,8 @@
             {% endfor %}
             <form class="input-group input-group-lg" method="post" action="{% url 'user_management:register' %}">
                 {% csrf_token %}
-                <input class="form-control" type="text" name="username" placeholder="{% trans "Username" %}" value="{{ username }}" required>
-                <input class="form-control" type="email" name="email" placeholder="{% trans "eMail" %}" value="{{ email }}" required>
+                <input class="form-control" type="text" name="username" placeholder="{% trans "Username" %}" value="{{ username_field }}" required>
+                <input class="form-control" type="email" name="email" placeholder="{% trans "eMail" %}" value="{{ email_field }}" required>
                 <input class="form-control" type="password" name="password" placeholder="{% trans "Password" %}" required>
                 <input class="btn btn-primary btn-lg btn-middle" type="submit" value="{% trans "Register" %}">
             </form>
