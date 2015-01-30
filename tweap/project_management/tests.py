@@ -122,43 +122,56 @@ class ViewsTest(TestCase):
 
         # test if page is available
         resp = self.client.get('/projects/new/')
-        self.assertEquals(resp.status_code, 200)
+        self.assertEqual(resp.status_code, 200)
 
         # test if validation works
         resp = self.client.post('/projects/new/', {})
-        self.assertEquals(resp.status_code, 200)
+        self.assertEqual(resp.status_code, 200)
         self.assertTrue(resp.context['error_messages'])
 
         # test if project with name only can be created
         resp = self.client.post('/projects/new/', {'name': 'TestCreateProject'})
-        self.assertEquals(resp.status_code, 302)
+        self.assertEqual(resp.status_code, 302)
         project_exist = Project.objects.filter(name='TestCreateproject').exists()
         self.assertTrue(project_exist)
 
         # test if project with name and description can be created
         resp = self.client.post('/projects/new/', {'name': 'TestCreateProject2', 'description': 'I am a test project'})
-        self.assertEquals(resp.status_code, 302)
+        self.assertEqual(resp.status_code, 302)
         project_exist = Project.objects.filter(name='TestCreateproject2').exists()
         self.assertTrue(project_exist)
         project = Project.objects.get(name='TestCreateproject2')
-        self.assertEquals(project.description, 'I am a test project')
+        self.assertEqual(project.description, 'I am a test project')
 
         # test if a non existing project retuns 404
         resp = self.client.get('/projects/edit/9999/')
-        self.assertEquals(resp.status_code, 404)
+        self.assertEqual(resp.status_code, 404)
 
         # test if an existing project can be edited
         resp = self.client.get('/projects/edit/' + str(project.id) + '/')
-        self.assertEquals(resp.status_code, 200)
+        self.assertEqual(resp.status_code, 200)
 
         # test if changes are saved
         resp = self.client.post('/projects/edit/' + str(project.id) + '/', {'name': 'new name', 'description': 'new description'})
-        self.assertEquals(resp.status_code, 302)
+        self.assertEqual(resp.status_code, 302)
         project = Project.objects.get(id=project.id)
-        self.assertEquals(project.name, 'new name')
-        self.assertEquals(project.description, 'new description')
+        self.assertEqual(project.name, 'new name')
+        self.assertEqual(project.description, 'new description')
 
     def test_project_view(self):
+        self.setup_login()
+
+        # test if project with name only can be created
+        resp = self.client.post('/projects/new/', {'name': 'TestCreateProject'})
+        self.assertEqual(resp.status_code, 302)
+        project_exists = Project.objects.filter(name='TestCreateproject').exists()
+        self.assertTrue(project_exists)
+        project = Project.objects.get(name='TestCreateproject')
+
+        resp = self.client.get('/projects/' + str(project.id))
+        self.assertEqual(resp.status_code, 200)
+
+
         pass
 
     def test_view_all(self):
