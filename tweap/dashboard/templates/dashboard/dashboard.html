@@ -3,7 +3,11 @@
 {% block user_management_template %}
     <h1>{% trans "Dashboard" %}</h1>
     <div>
-        <p class="lead">{% trans "Welcome" %} {{ user.get_username }}!</p>
+        <h3>{% trans "Welcome" %} {{ user.get_username }}!</h3>
         <p>{% trans "Soon(ish) this is where you'll find your most needed information: Upcoming todo's, calendar events, project invites and the most important updates from your projects. You'll love it!" %}</p>
+        <h4>{% trans "Here are your updates:" %}</h4>
+        {% if invitation_count > 0 %}
+            <p><span class="glyphicon glyphicon-envelope"></span> <a href="{% url 'project_management:view_invites' %}"">{% trans "You have " %}{{invitation_count}}{% trans " pending project invitations" %}</a></p>
+        {% endif %}
     </div>
 {% endblock %}

@@ -1,11 +1,11 @@
 {% load i18n %}
 {% if user.is_authenticated %}
-    <li><a href="{% url 'project_management:create' %}">{% trans "new Project" %}</a></li>
-    <li><a href="{% url 'project_management:view_all' %}">{% trans "Projects" %}</a></li>
-    <li><a href="{% url 'project_management:view_invites' %}">{% trans "Invites" %} (<span id="invitations_link">{{ no_of_invites }}</span>)</a></li>
-    <li><a href="{% url 'user_management:profile' username %}">{% trans "Profile" %}</a></li>
-    <li><a href="{% url 'user_management:logout' %}">{% trans "Logout" %}</a></li>
+    <li><a name="navbar_new_link" href="{% url 'project_management:create' %}">{% trans "new Project" %}</a></li>
+    <li><a name="navbar_projects_link" href="{% url 'project_management:view_all' %}">{% trans "Projects" %}</a></li>
+    <li><a name="navbar_invites_link" href="{% url 'project_management:view_invites' %}">{% trans "Invites" %} (<span id="invitations_link">{{ no_of_invites }}</span>)</a></li>
+    <li><a name="navbar_profile_link" href="{% url 'user_management:profile' username %}">{% trans "Profile" %}</a></li>
+    <li><a name="navbar_logout_link" href="{% url 'user_management:logout' %}">{% trans "Logout" %}</a></li>
 {% else %}
-    <li><a href="{% url 'user_management:login' %}">{% trans "Login" %}</a></li>
-    <li><a href="{% url 'user_management:register' %}">{% trans "Register" %}</a></li>
+    <li><a name="navbar_login_link" href="{% url 'user_management:login' %}">{% trans "Login" %}</a></li>
+    <li><a name="navbar_register_link" href="{% url 'user_management:register' %}">{% trans "Register" %}</a></li>
 {% endif %}

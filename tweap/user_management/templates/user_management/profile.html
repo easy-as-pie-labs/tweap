@@ -42,7 +42,7 @@
         </table>
         {% if user.id == request_user.id %}
         <form class="form-group" action="{% url 'user_management:edit_profile' %}" method="GET">
-            <button type="submit" class="btn btn-primary btn-lg">{% trans "Make Changes" %}</button>
+            <button type="submit" name="make_changes" class="btn btn-primary btn-lg">{% trans "Make Changes" %}</button>
         </form>
         {% endif %}
 {% endblock %}

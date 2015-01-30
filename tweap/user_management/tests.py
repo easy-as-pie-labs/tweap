@@ -3,6 +3,10 @@ from django.contrib.auth.models import User
 from user_management.models import Profile, ProfileAddress
 from project_management.models import Project
 from django.http.response import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions import ElementNotVisibleException
 
 
 class UserManagementTest(TestCase):
@@ -498,4 +502,126 @@ class ViewTest(TestCase):
         pass
 
 
+class SeleniumTest(TestCase):
+    browser = None
 
+    def setUp(self):
+        self.browser = webdriver.Firefox()
+        self.email = '@something.de'
+        self.password = 'datPassword'
+    '''
+    def test_home(self):
+        self.browser.get('http://127.0.0.1:8000/')
+        self.assertTrue('Tweap' in self.browser.title)
+
+    def test_register(self):
+        self.browser.get('http://127.0.0.1:8000/users/register/')
+        self.assertTrue('Tweap' in self.browser.title)
+
+        elem = self.browser.find_element_by_name('username')
+        elem.send_keys('seleniumtester')
+
+        elem = self.browser.find_element_by_name('email')
+        elem.send_keys('seleniumtester@selenium.de')
+
+        elem = self.browser.find_element_by_name('password')
+        elem.send_keys('selenium_password' + Keys.RETURN)
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_logout_link'))
+        elem.click()
+
+    def test_login(self):
+        self.browser.get('http://127.0.0.1:8000/users/login/')
+        self.assertTrue('Tweap' in self.browser.title)
+
+        elem = self.browser.find_element_by_name('username')
+        elem.send_keys('seleniumtester')
+
+        elem = self.browser.find_element_by_name('password')
+        elem.send_keys('selenium_password' + Keys.RETURN)
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_logout_link'))
+        elem.click()
+    '''
+    def register(self, username, email, password):
+        self.browser.get('http://127.0.0.1:8000/users/register/')
+        self.assertTrue('Tweap' in self.browser.title)
+
+        elem = self.browser.find_element_by_name('username')
+        elem.send_keys(username)
+
+        elem = self.browser.find_element_by_name('email')
+        elem.send_keys(email)
+
+        elem = self.browser.find_element_by_name('password')
+        elem.send_keys(password + Keys.RETURN)
+
+    def login(self, username, password):
+        self.browser.get('http://127.0.0.1:8000/users/login/')
+        self.assertTrue('Tweap' in self.browser.title)
+
+        elem = self.browser.find_element_by_name('username')
+        elem.send_keys(username)
+
+        elem = self.browser.find_element_by_name('password')
+        elem.send_keys(password + Keys.RETURN)
+
+    def logout(self):
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_logout_link'))
+        elem.click()
+
+    def delete_account(self, username):
+
+        resp = self.client.post('/users/login/', {'username': username, 'password': self.password})
+        resp = self.client.post('/users/delete/', {'confirm': 'i am sure'})
+
+    ''' ----------------------------------------------------------------------------
+    ------------------------ actual tests start here -------------------------------
+    ---------------------------------------------------------------------------- '''
+    def test_register(self):
+        username = 'testregister'
+        self.register(username, username + self.email, self.password)
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_profile_link'))
+        self.assertIsNotNone(elem)
+        self.logout()
+        self.browser.get('http://127.0.0.1:8000/users/login/')
+        self.assertTrue('Tweap' in self.browser.title)
+
+        elem = self.browser.find_element_by_name('username')
+        elem.send_keys(username)
+
+        elem = self.browser.find_element_by_name('password')
+        elem.send_keys(self.password + Keys.RETURN)
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_profile_link'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('make_changes'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('delete_account'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('confirm'))
+        elem.click()
+
+        elem = self.browser.find_element_by_name('delete_account')
+        elem.click()
+
+    def test_delete_account(self):
+        username = 'testdeleteaccount'
+        self.register(username, username + self.email, self.password)
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_profile_link'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('make_changes'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('delete_account'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('confirm'))
+        elem.click()
+
+        elem = self.browser.find_element_by_name('delete_account')
+        elem.click()
