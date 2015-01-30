@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load static %}
 {% block user_management_template %}
-        {% if user.id == request.user.id %}
+        {% if user.id == request_user.id %}
             <h2>{% trans "Your profile" %}</h2>
         {% else %}
             <h2>{{user.username}}'s {% trans "profile" %}</h2>

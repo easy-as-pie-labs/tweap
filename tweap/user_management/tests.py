@@ -365,6 +365,10 @@ class UserManagementTest(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(User.objects.filter(username='usertobedeleted').count(), 1)
 
+        print('Test: delete page accessible')
+        resp = self.client.get('/users/delete/')
+        self.assertEqual(resp.status_code, 200)
+
         print("Test: delete account, checkbox checked")
         resp = self.client.post('/users/delete/', {'confirm': 'i am sure'})
         self.assertEqual(resp.status_code, 302)

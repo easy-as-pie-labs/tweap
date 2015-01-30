@@ -232,7 +232,10 @@ class DeleteAccount(View):
             return HttpResponseRedirect(reverse('dashboard:home'))
         else:
             context['error'] = ugettext("Checkbox for confirmation must be checked!")
-        return render(request, 'user_management/delete_account.html', context)
+            return render(request, 'user_management/delete_account.html', context)
+
+    def get(self, request):
+        return render(request, 'user_management/delete_account.html', {})
 
 
 class UserSuggestion(View):
