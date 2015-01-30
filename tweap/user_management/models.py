@@ -37,7 +37,7 @@ class ProfileAddress(models.Model):
     city = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
-
+        #TODO: remove unnecessary whitespaces
         address = ""
 
         # if there is at least the street or house_number AND postal_code or city, add a colon (,) between the two parts
@@ -45,9 +45,9 @@ class ProfileAddress(models.Model):
             address += self.street + " " + self.house_number + ", " + self.postal_code + " " + self.city
             colon_index = address.index(',')
 
-            # if there's no house_number, there is a space between street and second part, let's remove that
+            # if there's no house_number, there is a space between street and second part and two spaces after the colon, let's remove that
             if address[colon_index-1] == ' ':
-                address = address[0:colon_index-1] + address[colon_index:]
+                address = address[0:colon_index-1] + address[colon_index:colon_index+1] + address[colon_index+1:]
         # if one of the two separated parts is empty, we don't need a colon
         else:
             address += self.street + " " + self.house_number + " " + self.postal_code + " " + self.city
@@ -106,7 +106,7 @@ class Profile(models.Model):
         return connected_users
 
     def __str__(self):
-        if self.first_name is None and self.last_name is None:
+        if self.first_name is None and self.last_name is None or self.first_name == '' and self.last_name == '':
             return str(self.user.id) + ": " + str(self.user.username)
         return str(self.user.id) + ": " + str(self.first_name) + " " + str(self.last_name)
 

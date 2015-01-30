@@ -10,7 +10,7 @@ from user_management.tools import validate_registration_form, register_and_login
 from django.utils.translation import ugettext
 from django.contrib.auth.models import User
 import json
-
+from user_management.forms import ImageUploadForm
 
 class Register(View):
     """
@@ -81,15 +81,16 @@ class Login(View):
             return render(request, 'user_management/login.html', context)
 
 
-def logout(request):
-    """
-    View function for loging out an user
-    :param request:
-    :return:
-    """
-    django_logout(request)
-    context = {'redirect': request.GET.get('next', '')}
-    return render(request, 'user_management/logout.html', context)
+class Logout(View):
+    def get(self, request):
+        """
+        View function for loging out an user
+        :param request:
+        :return:
+        """
+        django_logout(request)
+        context = {'redirect': request.GET.get('next', '')}
+        return render(request, 'user_management/logout.html', context)
 
 
 class ViewProfile(View):
@@ -195,15 +196,15 @@ class EditProfile(View):
         return HttpResponseRedirect(reverse('user_management:profile', kwargs={'user_name': request.user.username}))
 
 
-def upload_picture(request):
-    """
-    view function for uploading a new picture to an user profile
-    :param request:
-    :return:
-    """
-    from user_management.forms import ImageUploadForm
-    # Handle file upload
-    if request.method == 'POST':
+class UploadPicture(View):
+    def post(self, request):
+        """
+        view function for uploading a new picture to an user profile
+        :param request:
+        :return:
+        """
+        # Handle file upload
+
         form = ImageUploadForm(request.POST, request.FILES)
         if form.is_valid():
             new_image = request.FILES['picture']
@@ -217,32 +218,30 @@ def upload_picture(request):
             return HttpResponseRedirect(reverse('user_management:edit_profile'))
 
 
-def delete_account(request):
-    """
-    view function for deleting an user account
-    :param request:
-    :return:
-    """
-    context = {}
-    if request.method == 'POST':
+class DeleteAccount(View):
+    def post(self, request):
+        """
+        view function for deleting an user account
+        :param request:
+        :return:
+        """
+        context = {}
         if request.POST.get('confirm', '') == 'i am sure':
             delete_user(request.user)
             django_logout(request)
             return HttpResponseRedirect(reverse('dashboard:home'))
         else:
             context['error'] = ugettext("Checkbox for confirmation must be checked!")
-    return render(request, 'user_management/delete_account.html', context)
+        return render(request, 'user_management/delete_account.html', context)
 
 
-
-
-def user_suggestion(request):
+class UserSuggestion(View):
     """
     view function for searching users by user name or email address
     :param request:
     :return: list of users as JSON string
     """
-    if request.method == 'GET':
+    def get(self, request):
         result = []
         search = request.GET.get('search', '')
         if len(search) > 1:

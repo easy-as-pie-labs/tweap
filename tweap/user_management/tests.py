@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from user_management.models import Profile, ProfileAddress
 from project_management.models import Project
+from django.http.response import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
 
 
 class UserManagementTest(TestCase):
@@ -20,6 +21,9 @@ class UserManagementTest(TestCase):
         resp = self.client.get('/dashboard/')
         self.assertEqual(resp.status_code, 200)
 
+        resp = self.client.post('/dashboard/')
+        self.assertTrue(type(resp) is HttpResponseNotAllowed)
+
     def test_register(self):
 
         print("__Test Regisration__")
@@ -36,6 +40,9 @@ class UserManagementTest(TestCase):
         # self.assertEqual(resp.context['username'], 'test')  # TODO: anpassen auf Dashboard
 
         self.client.get('/users/logout/')
+
+        resp = self.client.post('/dashboard/')
+        self.assertTrue(type(resp) is HttpResponseNotAllowed)
 
         # username and email already in use
         print("Test: username and email already in use")
@@ -240,9 +247,40 @@ class UserManagementTest(TestCase):
         resp = self.client.post('/users/editprofile/', {'email': 'new@test.de', 'password': 'meinPasswort', 'passwordrepeat': 'meinPasswort', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
         self.assertEqual(resp.status_code, 302)
 
-        print('profile was edited succesfully, password not changed')
-        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': '', 'passwordrepeat': '', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
+        print('profile was edited succesfully, complete address')
+        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': '', 'passwordrepeat': '', 'first_name': '', 'last_name': '', 'phone': '', 'city': 'a city', 'zip': '24941', 'street': 'a street', 'housenumber': '23'})
         self.assertEqual(resp.status_code, 302)
+        user = User.objects.get(username='myusername')
+        self.assertEqual(str(user.profile), str(user.id) + ': ' + 'myusername')
+        self.assertEqual(str(user.profile.address), 'a street 23, 24941 a city')
+
+        print('profile was edited succesfully, no city, no zip code')
+        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': '', 'passwordrepeat': '', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': 'a street', 'housenumber': '23'})
+        self.assertEqual(resp.status_code, 302)
+        user = User.objects.get(username='myusername')
+        self.assertEqual(str(user.profile), str(user.id) + ': ' + 'myusername')
+        self.assertEqual(str(user.profile.address), 'a street 23  ')
+
+        print('profile was edited succesfully, no street, no housenumber')
+        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': '', 'passwordrepeat': '', 'first_name': '', 'last_name': '', 'phone': '', 'city': 'a city', 'zip': '24941', 'street': '', 'housenumber': ''})
+        self.assertEqual(resp.status_code, 302)
+        user = User.objects.get(username='myusername')
+        self.assertEqual(str(user.profile), str(user.id) + ': ' + 'myusername')
+        self.assertEqual(str(user.profile.address), '  24941 a city')
+
+        print('profile was edited succesfully, no house number')
+        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': '', 'passwordrepeat': '', 'first_name': '', 'last_name': '', 'phone': '', 'city': 'a city', 'zip': '24941', 'street': 'some street', 'housenumber': ''})
+        self.assertEqual(resp.status_code, 302)
+        user = User.objects.get(username='myusername')
+        self.assertEqual(str(user.profile), str(user.id) + ': ' + 'myusername')
+        self.assertEqual(str(user.profile.address), 'some street, 24941 a city')
+
+        print('profile was edited succesfully, password not changed')
+        resp = self.client.post('/users/editprofile/', {'email': 'me@test.de', 'password': '', 'passwordrepeat': '', 'first_name': 'my', 'last_name': 'username', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
+        self.assertEqual(resp.status_code, 302)
+        user = User.objects.get(username='myusername')
+        self.assertEqual(str(user.profile), str(user.id) + ': ' + 'my username')
+        self.assertEqual(str(user.profile.address), '   ')
 
         print('email address already in use')
         resp = self.client.post('/users/editprofile/', {'email': 'used@test.de', 'password': 'meinPasswort', 'passwordrepeat': 'meinPasswort', 'first_name': '', 'last_name': '', 'phone': '', 'city': '', 'zip': '', 'street': '', 'housenumber': ''})
@@ -451,4 +489,9 @@ class ViewTest(TestCase):
         print('test: try to edit the profile of someone the user is not connected to')
         resp = self.client.get('/users/editprofile/thirdguy')
         self.assertEqual(resp.status_code, 404)
+
+    def test_upload_image(self):
+        pass
+
+
 

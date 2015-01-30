@@ -3,6 +3,7 @@ from project_management.models import Project, Invitation
 from project_management.tools import invite_users
 from django.contrib.auth.models import User
 import json
+from django.http.response import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
 
 
 class ModelTest(TestCase):
@@ -15,6 +16,9 @@ class ModelTest(TestCase):
         user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
         project = Project(name=self.project_name, description=self.project_description)
         project.save()
+
+        self.assertEqual(str(project), self.project_name)
+
         project.members.add(user)
         project.members.add(user2)
         # test if users are in project now
@@ -43,6 +47,8 @@ class ModelTest(TestCase):
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
         invitation = Invitation(user=user, project=project)
         invitation.save()
+
+        self.assertEqual(str(invitation), user.username + ' invited to ' + self.project_name)
         # test if invitation is returned for the user via the method get_for_user()
         self.assertTrue(invitation in Invitation.get_for_user(user))
         invitation.delete()
@@ -168,17 +174,67 @@ class ViewsTest(TestCase):
         self.assertTrue(project_exists)
         project = Project.objects.get(name='TestCreateproject')
 
+        print('test: acces own project')
         resp = self.client.get('/projects/' + str(project.id))
         self.assertEqual(resp.status_code, 200)
+        self.assertTrue(type(resp) is HttpResponse)
 
+        resp = self.client.post('/projects/' + str(project.id))
+        self.assertTrue(type(resp) is HttpResponseNotAllowed)
 
-        pass
+        print('test non-existent project')
+        resp = self.client.get('/projects/1337')
+        self.assertEqual(resp.status_code, 404)
+
+        self.client.get('/users/logout/')
+
+        print('test: access \'own\' project when not logged in')
+        resp = self.client.get('/projects/' + str(project.id))
+        self.assertEqual(resp.status_code, 302)
+        self.assertTrue(type(resp) is HttpResponseRedirect)
+
+        User.objects.create_user('anotheruser', 'anotheruser@test.de', 'testpw')
+        self.client.post('/users/login/', {'username': 'anotheruser', 'password': 'testpw'})
+
+        print('test: someone else\'s project')
+        resp = self.client.get('/projects/' + str(project.id))
+        self.assertEqual(resp.status_code, 404)
 
     def test_view_all(self):
-        pass
+        self.setup_login()
+
+        print('test: access own projects')
+        resp = self.client.get('/projects/all/')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(type(resp) is HttpResponse)
+
+        resp = self.client.post('/projects/all/')
+        self.assertTrue(type(resp) is HttpResponseNotAllowed)
+
+        self.client.get('/users/logout/')
+
+        print('test: access projects when not logged in')
+        resp = self.client.get('/projects/all/')
+        self.assertEqual(resp.status_code, 302)
+        self.assertTrue(type(resp) is HttpResponseRedirect)
 
     def test_view_invites(self):
-        pass
+        self.setup_login()
+
+        print('test: access invites')
+        resp = self.client.get('/projects/invites/')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(type(resp) is HttpResponse)
+
+        resp = self.client.post('/projects/invites/')
+        self.assertTrue(type(resp) is HttpResponseNotAllowed)
+
+        self.client.get('/users/logout/')
+
+        print('test: access invites when not logged in')
+        resp = self.client.get('/projects/invites/')
+        self.assertEqual(resp.status_code, 302)
+        self.assertTrue(type(resp) is HttpResponseRedirect)
 
     def test_leave(self):
         pass

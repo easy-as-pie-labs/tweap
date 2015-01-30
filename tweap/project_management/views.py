@@ -95,41 +95,44 @@ class ViewAll(View):
         return render(request, 'project_management/view_all.html', context)
 
 
-def view_invites(request):
+class ViewInvites(View):
     """
-    View function for displaying all invitations of an user
+    View class for displaying all invitations of an user
     :param request:
     :return:
     """
-    invitations = Invitation.objects.filter(user=request.user)
-    context = {'invitations': invitations}
-    return render(request, 'project_management/view_invites.html', context)
+
+    def get(self, request):
+        invitations = Invitation.objects.filter(user=request.user)
+        context = {'invitations': invitations}
+        return render(request, 'project_management/view_invites.html', context)
 
 
-def leave(request):
+class LeaveGroup(View):
     """
-    view function for leaving a project
+    view class for leaving a project
     :param request:
     :return:
     """
-    if request.method == 'POST':
+    def post(self, request):
         project_id = request.POST.get('project_id', '')
         if project_id:
             project = get_object_or_404(ProjectModel, id=project_id)
             if request.user in project.members.all():
                 project.leave(request.user)
                 return HttpResponseRedirect(reverse('project_management:view_all'))
-    # TODO: wenn letzter user leaved im frontend auf das aut. löschen der gruppe hinweisen
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        # TODO: wenn letzter user leaved im frontend auf das aut. löschen der gruppe hinweisen
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-def invitation_handler(request):
+
+class InvitationHandler(View):
     """
     view function for handling invitation actions (accept, reject)
     :param request:
     :return:
     """
-    result = {'url': '', 'id': ''}
-    if request.method == 'POST':
+    def post(self, request):
+        result = {'url': '', 'id': ''}
         invitation_id = request.POST.get('invitation_id', '')
         action = request.POST.get('action', '')
         if invitation_id:
@@ -142,4 +145,5 @@ def invitation_handler(request):
                     result['id'] = invitation_id
                     invitation.reject()
 
-    return HttpResponse(json.dumps(result), content_type="application/json")
+        return HttpResponse(json.dumps(result), content_type="application/json")
+

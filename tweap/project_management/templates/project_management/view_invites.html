@@ -7,15 +7,19 @@
 {% endblock js %}
 {% block project_management_template %}
     <h1>{% trans "Your invites" %}</h1>
-    {% for invitation in invitations %}
-        <div id="invitation_container_id_{{ invitation.id }}">
-            <p><strong>{{ invitation.project.name }}</strong></p>
-            <p>{{ invitation.project.description }}</p>
-            <div class="form-group">
-                <button id="{{ invitation.id }}" class="btn btn-success acceptInvitation">{% trans "accept" %}</button>
-                <button id="{{ invitation.id }}" class="btn btn-danger rejectInvitation">{% trans "reject" %}</button>
+    {% if invitations %}
+        {% for invitation in invitations %}
+            <div id="invitation_container_id_{{ invitation.id }}">
+                <p><strong>{{ invitation.project.name }}</strong></p>
+                <p>{{ invitation.project.description }}</p>
+                <div class="form-group">
+                    <button id="{{ invitation.id }}" class="btn btn-success acceptInvitation">{% trans "accept" %}</button>
+                    <button id="{{ invitation.id }}" class="btn btn-danger rejectInvitation">{% trans "reject" %}</button>
+                </div>
+                <hr>
             </div>
-            <hr>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    {% else %}
+        <p>{% trans "You don't have any invites :(" %}</p>
+    {% endif  %}
 {% endblock %}

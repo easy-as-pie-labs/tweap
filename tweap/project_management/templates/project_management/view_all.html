@@ -8,5 +8,7 @@
         <a href="{% url 'project_management:project' project.id %}" class="list-group-item" ><h4>{{ project }}</h4>{{ project.description }}</a>
         {% endfor %}
     </div>
+    {% else %}
+        <p>{% trans "You don't currently have any projects :(" %}</p>
     {% endif %}
 {% endblock %}
