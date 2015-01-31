@@ -498,7 +498,12 @@ class ViewTest(TestCase):
         self.assertEqual(resp.status_code, 404)
 
     def test_upload_image(self):
-        pass
+        resp = self.client.post('/users/register/', {'username': 'imageuploadtest', 'email': 'imageupload@test.de', 'password': 'correct_password'})
+        self.assertEqual(resp.status_code, 302)
+        print('test: no picture uploaded')
+        picture = User.objects.get(username='imageuploadtest').profile.picture
+        self.assertEqual(picture, '')
+        # TODO: Upload here the image
 
 
 class SeleniumTest(TestCase):
