@@ -211,15 +211,13 @@ class UploadPicture(View):
         form = ImageUploadForm(request.POST, request.FILES)
         if form.is_valid():
             new_image = request.FILES['picture']
-            #TODO: check mimetype to make sure it was an image
             user = User.objects.get(id=request.user.id)
             user.profile.add_picture(new_image)
 
             return HttpResponseRedirect(reverse('user_management:edit_profile'))
         else:
-            #TODO: upload failed
-            return HttpResponseRedirect(reverse('user_management:edit_profile'), {'image_upload_error': True})
-
+            #TODO: instead of redirect, give view info that the upload failed
+            return HttpResponseRedirect(reverse('user_management:edit_profile'))
 
 class DeleteAccount(View):
     def post(self, request):

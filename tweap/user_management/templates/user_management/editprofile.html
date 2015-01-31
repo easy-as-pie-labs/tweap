@@ -5,7 +5,7 @@
         {% for error, message in error_messages.items %}
             <p class="alert alert-danger no-margin-element">{{ message }}</p>
         {% endfor %}
-        {% if image_upload_picture %}
+        {% if image_upload_fail %}
             <p class="alert alert-danger no-margin-element">{% trans "Only files of type png, jpeg, gif or tiff can be used as profile pictures." %}</p>
         {% endif %}
         {% if user.profile.picture %}

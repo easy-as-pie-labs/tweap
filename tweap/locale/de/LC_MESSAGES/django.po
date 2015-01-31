@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-31 15:11+0000\n"
-"PO-Revision-Date: 2015-01-31 15:12+0000\n"
-"Last-Translator: b'  <t.s.peikert@gmail.com>'\n"
+"PO-Revision-Date: 2015-01-31 16:56+0100\n"
+"Last-Translator: b'  <root@root.root>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -102,26 +102,22 @@ msgid "Create"
 msgstr "Erstellen"
 
 #: project_management/templates/project_management/project.html:29
-#, fuzzy
 #| msgid "Create new project"
 msgid "leave project"
-msgstr "Neues Projekt erstellen"
+msgstr "Projekt Verlassen"
 
 #: project_management/templates/project_management/project.html:32
-#, fuzzy
 #| msgid "Edit project"
 msgid "edit project"
 msgstr "Projekt bearbeiten"
 
 #: project_management/templates/project_management/project.html:41
 #: project_management/templates/project_management/project.html:58
-#, fuzzy
 #| msgid "new Project"
 msgid "Leave Project"
-msgstr "neues Projekt"
+msgstr "Projekt Verlassen"
 
 #: project_management/templates/project_management/project.html:44
-#, fuzzy
 #| msgid "Are you sure, you want to leave this group?"
 msgid "Are you sure you want to leave this project?"
 msgstr "Bist du sicher, dass du die Gruppe verlassen willst?"
@@ -152,10 +148,9 @@ msgstr ""
 "Da es noch ausstehende Einladungen gibt, wird dieses Projekt nicht gelöscht."
 
 #: project_management/templates/project_management/project.html:54
-#, fuzzy
 #| msgid "leave group"
 msgid "Don't leave group"
-msgstr "Gruppe verlassen"
+msgstr "Gruppe nicht verlassen"
 
 #: project_management/templates/project_management/view_all.html:4
 msgid "Your projects"
