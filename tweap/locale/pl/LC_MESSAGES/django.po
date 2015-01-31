@@ -2,22 +2,21 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-31 15:11+0000\n"
-"PO-Revision-Date: 2015-01-29 11:34+0100\n"
+"PO-Revision-Date: 2015-01-31 17:05+0100\n"
 "Last-Translator: b'  <root@root.root>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
+"Language: \n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
 #: dashboard/templates/dashboard/dashboard.html:4
@@ -31,23 +30,23 @@ msgstr "Witaj"
 #: dashboard/templates/dashboard/dashboard.html:7
 msgid ""
 "Soon(ish) this is where you'll find your most needed information: Upcoming "
-"todo's, calendar events, project invites and the most important updates from "
-"your projects. You'll love it!"
+"todo's, calendar events, project invites and the most important updates from"
+" your projects. You'll love it!"
 msgstr ""
 "Za niedługo tu bedą najważniejsze informację: lista zadań do wykonania, "
 "kalendarz, wydarzenia, zaproszenia do rożnych projekt i aktualnosć projektu."
 
 #: dashboard/templates/dashboard/dashboard.html:9
 msgid "Here are your updates:"
-msgstr ""
+msgstr "Tutaj są twoje ostatnie doniesienia "
 
 #: dashboard/templates/dashboard/dashboard.html:10
 msgid "You have "
-msgstr ""
+msgstr "Ty masz"
 
 #: dashboard/templates/dashboard/dashboard.html:10
 msgid " pending project invitations"
-msgstr ""
+msgstr "zaproszenia"
 
 #: dashboard/templates/dashboard/home.html:7
 msgid "Hey! Welcome to tweap"
@@ -102,33 +101,32 @@ msgid "Create"
 msgstr "Otwórz"
 
 #: project_management/templates/project_management/project.html:29
-#, fuzzy
 #| msgid "Create new project"
 msgid "leave project"
-msgstr "Otwórz nowy projekt"
+msgstr "Wyjdż z projektu"
 
 #: project_management/templates/project_management/project.html:32
-#, fuzzy
 #| msgid "Edit project"
 msgid "edit project"
 msgstr "Edytuj projekt"
 
 #: project_management/templates/project_management/project.html:41
 #: project_management/templates/project_management/project.html:58
-#, fuzzy
 #| msgid "new Project"
 msgid "Leave Project"
-msgstr "Nowy projekt"
+msgstr "Wyjdż z projektu"
 
 #: project_management/templates/project_management/project.html:44
 msgid "Are you sure you want to leave this project?"
-msgstr ""
+msgstr "Jesteś pewien że chcesz wyjśc z projektu"
 
 #: project_management/templates/project_management/project.html:46
 msgid ""
 "Since you are the last person in this project, the project and all its data "
 "will be deleted from our servers. This action cannot be undone!"
 msgstr ""
+"Jesteś ostatni w projekcie. Jak wyjdziesz, wszystkie dany będą zniszczone na"
+" naszych serwerach."
 
 #: project_management/templates/project_management/project.html:48
 msgid ""
@@ -138,15 +136,14 @@ msgstr ""
 
 #: project_management/templates/project_management/project.html:50
 msgid ""
-"Since there are still pending invitations for this project, the project will "
-"not be deleted."
+"Since there are still pending invitations for this project, the project will"
+" not be deleted."
 msgstr ""
 
 #: project_management/templates/project_management/project.html:54
-#, fuzzy
 #| msgid "leave group"
 msgid "Don't leave group"
-msgstr "Wyjdz z grupy"
+msgstr "Nie wyjdz z grupy"
 
 #: project_management/templates/project_management/view_all.html:4
 msgid "Your projects"
@@ -225,9 +222,9 @@ msgstr ""
 
 #: user_management/templates/user_management/delete_account.html:7
 msgid ""
-"Deleting your account cannot be undone. If you delete your account, all your "
-"data will be deleted from our servers, your account will be removed from all "
-"projects and subsequently empty projects will be deleted."
+"Deleting your account cannot be undone. If you delete your account, all your"
+" data will be deleted from our servers, your account will be removed from "
+"all projects and subsequently empty projects will be deleted."
 msgstr ""
 
 #: user_management/templates/user_management/delete_account.html:16
