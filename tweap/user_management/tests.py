@@ -508,6 +508,7 @@ class SeleniumTest(TestCase):
         self.browser = webdriver.Firefox()
         self.email = '@usermanagement.de'
         self.password = 'datPassword'
+        self.timeout = 2
 
     def register(self, username, email, password):
         self.browser.get('http://127.0.0.1:8000/users/register/')
@@ -533,20 +534,20 @@ class SeleniumTest(TestCase):
         elem.send_keys(password + Keys.RETURN)
 
     def logout(self):
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_logout_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_logout_link'))
         elem.click()
 
     def delete_account(self):
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_profile_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_profile_link'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('make_changes'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('make_changes'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('delete_account'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('delete_account'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('confirm'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('confirm'))
         elem.click()
 
         elem = self.browser.find_element_by_name('delete_account')
@@ -567,42 +568,45 @@ class SeleniumTest(TestCase):
 
         self.login(username, self.password)
         self.delete_account()
+        self.browser.close()
 
     def test_delete_account(self):
         print('ui_test: delect account')
         username = 'testdeleteaccount'
         self.register(username, username + self.email, self.password)
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_profile_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_profile_link'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('make_changes'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('make_changes'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('delete_account'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('delete_account'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('confirm'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('confirm'))
         elem.click()
 
         elem = self.browser.find_element_by_name('delete_account')
         elem.click()
+        self.browser.close()
 
     def test_edit_profile(self):
         print('ui_test: edit profile')
         username = 'testeditprofile'
         self.register(username, username + self.email, self.password)
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_profile_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_profile_link'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('make_changes'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('make_changes'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('street'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('street'))
         elem.send_keys('some street')
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('save_changes'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('save_changes'))
         elem.click()
 
         self.delete_account()
+        self.browser.close()

@@ -254,6 +254,7 @@ class SeleniumTest(TestCase):
         self.browser = webdriver.Firefox()
         self.email = '@projectmanagement.de'
         self.password = 'datPassword'
+        self.timeout = 2
 
     def register(self, username, email, password):
         self.browser.get('http://127.0.0.1:8000/users/register/')
@@ -279,20 +280,20 @@ class SeleniumTest(TestCase):
         elem.send_keys(password + Keys.RETURN)
 
     def logout(self):
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_logout_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_logout_link'))
         elem.click()
 
     def delete_account(self):
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_profile_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_profile_link'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('make_changes'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('make_changes'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('delete_account'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('delete_account'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('confirm'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('confirm'))
         elem.click()
 
         elem = self.browser.find_element_by_name('delete_account')
@@ -307,7 +308,7 @@ class SeleniumTest(TestCase):
 
         self.register(username, username + self.email, self.password)
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_new_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_new_link'))
         elem.click()
 
         elem = self.browser.find_element_by_name('name')
@@ -320,6 +321,51 @@ class SeleniumTest(TestCase):
         elem.click()
 
         self.delete_account()
+        self.browser.close()
+
+    def test_view_invite(self):
+        print('ui_test: view project')
+        initiator = 'testnewproject2'
+        receiver = 'testviewinvite'
+
+        self.register(receiver, receiver + self.email, self.password)
+        self.logout()
+
+        self.register(initiator, initiator + self.email, self.password)
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_new_link'))
+        elem.click()
+
+        elem = self.browser.find_element_by_name('name')
+        elem.send_keys('a great project')
+
+        elem = self.browser.find_element_by_name('description')
+        elem.send_keys('a great project description')
+
+        elem = self.browser.find_element_by_id('users')
+        elem.send_keys(receiver)
+
+        elem = self.browser.find_element_by_name('create_save')
+        elem.click()
+
+        self.logout()
+
+        self.login(receiver, self.password)
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_invites_link'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('acceptInvitation'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('edit_project'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('leave_project'))
+
+        self.delete_account()
+
+        self.login(initiator, self.password)
+        self.delete_account()
+        self.browser.close()
 
     def test_reject_invite(self):
         print('ui_test: reject project invite')
@@ -331,7 +377,7 @@ class SeleniumTest(TestCase):
 
         self.register(initiator, initiator + self.email, self.password)
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_new_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_new_link'))
         elem.click()
 
         elem = self.browser.find_element_by_name('name')
@@ -350,16 +396,17 @@ class SeleniumTest(TestCase):
 
         self.login(receiver, self.password)
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_invites_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_invites_link'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('rejectInvitation'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('rejectInvitation'))
         elem.click()
 
         self.delete_account()
 
         self.login(initiator, self.password)
         self.delete_account()
+        self.browser.close()
 
     def test_accept_invite(self):
         print('ui_test: accept project invite')
@@ -371,7 +418,7 @@ class SeleniumTest(TestCase):
 
         self.register(initiator, initiator + self.email, self.password)
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_new_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_new_link'))
         elem.click()
 
         elem = self.browser.find_element_by_name('name')
@@ -390,20 +437,21 @@ class SeleniumTest(TestCase):
 
         self.login(receiver, self.password)
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_invites_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_invites_link'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('acceptInvitation'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('acceptInvitation'))
         elem.click()
 
         self.delete_account()
 
         self.login(initiator, self.password)
         self.delete_account()
+        self.browser.close()
 
     def test_view_project(self):
         print('ui_test: view project')
-        initiator = 'testnewproject2'
+        initiator = 'testnewprojectview'
         receiver = 'testviewproject'
 
         self.register(receiver, receiver + self.email, self.password)
@@ -411,7 +459,7 @@ class SeleniumTest(TestCase):
 
         self.register(initiator, initiator + self.email, self.password)
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_new_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_new_link'))
         elem.click()
 
         elem = self.browser.find_element_by_name('name')
@@ -430,19 +478,30 @@ class SeleniumTest(TestCase):
 
         self.login(receiver, self.password)
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_invites_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_invites_link'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('acceptInvitation'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('acceptInvitation'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('edit_project'))
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('leave_project'))
-
-        self.delete_account()
+        self.logout()
 
         self.login(initiator, self.password)
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_projects_link'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_class_name('list-group-item'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_class_name('panel-heading'))
+        elem.click()
+
         self.delete_account()
+
+        self.login(receiver, self.password)
+        self.delete_account()
+        self.browser.close()
 
     def test_edit_project(self):
         print('ui_test: edit project')
@@ -454,7 +513,7 @@ class SeleniumTest(TestCase):
 
         self.register(initiator, initiator + self.email, self.password)
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_new_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_new_link'))
         elem.click()
 
         elem = self.browser.find_element_by_name('name')
@@ -473,16 +532,16 @@ class SeleniumTest(TestCase):
 
         self.login(receiver, self.password)
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_invites_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_invites_link'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('acceptInvitation'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('acceptInvitation'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('edit_project'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('edit_project'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('description'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('description'))
         elem.send_keys(', yeah!')
 
         elem = self.browser.find_element_by_name('create_save')
@@ -492,6 +551,7 @@ class SeleniumTest(TestCase):
 
         self.login(initiator, self.password)
         self.delete_account()
+        self.browser.close()
 
     def test_leave_project(self):
         print('ui_test: leave project')
@@ -503,7 +563,7 @@ class SeleniumTest(TestCase):
 
         self.register(initiator, initiator + self.email, self.password)
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_new_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_new_link'))
         elem.click()
 
         elem = self.browser.find_element_by_name('name')
@@ -522,13 +582,13 @@ class SeleniumTest(TestCase):
 
         self.login(receiver, self.password)
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_invites_link'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_invites_link'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('acceptInvitation'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('acceptInvitation'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('leave_project'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('leave_project'))
         elem.click()
 
         is_appeared = WebDriverWait(self.browser, 30, 1, (ElementNotVisibleException)).until(lambda x: x.find_element_by_name('leave_project_confirm').is_displayed())
@@ -536,12 +596,13 @@ class SeleniumTest(TestCase):
         while not is_appeared:
             pass
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('leave_project_confirm'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('leave_project_confirm'))
         elem.click()
 
-        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_id('your_projects_heading'))
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_id('your_projects_heading'))
 
         self.delete_account()
 
         self.login(initiator, self.password)
         self.delete_account()
+        self.browser.close()
