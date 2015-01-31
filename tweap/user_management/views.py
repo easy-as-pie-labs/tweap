@@ -218,7 +218,7 @@ class UploadPicture(View):
             return HttpResponseRedirect(reverse('user_management:edit_profile'))
         else:
             #TODO: upload failed
-            return HttpResponseRedirect(reverse('user_management:edit_profile'))
+            return HttpResponseRedirect(reverse('user_management:edit_profile'), {'image_upload_error': True})
 
 
 class DeleteAccount(View):

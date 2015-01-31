@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-31 14:51+0000\n"
+"POT-Creation-Date: 2015-01-31 15:11+0000\n"
 "PO-Revision-Date: 2015-01-29 11:34+0100\n"
 "Last-Translator: b'  <root@root.root>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -235,7 +235,7 @@ msgid "I am sure"
 msgstr ""
 
 #: user_management/templates/user_management/delete_account.html:19
-#: user_management/templates/user_management/editprofile.html:81
+#: user_management/templates/user_management/editprofile.html:84
 msgid "Delete account"
 msgstr ""
 
@@ -244,68 +244,73 @@ msgstr ""
 msgid "Your profile"
 msgstr "Twój profil"
 
-#: user_management/templates/user_management/editprofile.html:19
+#: user_management/templates/user_management/editprofile.html:9
+msgid ""
+"Only files of type png, jpeg, gif or tiff can be used as profile pictures."
+msgstr ""
+
+#: user_management/templates/user_management/editprofile.html:22
 msgid "Upload image"
 msgstr "Przesłać zdjecie"
 
-#: user_management/templates/user_management/editprofile.html:29
+#: user_management/templates/user_management/editprofile.html:32
 msgid "Remove Picture"
 msgstr ""
 
-#: user_management/templates/user_management/editprofile.html:35
+#: user_management/templates/user_management/editprofile.html:38
 #: user_management/templates/user_management/login.html:11
 #: user_management/templates/user_management/profile.html:15
 #: user_management/templates/user_management/register.html:11
 msgid "Username"
 msgstr "Imię użytkownika"
 
-#: user_management/templates/user_management/editprofile.html:39
+#: user_management/templates/user_management/editprofile.html:42
 #: user_management/templates/user_management/profile.html:19
 msgid "E-Mail"
 msgstr "Adres mailowy"
 
-#: user_management/templates/user_management/editprofile.html:43
+#: user_management/templates/user_management/editprofile.html:46
 #: user_management/templates/user_management/login.html:12
 #: user_management/templates/user_management/register.html:13
 msgid "Password"
 msgstr "Hasło"
 
-#: user_management/templates/user_management/editprofile.html:47
+#: user_management/templates/user_management/editprofile.html:50
 msgid "Repeat Password"
 msgstr "Powtórz hasło"
 
-#: user_management/templates/user_management/editprofile.html:51
+#: user_management/templates/user_management/editprofile.html:54
 #: user_management/templates/user_management/profile.html:27
 msgid "First name"
 msgstr "Imię"
 
-#: user_management/templates/user_management/editprofile.html:55
+#: user_management/templates/user_management/editprofile.html:58
 #: user_management/templates/user_management/profile.html:31
 msgid "Last name"
 msgstr "Nazwisko"
 
-#: user_management/templates/user_management/editprofile.html:59
+#: user_management/templates/user_management/editprofile.html:62
 #: user_management/templates/user_management/profile.html:35
 msgid "Phone"
 msgstr "Numer telefonu"
 
-#: user_management/templates/user_management/editprofile.html:63
+#: user_management/templates/user_management/editprofile.html:66
 msgid "City"
 msgstr "Miasto"
 
-#: user_management/templates/user_management/editprofile.html:67
+#: user_management/templates/user_management/editprofile.html:70
 msgid "ZIP-Code"
 msgstr "Kod pocztowy"
 
-#: user_management/templates/user_management/editprofile.html:71
+#: user_management/templates/user_management/editprofile.html:74
 msgid "Street"
 msgstr "Ulica"
 
-#: user_management/templates/user_management/editprofile.html:75
+#: user_management/templates/user_management/editprofile.html:78
 msgid "Housenumber"
 msgstr "Numer domu"
 
-#: user_management/templates/user_management/editprofile.html:79
+#: user_management/templates/user_management/editprofile.html:82
 msgid "Save Changes"
 msgstr "Zapisz"
 
