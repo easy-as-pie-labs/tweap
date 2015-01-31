@@ -91,6 +91,14 @@ class Profile(models.Model):
         self.picture = picture
         self.save()
 
+    def delete_picture(self):
+        """
+        deletes a picture
+        :return:
+        """
+        self.picture.delete()
+        self.save()
+
     def get_connected_users(self):
         """
         creates a list of all users, the current user is connected with via projects

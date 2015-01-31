@@ -21,6 +21,15 @@
         <br>
         <form class="form-group" action="{% url 'user_management:edit_profile' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
+            {% if user.profile.picture %}
+                <p>or</p>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" name="delete_picture" value="delete">
+                    {% trans "Remove Picture" %}
+                  </label>
+                </div>
+            {% endif %}
         <table class="table">
             <tr>
                 <td><strong>{% trans "Username" %}: </strong></td>

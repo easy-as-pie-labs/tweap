@@ -171,6 +171,9 @@ class EditProfile(View):
         if password:
             user.set_password(password)
 
+        if request.POST.get('delete_picture', '') == 'delete':
+            user.profile.delete_picture()
+
         user.profile.first_name = first_name
         user.profile.last_name = last_name
         user.profile.telephone = phone
