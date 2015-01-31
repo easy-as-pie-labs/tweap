@@ -10,6 +10,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 class UserManagementTest(TestCase):
     def test_home(self):
+
+        print("__Test Dashboard__")
         resp = self.client.get('/dashboard/')
         self.assertEqual(resp.status_code, 200)
 
@@ -223,6 +225,8 @@ class UserManagementTest(TestCase):
         self.assertTrue('error_message' in resp.context)
 
     def test_edit_profile(self):
+
+        print("__Test Edit__")
         # create test user
         resp = self.client.post('/users/register/', {'username': 'myusername', 'email': 'me@test.de', 'password': 'correct_password'})
         self.assertEqual(resp.status_code, 302)
@@ -348,7 +352,10 @@ class UserManagementTest(TestCase):
         self.assertFalse('email' in resp.context['error_messages'])
         self.assertTrue('form' in resp.context['error_messages'])
 
-    def delete_account(self):
+    def test_delete_account(self):
+
+        print("__Test Delete__")
+
         # create test user
         resp = self.client.post('/users/register/', {'username': 'usertobedeleted', 'email': 'usertobedeleted@test.de', 'password': 'correct_password'})
         self.assertEqual(resp.status_code, 302)
@@ -418,6 +425,9 @@ class UserManagementTest(TestCase):
 
 class ViewTest(TestCase):
     def test_view_access_denied(self):
+
+        print("__Test Access denied__")
+
         # register a user to view
         resp = self.client.post('/users/register/', {'username': 'theirusername', 'email': 'them@test.de', 'password': 'correct_password'})
         self.assertEqual(resp.status_code, 302)
@@ -430,11 +440,11 @@ class ViewTest(TestCase):
         resp = self.client.post('/users/login/', {'username': 'myusername', 'password': 'correct_password'})
         self.assertEqual(resp.status_code, 302)
 
-        print('test register redirect when user is already logged in')
+        print('test: register redirect when user is already logged in')
         resp = self.client.get('/users/register/')
         self.assertEqual(resp.status_code, 302)
 
-        print('test login redirect when user is already logged in')
+        print('test: login redirect when user is already logged in')
         resp = self.client.get('/users/login/')
         self.assertEqual(resp.status_code, 302)
 
@@ -449,15 +459,18 @@ class ViewTest(TestCase):
         resp = self.client.get('/users/logout/')
         self.assertEqual(resp.status_code, 200)
 
-        print('test try to edit profile when not logged in')
+        print('test: try to edit profile when not logged in')
         resp = self.client.get('/users/editprofile/')
         self.assertEqual(resp.status_code, 302)
 
-        print('test try to view \'own\' profile when not logged in')
+        print('test: try to view \'own\' profile when not logged in')
         resp = self.client.get('/users/profile/myusername/')
         self.assertEqual(resp.status_code, 302)
 
     def test_view_accessibility(self):
+
+        print("__Test Accessibility__")
+
         resp = self.client.post('/users/register/', {'username': 'connecteduser', 'email': 'anotheruser@test.de', 'password': 'correct_password'})
         self.assertEqual(resp.status_code, 302)
         resp = self.client.post('/users/register/', {'username': 'thirdguy', 'email': 'yetanotheruser@test.de', 'password': 'correct_password'})
@@ -498,8 +511,12 @@ class ViewTest(TestCase):
         self.assertEqual(resp.status_code, 404)
 
     def test_upload_image(self):
+
+        print("__Test image upload__")
+
         resp = self.client.post('/users/register/', {'username': 'imageuploadtest', 'email': 'imageupload@test.de', 'password': 'correct_password'})
         self.assertEqual(resp.status_code, 302)
+
         print('test: no picture uploaded')
         picture = User.objects.get(username='imageuploadtest').profile.picture
         self.assertEqual(picture, '')
@@ -562,7 +579,7 @@ class SeleniumTest(TestCase):
     ------------------------ actual tests start here -------------------------------
     ---------------------------------------------------------------------------- '''
     def test_register(self):
-        print('ui_test: register')
+        print('__UI_Test register__')
         username = 'testregister'
         self.register(username, username + self.email, self.password)
         elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_profile_link'))
@@ -576,7 +593,7 @@ class SeleniumTest(TestCase):
         self.browser.close()
 
     def test_delete_account(self):
-        print('ui_test: delect account')
+        print('__UI_Test delete account__')
         username = 'testdeleteaccount'
         self.register(username, username + self.email, self.password)
 
@@ -597,7 +614,7 @@ class SeleniumTest(TestCase):
         self.browser.close()
 
     def test_edit_profile(self):
-        print('ui_test: edit profile')
+        print('__UI_Test edit profile__')
         username = 'testeditprofile'
         self.register(username, username + self.email, self.password)
 
