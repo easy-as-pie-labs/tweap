@@ -41,7 +41,14 @@
             <h4 class="modal-title" id="myModalLabel">{% trans "Leave Project" %}</h4>
           </div>
           <div class="modal-body">
-            {% trans "Are you sure, you want to leave this group?" %}
+              <p>{% trans "Are you sure you want to leave this project?" %}</p>
+              {% if members|length == 1 and invitations|length == 0 %}
+                <p>{% trans "Since you are the last person in this project, the project and all its data will be deleted from our servers. This action cannot be undone!" %}</p>
+              {% elif members|length > 1 %}
+                <p>{% trans "Since you are not the last member in this project, the project won't be deleted and you can be re-invited to join the group at any time." %}</p>
+              {% else %}
+                <p>{% trans "Since there are still pending invitations for this project, the project will not be deleted." %}</p>
+              {% endif %}
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Don't leave group" %}</button>

@@ -591,10 +591,7 @@ class SeleniumTest(TestCase):
         elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('leave_project'))
         elem.click()
 
-        is_appeared = WebDriverWait(self.browser, 30, 1, (ElementNotVisibleException)).until(lambda x: x.find_element_by_name('leave_project_confirm').is_displayed())
-
-        while not is_appeared:
-            pass
+        WebDriverWait(self.browser, 30, 1, (ElementNotVisibleException)).until(lambda x: x.find_element_by_name('leave_project_confirm').is_displayed())
 
         elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('leave_project_confirm'))
         elem.click()

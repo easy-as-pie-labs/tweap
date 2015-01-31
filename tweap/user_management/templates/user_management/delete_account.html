@@ -4,6 +4,7 @@
 {% block user_management_template %}
 
     <h2>{% trans "Do you really want to delete your tweap account?" %}</h2>
+    <p>{% trans "Deleting your account cannot be undone. If you delete your account, all your data will be deleted from our servers, your account will be removed from all projects and subsequently empty projects will be deleted." %}</p>
     {% if error %}
         <div class="alert alert-danger no-margin-element">{{ error }}</div>
     {%  endif %}
