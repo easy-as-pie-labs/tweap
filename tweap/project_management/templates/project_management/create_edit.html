@@ -15,14 +15,14 @@
     <form method="post" autocomplete="off" class="form-group" action="{% if project %} {% url 'project_management:edit' project.id %} {% else %} {% url 'project_management:create' %} {% endif %}">
         {% csrf_token %}
         {% for field in form %}
-            {{field.label_tag}}{{ field|addcss:'form-control' }}<br>
+            {{field.label_tag}}{{ field|addcssandtabindex:'form-control' }}<br>
         {% endfor %}
         <input type="hidden" id="hiddenValues" name="invitations" />
         <label for="newInputs" class="control-label">{% trans "Invite Members" %}</label>
         <div id="newInputs">
             <div class="form-group">
                 <div class="input-group date">
-                    <input id="users" type="text" placeholder='{% trans "Username or eMail" %}' class="form-control member"><span class="input-group-addon addUserButton focus-pointer"><i class="glyphicon glyphicon-plus-sign"></i></span>
+                    <input id="users" type="text" tabindex="2" placeholder='{% trans "Username or eMail" %}' class="form-control member"><span class="input-group-addon addUserButton focus-pointer"><i class="glyphicon glyphicon-plus-sign"></i></span>
                 </div>
                 <div id="suggestions">
                 </div>
@@ -56,7 +56,7 @@
         {% endif %}
 
 
-        <input onClick="insertHiddenValues()" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
+        <input onClick="insertHiddenValues()" tabindex="3" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
     </form>
         </div>
 {% endblock %}
