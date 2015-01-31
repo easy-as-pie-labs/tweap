@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-31 15:11+0000\n"
-"PO-Revision-Date: 2015-01-31 16:56+0100\n"
-"Last-Translator: b'  <root@root.root>'\n"
+"POT-Creation-Date: 2015-01-31 16:08+0000\n"
+"PO-Revision-Date: 2015-01-31 16:09+0000\n"
+"Last-Translator: b'  <t.s.peikert@gmail.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -75,50 +75,51 @@ msgstr "Beschreibung"
 msgid "The name of the project is too long."
 msgstr "Der Name des Projekts ist zu lang"
 
-#: project_management/templates/project_management/create_edit.html:21
+#: project_management/templates/project_management/create_edit.html:19
+#| msgid "Create new project"
+msgid "Please enter a project name!"
+msgstr "Bitte gib einen Projektnamen an!"
+
+#: project_management/templates/project_management/create_edit.html:30
 msgid "Invite Members"
 msgstr "Mitglieder einladen"
 
-#: project_management/templates/project_management/create_edit.html:25
+#: project_management/templates/project_management/create_edit.html:34
 msgid "Username or eMail"
 msgstr "Benutzername oder E-Mail"
 
-#: project_management/templates/project_management/create_edit.html:33
+#: project_management/templates/project_management/create_edit.html:42
 #: project_management/templates/project_management/project.html:12
 msgid "Members"
 msgstr "Mitglieder"
 
-#: project_management/templates/project_management/create_edit.html:46
+#: project_management/templates/project_management/create_edit.html:55
 #: project_management/templates/project_management/project.html:19
 msgid "Invited"
 msgstr "Eingeladen"
 
-#: project_management/templates/project_management/create_edit.html:59
+#: project_management/templates/project_management/create_edit.html:68
 msgid "Save"
 msgstr "Speichern"
 
-#: project_management/templates/project_management/create_edit.html:59
+#: project_management/templates/project_management/create_edit.html:68
 msgid "Create"
 msgstr "Erstellen"
 
 #: project_management/templates/project_management/project.html:29
-#| msgid "Create new project"
 msgid "leave project"
 msgstr "Projekt Verlassen"
 
 #: project_management/templates/project_management/project.html:32
-#| msgid "Edit project"
 msgid "edit project"
 msgstr "Projekt bearbeiten"
 
 #: project_management/templates/project_management/project.html:41
-#: project_management/templates/project_management/project.html:58
-#| msgid "new Project"
+#: project_management/templates/project_management/project.html:54
 msgid "Leave Project"
 msgstr "Projekt Verlassen"
 
 #: project_management/templates/project_management/project.html:44
-#| msgid "Are you sure, you want to leave this group?"
 msgid "Are you sure you want to leave this project?"
 msgstr "Bist du sicher, dass du die Gruppe verlassen willst?"
 
@@ -131,24 +132,7 @@ msgstr ""
 "dazugehörigen Daten von unseren Servern gelöscht. Diese Aktion kann nicht "
 "rückgängig gemacht werden."
 
-#: project_management/templates/project_management/project.html:48
-msgid ""
-"Since you are not the last member in this project, the project won't be "
-"deleted and you can be re-invited to join the group at any time."
-msgstr ""
-"Da du nicht die letzte Person in diesem Projekt bist, wird das Projekt nicht"
-" gelöscht und du kannst jederzeit wieder zu diesem Projekt eingeladen "
-"werden."
-
 #: project_management/templates/project_management/project.html:50
-msgid ""
-"Since there are still pending invitations for this project, the project will"
-" not be deleted."
-msgstr ""
-"Da es noch ausstehende Einladungen gibt, wird dieses Projekt nicht gelöscht."
-
-#: project_management/templates/project_management/project.html:54
-#| msgid "leave group"
 msgid "Don't leave group"
 msgstr "Gruppe nicht verlassen"
 
@@ -396,9 +380,23 @@ msgstr "Die E-Mail Adresse wird bereits verwendet"
 msgid "Login not successful!"
 msgstr "Login nicht erfolgreich!"
 
-#: user_management/views.py:237
+#: user_management/views.py:235
 msgid "Checkbox for confirmation must be checked!"
 msgstr "Du musst die checkbox bestätigen!"
+
+#~ msgid ""
+#~ "Since you are not the last member in this project, the project won't be "
+#~ "deleted and you can be re-invited to join the group at any time."
+#~ msgstr ""
+#~ "Da du nicht die letzte Person in diesem Projekt bist, wird das Projekt nicht"
+#~ " gelöscht und du kannst jederzeit wieder zu diesem Projekt eingeladen "
+#~ "werden."
+
+#~ msgid ""
+#~ "Since there are still pending invitations for this project, the project will"
+#~ " not be deleted."
+#~ msgstr ""
+#~ "Da es noch ausstehende Einladungen gibt, wird dieses Projekt nicht gelöscht."
 
 #~ msgid "Once you register and login..."
 #~ msgstr "Bist du einmal registriert und eingeloggt..."
