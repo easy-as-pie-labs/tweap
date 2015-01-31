@@ -8,9 +8,18 @@
 {% endblock %}
 {% block project_management_template %}
     <h1>{{ headline }}</h1>
+    <!-- TODO: this shit is fucked up. since the only fail that can currently happen is an empty name, I just hardcoded it -->
+    <!--
     {% for error, message in error_messages.items %}
-        {{ message }}<br>
-    {%  endfor %}
+        {{ message }}
+    {% endfor %}-->
+
+    {% for error, message in error_messages.items %}
+        {% if error == 'name' %}
+            <p class="alert alert-danger no-margin-element">{% trans "Please enter a project name!" %}</p>
+        {% endif %}
+    {% endfor %}
+
     <div class="jumbotron">
     <form method="post" autocomplete="off" class="form-group" action="{% if project %} {% url 'project_management:edit' project.id %} {% else %} {% url 'project_management:create' %} {% endif %}">
         {% csrf_token %}

@@ -56,3 +56,19 @@
 
 table a{color:white;font-size:16px;}
 table a:hover{color:white;text-decoration: none}
+
+.errorlist {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.errorlist > li{
+    padding: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}

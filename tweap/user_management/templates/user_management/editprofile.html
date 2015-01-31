@@ -3,7 +3,7 @@
 {% block user_management_template %}
         <h2>{% trans "Your profile" %}</h2>
         {% for error, message in error_messages.items %}
-        <p class="alert alert-danger no-margin-element">{{ message }}</p>
+            <p class="alert alert-danger no-margin-element">{{ message }}</p>
         {% endfor %}
         {% if image_upload_picture %}
             <p class="alert alert-danger no-margin-element">{% trans "Only files of type png, jpeg, gif or tiff can be used as profile pictures." %}</p>
