@@ -35,7 +35,7 @@
                 <div id="members">
                     <div class="form-group">
                         <div class="input-group date">
-                            <input id="users" type="text" class="form-control" disabled="disabled" value="{{ member }}">
+                            <input id="member_users" type="text" class="form-control" disabled="disabled" value="{{ member }}">
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                 <div id="invitations">
                     <div class="form-group">
                         <div class="input-group date">
-                            <input id="users" type="text" class="form-control" disabled="disabled" value="{{ invitation.user.username }}">
+                            <input id="invited_users" type="text" class="form-control" disabled="disabled" value="{{ invitation.user.username }}">
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
         {% endif %}
 
 
-        <input onClick="insertHiddenValues()" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
+        <input onClick="insertHiddenValues()" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
     </form>
         </div>
 {% endblock %}

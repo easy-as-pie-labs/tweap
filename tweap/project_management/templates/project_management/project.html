@@ -26,10 +26,10 @@
         </div>
         <div class="panel-footer">
             <div class="form-group inline-form" >
-                <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#leaveGroupModal">{% trans "leave project" %}</button>
+                <button type="submit" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#leaveGroupModal">{% trans "leave project" %}</button>
             </div>
             <a href="{% url 'project_management:edit' project.id %}">
-                <button type="submit" class="btn btn-success">{% trans "edit project" %}</button>
+                <button type="submit" name="edit_project" class="btn btn-success">{% trans "edit project" %}</button>
             </a>
         </div>
     </div>
@@ -48,7 +48,7 @@
             <form class="form-group inline-form" action="{% url 'project_management:leave' %}" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="project_id" value="{{ project.id }}">
-                <input type="submit" class="btn btn-danger" value="{% trans "Leave Project" %}">
+                <input type="submit" class="btn btn-danger" name="leave_project_confirm" value="{% trans "Leave Project" %}">
             </form>
           </div>
         </div>

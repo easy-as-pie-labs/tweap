@@ -4,6 +4,10 @@ from project_management.tools import invite_users
 from django.contrib.auth.models import User
 import json
 from django.http.response import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions import ElementNotVisibleException
 
 
 class ModelTest(TestCase):
@@ -243,5 +247,301 @@ class ViewsTest(TestCase):
         pass
 
 
+class SeleniumTest(TestCase):
+    browser = None
 
+    def setUp(self):
+        self.browser = webdriver.Firefox()
+        self.email = '@projectmanagement.de'
+        self.password = 'datPassword'
 
+    def register(self, username, email, password):
+        self.browser.get('http://127.0.0.1:8000/users/register/')
+        self.assertTrue('Tweap' in self.browser.title)
+
+        elem = self.browser.find_element_by_name('username')
+        elem.send_keys(username)
+
+        elem = self.browser.find_element_by_name('email')
+        elem.send_keys(email)
+
+        elem = self.browser.find_element_by_name('password')
+        elem.send_keys(password + Keys.RETURN)
+
+    def login(self, username, password):
+        self.browser.get('http://127.0.0.1:8000/users/login/')
+        self.assertTrue('Tweap' in self.browser.title)
+
+        elem = self.browser.find_element_by_name('username')
+        elem.send_keys(username)
+
+        elem = self.browser.find_element_by_name('password')
+        elem.send_keys(password + Keys.RETURN)
+
+    def logout(self):
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_logout_link'))
+        elem.click()
+
+    def delete_account(self):
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_profile_link'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('make_changes'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('delete_account'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('confirm'))
+        elem.click()
+
+        elem = self.browser.find_element_by_name('delete_account')
+        elem.click()
+
+    ''' ----------------------------------------------------------------------------
+    ------------------------ actual tests start here -------------------------------
+    ---------------------------------------------------------------------------- '''
+    def test_new_project(self):
+        print('ui_test: create project')
+        username = 'testnewproject'
+
+        self.register(username, username + self.email, self.password)
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_new_link'))
+        elem.click()
+
+        elem = self.browser.find_element_by_name('name')
+        elem.send_keys('a great project')
+
+        elem = self.browser.find_element_by_name('description')
+        elem.send_keys('a great project description')
+
+        elem = self.browser.find_element_by_name('create_save')
+        elem.click()
+
+        self.delete_account()
+
+    def test_reject_invite(self):
+        print('ui_test: reject project invite')
+        initiator = 'testnewproject'
+        receiver = 'testrejectinvite'
+
+        self.register(receiver, receiver + self.email, self.password)
+        self.logout()
+
+        self.register(initiator, initiator + self.email, self.password)
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_new_link'))
+        elem.click()
+
+        elem = self.browser.find_element_by_name('name')
+        elem.send_keys('a great project')
+
+        elem = self.browser.find_element_by_name('description')
+        elem.send_keys('a great project description')
+
+        elem = self.browser.find_element_by_id('users')
+        elem.send_keys(receiver)
+
+        elem = self.browser.find_element_by_name('create_save')
+        elem.click()
+
+        self.logout()
+
+        self.login(receiver, self.password)
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_invites_link'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('rejectInvitation'))
+        elem.click()
+
+        self.delete_account()
+
+        self.login(initiator, self.password)
+        self.delete_account()
+
+    def test_accept_invite(self):
+        print('ui_test: accept project invite')
+        initiator = 'testnewproject'
+        receiver = 'testacceptinvite'
+
+        self.register(receiver, receiver + self.email, self.password)
+        self.logout()
+
+        self.register(initiator, initiator + self.email, self.password)
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_new_link'))
+        elem.click()
+
+        elem = self.browser.find_element_by_name('name')
+        elem.send_keys('a great project')
+
+        elem = self.browser.find_element_by_name('description')
+        elem.send_keys('a great project description')
+
+        elem = self.browser.find_element_by_id('users')
+        elem.send_keys(receiver)
+
+        elem = self.browser.find_element_by_name('create_save')
+        elem.click()
+
+        self.logout()
+
+        self.login(receiver, self.password)
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_invites_link'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('acceptInvitation'))
+        elem.click()
+
+        self.delete_account()
+
+        self.login(initiator, self.password)
+        self.delete_account()
+
+    def test_view_project(self):
+        print('ui_test: view project')
+        initiator = 'testnewproject2'
+        receiver = 'testviewproject'
+
+        self.register(receiver, receiver + self.email, self.password)
+        self.logout()
+
+        self.register(initiator, initiator + self.email, self.password)
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_new_link'))
+        elem.click()
+
+        elem = self.browser.find_element_by_name('name')
+        elem.send_keys('a great project')
+
+        elem = self.browser.find_element_by_name('description')
+        elem.send_keys('a great project description')
+
+        elem = self.browser.find_element_by_id('users')
+        elem.send_keys(receiver)
+
+        elem = self.browser.find_element_by_name('create_save')
+        elem.click()
+
+        self.logout()
+
+        self.login(receiver, self.password)
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_invites_link'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('acceptInvitation'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('edit_project'))
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('leave_project'))
+
+        self.delete_account()
+
+        self.login(initiator, self.password)
+        self.delete_account()
+
+    def test_edit_project(self):
+        print('ui_test: edit project')
+        initiator = 'testnewproject3'
+        receiver = 'testeditproject'
+
+        self.register(receiver, receiver + self.email, self.password)
+        self.logout()
+
+        self.register(initiator, initiator + self.email, self.password)
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_new_link'))
+        elem.click()
+
+        elem = self.browser.find_element_by_name('name')
+        elem.send_keys('a great project')
+
+        elem = self.browser.find_element_by_name('description')
+        elem.send_keys('a great project description')
+
+        elem = self.browser.find_element_by_id('users')
+        elem.send_keys(receiver)
+
+        elem = self.browser.find_element_by_name('create_save')
+        elem.click()
+
+        self.logout()
+
+        self.login(receiver, self.password)
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_invites_link'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('acceptInvitation'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('edit_project'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('description'))
+        elem.send_keys(', yeah!')
+
+        elem = self.browser.find_element_by_name('create_save')
+        elem.click()
+
+        self.delete_account()
+
+        self.login(initiator, self.password)
+        self.delete_account()
+
+    def test_leave_project(self):
+        print('ui_test: leave project')
+        initiator = 'testnewproject4'
+        receiver = 'testleaveproject'
+
+        self.register(receiver, receiver + self.email, self.password)
+        self.logout()
+
+        self.register(initiator, initiator + self.email, self.password)
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_new_link'))
+        elem.click()
+
+        elem = self.browser.find_element_by_name('name')
+        elem.send_keys('a great project')
+
+        elem = self.browser.find_element_by_name('description')
+        elem.send_keys('a great project description')
+
+        elem = self.browser.find_element_by_id('users')
+        elem.send_keys(receiver)
+
+        elem = self.browser.find_element_by_name('create_save')
+        elem.click()
+
+        self.logout()
+
+        self.login(receiver, self.password)
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('navbar_invites_link'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('acceptInvitation'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('leave_project'))
+        elem.click()
+
+        is_appeared = WebDriverWait(self.browser, 30, 1, (ElementNotVisibleException)).until(lambda x: x.find_element_by_name('leave_project_confirm').is_displayed())
+
+        while not is_appeared:
+            pass
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_name('leave_project_confirm'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, 2).until(lambda x: x.find_element_by_id('your_projects_heading'))
+
+        self.delete_account()
+
+        self.login(initiator, self.password)
+        self.delete_account()

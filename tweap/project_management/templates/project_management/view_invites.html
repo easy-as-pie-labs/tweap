@@ -13,8 +13,8 @@
                 <p><strong>{{ invitation.project.name }}</strong></p>
                 <p>{{ invitation.project.description }}</p>
                 <div class="form-group">
-                    <button id="{{ invitation.id }}" class="btn btn-success acceptInvitation">{% trans "accept" %}</button>
-                    <button id="{{ invitation.id }}" class="btn btn-danger rejectInvitation">{% trans "reject" %}</button>
+                    <button id="{{ invitation.id }}" name="acceptInvitation" class="btn btn-success acceptInvitation">{% trans "accept" %}</button>
+                    <button id="{{ invitation.id }}" name="rejectInvitation" class="btn btn-danger rejectInvitation">{% trans "reject" %}</button>
                 </div>
                 <hr>
             </div>
