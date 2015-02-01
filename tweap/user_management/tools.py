@@ -28,7 +28,7 @@ def validate_registration_form(form):
 
             if User.objects.filter(username=credentials['username']).exists():
                 errors['username'] = ugettext("The username isn't available")
-            if not re.match("^[A-Za-z0-9-]+$", credentials['username']):
+            if not re.match("^[A-Za-z0-9]+$", credentials['username']):
                 errors['username'] = ugettext("The username can only contain letters and numbers")
             if not re.match("[^@]+@[^@]+\.[^@]+", credentials['email']):
                 errors['email'] = ugettext("The email address isn't valid")
