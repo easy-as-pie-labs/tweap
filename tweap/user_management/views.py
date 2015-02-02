@@ -126,6 +126,7 @@ class EditProfile(View):
         :param request:
         :return:
         """
+
         user = get_object_or_404(User, id=request.user.id)
         try:
             profile_address = ProfileAddress.objects.get(id=user.profile.address.id)
@@ -135,7 +136,17 @@ class EditProfile(View):
 
         from user_management.forms import ImageUploadForm
         form = ImageUploadForm() # A empty, unbound form
-        context = {'user': user, 'profile_address': profile_address, 'form': form}
+
+        image_upload = 'none or success'
+
+        try:
+            if request.GET['upload'] == 'failed':
+                image_upload = 'fail'
+        except:
+            pass
+
+
+        context = {'user': user, 'profile_address': profile_address, 'form': form, 'image_upload': image_upload}
         return render(request, 'user_management/editprofile.html', context)
 
     def post(self, request):
@@ -210,14 +221,17 @@ class UploadPicture(View):
 
         form = ImageUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            new_image = request.FILES['picture']
-            user = User.objects.get(id=request.user.id)
-            user.profile.add_picture(new_image)
+            try:
+                new_image = request.FILES['picture']
+                user = User.objects.get(id=request.user.id)
+                user.profile.add_picture(new_image)
 
-            return HttpResponseRedirect(reverse('user_management:edit_profile'))
+                return HttpResponseRedirect(reverse('user_management:edit_profile'))
+            except:
+                return HttpResponseRedirect(reverse('user_management:edit_profile') + '?upload=failed')
         else:
             #TODO: instead of redirect, give view info that the upload failed
-            return HttpResponseRedirect(reverse('user_management:edit_profile'))
+            return HttpResponseRedirect(reverse('user_management:edit_profile') + '?upload=failed')
 
 class DeleteAccount(View):
     def post(self, request):
