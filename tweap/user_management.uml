@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>Python</ID>
+  <OriginalElement>#/Users/thomas/tweap/tweap/user_management/models.py</OriginalElement>
+  <nodes>
+    <node x="203.25" y="1326.0">user_management.models.Profile</node>
+    <node x="511.5" y="0.0">_collections_abc.Hashable</node>
+    <node x="0.0" y="146.0">django.db.models.base.Model</node>
+    <node x="656.25" y="1392.0">user_management.models.ProfileAddress</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="user_management.models.Profile" target="django.db.models.base.Model">
+      <point x="0.0" y="-147.0" />
+      <point x="419.75" y="1301.0" />
+      <point x="305.5" y="1301.0" />
+      <point x="-305.5" y="565.0" />
+    </edge>
+    <edge source="django.db.models.base.Model" target="_collections_abc.Hashable">
+      <point x="0.0" y="-565.0" />
+      <point x="0.0" y="48.0" />
+    </edge>
+    <edge source="user_management.models.ProfileAddress" target="django.db.models.base.Model">
+      <point x="0.0" y="-81.0" />
+      <point x="802.25" y="1301.0" />
+      <point x="916.5" y="1301.0" />
+      <point x="305.5" y="565.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="292.0" y="1414.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+    <Category>Inner Classes</Category>
+    <Category>Fields</Category>
+  </Categories>
+</Diagram>
+

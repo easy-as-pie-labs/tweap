@@ -271,7 +271,6 @@ class SeleniumTest(TestCase):
 
     def login(self, username, password):
         self.browser.get('http://127.0.0.1:8000/users/login/')
-        self.assertTrue('Tweap' in self.browser.title)
 
         elem = self.browser.find_element_by_name('username')
         elem.send_keys(username)

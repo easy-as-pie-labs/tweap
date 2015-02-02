@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DjangoModelDependency</ID>
+  <OriginalElement>#tweap</OriginalElement>
+  <nodes>
+    <node x="151.5" y="189.0">user_management.models.Profile</node>
+    <node x="312.0" y="44.0">django.contrib.auth.models.User</node>
+    <node x="0.0" y="0.0">user_management.models.ProfileAddress</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="user_management.models.Profile" target="user_management.models.ProfileAddress">
+      <point x="-68.5" y="-80.5" />
+      <point x="220.0" y="164.0" />
+      <point x="146.0" y="164.0" />
+      <point x="0.0" y="69.5" />
+    </edge>
+    <edge source="user_management.models.Profile" target="django.contrib.auth.models.User">
+      <point x="68.5" y="-80.5" />
+      <point x="357.0" y="164.0" />
+      <point x="431.0" y="164.0" />
+      <point x="0.0" y="25.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="275.0" y="154.0" />
+  <SelectedNodes>
+    <node>django.contrib.auth.models.User</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+  </Categories>
+</Diagram>
+
