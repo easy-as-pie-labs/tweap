@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.utils.translation import ugettext
-from project_management.models import ProjectForm, Project as ProjectModel, Invitation
+from project_management.models import ProjectForm, Project as ProjectModel, Invitation, Tag
 from project_management.tools import invite_users
 import json
 
@@ -147,3 +147,20 @@ class InvitationHandler(View):
 
         return HttpResponse(json.dumps(result), content_type="application/json")
 
+
+class TagSuggestion(View):
+    """
+    view function for searching tags in a project
+    :param request:
+    :return: list of tags as JSON string
+    """
+    def get(self, request):
+        result = []
+        search = request.GET.get('search', '')
+        if len(search) > 0:
+            project_id = request.GET.get('project_id', '')
+            if project_id:
+                tags = Tag.objects.filter(project__id=project_id, name__icontains=search)[:5]
+                for tag in tags:
+                    result.append(tag)
+        return HttpResponse(json.dumps(result), content_type="application/json")
