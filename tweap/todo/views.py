@@ -12,12 +12,16 @@ class CreateEdit(View):
     View class for creating of editing a project
     """
 
-    def get(self, request, todo_id=None):
-        if todo_id is None:
-            context = {
-                'headline': ugettext("Create new ToDo")
-            }
+    def get(self, request, todo_id=None, project_id=None):
 
+        context = {}
+
+        if todo_id is None:
+            if project_id is None:
+                raise Http404
+            else:
+                context['headline'] = ugettext("Create new Todo")
+                render(request, 'create_edit.html', context)
         else:
             todo = get_object_or_404(Todo, id=todo_id)
             project = todo.project
@@ -41,11 +45,10 @@ class CreateEdit(View):
         form = request.POST
 
         if todo_id is None:
-                if project_id is None:
-                    context['headline'] = ugettext("Create new ToDo")
-                    render(request, 'todo/create_edit', context)
-                else:
-                    todo = Todo()
+            if project_id is None:
+                raise Http404
+            else:
+                todo = Todo()
         else:
             todo = get_object_or_404(Todo, id=todo_id)
             project = todo.project
