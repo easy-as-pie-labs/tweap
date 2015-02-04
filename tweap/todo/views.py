@@ -6,6 +6,7 @@ from django.utils.translation import ugettext
 from todo.models import Todo
 from django.contrib.auth.models import User
 from project_management.models import Project
+from project_management.tools import get_tags
 
 
 class CreateEdit(View):
@@ -29,7 +30,7 @@ class CreateEdit(View):
             todo = get_object_or_404(Todo, id=todo_id)
             project = todo.project
             assigned_users = project.members.all()
-            tags = todo.tags
+            tags = todo.tags.all()
             if request.user not in assigned_users:
                 raise Http404
             else:
@@ -65,10 +66,14 @@ class CreateEdit(View):
             todo.due_date = form['due_date']
             todo.project = Project.objects.get(id=project_id)
             assignees = form.getlist('assignees')
-
+            todo.save()
             for assignee in assignees:
-                todo.assignees.add(User.objects.filter(username=assignee))
-            #Todo: Search for tags and save them
+                todo.assignees.add(User.objects.get(username=assignee))
+            tags = get_tags(form['tags'], todo.project)
+
+            for tag in tags:
+                todo.tags.add(tag)
+
             todo.save()
             return HttpResponseRedirect(reverse('project_management:project', args=(project_id, )))
         else:
