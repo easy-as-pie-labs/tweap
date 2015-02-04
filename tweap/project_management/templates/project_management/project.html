@@ -22,23 +22,6 @@
                     {% endfor %}
                     </td>
                 </tr>
-                <tr>
-                    <td><strong>{% trans "Todos" %}:</strong></td>
-                    <td>
-                        {% for todo in todos %}
-                        <div class="btn-group btn-group-lg col-md-12" role="group" aria-label="Large button group">
-                            <a href="{% url 'todo:mark_done' todo.id %}" class="list-group-item col-md-2"><span class="glyphicon glyphicon-ok"></span></a>
-                            <a href="{% url 'todo:edit' todo.id %}" class="list-group-item col-md-8">{{ todo.title }}</a>
-                            <a href="{% url 'todo:delete' todo.id %}" class="list-group-item col-md-2"><span class="glyphicon glyphicon-remove"></span></a>
-                        </div><br>
-                        {% endfor %}
-                        <form action="{% url 'todo:create' project.id %}" method="get">
-                            <button type="submit" class="btn btn-default btn-lg">
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {% trans "New Todo" %}
-                            </button>
-                        </form>
-                    </td>
-                </tr>
             </table>
         </div>
         <div class="panel-footer">
@@ -50,6 +33,59 @@
             </a>
         </div>
     </div>
+    <!--
+    <div class="panel panel-primary col-md-4">
+        <div class="panel-heading panel-heading-bigger">{% trans "Todo's" %}</div>
+        <div class="panel-body">
+            {% for todo in todos %}
+            <div class="btn-group btn-group-lg col-md-12" role="group" aria-label="Large button group">
+                <a href="{% url 'todo:mark_done' todo.id %}" class="list-group-item col-md-2"><span class="glyphicon glyphicon-ok"></span></a>
+                <a href="{% url 'todo:edit' todo.id %}" class="list-group-item col-md-8">{{ todo.title }}</a>
+                <a href="{% url 'todo:delete' todo.id %}" class="list-group-item col-md-2"><span class="glyphicon glyphicon-remove"></span></a>
+            </div><br>
+            {% endfor %}
+            <form action="{% url 'todo:create' project.id %}" method="get">
+                <button type="submit" class="btn btn-default btn-lg">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {% trans "New Todo" %}
+                </button>
+            </form>
+        </div>
+    </div>-->
+
+    <div class="panel panel-primary col-md-4">
+        <div class="panel-heading panel-heading-bigger">{% trans "Todo's" %}</div>
+        <div class="panel-body">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <td style="width: 65%;">todo</td>
+                        <td>action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for todo in todos %}
+                  <tr>
+                    <td><a href="{% url 'todo:edit' todo.id %}" class="list-group-item">{{ todo.title }}</a></td>
+                    <td class="td-actions"><a href="{% url 'todo:mark_done' todo.id %}" class="btn btn-small btn-success"><span class="glyphicon glyphicon-ok"></span></a><a href="{% url 'todo:delete' todo.id %}" class="btn btn-danger btn-small"><span class="glyphicon glyphicon-remove"></span></a></td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            <form action="{% url 'todo:create' project.id %}" method="get">
+                <button type="submit" class="btn btn-default btn-lg">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {% trans "New Todo" %}
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-primary col-md-8">
+        <div class="panel-heading panel-heading-bigger">{% trans "Calendar" %}</div>
+        <div class="panel-body">
+            <h1>This is where the calendar would be displayed if only we had built one. :'(</h1>
+        </div>
+    </div>
+
     <div class="modal fade" id="leaveGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
