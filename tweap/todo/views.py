@@ -72,7 +72,9 @@ class CreateEdit(View):
             todo.title = form['title']
             todo.description = form['description']
 
-            todo.due_date = form['due_date']
+            due_date = form['due_date']
+            if due_date != '':
+                todo.due_date = due_date
 
             todo.project = project
             assignees = form.getlist('assignees')

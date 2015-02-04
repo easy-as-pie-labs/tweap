@@ -1,7 +1,4 @@
 {% load i18n %}
-$(document).ready(function(){
-   newTags = new Tags();
-});
 
 //Adds new Inputfields
 $(document).on('click', '.addTagButton', function() {
@@ -31,7 +28,7 @@ function addTagInput(){
     $('.removeTagButton').parent().parent().removeClass('has-error');
 
     $('#newInputs').prepend(
-        "<div class='form-group'><div class='input-group date'><input id='tags' type='text' placeholder='{% trans "Add Tag" %}' class='form-control tag'><span class='input-group-addon addTagButton focus-pointer'><i class='glyphicon glyphicon-plus-sign'></i></span></div></div>"
+        "<div class='form-group'><div class='input-group symbol'><input id='tags' type='text' placeholder='{% trans "Add Tag" %}' class='form-control tag'><span class='input-group-addon addTagButton focus-pointer'><i class='glyphicon glyphicon-plus-sign'></i></span></div></div>"
     );
 
     $('#suggestions').remove();
@@ -107,3 +104,7 @@ var Tags = function(){
         return JSON.stringify(this.Tags);
     }
 }
+
+$(document).ready(function(){
+   newTags = new Tags();
+});

@@ -8,11 +8,11 @@
 {% block js %}
 <script type="text/javascript">
 
-    
+    {% include "edit_todo_form_control.js" %}
     {% include "bootstrap-datepicker.js" %}
 
 </script>
-<!-- {% include "edit_todo_form_control.js"} -->
+<!--  -->
 {% endblock %}
 {% block todo_template %}
     <h1>{{ headline }}</h1>
@@ -57,7 +57,7 @@
             <label for="newInputs" class="control-label">{% trans "Add Tags" %}</label>
             <div id="newInputs">
                 <div class="form-group">
-                    <div class="input-group date">
+                    <div class="input-group symbol">
                         <input id="tags" type="text" tabindex="2" placeholder='{% trans "Add Tag" %}' class="form-control tag"><span class="input-group-addon addTagButton focus-pointer"><i class="glyphicon glyphicon-plus-sign"></i></span>
                     </div>
                     <div id="suggestions">
@@ -70,7 +70,7 @@
                 {% for tag in tags %}
                     <div id="tag">
                         <div class="form-group">
-                            <div class="input-group date">
+                            <div class="input-group symbol">
                                 <input id="used_tags" type="text" class="form-control" disabled="disabled" value="{{ tag.name }}">
                             </div>
                         </div>
@@ -85,7 +85,6 @@
         </div>
 <script>
     $(document).ready(function(){
-        console.log("ready")
        $('.input-group.date').datepicker({
             format: "yyyy-mm-dd",
             todayBtn: "linked",
