@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'image_cropping',
     'easy_thumbnails',
     'dashboard',
+    'todo',
 )
 
 MIDDLEWARE_CLASSES = (

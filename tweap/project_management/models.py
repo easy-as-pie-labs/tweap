@@ -90,3 +90,11 @@ class Invitation(models.Model):
 
     def __str__(self):
         return self.user.username + " invited to " + self.project.name
+
+
+class Tag(models.Model):
+    """
+    Model for Todo tags
+    """
+    name = models.CharField(max_length=20)
+    project = models.ForeignKey(Project)
