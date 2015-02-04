@@ -47,7 +47,7 @@
             <ul class="list-group">
                 {% for member in members %}
                 <li class="list-group-item">
-                    <input type="checkbox" name="assignees" value="{{member.username}}"> {{member.username}}
+                    <input type="checkbox" name="assignees" value="{{member.username}}" {% for assignee in assignees %}{% if assignee == member %}checked{% endif %}{% endfor %}> {{member.username}}
                 </li>
             {% endfor %}
             </ul>

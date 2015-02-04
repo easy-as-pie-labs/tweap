@@ -53,3 +53,13 @@ class Todo(models.Model):
         month = self.due_date.month
         day = self.due_date.day
         return str("%04d" % year) + "-" + str("%02d" % month) + "-" + str("%02d" % day)
+
+    def clear_assignees(self):
+        """
+        clear all assignees
+        :return:
+        """
+        # TODO: can this be done in an easier way?
+        for assignee in self.assignees.all():
+            self.assignees.remove(assignee)
+        self.save()

@@ -46,7 +46,8 @@ class CreateEdit(View):
                 'tags': tags,
                 'members': assigned_users,
                 'project': project,
-                'date': todo.get_date()
+                'date': todo.get_date(),
+                'assignees': todo.assignees.all(),
             }
         return render(request, 'todo/create_edit.html', context)
 
@@ -79,6 +80,7 @@ class CreateEdit(View):
             todo.project = project
             assignees = form.getlist('assignees')
             todo.save()
+            todo.clear_assignees()
             for assignee in assignees:
                 todo.assignees.add(User.objects.get(username=assignee))
             tags = get_tags(form['tags'], todo.project)
@@ -95,7 +97,7 @@ class CreateEdit(View):
             'project': project,
             'members': project.members.all(),
             'headline': ugettext("Create new Todo"),
-            'date': todo.get_date()
+            'date': todo.get_date(),
         }
         return render(request, 'todo/create_edit.html', context)
 
