@@ -29,5 +29,17 @@ class Todo(models.Model):
     def get_closed_for_project(cls, project):
         return Todo.objects.filter(project=project, done=True)
 
+    @classmethod
+    def get_all_for_user(cls, user):
+        return Todo.objects.filter(assignees=user)
+
+    @classmethod
+    def get_open_for_user(cls, user):
+        return Todo.objects.filter(assignees=user, done=False)
+
+    @classmethod
+    def get_closed_for_user(cls, user):
+        return Todo.objects.filter(assignees=user, done=True)
+
     def __str__(self):
         return self.title
