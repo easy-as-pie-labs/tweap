@@ -18,8 +18,8 @@
         {% csrf_token %}
 
         <div class="form-group">
-            <strong>{% trans "Name" %}:</strong>
-            <input class="form-control" type="text" name="name" value="{{ todo.name }}">
+            <strong>{% trans "Title" %}:</strong>
+            <input class="form-control" type="text" name="title" value="{{ todo.name }}">
         </div>
         <div class="form-group">
             <strong>{% trans "Description" %}:</strong>
@@ -27,7 +27,7 @@
         </div>
         <div class="form-group">
             <strong>{% trans "Due Date" %}:</strong>
-            <input class="form-control" type="text" name="name" value="{{ todo.due_date }}">
+            <input class="form-control" type="text" name="due_date" value="{{ todo.due_date }}">
 
             </div>
 
