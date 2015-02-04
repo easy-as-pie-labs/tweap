@@ -98,3 +98,9 @@ class CreateEdit(View):
         return render(request, 'todo/create_edit.html', context)
 
 
+class Delete(View):
+    def get(self, request, todo_id):
+        todo = Todo.objects.get(id=todo_id)
+        todo.delete()
+        return HttpResponseRedirect(reverse('project_management:project', args=(todo.project.id, )))
+
