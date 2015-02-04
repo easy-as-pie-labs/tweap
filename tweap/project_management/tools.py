@@ -40,12 +40,13 @@ def get_tags(tag_list, project):
         tag_list = json.loads(tag_list)
         for tag in tag_list:
             tag = tag.lower().strip()
-            try:
-                tag_object = Tag.objects.get(project=project, name=tag)
-            except Tag.DoesNotExist:
-                tag_object = Tag(project=project, name=tag)
-                tag_object.save()
-            tags.append(tag_object)
+            if tag:
+                try:
+                    tag_object = Tag.objects.get(project=project, name=tag)
+                except Tag.DoesNotExist:
+                    tag_object = Tag(project=project, name=tag)
+                    tag_object.save()
+                tags.append(tag_object)
     return tags
 
 
