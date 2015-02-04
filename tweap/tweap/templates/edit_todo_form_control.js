@@ -1,6 +1,6 @@
 {% load i18n %}
 $(document).ready(function(){
-   newMembers = new Members();
+   newTags = new Tags();
 });
 
 //Adds new Inputfields
@@ -31,7 +31,7 @@ function addTagInput(){
     $('.removeTagButton').parent().parent().removeClass('has-error');
 
     $('#newInputs').prepend(
-        "<div class='form-group'><div class='input-group date'><input id='users' type='text' placeholder='{% trans "Add Tag" %}' class='form-control tag'><span class='input-group-addon addTagButton focus-pointer'><i class='glyphicon glyphicon-plus-sign'></i></span></div></div>"
+        "<div class='form-group'><div class='input-group date'><input id='tags' type='text' placeholder='{% trans "Add Tag" %}' class='form-control tag'><span class='input-group-addon addTagButton focus-pointer'><i class='glyphicon glyphicon-plus-sign'></i></span></div></div>"
     );
 
     $('#suggestions').remove();
@@ -44,7 +44,6 @@ function addTagInput(){
 
 //Ajax-Request for Usersuggestions
 $(document).on('keyup', '#tags', function(){
-    console.log("{% url 'project_management:tag_suggestion' %}")
     typedText = (this).value
     //AJAX-Request:
     data = {search:typedText, project_id:"{{ project.id }}"};
@@ -59,7 +58,7 @@ $(document).on('click', '.suggestion', function() {
     suggestionId = $(this).attr('id');
     firstInput = $('#newInputs').find('input[type=text]').filter(':visible:first')
     firstInput.val(suggestionId);
-    addMemberInput();
+    addTagInput();
 });
 
 /*
@@ -85,26 +84,28 @@ function addSuggestionToContent(id) {
 
 //Adds Userarray-JSONString to Hiddenfield
 function insertHiddenValues(){
-    inputTagArr = $("#newInputs .member");
+    inputTagArr = $("#newInputs .tag");
 
     for(i=0;i<inputTagArr.length;i++){
-        newTags.addUser(inputTagArr.eq(i).val());
+        newTags.addTag(inputTagArr.eq(i).val());
     }
 
-    $('#hiddenValues').val(newTags.getUsersString());
+    $('#hiddenValues').val(newTags.getTagsString());
+    alert(newTags.getTagsString());
+    alert($('#hiddenValues').val());
 }
 
 //Object is initialized on the very Beginning of this document
-var Members = function(){
-    this.Users = new Array();
+var Tags = function(){
+    this.Tags = new Array();
 
     //Adds new Userstring to Users-Array (Attribute)
-    this.addUser = function(added_user){
-        this.Users.push(added_user)
+    this.addTag = function(added_user){
+        this.Tags.push(added_user)
     }
 
     //Stringifies the Users-Arrayattribute and returns it
-    this.getUsersString = function() {
-        return JSON.stringify(this.Users);
+    this.getTagsString = function() {
+        return JSON.stringify(this.Tags);
     }
 }
