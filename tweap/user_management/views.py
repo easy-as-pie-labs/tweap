@@ -262,8 +262,8 @@ class UserSuggestion(View):
     def get(self, request):
         result = []
         search = request.GET.get('search', '')
-        if len(search) > 1:
-            users = User.objects.filter(Q(username__icontains=search) | Q(email__icontains=search))[:5]
+        if search:
+            users = User.objects.filter(Q(username__istartswith=search) | Q(email__icontains=search))[:5]
             for user in users:
                 if user != request.user:
                     result.append(user.username)

@@ -10,4 +10,5 @@ urlpatterns = patterns(
     url(r'^all/$', views.ViewAll.as_view(), name='view_all'),
     url(r'^invites/$', views.ViewInvites.as_view(), name='view_invites'),
     url(r'^invitation_handler/$', views.InvitationHandler.as_view(), name='invitation_handler'),
+    url(r'^tag_suggestion/$', views.TagSuggestion.as_view(), name='tag_suggestion'),
 )
