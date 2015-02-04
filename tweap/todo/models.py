@@ -20,5 +20,9 @@ class Todo(models.Model):
     def get_for_project(cls, project):
         return Todo.objects.filter(project=project)
 
+    @classmethod
+    def get_for_user(cls, user):
+        return Todo.objects.filter(assignees=user)
+
     def __str__(self):
         return self.title

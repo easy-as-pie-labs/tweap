@@ -9,5 +9,8 @@
             <h4>{% trans "Here are your updates:" %}</h4>
             <p><span class="glyphicon glyphicon-envelope"></span> <a href="{% url 'project_management:view_invites' %}"">{% trans "You have " %}{{invitation_count}}{% trans " pending project invitations" %}</a></p>
         {% endif %}
+        {% for todo in todos %}
+            {{ todo.name }}
+        {% endfor %}
     </div>
 {% endblock %}
