@@ -9,5 +9,3 @@ urlpatterns = patterns(
     url(r'^edit/(?P<todo_id>\d+)/$', views.CreateEdit.as_view(), name='edit'),
     url(r'^delete/(?P<todo_id>\d+)/$', views.CreateEdit.as_view(), name='delete'),
     url(r'^clear/(?P<todo_id>\d+)/$', views.CreateEdit.as_view(), name='clear'),
-    url(r'^tag_suggestion/$', projectviews.TagSuggestion.as_view(), name='tag_suggestion'),
-)
