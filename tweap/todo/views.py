@@ -46,6 +46,7 @@ class CreateEdit(View):
                 'tags': tags,
                 'members': assigned_users,
                 'project': project,
+                'date': todo.get_date()
             }
         return render(request, 'todo/create_edit.html', context)
 
@@ -71,10 +72,8 @@ class CreateEdit(View):
             todo.title = form['title']
             todo.description = form['description']
 
-            # datepicker returns YYYY/MM/DD
-            due = form['due_date']
-            # TODO: the stuff django fills into the field is according to locale, however not the default locale format like datetime actually dictates, so, fuck you django
-            todo.due_date = '2015-12-01'
+            todo.due_date = form['due_date']
+
             todo.project = project
             assignees = form.getlist('assignees')
             todo.save()
@@ -94,6 +93,7 @@ class CreateEdit(View):
             'project': project,
             'members': project.members.all(),
             'headline': ugettext("Create new Todo"),
+            'date': todo.get_date()
         }
         return render(request, 'todo/create_edit.html', context)
 

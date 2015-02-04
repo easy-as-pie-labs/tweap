@@ -43,3 +43,13 @@ class Todo(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_date(self):
+        """
+        get's compatible dateformat
+        :return:
+        """
+        year = self.due_date.year
+        month = self.due_date.month
+        day = self.due_date.day
+        return str("%04d" % year) + "-" + str("%02d" % month) + "-" + str("%02d" % day)

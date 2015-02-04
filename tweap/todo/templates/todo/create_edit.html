@@ -1,10 +1,18 @@
 {% extends "todo_template.html" %}
 {% load i18n %}
 {% load myfilters %}
+{% load static %}
+{% block css %}
+<link href="{% static 'tweap/css/datepicker.min.css' %}" rel="stylesheet">
+{% endblock %}
 {% block js %}
 <script type="text/javascript">
-    {% include "edit_todo_form_control.js" %}
+
+    
+    {% include "bootstrap-datepicker.js" %}
+
 </script>
+<!-- {% include "edit_todo_form_control.js"} -->
 {% endblock %}
 {% block todo_template %}
     <h1>{{ headline }}</h1>
@@ -25,11 +33,13 @@
             <strong>{% trans "Description" %}:</strong>
             <textarea class="form-control" name="description">{{ todo.description }}</textarea>
         </div>
+
         <div class="form-group">
             <strong>{% trans "Due Date" %}:</strong>
-            <input class="form-control" type="text" name="due_date" value="{{ todo.due_date }}">
-
+            <div class="input-group date">
+                <input type="text" name="due_date" value='{{ date }}' class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
             </div>
+        </div>
 
         <div class="panel panel-primary">
             <div class="panel-heading">{% trans "Assign members" %}</div>
@@ -73,4 +83,15 @@
 
     </form>
         </div>
+<script>
+    $(document).ready(function(){
+        console.log("ready")
+       $('.input-group.date').datepicker({
+            format: "yyyy-mm-dd",
+            todayBtn: "linked",
+            autoclose: true,
+            todayHighlight: true
+       });
+    });
+</script>
 {% endblock %}
