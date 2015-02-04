@@ -43,7 +43,8 @@ def get_tags(tag_list, project):
             try:
                 tag_object = Tag.objects.get(project=project, name=tag)
             except Tag.DoesNotExist:
-                tag_object = Tag(project=project, name=tag).save()
+                tag_object = Tag(project=project, name=tag)
+                tag_object.save()
             tags.append(tag_object)
     return tags
 

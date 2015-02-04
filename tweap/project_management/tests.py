@@ -1,6 +1,6 @@
 from django.test import TestCase
-from project_management.models import Project, Invitation
-from project_management.tools import invite_users
+from project_management.models import Project, Invitation, Tag
+from project_management.tools import invite_users, get_tags
 from django.contrib.auth.models import User
 import json
 from django.http.response import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
@@ -119,6 +119,30 @@ class ToolsTest(TestCase):
         user1.delete()
         user2.delete()
         user3.delete()
+
+    def test_get_tags(self):
+        project = Project(name="Testprojekt")
+        project.save()
+        tag = Tag(name="testtag1", project=project)
+        tag.save()
+
+        #test if only testtag1 exists
+        self.assertTrue(Tag.objects.filter(project=project, name="testtag1").exists())
+        self.assertFalse(Tag.objects.filter(project=project, name="testtag2").exists())
+        self.assertFalse(Tag.objects.filter(project=project, name="testtag3").exists())
+
+        tag_string = ['testttag1', 'testtag2', 'testtag3']
+        tag_string = json.dumps(tag_string)
+        tags = get_tags(tag_string, project)
+
+        #test if return list contains 3 Tags
+        self.assertEquals(len(tags), 3)
+        self.assertIsInstance(tags[0], Tag)
+
+        #test that all 3 testtags exists now
+        self.assertTrue(Tag.objects.filter(project=project, name="testtag1").exists())
+        self.assertTrue(Tag.objects.filter(project=project, name="testtag2").exists())
+        self.assertTrue(Tag.objects.filter(project=project, name="testtag3").exists())
 
 
 class ViewsTest(TestCase):
@@ -247,6 +271,7 @@ class ViewsTest(TestCase):
         pass
 
 
+"""
 class SeleniumTest(TestCase):
     browser = None
 
@@ -602,3 +627,4 @@ class SeleniumTest(TestCase):
         self.login(initiator, self.password)
         self.delete_account()
         self.browser.close()
+"""
