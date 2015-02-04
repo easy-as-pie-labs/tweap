@@ -7,15 +7,19 @@ from todo.models import Todo
 from django.contrib.auth.models import User
 from project_management.models import Project
 
+
 class CreateEdit(View):
     """
     View class for creating of editing a project
     """
 
-    def get(self, request, todo_id=None):
+    def get(self, request, todo_id=None, project_id=None):
         if todo_id is None:
+            project = Project.objects.get(id=project_id)
             context = {
-                'headline': ugettext("Create new ToDo")
+                'headline': ugettext("Create new ToDo"),
+                'project': project,
+                'members': project.members.all(),
             }
 
         else:

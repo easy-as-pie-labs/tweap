@@ -1,0 +1,76 @@
+{% extends "todo_template.html" %}
+{% load i18n %}
+{% load myfilters %}
+{% block js %}
+<script type="text/javascript">
+    {% include "edit_todo_form_control.js" %}
+</script>
+{% endblock %}
+{% block todo_template %}
+    <h1>{{ headline }}</h1>
+
+    {% for error, message in error_messages.items %}
+        <p class="alert alert-danger no-margin-element">{{ message }}</p>
+    {% endfor %}
+
+    <div class="jumbotron">
+    <form method="post" autocomplete="off" class="form-group" action="{% if todo %} {% url 'todo:edit' todo.id %} {% else %} {% url 'todo:create' project.id %} {% endif %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <strong>{% trans "Name" %}:</strong>
+            <input class="form-control" type="text" name="name" value="{{ todo.name }}">
+        </div>
+        <div class="form-group">
+            <strong>{% trans "Description" %}:</strong>
+            <textarea class="form-control" name="description">{{ todo.description }}</textarea>
+        </div>
+        <div class="form-group">
+            <strong>{% trans "Due Date" %}:</strong>
+            <input class="form-control" type="text" name="name" value="{{ todo.due_date }}">
+
+            </div>
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">{% trans "Assign members" %}</div>
+
+            <ul class="list-group">
+                {% for member in members %}
+                <li class="list-group-item">
+                    <input type="checkbox" name="assignees[]" value="{{member.username}}"> {{member.username}}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+
+            <input type="hidden" id="hiddenValues" name="tags" />
+            <label for="newInputs" class="control-label">{% trans "Add Tags" %}</label>
+            <div id="newInputs">
+                <div class="form-group">
+                    <div class="input-group date">
+                        <input id="tags" type="text" tabindex="2" placeholder='{% trans "Add Tag" %}' class="form-control tag"><span class="input-group-addon addTagButton focus-pointer"><i class="glyphicon glyphicon-plus-sign"></i></span>
+                    </div>
+                    <div id="suggestions">
+                    </div>
+                </div>
+            </div>
+
+            {% if tags %}
+                <label for="tag" class="control-label">{% trans "Tags" %}</label>
+                {% for tag in tags %}
+                    <div id="tag">
+                        <div class="form-group">
+                            <div class="input-group date">
+                                <input id="used_tags" type="text" class="form-control" disabled="disabled" value="{{ tag }}">
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+
+            <input onClick="insertHiddenValues()" tabindex="3" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
+
+    </form>
+        </div>
+{% endblock %}
