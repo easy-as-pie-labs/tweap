@@ -157,10 +157,10 @@ class TagSuggestion(View):
     def get(self, request):
         result = []
         search = request.GET.get('search', '')
-        if len(search) > 0:
+        if search:
             project_id = request.GET.get('project_id', '')
             if project_id:
-                tags = Tag.objects.filter(project__id=project_id, name__icontains=search)[:5]
+                tags = Tag.objects.filter(project__id=project_id, name__istartswith=search)[:5]
                 for tag in tags:
-                    result.append(tag)
+                    result.append(tag.name)
         return HttpResponse(json.dumps(result), content_type="application/json")
