@@ -14,12 +14,12 @@ $(document).on('click', '.addTagButton', function() {
         $(this).parent().parent().addClass('has-error');
     }
     else {
-        addMemberInput();
+        addTagInput();
     }
 });
 
 // if input is there add new field, make old field uneditable and removable
-function addMemberInput(){
+function addTagInput(){
     $('.addTagButton').addClass('removeTagButton');
     $('.addTagButton').removeClass('addTagButton');
 
@@ -44,10 +44,11 @@ function addMemberInput(){
 
 //Ajax-Request for Usersuggestions
 $(document).on('keyup', '#tags', function(){
+    console.log("{% url 'project_management:tag_suggestion' %}")
     typedText = (this).value
     //AJAX-Request:
-    data = {search:typedText};
-    $.get("{% url 'todo:tag_suggestion' %}", data, function(output){
+    data = {search:typedText, project_id:"{{ project.id }}"};
+    $.get("{% url 'project_management:tag_suggestion' %}", data, function(output){
         manageTagSuggestionAjaxRequest(output)
     })
 
