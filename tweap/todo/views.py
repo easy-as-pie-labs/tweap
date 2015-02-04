@@ -18,40 +18,48 @@ class CreateEdit(View):
         if todo_id is None:
             if project_id is None:
                 raise Http404
-            else:
-                project = Project.objects.get(id=project_id)
-                context = {
-                    'headline': ugettext("Create new Todo"),
-                    'project': project,
-                    'members': project.members.all(),
-                }
-        else:
-            todo = get_object_or_404(Todo, id=todo_id)
+
+            project = Project.objects.get(id=project_id)
+            context = {
+                'headline': ugettext("Create new Todo"),
+                'project': project,
+                'members': project.members.all(),
+            }
+
+            return render(request, 'todo/create_edit.html', context)
+
+        todo = get_object_or_404(Todo, id=todo_id)
+
+        if project_id is None:
             project = todo.project
-            assigned_users = project.members.all()
-            tags = todo.tags.all()
-            if request.user not in assigned_users:
-                raise Http404
-            else:
-                context = {
-                    'headline': ugettext("Edit Todo"),
-                    'todo': todo,
-                    'tags': tags,
-                    'members': assigned_users,
-                    'project': project,
-                }
+        else:
+            project = Project.objects.get(project_id)
+
+        assigned_users = project.members.all()
+        tags = todo.tags.all()
+        if request.user not in assigned_users:
+            raise Http404
+        else:
+            context = {
+                'headline': ugettext("Edit Todo"),
+                'todo': todo,
+                'tags': tags,
+                'members': assigned_users,
+                'project': project,
+            }
         return render(request, 'todo/create_edit.html', context)
 
     def post(self, request, todo_id=None, project_id=None):
 
-        context = {}
         form = request.POST
 
         if todo_id is None:
             if project_id is None:
                 raise Http404
-            else:
-                todo = Todo()
+
+            todo = Todo()
+            project = Project.objects.get(id=project_id)
+
         else:
             todo = get_object_or_404(Todo, id=todo_id)
             project = todo.project
@@ -62,8 +70,12 @@ class CreateEdit(View):
         if 'title' in form:
             todo.title = form['title']
             todo.description = form['description']
-            todo.due_date = form['due_date']
-            todo.project = Project.objects.get(id=project_id)
+
+            # datepicker returns YYYY/MM/DD
+            due = form['due_date']
+            # TODO: the stuff django fills into the field is according to locale, however not the default locale format like datetime actually dictates, so, fuck you django
+            todo.due_date = '2015-12-01'
+            todo.project = project
             assignees = form.getlist('assignees')
             todo.save()
             for assignee in assignees:
@@ -74,13 +86,15 @@ class CreateEdit(View):
                 todo.tags.add(tag)
 
             todo.save()
-            return HttpResponseRedirect(reverse('project_management:project', args=(project_id, )))
-        else:
-            project = Project.objects.get(id=project_id)
-            context['error_messages'] = {'name': ugettext("The name must not be empty!")}
-            context['project'] = project
-            context['members'] = project.members.all()
-            context['headline'] = ugettext("Create new Todo")
-            return render(request, 'todo/create_edit.html', context)
+            return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))
+
+        project = Project.objects.get(id=project_id)
+        context = {
+            'error_messages': {'name': ugettext("The name must not be empty!")},
+            'project': project,
+            'members': project.members.all(),
+            'headline': ugettext("Create new Todo"),
+        }
+        return render(request, 'todo/create_edit.html', context)
 
 
