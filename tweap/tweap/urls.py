@@ -9,6 +9,7 @@ urlpatterns = patterns(
     url(r'^dashboard/', include('dashboard.urls', namespace='dashboard')),
     url(r'^users/', include('user_management.urls', namespace='user_management')),
     url(r'^projects/', include('project_management.urls', namespace='project_management')),
+    url(r'^todos/', include('todo.urls', namespace='todo')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^i18n/', include('django.conf.urls.i18n')),
 )
