@@ -10,9 +10,8 @@ from project_management.models import Project
 
 class CreateEdit(View):
     """
-    View class for creating of editing a project
+    View class for creating or editing a todo
     """
-
     def get(self, request, todo_id=None, project_id=None):
 
         if todo_id is None:
@@ -29,7 +28,7 @@ class CreateEdit(View):
             todo = get_object_or_404(Todo, id=todo_id)
             project = todo.project
             assigned_users = project.members.all()
-            tags = todo.tags
+            tags = todo.tags.all()
             if request.user not in assigned_users:
                 raise Http404
             else:
@@ -38,7 +37,7 @@ class CreateEdit(View):
                     'todo': todo,
                     'tags': tags,
                     'members': assigned_users,
-                    'project': project
+                    'project': project,
                 }
         return render(request, 'todo/create_edit.html', context)
 
