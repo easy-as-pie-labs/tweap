@@ -7,10 +7,10 @@
         <p>{% trans "Soon(ish) this is where you'll find your most needed information: Upcoming todo's, calendar events, project invites and the most important updates from your projects. You'll love it!" %}</p>
         {% if invitation_count > 0 %}
             <h4>{% trans "Here are your updates:" %}</h4>
-            <p><span class="glyphicon glyphicon-envelope"></span> <a href="{% url 'project_management:view_invites' %}"">{% trans "You have " %}{{invitation_count}}{% trans " pending project invitations" %}</a></p>
+            <p><span class="glyphicon glyphicon-envelope"></span> <a href="{% url 'project_management:view_invites' %}">{% trans "You have " %}{{invitation_count}}{% trans " pending project invitations" %}</a></p>
         {% endif %}
         {% for todo in todos %}
-            {{ todo.name }}
+            {{ todo.title }}
         {% endfor %}
     </div>
 {% endblock %}
