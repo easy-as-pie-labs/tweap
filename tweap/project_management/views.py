@@ -5,6 +5,7 @@ from django.views.generic import View
 from django.utils.translation import ugettext
 from project_management.models import ProjectForm, Project as ProjectModel, Invitation, Tag
 from project_management.tools import invite_users
+from todo.models import Todo
 import json
 
 
@@ -80,6 +81,7 @@ class Project(View):
         context['project'] = project
         context['members'] = project.members.all()
         context['invitations'] = Invitation.objects.filter(project=project)
+        context['todos'] = Todo.get_for_project(project)
         if request.user in context['members']:
             return render(request, 'project_management/project.html', context)
         else:

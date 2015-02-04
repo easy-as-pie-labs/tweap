@@ -12,6 +12,13 @@ class Todo(models.Model):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000, null=True, blank=True)
     due_date = models.DateField(null=True, blank=True)
-    assignees = models.ManyToManyField(User)
+    assignees = models.ManyToManyField(User, null=True, blank=True)
     project = models.ForeignKey(Project)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, null=True, blank=True)
+
+    @classmethod
+    def get_for_project(cls, project):
+        return Todo.objects.filter(project=project)
+
+    def __str__(self):
+        return self.title
