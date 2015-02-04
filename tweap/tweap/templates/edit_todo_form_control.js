@@ -91,8 +91,6 @@ function insertHiddenValues(){
     }
 
     $('#hiddenValues').val(newTags.getTagsString());
-    alert(newTags.getTagsString());
-    alert($('#hiddenValues').val());
 }
 
 //Object is initialized on the very Beginning of this document
