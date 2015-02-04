@@ -104,3 +104,11 @@ class Delete(View):
         todo.delete()
         return HttpResponseRedirect(reverse('project_management:project', args=(todo.project.id, )))
 
+
+class MarkDone(View):
+    def get(self, request, todo_id):
+        todo = Todo.objects.get(id=todo_id)
+        todo.done = True
+        todo.save()
+        return HttpResponseRedirect(reverse('project_management:project', args=(todo.project.id, )))
+

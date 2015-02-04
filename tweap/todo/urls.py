@@ -8,5 +8,5 @@ urlpatterns = patterns(
     url(r'^new/project/(?P<project_id>\d+)$', views.CreateEdit.as_view(), name='create'),
     url(r'^edit/(?P<todo_id>\d+)/$', views.CreateEdit.as_view(), name='edit'),
     url(r'^delete/(?P<todo_id>\d+)/$', views.Delete.as_view(), name='delete'),
-    url(r'^clear/(?P<todo_id>\d+)/$', views.CreateEdit.as_view(), name='clear'),
+    url(r'^clear/(?P<todo_id>\d+)/$', views.MarkDone.as_view(), name='mark_done'),
 )

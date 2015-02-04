@@ -27,7 +27,7 @@
                     <td>
                         {% for todo in todos %}
                         <div class="btn-group btn-group-lg col-md-12" role="group" aria-label="Large button group">
-                            <a href="{% url 'todo:clear' todo.id %}" class="list-group-item col-md-2"><span class="glyphicon glyphicon-ok"></span></a>
+                            <a href="{% url 'todo:mark_done' todo.id %}" class="list-group-item col-md-2"><span class="glyphicon glyphicon-ok"></span></a>
                             <a href="{% url 'todo:edit' todo.id %}" class="list-group-item col-md-8">{{ todo.title }}</a>
                             <a href="{% url 'todo:delete' todo.id %}" class="list-group-item col-md-2"><span class="glyphicon glyphicon-remove"></span></a>
                         </div><br>
