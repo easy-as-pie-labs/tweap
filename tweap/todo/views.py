@@ -80,7 +80,7 @@ class CreateEdit(View):
             todo.project = project
             assignees = form.getlist('assignees')
             todo.save()
-            todo.clear_assignees()
+            todo.assignees.clear()
             for assignee in assignees:
                 todo.assignees.add(User.objects.get(username=assignee))
             tags = get_tags(form['tags'], todo.project)

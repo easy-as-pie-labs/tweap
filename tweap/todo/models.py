@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-
-# Create your models here.
+import datetime
 from project_management.models import Project, Tag
 
 
@@ -41,6 +40,20 @@ class Todo(models.Model):
     def get_closed_for_user(cls, user):
         return Todo.objects.filter(assignees=user, done=True)
 
+    @classmethod
+    def get_due_today_for_user(cls, user):
+        """
+        todos = cls.get_open_for_user(user)
+        for todo in todos:
+            if todo.
+        """""
+        return Todo.objects.filter(assignees=user, done=False, due_date__isnull=False, due_date__lte=datetime.date.today())
+
+    @classmethod
+    def get_due_this_week_for_user(cls, user):
+        end_of_week = datetime.date.today() + datetime.timedelta(days=(7 - datetime.date.today().isoweekday()))
+        return Todo.objects.filter(assignees=user, done=False, due_date__isnull=False, due_date__lte=end_of_week)
+
     def __str__(self):
         return self.title
 
@@ -55,13 +68,3 @@ class Todo(models.Model):
         month = self.due_date.month
         day = self.due_date.day
         return str("%04d" % year) + "-" + str("%02d" % month) + "-" + str("%02d" % day)
-
-    def clear_assignees(self):
-        """
-        clear all assignees
-        :return:
-        """
-        # TODO: can this be done in an easier way?
-        for assignee in self.assignees.all():
-            self.assignees.remove(assignee)
-        self.save()
