@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-31 16:08+0000\n"
+"POT-Creation-Date: 2015-02-05 15:29+0000\n"
 "PO-Revision-Date: 2015-01-31 17:05+0100\n"
 "Last-Translator: b'  <root@root.root>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,34 +20,43 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
-#: dashboard/templates/dashboard/dashboard.html:4
+#: dashboard/templates/dashboard/dashboard.html:9
 msgid "Dashboard"
 msgstr "Widok"
 
-#: dashboard/templates/dashboard/dashboard.html:6
-msgid "Welcome"
-msgstr "Witaj"
+#: dashboard/templates/dashboard/dashboard.html:15
+#, fuzzy
+#| msgid "Invites"
+msgid "Invitations"
+msgstr "Zaproszenia"
 
-#: dashboard/templates/dashboard/dashboard.html:7
-msgid ""
-"Soon(ish) this is where you'll find your most needed information: Upcoming "
-"todo's, calendar events, project invites and the most important updates from "
-"your projects. You'll love it!"
+#: dashboard/templates/dashboard/dashboard.html:34
+msgid "Today"
 msgstr ""
-"Za niedługo tu bedą najważniejsze informację: lista zadań do wykonania, "
-"kalendarz, wydarzenia, zaproszenia do rożnych projekt i aktualnosć projektu."
 
-#: dashboard/templates/dashboard/dashboard.html:9
-msgid "Here are your updates:"
-msgstr "Tutaj są twoje ostatnie doniesienia "
+#: dashboard/templates/dashboard/dashboard.html:37
+#: dashboard/templates/dashboard/dashboard.html:40
+#: dashboard/templates/dashboard/dashboard.html:53
+msgid "for"
+msgstr ""
 
-#: dashboard/templates/dashboard/dashboard.html:10
-msgid "You have "
-msgstr "Ty masz"
+#: dashboard/templates/dashboard/dashboard.html:43
+msgid "Looks like you got a free day!"
+msgstr ""
 
-#: dashboard/templates/dashboard/dashboard.html:10
-msgid " pending project invitations"
-msgstr "zaproszenia"
+#: dashboard/templates/dashboard/dashboard.html:50
+msgid "This week"
+msgstr ""
+
+#: dashboard/templates/dashboard/dashboard.html:56
+msgid "Nothing to do this week! Why not start a "
+msgstr ""
+
+#: dashboard/templates/dashboard/dashboard.html:56
+#, fuzzy
+#| msgid "new Project"
+msgid "new project"
+msgstr "Nowy projekt"
 
 #: dashboard/templates/dashboard/home.html:7
 msgid "Hey! Welcome to tweap"
@@ -67,7 +76,7 @@ msgstr ""
 msgid "Name"
 msgstr "Imię"
 
-#: project_management/models.py:48
+#: project_management/models.py:48 todo/templates/todo/create_edit.html:33
 msgid "Description"
 msgstr "Opisowanie"
 
@@ -100,10 +109,12 @@ msgid "Invited"
 msgstr "Zaproszeni"
 
 #: project_management/templates/project_management/create_edit.html:68
+#: todo/templates/todo/create_edit.html:82
 msgid "Save"
 msgstr "Zapisz"
 
 #: project_management/templates/project_management/create_edit.html:68
+#: todo/templates/todo/create_edit.html:82
 msgid "Create"
 msgstr "Otwórz"
 
@@ -115,16 +126,36 @@ msgstr "Wyjdż z projektu"
 msgid "edit project"
 msgstr "Edytuj projekt"
 
-#: project_management/templates/project_management/project.html:41
-#: project_management/templates/project_management/project.html:54
+#: project_management/templates/project_management/project.html:39
+msgid "Todo's"
+msgstr ""
+
+#: project_management/templates/project_management/project.html:45
+msgid "todo"
+msgstr ""
+
+#: project_management/templates/project_management/project.html:46
+msgid "assignees"
+msgstr ""
+
+#: project_management/templates/project_management/project.html:73
+msgid "New Todo"
+msgstr ""
+
+#: project_management/templates/project_management/project.html:83
+msgid "Calendar"
+msgstr ""
+
+#: project_management/templates/project_management/project.html:95
+#: project_management/templates/project_management/project.html:108
 msgid "Leave Project"
 msgstr "Wyjdż z projektu"
 
-#: project_management/templates/project_management/project.html:44
+#: project_management/templates/project_management/project.html:98
 msgid "Are you sure you want to leave this project?"
 msgstr "Jesteś pewien że chcesz wyjśc z projektu"
 
-#: project_management/templates/project_management/project.html:46
+#: project_management/templates/project_management/project.html:100
 msgid ""
 "Since you are the last person in this project, the project and all its data "
 "will be deleted from our servers. This action cannot be undone!"
@@ -132,69 +163,87 @@ msgstr ""
 "Jesteś ostatni w projekcie. Jak wyjdziesz, wszystkie dany będą zniszczone na "
 "naszych serwerach."
 
-#: project_management/templates/project_management/project.html:50
+#: project_management/templates/project_management/project.html:104
 msgid "Don't leave group"
 msgstr "Nie wyjdz z grupy"
 
-#: project_management/templates/project_management/view_all.html:4
-msgid "Your projects"
-msgstr "Twoje projekty"
-
-#: project_management/templates/project_management/view_all.html:12
-msgid "You don't currently have any projects :("
-msgstr ""
-
-#: project_management/templates/project_management/view_invites.html:9
-msgid "Your invites"
-msgstr "Twoje zaproszenia"
-
-#: project_management/templates/project_management/view_invites.html:16
-msgid "accept"
-msgstr "akceptuj"
-
-#: project_management/templates/project_management/view_invites.html:17
-msgid "reject"
-msgstr "odrzuć"
-
-#: project_management/templates/project_management/view_invites.html:23
-msgid "You don't have any invites :("
-msgstr ""
-
-#: project_management/views.py:21 project_management/views.py:47
+#: project_management/views.py:22 project_management/views.py:48
 msgid "Create new project"
 msgstr "Otwórz nowy projekt"
 
-#: project_management/views.py:31 project_management/views.py:55
+#: project_management/views.py:32 project_management/views.py:56
 msgid "Edit project"
 msgstr "Edytuj projekt"
 
-#: tweap/templates/navigation.html:3
-msgid "new Project"
-msgstr "Nowy projekt"
+#: todo/templates/todo/create_edit.html:29
+msgid "Title"
+msgstr ""
 
-#: tweap/templates/navigation.html:4
+#: todo/templates/todo/create_edit.html:38
+msgid "Due Date"
+msgstr ""
+
+#: todo/templates/todo/create_edit.html:45
+#, fuzzy
+#| msgid "Add Members"
+msgid "Assign members"
+msgstr "Dodaj członki"
+
+#: todo/templates/todo/create_edit.html:57
+msgid "Add Tags"
+msgstr ""
+
+#: todo/templates/todo/create_edit.html:61
+msgid "Add Tag"
+msgstr ""
+
+#: todo/templates/todo/create_edit.html:69
+msgid "Tags"
+msgstr ""
+
+#: todo/views.py:24 todo/views.py:101
+#, fuzzy
+#| msgid "Create new project"
+msgid "Create new Todo"
+msgstr "Otwórz nowy projekt"
+
+#: todo/views.py:44
+msgid "Edit Todo"
+msgstr ""
+
+#: todo/views.py:98
+#, fuzzy
+#| msgid "The username must not be an email address"
+msgid "The name must not be empty!"
+msgstr "Imię użytkownika nie może być adres mailowy"
+
+#: tweap/templates/navigation.html:5
 msgid "Projects"
 msgstr "Projekty"
 
-#: tweap/templates/navigation.html:5
-msgid "Invites"
-msgstr "Zaproszenia"
+#: tweap/templates/navigation.html:14
+msgid "new Project"
+msgstr "Nowy projekt"
 
-#: tweap/templates/navigation.html:6
+#: tweap/templates/navigation.html:15
+msgid "new Todo"
+msgstr ""
+
+#: tweap/templates/navigation.html:16
 msgid "Profile"
 msgstr "Profil"
 
-#: tweap/templates/navigation.html:7
+#: tweap/templates/navigation.html:17
 msgid "Logout"
 msgstr "Wylogowanie"
 
-#: tweap/templates/navigation.html:9
+#: tweap/templates/navigation.html:19
 #: user_management/templates/user_management/login.html:5
 #: user_management/templates/user_management/login.html:14
 msgid "Login"
 msgstr "Zalogowanie"
 
-#: tweap/templates/navigation.html:10
+#: tweap/templates/navigation.html:20
 #: user_management/templates/user_management/register.html:14
 msgid "Register"
 msgstr "Rejestruj śię"
@@ -223,7 +272,7 @@ msgid "I am sure"
 msgstr ""
 
 #: user_management/templates/user_management/delete_account.html:19
-#: user_management/templates/user_management/editprofile.html:84
+#: user_management/templates/user_management/editprofile.html:85
 msgid "Delete account"
 msgstr ""
 
@@ -232,73 +281,73 @@ msgstr ""
 msgid "Your profile"
 msgstr "Twój profil"
 
-#: user_management/templates/user_management/editprofile.html:9
+#: user_management/templates/user_management/editprofile.html:10
 msgid ""
 "Only files of type png, jpeg, gif or tiff can be used as profile pictures."
 msgstr ""
 
-#: user_management/templates/user_management/editprofile.html:22
+#: user_management/templates/user_management/editprofile.html:23
 msgid "Upload image"
 msgstr "Przesłać zdjecie"
 
-#: user_management/templates/user_management/editprofile.html:32
+#: user_management/templates/user_management/editprofile.html:33
 msgid "Remove Picture"
 msgstr ""
 
-#: user_management/templates/user_management/editprofile.html:38
+#: user_management/templates/user_management/editprofile.html:39
 #: user_management/templates/user_management/login.html:11
 #: user_management/templates/user_management/profile.html:15
 #: user_management/templates/user_management/register.html:11
 msgid "Username"
 msgstr "Imię użytkownika"
 
-#: user_management/templates/user_management/editprofile.html:42
+#: user_management/templates/user_management/editprofile.html:43
 #: user_management/templates/user_management/profile.html:19
 msgid "E-Mail"
 msgstr "Adres mailowy"
 
-#: user_management/templates/user_management/editprofile.html:46
+#: user_management/templates/user_management/editprofile.html:47
 #: user_management/templates/user_management/login.html:12
 #: user_management/templates/user_management/register.html:13
 msgid "Password"
 msgstr "Hasło"
 
-#: user_management/templates/user_management/editprofile.html:50
+#: user_management/templates/user_management/editprofile.html:51
 msgid "Repeat Password"
 msgstr "Powtórz hasło"
 
-#: user_management/templates/user_management/editprofile.html:54
+#: user_management/templates/user_management/editprofile.html:55
 #: user_management/templates/user_management/profile.html:27
 msgid "First name"
 msgstr "Imię"
 
-#: user_management/templates/user_management/editprofile.html:58
+#: user_management/templates/user_management/editprofile.html:59
 #: user_management/templates/user_management/profile.html:31
 msgid "Last name"
 msgstr "Nazwisko"
 
-#: user_management/templates/user_management/editprofile.html:62
+#: user_management/templates/user_management/editprofile.html:63
 #: user_management/templates/user_management/profile.html:35
 msgid "Phone"
 msgstr "Numer telefonu"
 
-#: user_management/templates/user_management/editprofile.html:66
+#: user_management/templates/user_management/editprofile.html:67
 msgid "City"
 msgstr "Miasto"
 
-#: user_management/templates/user_management/editprofile.html:70
+#: user_management/templates/user_management/editprofile.html:71
 msgid "ZIP-Code"
 msgstr "Kod pocztowy"
 
-#: user_management/templates/user_management/editprofile.html:74
+#: user_management/templates/user_management/editprofile.html:75
 msgid "Street"
 msgstr "Ulica"
 
-#: user_management/templates/user_management/editprofile.html:78
+#: user_management/templates/user_management/editprofile.html:79
 msgid "Housenumber"
 msgstr "Numer domu"
 
-#: user_management/templates/user_management/editprofile.html:82
+#: user_management/templates/user_management/editprofile.html:83
 msgid "Save Changes"
 msgstr "Zapisz"
 
@@ -374,9 +423,42 @@ msgstr "Adres mailowy jest już zajęty"
 msgid "Login not successful!"
 msgstr "Błąd w zalogowaniu"
 
-#: user_management/views.py:235
+#: user_management/views.py:249
 msgid "Checkbox for confirmation must be checked!"
 msgstr ""
+
+#~ msgid "Welcome"
+#~ msgstr "Witaj"
+
+#~ msgid ""
+#~ "Soon(ish) this is where you'll find your most needed information: "
+#~ "Upcoming todo's, calendar events, project invites and the most important "
+#~ "updates from your projects. You'll love it!"
+#~ msgstr ""
+#~ "Za niedługo tu bedą najważniejsze informację: lista zadań do wykonania, "
+#~ "kalendarz, wydarzenia, zaproszenia do rożnych projekt i aktualnosć "
+#~ "projektu."
+
+#~ msgid "Here are your updates:"
+#~ msgstr "Tutaj są twoje ostatnie doniesienia "
+
+#~ msgid "You have "
+#~ msgstr "Ty masz"
+
+#~ msgid " pending project invitations"
+#~ msgstr "zaproszenia"
+
+#~ msgid "Your projects"
+#~ msgstr "Twoje projekty"
+
+#~ msgid "Your invites"
+#~ msgstr "Twoje zaproszenia"
+
+#~ msgid "accept"
+#~ msgstr "akceptuj"
+
+#~ msgid "reject"
+#~ msgstr "odrzuć"
 
 #~ msgid "Once you register and login..."
 #~ msgstr "Po rejestracji i logowanju..."
@@ -402,12 +484,6 @@ msgstr ""
 #~ msgid ""
 #~ "Welcome Guest! This is Tweap. Here we will introduce you into our project."
 #~ msgstr "Witaj gościu"
-
-#~ msgid "Add Members"
-#~ msgstr "Dodaj członki"
-
-#~ msgid "The username must not be an email address"
-#~ msgstr "Imię użytkownika nie może być adres mailowy"
 
 #~ msgid "Welcome Guest!"
 #~ msgstr "Witam Gośćiu!"

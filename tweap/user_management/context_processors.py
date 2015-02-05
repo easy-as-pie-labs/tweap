@@ -1,12 +1,12 @@
-from project_management.models import Invitation
+from project_management.models import Project
 
 
 def user_info(request):
-    no_of_invites = ""
+    projects = None
     if request.user.is_authenticated():
-        no_of_invites = Invitation.objects.filter(user=request.user.id).count()
+        projects = Project.objects.filter(members=request.user)
 
     return {
-        'no_of_invites': no_of_invites,
         'username': request.user.username,
+        'projects': projects
     }

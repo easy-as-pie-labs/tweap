@@ -88,28 +88,6 @@ class Project(View):
             raise Http404
 
 
-class ViewAll(View):
-    """
-    View class for displaying all projects of an user
-    """
-    def get(self, request):
-        context = {'projects': ProjectModel.objects.filter(members=request.user)}
-        return render(request, 'project_management/view_all.html', context)
-
-
-class ViewInvites(View):
-    """
-    View class for displaying all invitations of an user
-    :param request:
-    :return:
-    """
-
-    def get(self, request):
-        invitations = Invitation.objects.filter(user=request.user)
-        context = {'invitations': invitations}
-        return render(request, 'project_management/view_invites.html', context)
-
-
 class LeaveGroup(View):
     """
     view class for leaving a project

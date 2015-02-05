@@ -16,6 +16,9 @@ class Todo(models.Model):
     tags = models.ManyToManyField(Tag, null=True, blank=True)
     done = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['due_date', 'project__name']
+
     @classmethod
     def get_all_for_project(cls, project):
         return Todo.objects.filter(project=project)
@@ -41,18 +44,17 @@ class Todo(models.Model):
         return Todo.objects.filter(assignees=user, done=True)
 
     @classmethod
+    def get_overdue_for_user(cls, user):
+        return Todo.objects.filter(assignees=user, done=False, due_date__isnull=False, due_date__lt=datetime.date.today())
+
+    @classmethod
     def get_due_today_for_user(cls, user):
-        """
-        todos = cls.get_open_for_user(user)
-        for todo in todos:
-            if todo.
-        """""
-        return Todo.objects.filter(assignees=user, done=False, due_date__isnull=False, due_date__lte=datetime.date.today())
+        return Todo.objects.filter(assignees=user, done=False, due_date__isnull=False, due_date=datetime.date.today())
 
     @classmethod
     def get_due_this_week_for_user(cls, user):
         end_of_week = datetime.date.today() + datetime.timedelta(days=(7 - datetime.date.today().isoweekday()))
-        return Todo.objects.filter(assignees=user, done=False, due_date__isnull=False, due_date__lte=end_of_week)
+        return Todo.objects.filter(assignees=user, done=False, due_date__isnull=False, due_date__lte=end_of_week, due_date__gt=datetime.date.today())
 
     def __str__(self):
         return self.title

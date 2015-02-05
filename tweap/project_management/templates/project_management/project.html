@@ -33,52 +33,54 @@
             </a>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><i class="fa fa-check-square-o"></i> {% trans "Todo's" %}</div>
+                <div class="widget-box">
+                    <div class="widget-container table-responsive">
+                        <table class="table table-hover table-striped order-table table-green">
+                        <thead>
+                            <tr>
+                                <th>{% trans "todo" %}</th>
+                                <th>{% trans "assignees" %}</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for todo in todos %}
+                            <tr>
+                                <td>{% if todo.done %}<del>{% endif %}{{ todo.title }}{% if todo.done %}</del>{% endif %}</td>
+                                <td>{% for assignee in todo.assignees.all %}{{ assignee }}, {% endfor %}</td>
+                                {% if todo.done %}
+                                <td>
+                                    <a href="{% url 'todo:edit' todo.id %}" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <a href="{% url 'todo:mark_undone' todo.id %}" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-repeat"></i></a>
+                                </td>
+                                {% else %}
+                                <td>
+                                    <a href="{% url 'todo:edit' todo.id %}" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <a href="{% url 'todo:mark_done' todo.id %}" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-ok"></i></a>
+                                    <a href="{% url 'todo:delete' todo.id %}" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
+                                </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                        <form action="{% url 'todo:create' project.id %}" method="get">
+                            <button type="submit" class="btn btn-default btn-lg">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {% trans "New Todo" %}
+                            </button>
+                        </form>
 
-    <div class="panel panel-primary col-md-4" style="padding: 0px">
-        <div class="panel-heading panel-heading-bigger"><i class="glyphicon glyphicon-tasks"></i> {% trans "Todo's" %}</div>
-        <div class="widget-box">
-            <div class="widget-container table-responsive">
-                <table class="table table-hover table-striped order-table table-green">
-                <thead>
-                    <tr>
-                        <th>{% trans "todo" %}</th>
-                        <th>{% trans "assignees" %}</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for todo in todos %}
-                    <tr>
-                        <td>{% if todo.done %}<del>{% endif %}{{ todo.title }}{% if todo.done %}</del>{% endif %}</td>
-                        <td>{% for assignee in todo.assignees.all %}{{ assignee }}, {% endfor %}</td>
-                        {% if todo.done %}
-                        <td>
-                            <a href="{% url 'todo:edit' todo.id %}" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
-                            <a href="{% url 'todo:mark_undone' todo.id %}" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-repeat"></i></a>
-                        </td>
-                        {% else %}
-                        <td>
-                            <a href="{% url 'todo:edit' todo.id %}" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
-                            <a href="{% url 'todo:mark_done' todo.id %}" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-ok"></i></a>
-                            <a href="{% url 'todo:delete' todo.id %}" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
-                        </td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-                <form action="{% url 'todo:create' project.id %}" method="get">
-                    <button type="submit" class="btn btn-default btn-lg">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {% trans "New Todo" %}
-                    </button>
-                </form>
-
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-8" style="padding: 0px; margin: 0px;">
-        <div class="panel panel-primary col-md-11 col-md-offset-1" style="padding: 0px">
-            <div class="panel-heading panel-heading-bigger"><i class="glyphicon glyphicon-calendar"></i> {% trans "Calendar" %}</div>
+    <div class="col-md-6" >
+        <div class="panel panel-primary">
+            <div class="panel-heading"><i class="fa fa-calendar"></i> {% trans "Calendar" %}</div>
             <div class="panel-body">
                 <h1>This is where the calendar would be displayed if only we had built one. :'(</h1>
             </div>
@@ -109,4 +111,5 @@
         </div>
       </div>
     </div>
+        </div>
 {% endblock %}
