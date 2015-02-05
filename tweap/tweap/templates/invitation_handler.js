@@ -4,8 +4,8 @@ $.ajaxSetup({
 });
 
 $(document).on('click', '.acceptInvitation', function() {
-    id = (this).id
-    data = {
+    var id = (this).id
+    var data = {
         action:"accept",
         invitation_id:id
     };
@@ -16,8 +16,8 @@ $(document).on('click', '.acceptInvitation', function() {
 });
 
 $(document).on('click', '.rejectInvitation', function() {
-    id = (this).id
-    data = {
+    var id = (this).id
+    var data = {
         action: "reject",
         invitation_id: id
     };
@@ -30,14 +30,23 @@ $(document).on('click', '.rejectInvitation', function() {
 function manageInvitationAjaxRequest(output){
     if(output['url'] != ""){
         //Accepted
-        url = output['url'];
+       var  url = output['url'];
         window.location.href = url;
     }else{
-        invitation_id = output['id'];
-        $('#invitation_container_id_'+invitation_id).remove();
-        inviteNavText = $('#invitations_link').text();
-        amountOfInvites = parseInt(inviteNavText);
-        newAmountOfInvites = amountOfInvites - 1;
-        $('#invitations_link').text("" + newAmountOfInvites);
+        var invitation_id = output['id'];
+        $('#invitation_container_id_'+invitation_id).hide('slow', function() {
+            $('#invitation_container_id_' + invitation_id).remove();
+        });
+
+        if ($('#invitation_list').children().length == 2){
+            removeInvitationContainer();
+        }
     }
+}
+
+function removeInvitationContainer(){
+    var invitationList = $('#invitation_list');
+    invitationList.parent().parent().hide('slow', function(){
+        invitationList.parent().parent().remove();
+    });
 }
