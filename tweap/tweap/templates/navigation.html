@@ -5,7 +5,7 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{% trans "Projects" %} <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
               {% for project in projects %}
-                <li><a href="{% url 'project_management:project' project.id %}">{{ project.name }}</a></li>
+                <li><a href="{% url 'project_management:project' project.id %}"><i class="{{ project.icon }}"></i>&nbsp;&nbsp;{{ project.name }}</a></li>
               {% endfor %}
               <li class="divider"></li>
               <li><a name="navbar_new_link" href="{% url 'project_management:create' %}"><i class="fa fa-plus"></i>&nbsp;&nbsp;{% trans "new Project" %}</a></li>
@@ -18,7 +18,7 @@
 
           <ul class="dropdown-menu" role="menu">
               {% for project in projects %}
-                <li><a href="{% url 'todo:create' project.id %}">{{ project.name }}</a></li>
+                <li><a href="{% url 'todo:create' project.id %}"><i class="{{ project.icon }}"></i>&nbsp;&nbsp;{{ project.name }}</a></li>
               {% endfor %}
           </ul>
         </li>

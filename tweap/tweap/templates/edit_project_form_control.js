@@ -1,6 +1,22 @@
 {% load i18n %}
 $(document).ready(function(){
-   newMembers = new Members();
+    newMembers = new Members();
+    $('<p id="project_icon"><i id="projectIcon" name="projectIcon" class="{{ project.icon|default:"fa fa-folder-open-o" }} project_icon" data-toggle="modal" data-target="#projectIconModal"></i> {% trans "Click icon to change it" %}</p>').insertAfter('label[for=id_icon]');
+    $('label[for=id_icon]').attr('for', 'projectIcon');
+});
+
+//Adds click listener to the icons in modal
+$(document).on('click', '.project_icon_choose', function() {
+    $('.project_icon_choosed').removeClass('project_icon_choosed');
+    $(this).addClass('project_icon_choosed');
+});
+
+//Adds click listener to the modals ok button
+$(document).on('click', '#setIconButton', function() {
+    var icon_class = $('.project_icon_choosed').attr('id');
+    $('#projectIcon').removeClass().addClass('project_icon ' + icon_class);
+    $('input[name=icon]').val(icon_class);
+    $('#projectIconModal').modal('hide');
 });
 
 //Adds new Inputfields
