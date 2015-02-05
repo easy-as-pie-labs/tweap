@@ -100,8 +100,7 @@ class LeaveGroup(View):
             project = get_object_or_404(ProjectModel, id=project_id)
             if request.user in project.members.all():
                 project.leave(request.user)
-                return HttpResponseRedirect(reverse('project_management:view_all'))
-        # TODO: wenn letzter user leaved im frontend auf das aut. löschen der gruppe hinweisen
+                return HttpResponseRedirect(reverse('dashboard:home'))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
