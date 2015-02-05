@@ -49,6 +49,8 @@ class Todo(models.Model):
         get's compatible dateformat
         :return:
         """
+        if self.due_date is None:
+            return ""
         year = self.due_date.year
         month = self.due_date.month
         day = self.due_date.day

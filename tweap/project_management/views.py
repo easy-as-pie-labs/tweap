@@ -81,7 +81,7 @@ class Project(View):
         context['project'] = project
         context['members'] = project.members.all()
         context['invitations'] = Invitation.objects.filter(project=project)
-        context['todos'] = Todo.get_open_for_project(project)
+        context['todos'] = Todo.get_all_for_project(project)
         if request.user in context['members']:
             return render(request, 'project_management/project.html', context)
         else:
