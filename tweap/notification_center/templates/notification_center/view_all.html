@@ -1,0 +1,15 @@
+{% extends "notification_template.html" %}
+{% load i18n %}
+{% load myfilters %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block js %}
+{% endblock %}
+{% block notification_template %}
+
+    {% for notification in notifications %}
+        <a href="{% url 'notification_center:view' notification.id %}">{{ notification.trigger.username }} {{ notification.event.text }} in {{ notification.project.name }} at {{ notification.timestamp}}</a>
+    {% endfor %}
+
+{% endblock %}

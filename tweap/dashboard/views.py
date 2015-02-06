@@ -3,6 +3,7 @@ from django.views.generic import View
 from project_management.models import Invitation
 from todo.models import Todo
 
+
 class Home(View):
     """
     View function for the home

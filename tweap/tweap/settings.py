@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'easy_thumbnails',
     'dashboard',
     'todo',
+    'notification_center',
 )
 
 MIDDLEWARE_CLASSES = (
