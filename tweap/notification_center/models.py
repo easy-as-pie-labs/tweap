@@ -1,10 +1,6 @@
 from django.db import models
-from django.db import models
 from django.contrib.auth.models import User
-from os.path import splitext
 from project_management.models import Project
-import random
-import hashlib
 
 
 class Event(models.Model):
