@@ -76,3 +76,28 @@ table a:hover{color:white;text-decoration: none}
 .warning_red{
     color: #d9534f;
 }
+
+p#project_icon{
+    margin-top: 5px;
+    margin-bottom: 0px;
+    font-size: 14px;
+}
+
+.project_icon{
+    font-size: 30px !important;
+    margin-right: 10px;
+}
+
+.project_icon_choose{
+    font-size: 30px !important;
+    margin-bottom: 25px;
+}
+.project_icon:hover,
+.project_icon_choose:hover{
+    font-size: 30px !important;
+    cursor: pointer;
+}
+
+.project_icon_choosed{
+    color: #337ab7;
+}

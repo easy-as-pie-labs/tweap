@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block project_management_template %}
     <div class="panel panel-primary">
-        <div class="panel-heading panel-heading-bigger"><i class="fa fa-folder-open-o"></i> {{ project.name }}</div>
+        <div class="panel-heading panel-heading-bigger"><i class="{{ project.icon }}"></i> {{ project.name }}</div>
         <div class="panel-body">
             <p>
                 {{ project.description }}

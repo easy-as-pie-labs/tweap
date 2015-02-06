@@ -67,5 +67,52 @@
 
         <input onClick="insertHiddenValues()" tabindex="3" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
     </form>
+
+    <div class="modal fade" id="projectIconModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{% trans "Choose an icon for the project" %}</h4>
+          </div>
+          <div class="modal-body">
+              <div class="container">
+                  <div class="row">
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-folder-o project_icon_choose project_icon_choosed" id="fa fa-folder-o"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-birthday-cake project_icon_choose" id="fa fa-birthday-cake"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-anchor project_icon_choose" id="fa fa-anchor"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-camera project_icon_choose" id="fa fa-camera"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-coffee project_icon_choose" id="fa fa-coffee"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-flask project_icon_choose" id="fa fa-flask"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-fire project_icon_choose" id="fa fa-fire"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-cogs project_icon_choose" id="fa fa-cogs"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-motorcycle project_icon_choose" id="fa fa-motorcycle"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-road project_icon_choose" id="fa fa-road"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-space-shuttle project_icon_choose" id="fa fa-space-shuttle"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-ship project_icon_choose" id="fa fa-ship"></i></div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-futbol-o project_icon_choose" id="fa fa-futbol-o"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-university project_icon_choose" id="fa fa-university"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-leaf project_icon_choose" id="fa fa-leaf"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-cubes project_icon_choose" id="fa fa-cubes"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-code project_icon_choose" id="fa fa-code"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-beer project_icon_choose" id="fa fa-beer"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-bed project_icon_choose" id="fa fa-bed"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-music project_icon_choose" id="fa fa-music"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-train project_icon_choose" id="fa fa-train"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-book project_icon_choose" id="fa fa-book"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-bug project_icon_choose" id="fa fa-bug"></i></div>
+                      <div class="col-md-2 col-xs-3"><i class="fa fa-cutlery project_icon_choose" id="fa fa-cutlery"></i></div>
+                  </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+            <button type="button" class="btn btn-success" id="setIconButton">{% trans "OK" %}</button>
+          </div>
+        </div>
+      </div>
+    </div>
         </div>
 {% endblock %}
