@@ -1,17 +1,17 @@
 {% load i18n %}
 {% if user.is_authenticated %}
     <li class="dropdown">
-      {% if projects %}
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{% trans "Projects" %} <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-              {% for project in projects %}
-                <li><a href="{% url 'project_management:project' project.id %}"><i class="{{ project.icon }}"></i>&nbsp;&nbsp;{{ project.name }}</a></li>
-              {% endfor %}
-              <li class="divider"></li>
+              {% if projects %}
+                  {% for project in projects %}
+                    <li><a href="{% url 'project_management:project' project.id %}"><i class="{{ project.icon }}"></i>&nbsp;&nbsp;{{ project.name }}</a></li>
+                  {% endfor %}
+                  <li class="divider"></li>
+              {% endif %}
               <li><a name="navbar_new_link" href="{% url 'project_management:create' %}"><i class="fa fa-plus"></i>&nbsp;&nbsp;{% trans "new Project" %}</a></li>
           </ul>
         </li>
-    {% endif %}
     <li class="dropdown">
       {% if projects %}
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{% trans "new Todo" %} <span class="caret"></span></a>

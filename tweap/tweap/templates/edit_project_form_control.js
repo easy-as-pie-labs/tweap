@@ -7,13 +7,9 @@ $(document).ready(function(){
 
 //Adds click listener to the icons in modal
 $(document).on('click', '.project_icon_choose', function() {
-    $('.project_icon_choosed').removeClass('project_icon_choosed');
-    $(this).addClass('project_icon_choosed');
-});
-
-//Adds click listener to the modals ok button
-$(document).on('click', '#setIconButton', function() {
-    var icon_class = $('.project_icon_choosed').attr('id');
+    $('.project_icon_chosen').removeClass('project_icon_chosen');
+    $(this).addClass('project_icon_chosen');
+    var icon_class = $('.project_icon_chosen').attr('id');
     $('#projectIcon').removeClass().addClass('project_icon ' + icon_class);
     $('input[name=icon]').val(icon_class);
     $('#projectIconModal').modal('hide');
