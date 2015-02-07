@@ -77,7 +77,7 @@ DATABASES = {
         'ENGINE': 'mysql.connector.django',
         'NAME': 'tweap',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'tweap',
     }
 }
 
