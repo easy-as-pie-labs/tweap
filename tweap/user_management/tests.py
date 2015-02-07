@@ -527,7 +527,7 @@ class SeleniumTest(TestCase):
     browser = None
 
     def setUp(self):
-        self.browser = webdriver.Firefox()
+        self.browser = webdriver.PhantomJS()
         self.email = '@usermanagement.de'
         self.password = 'datPassword'
         self.timeout = 2
