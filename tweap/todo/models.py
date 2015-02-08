@@ -53,7 +53,7 @@ class Todo(models.Model):
 
     @classmethod
     def get_due_this_week_for_user(cls, user):
-        end_of_week = datetime.date.today() + datetime.timedelta(days=(7 - datetime.date.today().isoweekday()))
+        end_of_week = datetime.date.today() + datetime.timedelta(days=(7))
         return Todo.objects.filter(assignees=user, done=False, due_date__isnull=False, due_date__lte=end_of_week, due_date__gt=datetime.date.today())
 
     def __str__(self):
