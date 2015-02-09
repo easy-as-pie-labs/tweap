@@ -61,8 +61,10 @@
                              {% for todo in due_this_week %}
                                 <a href="{% url 'todo:todo' todo.id %}" class="list-group-item"><i class="fa fa-pencil-square-o"></i> {{ todo.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ todo.project.name }} <span class="pull-right">{{ todo.due_date }}</span></a>
                              {% endfor %}
+                        {% elif overdue or due_today %}
+                            <div class="list-group-item"><i class="fa fa-rocket"></i> {% trans "Once you are done today, you got nothing for the rest of the week!" %}</div>
                         {% else %}
-                            <div class="list-group-item"><i class="fa fa-rocket"></i> {% trans "Nothing to do this week! Why not start a " %}<a href="{% url 'project_management:create' %}">{% trans "new project" %}</a>?</div>
+                            <div class="list-group-item"><i class="fa fa-rocket"></i> {% trans "Nothing to do this week! Why not start a" %} <a href="{% url 'project_management:create' %}">{% trans "new project" %}</a>?</div>
                         {% endif %}
                     </div>
                 </div>
