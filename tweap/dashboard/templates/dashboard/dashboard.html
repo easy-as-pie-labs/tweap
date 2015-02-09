@@ -8,7 +8,7 @@
 {% block project_management_template %}
     <h1>{% trans "Dashboard" %}</h1>
 
-        {% if invitations %}
+        {% if invitations or notifications %}
         <div class="row">
             <div class="col-md-6">
                 <div class="list-group" id="invitation_list">
