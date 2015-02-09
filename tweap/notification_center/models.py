@@ -10,46 +10,13 @@ class Event(models.Model):
         return self.text
 
 
-class Url(models.Model):
-    url = models.CharField(max_length=20, null=False)
-    parameter = models.CharField(max_length=20, null=False)
-
-    def __str__(self):
-        return self.url + "/" + self.parameter
-
-"""
-TODO: url could also be multiple parameters
-possible solution:
-
-class Url(models.Model):
-    url = models.CharField(max_length=20, null=False)
-
-class UrlParameter(models.Model):
-    value = models.CharField(max_length=20, null=False)
-    url = models.ForeignKey(Url, null=False)
-
-then in Notification:
-def get_params():
-    params = UrlParameter.objects.filter(url=url)
-    parameters = []
-    for param in params:
-        parameters.append(param.value)
-    return tuple(parameters)
-
-then in ViewOne:
-parameters = notification.get_params()
-and:
-arg = parameters
-"""
-
-
 class Notification(models.Model):
     receiver = models.ForeignKey(User, null=False, related_name='%(class)s_receiver')
-    trigger = models.ForeignKey(User, null=False, related_name='%(class)s_triggerer')
-    project = models.ForeignKey(Project, null=False)
+    trigger_user = models.ForeignKey(User, null=False, related_name='%(class)s_triggerer')
     timestamp = models.DateTimeField(auto_now=True)
+    project = models.ForeignKey(Project, null=False)
+    target_url = models.CharField(max_length=100, blank=False)
     event = models.ForeignKey(Event, null=False)
-    url = models.ForeignKey(Url, null=False)
 
     def __str__(self):
-        return self.trigger.username + "->" + self.receiver.username + " in " + self.project.name + ": " + self.event.text
+        return str(self.event) + ", from " + self.trigger_user.username + ", to " + self.receiver.username

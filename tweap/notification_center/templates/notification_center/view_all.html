@@ -9,7 +9,11 @@
 {% block notification_template %}
 
     {% for notification in notifications %}
-        <a href="{% url 'notification_center:view' notification.id %}">{{ notification.trigger.username }} {{ notification.event.text }} in {{ notification.project.name }} at {{ notification.timestamp}}</a>
+        <a href="{% url 'user_management:profile' notification.trigger_user.username %}">{{ notification.trigger_user.username }}</a> {{ notification.event.text }} in <a href="{% url 'project_management:project' notification.project.id %}">{{ notification.project.name }}</a>
+        <button style="margin-left: 5px;" id="{{ notification.id }}" title="View" name="followInvitation" class="btn btn-xs btn-primary followInvitation"><i class="glyphicon glyphicon-eye-open"></i></button>
+        <button id="{{ notification.id }}" title="Mark as Seen" name="markInvitationSeen" class="btn btn-xs btn-success markInvitationSeen" style="margin-right: 5px;"><i class="glyphicon glyphicon-ok"></i></button>
+        <span class="pull-right">{{ notification.timestamp }}</span><br>
+
     {% endfor %}
 
 {% endblock %}

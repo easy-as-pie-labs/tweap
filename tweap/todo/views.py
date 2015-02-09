@@ -7,7 +7,7 @@ from todo.models import Todo
 from django.contrib.auth.models import User
 from project_management.models import Project
 from project_management.tools import get_tags
-
+from notification_center.models import Event, Notification
 
 class CreateEdit(View):
     """
@@ -91,6 +91,32 @@ class CreateEdit(View):
                 todo.tags.add(tag)
 
             todo.save()
+
+            # see if event type already exists in db
+            event_text = "assigned a todo to you"
+            try:
+                event = Event.objects.get(text=event_text)
+            except:
+                event = Event()
+                event.text = event_text
+                event.save()
+
+            # send out notifications
+            for assignee in assignees:
+                user = User.objects.get(username=assignee)
+
+                # We don't want a notification for the user who created this
+                if user == request.user:
+                    continue
+
+                notification = Notification()
+                notification.receiver = user
+                notification.trigger_user = request.user
+                notification.project = project
+                notification.target_url = request.build_absolute_uri(reverse('todo:edit', args=(todo.id, )))
+                notification.event = event
+                notification.save()
+
             return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))
 
         project = Project.objects.get(id=project_id)

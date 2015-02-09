@@ -12,15 +12,24 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="list-group" id="invitation_list">
-                    <span class="list-group-item active"><i class="fa fa-envelope-o"></i> {% trans "Invitations" %}</span>
+                    <span class="list-group-item active"><i class="fa fa-inbox"></i> {% trans "Inbox" %}</span>
                     {% for invitation in invitations %}
 
                     <div id="invitation_container_id_{{ invitation.id }}" class="list-group-item">
-                        <p><strong>{{ invitation.project.name }}</strong>&nbsp;
+                        <p><strong>{% trans "Invitation to project" %}: {{ invitation.project.name }}</strong>&nbsp;
                             <button id="{{ invitation.id }}" name="rejectInvitation" class="btn btn-xs btn-danger rejectInvitation pull-right"><i class="glyphicon glyphicon-remove"></i></button>
                             <button id="{{ invitation.id }}" name="acceptInvitation" class="btn btn-xs btn-success acceptInvitation pull-right" style="margin-right: 5px;"><i class="glyphicon glyphicon-ok"></i></button>
                         </p>
                         <p>{{ invitation.project.description }}</p>
+                    </div>
+                    {% endfor %}
+                    {% for notification in notifications %}
+                    <div id="notification_container_id_{{ notification.id }}" class="list-group-item">
+                        <p><a href="{% url 'user_management:profile' notification.trigger_user.username %}">{{ notification.trigger_user.username }}</a> {{ notification.event.text }} in <a href="{% url 'project_management:project' notification.project.id %}">{{ notification.project.name }}</a> <span class="small">({{ notification.timestamp }})</span>
+                            <button id="{{ notification.id }}" title="Mark as Seen" name="markInvitationSeen" class="btn btn-xs btn-success markInvitationSeen pull-right pull-right"><i class="glyphicon glyphicon-ok"></i></button>
+                            <button id="{{ notification.id }}" title="View" name="followInvitation" class="btn btn-xs btn-primary followInvitation pull-right" style="margin-right: 5px;"><i class="glyphicon glyphicon-eye-open"></i></button>
+
+                        </p>
                     </div>
                     {% endfor %}
                 </div>

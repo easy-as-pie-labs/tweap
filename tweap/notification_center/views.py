@@ -16,7 +16,14 @@ class ViewOne(View):
     def get(self, request, notification_id):
         # TODO: error handling
         notification = Notification.objects.get(id=notification_id)
-        url = notification.url.url
-        parameter = notification.url.parameter
+        url = notification.target_url
         notification.delete()
-        return HttpResponseRedirect(reverse(url, args=(parameter, )))
+        return HttpResponseRedirect(url)
+
+
+class MarkSeen(View):
+    def get(self, request, notification_id):
+        notification = Notification.objects.get(id=notification_id)
+        url = notification.target_url
+        notification.delete()
+        return HttpResponseRedirect(url)
