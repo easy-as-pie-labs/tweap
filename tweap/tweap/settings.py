@@ -102,7 +102,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR + "/tweap/", 'static'),
 )
 
-STATIC_ROOT = "/home/goggelz/STATIC_DJANGO/tweap/"
+STATIC_ROOT = "/srv/teamcity/deploy/tweap/alpha/static"
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR + "/tweap/",  'templates'),

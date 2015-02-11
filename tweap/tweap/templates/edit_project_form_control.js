@@ -1,14 +1,14 @@
 {% load i18n %}
 $(document).ready(function(){
     newMembers = new Members();
-    $('<p id="project_icon"><i id="projectIcon" name="projectIcon" class="{{ project.icon|default:"fa fa-folder-open-o" }} project_icon" data-toggle="modal" data-target="#projectIconModal"></i> {% trans "Click icon to change it" %}</p>').insertAfter('label[for=id_icon]');
+
+    $('<p id="project_icon"><i id="projectIcon" name="projectIcon" class="{{ project.icon|default:"fa fa-folder-open-o" }} project_icon" data-toggle="modal" data-target="#projectIconModal"></i> {% trans "Click icon to change it" %}</p>')
+        .insertAfter('label[for=id_icon]');
     $('label[for=id_icon]').attr('for', 'projectIcon');
 
     projectIconClass = '{{ project.icon|default:"fa fa-folder-open-o" }}'
     projectIconClass = "." + projectIconClass.split(" ")[1];
-    console.log(projectIconClass);
     active = $('#projectIconModal').find(projectIconClass);
-    console.log(active)
     $(active).addClass('project_icon_chosen');
 });
 
@@ -42,8 +42,8 @@ function addMemberInput(){
     $('.addUserButton').addClass('removeUserButton');
     $('.addUserButton').removeClass('addUserButton');
 
-    $('.removeUserButton').children().first().removeClass('glyphicon-plus-sign');
-    $('.removeUserButton').children().first().addClass('glyphicon-minus-sign');
+    $('.removeUserButton').children().first().removeClass('fa fa-plus-circle');
+    $('.removeUserButton').children().first().addClass('fa fa-minus-circle');
 
     $('.removeUserButton').prev().attr("disabled", true);
 

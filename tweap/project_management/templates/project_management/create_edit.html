@@ -8,11 +8,6 @@
 {% endblock %}
 {% block project_management_template %}
     <h1>{{ headline }}</h1>
-    <!-- TODO: this shit is fucked up. since the only fail that can currently happen is an empty name, I just hardcoded it -->
-    <!--
-    {% for error, message in error_messages.items %}
-        {{ message }}
-    {% endfor %}-->
 
     {% for error, message in error_messages.items %}
         {% if error == 'name' %}
@@ -31,7 +26,7 @@
         <div id="newInputs">
             <div class="form-group">
                 <div class="input-group date">
-                    <input id="users" type="text" tabindex="2" placeholder='{% trans "Username or eMail" %}' class="form-control member"><span class="input-group-addon addUserButton focus-pointer"><i class="glyphicon glyphicon-plus-sign"></i></span>
+                    <input id="users" type="text" tabindex="2" placeholder='{% trans "Username or eMail" %}' class="form-control member"><span class="input-group-addon addUserButton focus-pointer"><i class="fa fa-plus-circle"></i></span>
                 </div>
                 <div id="suggestions">
                 </div>
