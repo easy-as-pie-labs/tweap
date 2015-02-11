@@ -18,7 +18,6 @@ $(document).on('click', '.addTagButton', function() {
 //adds clicked suggestion to tag-list
 $(document).on('click', '.suggestion', function() {
     addTagAndCleanInput($(this).attr('id'));
-    $('#suggestions').empty();
 });
 
 function addTagAndCleanInput(newTagName) {
@@ -26,6 +25,7 @@ function addTagAndCleanInput(newTagName) {
     $('#tag-list').append('<span class="tweap-tag label label-primary" id="' + newTagName + '"><i class="fa fa-tag"></i> ' + newTagName + '</span>');
     $('#tag-input').val("");
     $('#tag-input').attr("placeholder", "{% trans 'Add Tag' %}");
+    $('#suggestions').empty();
 }
 
 //Ajax-Request for TagSuggestions
@@ -66,7 +66,7 @@ $(document).on('click', '.tweap-tag', function() {
 });
 
 
-//Object is initialized on the very Beginning of this document
+//Object is initialized in document ready, manages the tags
 var Tags = function(){
     this.Tags = new Array();
 
@@ -77,7 +77,10 @@ var Tags = function(){
     }
 
     this.remove = function(tagToRemove){
-        this.Tags.pop(tagToRemove);
+        var index = this.Tags.indexOf(tagToRemove);
+        if (index > -1) {
+            this.Tags.splice(index, 1);
+        }
         $('#tags').val(JSON.stringify(this.Tags));
     }
 }
