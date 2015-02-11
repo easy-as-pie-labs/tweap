@@ -4400,8 +4400,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   color: white;
   background-color: #337ab7;
 }
-.navbar-default .navbar-nav > li > a:hover,
-.navbar-default .navbar-nav > li > a:focus {
+.navbar-default .navbar-nav > li > a:hover{
   color: #337ab7;
   background-color: transparent;
 }
