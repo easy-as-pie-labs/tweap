@@ -11,28 +11,22 @@ $(document).on('click', '.addTagButton', function() {
     }
     else {
         $(this).parent().parent().removeClass('has-error');
-        addTagInput();
+        addTagAndCleanInput($('#tag-input').val());
     }
 });
 
-// adds tag from input to tag-list, cleans tag input field, refreshes tag-array
-function addTagInput(){
-    var newTagName = $('#tag-input').val();
+//adds clicked suggestion to tag-list
+$(document).on('click', '.suggestion', function() {
+    addTagAndCleanInput($(this).attr('id'));
+    $('#suggestions').empty();
+});
+
+function addTagAndCleanInput(newTagName) {
     tagList.add(newTagName);
     $('#tag-list').append('<span class="tweap-tag label label-primary" id="' + newTagName + '"><i class="fa fa-tag"></i> ' + newTagName + '</span>');
     $('#tag-input').val("");
     $('#tag-input').attr("placeholder", "{% trans 'Add Tag' %}");
 }
-
-//adds clicked suggestion to tag-list
-$(document).on('click', '.suggestion', function() {
-    var newTagName = $(this).attr('id');
-    tagList.add(newTagName);
-    $('#tag-list').append('<span class="tweap-tag label label-primary" id="' + newTagName + '"><i class="fa fa-tag"></i> ' + newTagName + '</span>');
-    $('#suggestions').empty();
-    $('#tag-input').val("");
-    $('#tag-input').attr("placeholder", "{% trans 'Add Tag' %}");
-});
 
 //Ajax-Request for TagSuggestions
 $(document).on('keyup', '#tag-input', function(){

@@ -45,8 +45,15 @@ def get_tags(tag_list, project):
                     tag_object = Tag.objects.get(project=project, name=tag)
                 except Tag.DoesNotExist:
                     tag_object = Tag(project=project, name=tag)
-                    tag_object.save()
-                tags.append(tag_object)
+                    try:
+                        tag_object.save()
+                    # if someone manipulates post-data and tries to create tags longer than 20 chars
+                    except:
+                        tag_object = None
+                if tag_object is not None:
+                    tags.append(tag_object)
+
+    # TODO: check if tags are in project that are used nowhere and delete them!
     return tags
 
 
