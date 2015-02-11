@@ -113,6 +113,19 @@ class Profile(models.Model):
                     connected_users.append(member)
         return connected_users
 
+    def get_name(self):
+        if self.first_name is None or self.first_name == "":
+            if self.last_name is not None and self.last_name != "":
+                return self.last_name
+            else:
+                return ""
+        else:
+            if self.last_name is not None and self.last_name != "":
+                return self.first_name + " " + self.last_name
+            else:
+                return self.first_name
+
+
     def __str__(self):
         if self.first_name is None and self.last_name is None or self.first_name == '' and self.last_name == '':
             return str(self.user.id) + ": " + str(self.user.username)

@@ -12,11 +12,11 @@
         {% csrf_token %}
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="confirm" value="i am sure">
+            <input id="confirm" type="checkbox" name="confirm" value="i am sure">
             {% trans "I am sure" %}
           </label>
         </div>
-        <button name="delete_account" type="submit" class="btn btn-danger btn-lg">{% trans "Delete account" %}</button>
+        <button id="delete_account" name="delete_account" type="submit" class="btn btn-danger btn-lg">{% trans "Delete account" %}</button>
     </form>
 
 {% endblock %}

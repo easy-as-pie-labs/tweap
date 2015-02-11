@@ -23,7 +23,7 @@
 			<p><input type="submit" value="{% trans "Upload image" %}" /></p>
 		</form>
         <br>
-        <form class="form-group" action="{% url 'user_management:edit_profile' %}" method="POST" enctype="multipart/form-data">
+        <form class="form-group" id="edit_profile_form" action="{% url 'user_management:edit_profile' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {% if user.profile.picture %}
                 <p>or</p>
@@ -80,9 +80,9 @@
                 <td><input class="form-control" type="number" name="housenumber" value="{% if not profile_address.house_number %}{% else %}{{ profile_address.house_number }}{% endif %}"></td>
             </tr>
         </table>
-            <button name="save_changes" class="btn btn-primary btn-lg">{% trans "Save Changes" %}</button>
+            <button id="save_changes" class="btn btn-primary btn-lg">{% trans "Save Changes" %}</button>
         </form>
-    <a href="{% url 'user_management:delete_account' %}"><button name="delete_account" class="btn btn-danger btn-lg">{% trans "Delete account" %}</button></a>
+    <a href="{% url 'user_management:delete_account' %}"><button id="delete_account" name="delete_account" class="btn btn-danger btn-lg">{% trans "Delete account" %}</button></a>
     </div>
 </div>
 {% endblock %}

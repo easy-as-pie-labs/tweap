@@ -1,7 +1,7 @@
 {% load i18n %}
 {% if user.is_authenticated %}
     <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{% trans "Projects" %} <span class="caret"></span></a>
+        <a href="#" id="project_dropdown" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{% trans "Projects" %} <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
               {% if projects %}
                   {% for project in projects %}
@@ -9,12 +9,12 @@
                   {% endfor %}
                   <li class="divider"></li>
               {% endif %}
-              <li><a name="navbar_new_link" href="{% url 'project_management:create' %}"><i class="fa fa-plus"></i>&nbsp;&nbsp;{% trans "new Project" %}</a></li>
+              <li><a id="navbar_new_link" href="{% url 'project_management:create' %}"><i class="fa fa-plus"></i>&nbsp;&nbsp;{% trans "new Project" %}</a></li>
           </ul>
         </li>
     <li class="dropdown">
       {% if projects %}
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{% trans "new Todo" %} <span class="caret"></span></a>
+        <a href="#" id="todo_dropdown" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{% trans "new Todo" %} <span class="caret"></span></a>
 
           <ul class="dropdown-menu" role="menu">
               {% for project in projects %}
@@ -23,9 +23,9 @@
           </ul>
         </li>
     {% endif %}
-    <li><a name="navbar_profile_link" href="{% url 'user_management:profile' username %}">{% trans "Profile" %}</a></li>
-    <li><a name="navbar_logout_link" href="{% url 'user_management:logout' %}">{% trans "Logout" %}</a></li>
+    <li><a id="navbar_profile_link" href="{% url 'user_management:profile' username %}">{% trans "Profile" %}</a></li>
+    <li><a id="navbar_logout_link" href="{% url 'user_management:logout' %}">{% trans "Logout" %}</a></li>
 {% else %}
-    <li><a name="navbar_login_link" href="{% url 'user_management:login' %}">{% trans "Login" %}</a></li>
-    <li><a name="navbar_register_link" href="{% url 'user_management:register' %}">{% trans "Register" %}</a></li>
+    <li><a id="navbar_login_link" href="{% url 'user_management:login' %}">{% trans "Login" %}</a></li>
+    <li><a id="navbar_register_link" href="{% url 'user_management:register' %}">{% trans "Register" %}</a></li>
 {% endif %}

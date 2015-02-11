@@ -6,7 +6,7 @@
             {% for error, message in error_messages.items %}
             <div class="alert alert-danger">{{ message }}</div><br>
             {% endfor %}
-            <form class="input-group input-group-lg" method="post" action="{% url 'user_management:register' %}">
+            <form id="register-form" class="input-group input-group-lg" method="post" action="{% url 'user_management:register' %}">
                 {% csrf_token %}
                 <input class="form-control" type="text" name="username" placeholder="{% trans "Username" %}" value="{{ username_field }}" tabindex="1" required>
                 <input class="form-control" type="email" name="email" placeholder="{% trans "eMail" %}" value="{{ email_field }}" tabindex="2" required>

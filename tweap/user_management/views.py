@@ -112,7 +112,7 @@ class ViewProfile(View):
             profile_address = ProfileAddress.objects.get(id=user.profile.address.id)
         except:
             profile_address = None
-        context = {'user': user, 'request_user': request.user, 'profile_address': profile_address}
+        context = {'user': user, 'request_user': request.user, 'profile_address': profile_address, 'name': user.profile.get_name()}
         return render(request, 'user_management/profile.html', context)
 
 

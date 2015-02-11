@@ -6,7 +6,7 @@
         {% if error_message %}
             <div class="alert alert-danger">{{ error_message }}</div>
         {% endif %}
-        <form class="input-group input-group-lg" method="post" action="{% url 'user_management:login' %}">
+        <form id="login-form" class="input-group input-group-lg" method="post" action="{% url 'user_management:login' %}">
             {% csrf_token %}
             <input class="form-control" type="text" name="username" placeholder="{% trans "Username" %}" tabindex="1" required>
             <input class="form-control" type="password" name="password" placeholder="{% trans "Password" %}" tabindex="2" required>
