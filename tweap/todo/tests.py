@@ -267,71 +267,181 @@ class ViewsTest(TestCase):
     project_description = "Testdescription"
     todo_name = "Testtodo"
 
-    def create_todo(self):
+    def test_create_todo(self):
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
-        user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
-        project = Project(name=self.project_name, description=self.project_description)
-        project.save()
+        user_unassigned = User.objects.create_user('testuser2', 'test@test.de', 'testpw')
+
+        project_assigned = Project(name=self.project_name, description=self.project_description)
+        project_assigned.save()
+        project_assigned.members.add(user)
+        project_assigned.save()
+
+        project_unassigned = Project(name=self.project_name, description=self.project_description)
+        project_unassigned.save()
+        project_unassigned.members.add(user_unassigned)
+        project_unassigned.save()
+
+        #Login
         self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
 
-        resp = self.client.get('/todo/new/project/' + str(project.id))
+        #User is assigned to project (GET)
+        resp = self.client.get('/todo/new/project/' + str(project_assigned.id))
         self.assertEqual(200, resp.status_code)
         self.assertTrue(type(resp) is HttpResponse)
 
-        resp = self.client.post('/todo/new/project/' + str(project.id), {'name': self.todo_name})
+        #User is assgined to project and Title is not empty
+        resp = self.client.post('/todo/new/project/' + str(project_assigned.id), {'title': self.todo_name, 'description': "", 'due_date': "", 'tags': ""})
         self.assertEqual(302, resp.status_code)
         self.assertTrue(type(resp) is HttpResponseRedirect)
 
-        todo = Todo.objects.get(name=self.todo_name)
+        todo = Todo.objects.filter(title=self.todo_name)
         self.assertTrue(todo.exists())
-
         todo.delete()
-        project.delete()
-        user.delete()
-        user2.delete()
 
-    def create_edit_todo(self):
+        #User is assigned to project but Title is empty
+        resp = self.client.post('/todo/new/project/' + str(project_assigned.id), {'title': "", 'description': "", 'due_date': "", 'tags': ""})
+        self.assertEqual(200, resp.status_code)
+        self.assertTrue(type(resp) is HttpResponse)
+        self.assertTrue(resp.context['error_messages'])
+
+        todo = Todo.objects.filter(title=self.todo_name)
+        self.assertFalse(todo.exists())
+        todo.delete()
+
+        #User is unassigned to project (GET)
+        resp = self.client.get('/todo/new/project/' + str(project_unassigned.id))
+        self.assertEqual(404, resp.status_code)
+
+        #User is unassigned to project and Title is not empty
+        resp = self.client.post('/todo/new/project/' + str(project_unassigned.id), {'title': self.todo_name, 'description': "", 'due_date': "", 'tags': ""})
+        self.assertEqual(404, resp.status_code)
+
+        todo = Todo.objects.filter(title=self.todo_name)
+        self.assertFalse(todo.exists())
+        todo.delete()
+
+        #User is unassgined to project and Title is empty
+        resp = self.client.post('/todo/new/project/' + str(project_unassigned.id), {'title': "", 'description': "", 'due_date': "", 'tags': ""})
+        self.assertEqual(404, resp.status_code)
+
+        todo = Todo.objects.filter(title=self.todo_name)
+        self.assertFalse(todo.exists())
+        todo.delete()
+
+        #Project does not exist (POST)
+        resp = self.client.post('/todo/new/project/999', {'title': self.todo_name, 'description': "", 'due_date': "", 'tags': ""})
+        self.assertEqual(404, resp.status_code)
+
+        #Project dies not exist (GET)
+        resp = self.client.get('/todo/new/project/999')
+        self.assertEqual(404, resp.status_code)
+
+        project_assigned.delete()
+        project_unassigned.delete()
+        user.delete()
+        user_unassigned.delete()
+
+    def test_create_edit_todo(self):
+
+        #init
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
-        user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
-        project = Project(name=self.project_name, description=self.project_description)
-        project.save()
+        user_unassigned = User.objects.create_user('testuser2', 'test@test.de', 'testpw')
+
+        project_assigned = Project(name=self.project_name, description=self.project_description)
+        project_assigned.save()
+        project_assigned.members.add(user)
+        project_assigned.save()
+
+        project_unassigned = Project(name=self.project_name, description=self.project_description)
+        project_unassigned.save()
+        project_unassigned.members.add(user_unassigned)
+        project_unassigned.save()
+
+        todo_assigned = Todo(title=self.todo_name, description=self.project_description)
+        todo_assigned.project = project_assigned
+        todo_assigned.save()
+
+        todo_unassigned = Todo(title=self.todo_name, description=self.project_description)
+        todo_unassigned.project = project_unassigned
+        todo_unassigned.save()
+
+        #Login
         self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
 
-        resp = self.client.get('/todo/new/project/' + str(project.id))
+        #Open existing and assigned edit/todoh
+        resp = self.client.get('/todo/edit/' + str(todo_assigned.id))
         self.assertEqual(200, resp.status_code)
         self.assertTrue(type(resp) is HttpResponse)
 
-        resp = self.client.post('/todo/new/project/' + str(project.id), {'name': self.todo_name})
+        #Open existing but not assigned edit/todoh
+        resp = self.client.get('/todo/edit/' + str(todo_unassigned.id))
+        self.assertEqual(404, resp.status_code)
+
+        #Open non existing edit/todoh
+        resp = self.client.get('/todo/edit/999')
+        self.assertEqual(404, resp.status_code)
+
+        #Edit existing and assigned todoh with title
+        resp = self.client.post('/todo/edit/' + str(todo_assigned.id), {'title': self.todo_name, 'description': "new Description", 'due_date': "", 'tags': ""})
         self.assertEqual(302, resp.status_code)
         self.assertTrue(type(resp) is HttpResponseRedirect)
 
-        todo = Todo.objects.get(name=self.todo_name)
-        self.assertTrue(todo.exists())
+        todo = Todo.objects.get(id=todo_assigned.id)
+        self.assertTrue(todo.description == "new Description")
 
-        resp = self.client.get('/todo/edit/' + str(todo.id))
+        #Edit existing and assigned todoh without title
+        resp = self.client.post('/todo/edit/' + str(todo_assigned.id), {'title': "", 'description': "newer", 'due_date': "", 'tags': ""})
         self.assertEqual(200, resp.status_code)
         self.assertTrue(type(resp) is HttpResponse)
+        self.assertTrue(resp.context['error_messages'])
 
-        resp = self.client.post('/todo/edit/' + str(todo.id), {'name': 'another todo'})
-        self.assertEqual(302, resp.status_code)
-        self.assertTrue(type(resp) is HttpResponseRedirect)
+        '''todo = Todo.objects.filter(id=todo_assigned.id)
+        self.assertTrue(todo.description == "new Description")'''
 
-        todo = Todo.objects.get(name='another todo')
-        self.assertTrue(todo.exists())
+        #Edit existing but not assigned edit/todoh with title
+        resp = self.client.post('/todo/edit/' + str(todo_unassigned.id), {'title': self.todo_name, 'description': "newer Description", 'due_date': "", 'tags': ""})
+        self.assertEqual(404, resp.status_code)
+
+        todo = Todo.objects.get(id=todo_assigned.id)
+        self.assertTrue(todo.description == "new Description")
+
+        #Edit existing but not assigned edit/todoh without title
+        resp = self.client.post('/todo/edit/' + str(todo_unassigned.id), {'title': "", 'description': "newest Description", 'due_date': "", 'tags': ""})
+        self.assertEqual(404, resp.status_code)
+
+        todo = Todo.objects.get(id=todo_assigned.id)
+        self.assertTrue(todo.description == "new Description")
+
+        #Edit non existing todoh with title
+        resp = self.client.post('/todo/edit/999', {'title': self.todo_name, 'description': "latest Description", 'due_date': "", 'tags': ""})
+        self.assertEqual(404, resp.status_code)
+
+        todo = Todo.objects.get(id=todo_assigned.id)
+        self.assertTrue(todo.description == "new Description")
+
+        #Edit non existing todoh without title
+        resp = self.client.post('/todo/edit/999', {'title': "", 'description': "later Description", 'due_date': "", 'tags': ""})
+        self.assertEqual(404, resp.status_code)
+
+        todo = Todo.objects.get(id=todo_assigned.id)
+        self.assertTrue(todo.description == "new Description")
 
         todo.delete()
-        project.delete()
+        todo_assigned.delete()
+        todo_unassigned.delete()
         user.delete()
-        user2.delete()
+        user_unassigned.delete()
+        project_assigned.delete()
+        project_unassigned.delete()
 
-    def assign_todo(self):
+    def test_assign_todo(self):
         pass
 
-    def due_date_todo(self):
+    def test_due_date_todo(self):
         pass
 
-    def complete_todo(self):
+    def test_complete_todo(self):
         pass
 
-    def delete_todo(self):
+    def test_delete_todo(self):
         pass
