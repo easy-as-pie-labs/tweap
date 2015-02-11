@@ -110,3 +110,7 @@ p#project_icon{
     background-color: white !important;
     cursor: pointer !important;
 }
+
+.nobg:hover{
+    background-color: #337ab7;
+}
