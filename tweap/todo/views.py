@@ -22,10 +22,10 @@ class CreateEdit(View):
 
             project = Project.objects.get(id=project_id)
 
-            assigned_users = project.members.all()
+            project_members = project.members.all()
 
             # redirect if user is not in group at all
-            if request.user not in assigned_users:
+            if request.user not in project_members:
                 raise Http404
 
             context = {
@@ -43,19 +43,19 @@ class CreateEdit(View):
         else:
             project = Project.objects.get(project_id)
 
-        assigned_users = project.members.all()
+        project_members = project.members.all()
 
         tags = todo.tags.all()
 
         # redirect if user is not in group at all
-        if request.user not in assigned_users:
+        if request.user not in project_members:
             raise Http404
         else:
             context = {
                 'headline': ugettext("Edit Todo"),
                 'todo': todo,
                 'tags': tags,
-                'members': assigned_users,
+                'members': project_members,
                 'project': project,
                 'date': todo.get_date(),
                 'assignees': todo.assignees.all(),
@@ -76,10 +76,10 @@ class CreateEdit(View):
         else:
             todo = get_object_or_404(Todo, id=todo_id)
             project = todo.project
-            assigned_users = project.members.all()
+            project_members = project.members.all()
 
             # redirect if user is not in group at all
-            if request.user not in assigned_users:
+            if request.user not in project_members:
                 raise Http404
 
         if 'title' in form:
@@ -97,7 +97,10 @@ class CreateEdit(View):
             todo.save()
             todo.assignees.clear()
             for assignee in assignees:
-                todo.assignees.add(User.objects.get(username=assignee))
+                user = User.objects.get(username=assignee)
+                # if the post data was manipulated and a user assigned who is not in the project let's ignore it
+                if user in project.members.all():
+                    todo.assignees.add(user)
             tags = get_tags(form['tags'], todo.project)
 
             for tag in tags:
@@ -119,7 +122,8 @@ class CreateEdit(View):
                 user = User.objects.get(username=assignee)
 
                 # We don't want a notification for the user who created this
-                if user == request.user:
+                # also if the post data was manipulated and a user assigned who is not in the project let's ignore it
+                if user == request.user or user not in project.members.all():
                     continue
 
                 notification = Notification()
