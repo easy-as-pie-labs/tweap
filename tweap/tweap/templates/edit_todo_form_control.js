@@ -26,16 +26,35 @@ function addTagAndCleanInput(newTagName) {
     $('#tag-input').val("");
     $('#tag-input').attr("placeholder", "{% trans 'Add Tag' %}");
     $('#suggestions').empty();
+    $('#users').focus();
 }
 
 //Ajax-Request for TagSuggestions
-$(document).on('keyup', '#tag-input', function(){
-    typedText = (this).value
+$(document).on('keyup', '#tag-input', function(e){
+    typedText = (this).value;
     //AJAX-Request:
     data = {search:typedText, project_id:"{{ project.id }}"};
     $.get("{% url 'project_management:tag_suggestion' %}", data, function(output){
         manageTagSuggestionAjaxRequest(output)
     })
+});
+
+// overwrites enter to submit form when typing in tag input field and adds text as tag
+$(document).on('keydown', '#tag-input', function(e){
+    if ( e.which == 13 ) {
+        // if input is empty, prevent user adding
+        if(!$('#tag-input').val()) {
+            // focus on empty field and give error message
+            $('#tag-input').focus();
+            $('#tag-input').attr("placeholder", "{% trans 'Add Tag' %}");
+            $('#tag-input').parent().parent().addClass('has-error');
+        }
+        else {
+            $(this).parent().parent().removeClass('has-error');
+            addTagAndCleanInput($('#tag-input').val());
+    }
+        e.preventDefault();
+    }
 });
 
 /*
