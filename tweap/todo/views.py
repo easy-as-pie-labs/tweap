@@ -9,6 +9,7 @@ from project_management.models import Project
 from project_management.tools import get_tags
 from notification_center.models import Event, Notification
 
+
 class CreateEdit(View):
     """
     View class for creating or editing a todo
@@ -20,6 +21,13 @@ class CreateEdit(View):
                 raise Http404
 
             project = Project.objects.get(id=project_id)
+
+            assigned_users = project.members.all()
+
+            # redirect if user is not in group at all
+            if request.user not in assigned_users:
+                raise Http404
+
             context = {
                 'headline': ugettext("Create new Todo"),
                 'project': project,
@@ -36,7 +44,10 @@ class CreateEdit(View):
             project = Project.objects.get(project_id)
 
         assigned_users = project.members.all()
+
         tags = todo.tags.all()
+
+        # redirect if user is not in group at all
         if request.user not in assigned_users:
             raise Http404
         else:
@@ -66,6 +77,8 @@ class CreateEdit(View):
             todo = get_object_or_404(Todo, id=todo_id)
             project = todo.project
             assigned_users = project.members.all()
+
+            # redirect if user is not in group at all
             if request.user not in assigned_users:
                 raise Http404
 
