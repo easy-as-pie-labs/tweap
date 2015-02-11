@@ -114,3 +114,14 @@ p#project_icon{
 .nobg:hover{
     background-color: #337ab7;
 }
+
+.tweap-tag{
+    font-size: 14px !important;
+    font-weight: normal !important;
+}
+
+.tweap-tag:hover{
+    background-color: #d9534f;
+    text-decoration: line-through;
+    cursor: pointer;
+}
