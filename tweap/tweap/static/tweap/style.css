@@ -101,3 +101,12 @@ p#project_icon{
 .project_icon_chosen{
     color: #337ab7;
 }
+
+.cursor-pointer{
+    cursor: pointer;
+}
+
+.date-field-readonly{
+    background-color: white !important;
+    cursor: pointer !important;
+}

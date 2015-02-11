@@ -107,4 +107,15 @@ var Tags = function(){
 
 $(document).ready(function(){
    newTags = new Tags();
+    $('#due_date_warning').hide();
+
+    $('#due_date').change(function() {
+        var dueDate = new Date($('#due_date').val());
+        var today = new Date();
+        if (dueDate < today) {
+            $('#due_date_warning').show('slow');
+        } else {
+            $('#due_date_warning').hide('slow');
+        }
+    });
 });
