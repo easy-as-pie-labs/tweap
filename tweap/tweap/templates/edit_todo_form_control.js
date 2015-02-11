@@ -22,7 +22,7 @@ $(document).on('click', '.suggestion', function() {
 
 function addTagAndCleanInput(newTagName) {
     tagList.add(newTagName);
-    $('#tag-list').append('<span class="tweap-tag label label-primary" id="' + newTagName + '"><i class="fa fa-tag"></i> ' + newTagName + '</span>');
+    $('#tag-list').append('<p class="tag-outer"><span class="tag" id="' + newTagName + '"><i class="fa fa-tag"></i>' + newTagName + '</span></p>');
     $('#tag-input').val("");
     $('#tag-input').attr("placeholder", "{% trans 'Add Tag' %}");
     $('#suggestions').empty();
@@ -77,11 +77,11 @@ function addSuggestionToContent(newTagName) {
     );
 }
 
-//removes tags when clicked from tag-list and Array
-$(document).on('click', '.tweap-tag', function() {
+//remove tag from tag-list and array when clicked
+$(document).on('click', '.tag', function() {
     var tagToRemove = $(this).attr('id');
     tagList.remove(tagToRemove);
-    $(this).remove();
+    $(this).parent().remove();
 });
 
 
@@ -108,7 +108,7 @@ $(document).ready(function(){
     tagList = new Tags();
 
     //add existing tags to tagList
-    $('.tweap-tag').each(function() {
+    $('.tag').each(function() {
        tagList.add($(this).attr('id'));
     });
 
@@ -122,5 +122,12 @@ $(document).ready(function(){
         } else {
             $('#due_date_warning').hide('slow');
         }
+    });
+
+   $('.input-group.date').datepicker({
+        format: "yyyy-mm-dd",
+        todayBtn: "linked",
+        autoclose: true,
+        todayHighlight: true
     });
 });
