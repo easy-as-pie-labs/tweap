@@ -435,7 +435,57 @@ class ViewsTest(TestCase):
         project_unassigned.delete()
 
     def test_assign_todo(self):
-        pass
+        user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
+        user2 = User.objects.create_user('testuser2', 'test@test.de', 'testpw')
+        user_unassigned = User.objects.create_user('testuser3', 'test@test.de', 'testpw')
+
+        project = Project(name=self.project_name, description=self.project_description)
+        project.save()
+        project.members.add(user)
+        project.members.add(user2)
+        project.save()
+
+        todo = Todo(title=self.todo_name, description=self.project_description)
+        todo.project = project
+        todo.save()
+
+        #Login
+        self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
+
+        #Assign valid user
+        assignees = [user2.username]
+        resp = self.client.post('/todo/edit/' + str(todo.id), {'title': self.todo_name, 'description': "new Description", 'due_date': "", 'assignees': assignees, 'tags': ""})
+        self.assertEqual(302, resp.status_code)
+        self.assertTrue(type(resp) is HttpResponseRedirect)
+
+        todo_check = Todo.objects.get(id=todo.id)
+        self.assertTrue(user2 in todo_check.assignees.all())
+
+        #Assign invalid user only
+        assignees = [user_unassigned.username]
+        resp = self.client.post('/todo/edit/' + str(todo.id), {'title': self.todo_name, 'description': "new Description", 'due_date': "", 'assignees': assignees, 'tags': ""})
+        self.assertEqual(302, resp.status_code)
+        self.assertTrue(type(resp) is HttpResponseRedirect)
+
+        todo_check = Todo.objects.get(id=todo.id)
+        self.assertFalse(user_unassigned in todo_check.assignees.all())
+
+        #Assign invalid user and valid user
+        assignees = [user_unassigned.username, user2.username]
+        resp = self.client.post('/todo/edit/' + str(todo.id), {'title': self.todo_name, 'description': "new Description", 'due_date': "", 'assignees': assignees, 'tags': ""})
+        self.assertEqual(302, resp.status_code)
+        self.assertTrue(type(resp) is HttpResponseRedirect)
+
+        todo_check = Todo.objects.get(id=todo.id)
+        self.assertTrue(user2 in todo_check.assignees.all())
+        self.assertFalse(user_unassigned in todo_check.assignees.all())
+
+        todo_check.delete()
+        todo.delete()
+        user.delete()
+        user2.delete()
+        user_unassigned.delete()
+        project.delete()
 
     def test_due_date_todo(self):
         pass
