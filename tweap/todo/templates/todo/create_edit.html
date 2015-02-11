@@ -57,33 +57,27 @@
             </ul>
         </div>
 
-            <input type="hidden" id="hiddenValues" name="tags" />
-            <label for="newInputs" class="control-label">{% trans "Add Tags" %}</label>
-            <div id="newInputs">
+            <input type="hidden" id="tags" name="tags" />
+            <label for="tagInput" class="control-label">{% trans "Add Tags" %}</label>
+            <div id="tagInput">
                 <div class="form-group">
                     <div class="input-group symbol">
-                        <input id="tags" type="text" tabindex="2" placeholder='{% trans "Add Tag" %}' class="form-control tag"><span class="input-group-addon addTagButton focus-pointer"><i class="fa fa-plus-circle"></i></span>
+                        <input id="tag-input" type="text" tabindex="2" maxlength="20" placeholder='{% trans "Add Tag" %}' class="form-control tag"><span class="input-group-addon addTagButton focus-pointer"><i class="fa fa-plus-circle"></i></span>
                     </div>
                     <div id="suggestions">
                     </div>
                 </div>
             </div>
 
-            {% if tags %}
-                <label for="tag" class="control-label">{% trans "Tags" %}</label>
-                {% for tag in tags %}
-                    <div id="tag">
-                        <div class="form-group">
-                            <div class="input-group symbol">
-                                <input id="used_tags" type="text" class="form-control" disabled="disabled" value="{{ tag.name }}">
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
+        <label for="tag" class="control-label">{% trans "Tags" %}</label>
+        <div id="tag-list" class="form-group">
+            {% for tag in tags %}
+                <span class="tweap-tag label label-primary" id="{{ tag.name }}"><i class="fa fa-tag"></i> {{ tag.name }}</span>
+            {% endfor %}
+        </div>
 
 
-            <input onClick="insertHiddenValues()" tabindex="3" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
+            <input tabindex="3" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
 
     </form>
         </div>

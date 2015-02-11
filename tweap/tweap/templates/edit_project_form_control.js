@@ -42,8 +42,8 @@ function addMemberInput(){
     $('.addUserButton').addClass('removeUserButton');
     $('.addUserButton').removeClass('addUserButton');
 
-    $('.removeUserButton').children().first().removeClass('glyphicon-plus-sign');
-    $('.removeUserButton').children().first().addClass('glyphicon-minus-sign');
+    $('.removeUserButton').children().first().removeClass('fa fa-plus-circle');
+    $('.removeUserButton').children().first().addClass('fa fa-minus-circle');
 
     $('.removeUserButton').prev().attr("disabled", true);
 

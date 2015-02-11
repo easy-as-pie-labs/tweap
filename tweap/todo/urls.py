@@ -5,8 +5,8 @@ urlpatterns = patterns(
     '',
     url(r'^(?P<todo_id>\d+)/?$', views.CreateEdit.as_view(), name='todo'),
     url(r'^new/project/(?P<project_id>\d+)$', views.CreateEdit.as_view(), name='create'),
-    url(r'^edit/(?P<todo_id>\d+)/$', views.CreateEdit.as_view(), name='edit'),
-    url(r'^delete/(?P<todo_id>\d+)/$', views.Delete.as_view(), name='delete'),
-    url(r'^clear/(?P<todo_id>\d+)/$', views.MarkDone.as_view(), name='mark_done'),
-    url(r'^unclear/(?P<todo_id>\d+)/$', views.MarkUndone.as_view(), name='mark_undone'),
+    url(r'^edit/(?P<todo_id>\d+)$', views.CreateEdit.as_view(), name='edit'),
+    url(r'^delete/(?P<todo_id>\d+)$', views.Delete.as_view(), name='delete'),
+    url(r'^clear/(?P<todo_id>\d+)$', views.MarkDone.as_view(), name='mark_done'),
+    url(r'^unclear/(?P<todo_id>\d+)$', views.MarkUndone.as_view(), name='mark_undone'),
 )

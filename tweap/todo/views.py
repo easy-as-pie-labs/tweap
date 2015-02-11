@@ -20,7 +20,7 @@ class CreateEdit(View):
             if project_id is None:
                 raise Http404
 
-            project = Project.objects.get(id=project_id)
+            project = get_object_or_404(Project, id=project_id)
 
             project_members = project.members.all()
 
@@ -71,7 +71,12 @@ class CreateEdit(View):
                 raise Http404
 
             todo = Todo()
-            project = Project.objects.get(id=project_id)
+            project = get_object_or_404(Project, id=project_id)
+            project_members = project.members.all()
+
+            # redirect if user is not in group at all
+            if request.user not in project_members:
+                raise Http404
 
         else:
             todo = get_object_or_404(Todo, id=todo_id)
@@ -83,62 +88,63 @@ class CreateEdit(View):
                 raise Http404
 
         if 'title' in form:
-            todo.title = form['title']
-            todo.description = form['description']
+            if form['title'] != "":
+                todo.title = form['title']
+                todo.description = form['description']
 
-            due_date = form['due_date']
-            if due_date == '':
-                todo.due_date = None
-            else:
-                todo.due_date = due_date
+                due_date = form['due_date']
+                if due_date == '':
+                    todo.due_date = None
+                else:
+                    todo.due_date = due_date
 
-            todo.project = project
-            assignees = form.getlist('assignees')
-            todo.save()
-            todo.assignees.clear()
-            for assignee in assignees:
-                user = User.objects.get(username=assignee)
-                # if the post data was manipulated and a user assigned who is not in the project let's ignore it
-                if user in project.members.all():
-                    todo.assignees.add(user)
-            tags = get_tags(form['tags'], todo.project)
+                todo.project = project
+                assignees = form.getlist('assignees')
+                todo.save()
+                todo.assignees.clear()
+                for assignee in assignees:
+                    user = User.objects.get(username=assignee)
+                    # if the post data was manipulated and a user assigned who is not in the project let's ignore it
+                    if user in project.members.all():
+                        todo.assignees.add(user)
+                todo.tags.clear()
+                tags = get_tags(form['tags'], todo.project)
 
-            for tag in tags:
-                todo.tags.add(tag)
+                for tag in tags:
+                    todo.tags.add(tag)
 
-            todo.save()
+                todo.save()
 
-            # see if event type already exists in db
-            event_text = "assigned a todo to you"
-            try:
-                event = Event.objects.get(text=event_text)
-            except:
-                event = Event()
-                event.text = event_text
-                event.save()
+                # see if event type already exists in db
+                event_text = "assigned a todo to you"
+                try:
+                    event = Event.objects.get(text=event_text)
+                except:
+                    event = Event()
+                    event.text = event_text
+                    event.save()
 
-            # send out notifications
-            for assignee in assignees:
-                user = User.objects.get(username=assignee)
+                # send out notifications
+                for assignee in assignees:
+                    user = User.objects.get(username=assignee)
 
-                # We don't want a notification for the user who created this
-                # also if the post data was manipulated and a user assigned who is not in the project let's ignore it
-                if user == request.user or user not in project.members.all():
-                    continue
+                    # We don't want a notification for the user who created this
+                    # also if the post data was manipulated and a user assigned who is not in the project let's ignore it
+                    if user == request.user or user not in project.members.all():
+                        continue
 
-                notification = Notification()
-                notification.receiver = user
-                notification.trigger_user = request.user
-                notification.project = project
-                notification.target_url = request.build_absolute_uri(reverse('todo:edit', args=(todo.id, )))
-                notification.event = event
-                notification.save()
+                    notification = Notification()
+                    notification.receiver = user
+                    notification.trigger_user = request.user
+                    notification.project = project
+                    notification.target_url = request.build_absolute_uri(reverse('todo:edit', args=(todo.id, )))
+                    notification.event = event
+                    notification.save()
 
-            return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))
+                return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))
 
-        project = Project.objects.get(id=project_id)
         context = {
-            'error_messages': {'name': ugettext("The name must not be empty!")},
+            'error_messages': {'name': ugettext("The title must not be empty!")},
             'project': project,
             'members': project.members.all(),
             'headline': ugettext("Create new Todo"),
