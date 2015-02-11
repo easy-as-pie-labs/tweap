@@ -101,11 +101,11 @@ class CreateEdit(View):
                 # if the post data was manipulated and a user assigned who is not in the project let's ignore it
                 if user in project.members.all():
                     todo.assignees.add(user)
-            tags = get_tags(form['tags'], todo.project)
 
+            todo.tags.clear()
+            tags = get_tags(form['tags'], todo.project)
             for tag in tags:
                 todo.tags.add(tag)
-
             todo.save()
 
             # see if event type already exists in db
