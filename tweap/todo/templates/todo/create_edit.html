@@ -81,17 +81,13 @@
         </div>
         </div>
         <div class="panel-footer">
-                <input tabindex="3" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
+                <input tabindex="3" name="create_save" type="submit" class="btn btn-primary pull-right" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
             </form>
-        <a href="{% url 'project_management:project' project.id %}"><button class="btn btn-danger">{% trans "Cancel" %}</button></a>
+            <a class="pull-right" style="margin-right: 5px;" href="{% url 'project_management:project' project.id %}"><button class="btn btn-default">{% trans "Cancel" %}</button></a>
 
             {% if todo %}
-            <div class="form-group inline-form" >
-                <button type="submit" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#deleteTodoModal">{% trans "Delete" %}</button>
-            </div>
-            <a href="{% url 'todo:mark_done' todo.id %}">
-                <button type="" name="edit_project" class="btn btn-success">{% trans "Mark Done" %}</button>
-            </a>
+            <button type="submit" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#deleteTodoModal">{% trans "Delete" %}</button>
+
         </div>
 
         <div class="modal fade" id="deleteTodoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

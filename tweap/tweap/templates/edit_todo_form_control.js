@@ -124,7 +124,7 @@ $(document).ready(function(){
     });
 
     //removes title warning
-    $('#title-input').keyup(function() {
+    $('#title-input').keydown(function() {
         $('#title_warning').hide('slow');
         $('#title-input').parent().removeClass('has-error');
     });

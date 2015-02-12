@@ -61,7 +61,6 @@
                                 <td>
                                     <a href="{% url 'todo:edit' todo.id %}" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
                                     <a href="{% url 'todo:mark_done' todo.id %}" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-ok"></i></a>
-                                    <a href="{% url 'todo:delete' todo.id %}" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
                                 </td>
                                 {% endif %}
                             </tr>
@@ -82,7 +81,7 @@
         <div class="panel panel-primary">
             <div class="panel-heading"><i class="fa fa-calendar"></i> {% trans "Calendar" %}</div>
             <div class="panel-body">
-                <h1>This is where the calendar would be displayed if only we had built one. :'(</h1>
+
             </div>
         </div>
     </div>
