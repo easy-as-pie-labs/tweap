@@ -15,75 +15,80 @@
 <!--  -->
 {% endblock %}
 {% block todo_template %}
-    <h1>{{ headline }}</h1>
 
-    {% for error, message in error_messages.items %}
-        <p class="alert alert-danger no-margin-element">{{ message }}</p>
-    {% endfor %}
+    <div class="panel panel-primary">
+        <div class="panel-heading panel-heading-bigger"><i class="fa fa-check-square-o"></i> {{ headline }}</div>
+        <div class="panel-body">
+        <div class="col-md-10 col-md-offset-1">
 
-    <div class="jumbotron">
-        <form method="post" autocomplete="off" class="form-group" action="{% if todo %} {% url 'todo:edit' todo.id %} {% else %} {% url 'todo:create' project.id %} {% endif %}">
-            {% csrf_token %}
+            {% for error, message in error_messages.items %}
+                <p class="alert alert-danger no-margin-element">{{ message }}</p>
+            {% endfor %}
 
-            <div class="form-group">
-                <strong>{% trans "Title" %}:</strong>
-                <input class="form-control" type="text" name="title" value="{{ todo.title }}">
-            </div>
-            <div class="form-group">
-                <strong>{% trans "Description" %}:</strong>
-                <textarea class="form-control" name="description">{{ todo.description }}</textarea>
-            </div>
+            <form method="post" autocomplete="off" class="form-group" action="{% if todo %} {% url 'todo:edit' todo.id %} {% else %} {% url 'todo:create' project.id %} {% endif %}">
+                {% csrf_token %}
 
-            <div class="form-group">
-                <strong>{% trans "Due Date" %}:</strong>
-                <div class="input-group date">
-                    <input type="text" readonly id="due_date" name="due_date" value='{{ date }}' class="date-field-readonly form-control"><span class="cursor-pointer input-group-addon"><i class="fa fa-calendar"></i></span>
+                <div class="form-group">
+                    <strong>{% trans "Title" %}</strong>
+                    <input class="form-control" type="text" name="title" value="{{ todo.title }}">
                 </div>
-            </div>
-
-            <div id="due_date_warning" class="alert alert-warning" role="alert">
-                <i class="fa fa-exclamation-triangle"></i> {% trans "Your choosen due date lies in the past!" %}
-            </div>
-
-            <div class="panel panel-primary">
-                <div class="panel-heading">{% trans "Assign members" %}</div>
-
-                <ul class="list-group">
-                    {% for member in members %}
-                    <li class="list-group-item">
-                        <input type="checkbox" name="assignees" value="{{member.username}}" {% for assignee in assignees %}{% if assignee == member %}checked{% endif %}{% endfor %}> {{member.username}}
-                    </li>
-                {% endfor %}
-                </ul>
-            </div>
-
-            <input type="hidden" id="tags" name="tags" />
-            <div class="form-group">
-                <strong>{% trans "Add Tags" %}</strong>
-                <div class="input-group symbol">
-                    <input id="tag-input" type="text" tabindex="2" maxlength="20" placeholder='{% trans "Add Tag" %}' class="form-control"><span class="input-group-addon addTagButton focus-pointer"><i class="fa fa-plus-circle"></i></span>
+                <div class="form-group">
+                    <strong>{% trans "Description" %}</strong>
+                    <textarea class="form-control" name="description">{{ todo.description }}</textarea>
                 </div>
-                <div id="suggestions">
+
+                <div class="form-group">
+                    <strong>{% trans "Due Date" %}</strong>
+                    <div class="input-group date">
+                        <input type="text" readonly id="due_date" name="due_date" value='{{ date }}' class="date-field-readonly form-control"><span class="cursor-pointer input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
                 </div>
-            </div>
 
-            <div id="tag-list" class="form-group">
-                <strong>{% trans "Tags" %}</strong><br>
-                {% for tag in tags %}
-                    <p class="tag-outer"><span class="tag" id="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></p>
-                {% endfor %}
-            </div>
+                <div id="due_date_warning" class="alert alert-warning" role="alert">
+                    <i class="fa fa-exclamation-triangle"></i> {% trans "Your choosen due date lies in the past!" %}
+                </div>
 
-            <input tabindex="3" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
-        </form>
+                <div class="panel panel-default">
+                    <div class="panel-heading">{% trans "Assign members" %}</div>
 
-        {% if todo %}
-        <div class="form-group inline-form" >
-                <button type="submit" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#deleteTodoModal">{% trans "Delete" %}</button>
+                    <ul class="list-group">
+                        {% for member in members %}
+                        <li class="list-group-item">
+                            <input type="checkbox" name="assignees" value="{{member.username}}" {% for assignee in assignees %}{% if assignee == member %}checked{% endif %}{% endfor %}> {{member.username}}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+
+                <input type="hidden" id="tags" name="tags" />
+                <div class="form-group">
+                    <strong>{% trans "Tags" %}</strong>
+                    <div class="input-group symbol">
+                        <input id="tag-input" type="text" tabindex="2" maxlength="20" placeholder='{% trans "Add Tag" %}' class="form-control"><span class="input-group-addon addTagButton focus-pointer"><i class="fa fa-plus-circle"></i></span>
+                    </div>
+                    <div id="suggestions">
+                    </div>
+                </div>
+
+                <div id="tag-list" class="form-group">
+                    {% for tag in tags %}
+                        <p class="tag-outer"><span class="tag" id="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></p>
+                    {% endfor %}
+                </div>
         </div>
-        <a href="{% url 'todo:mark_done' todo.id %}">
+        </div>
+        <div class="panel-footer">
+                <input tabindex="3" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
+            </form>
+
+            {% if todo %}
+            <div class="form-group inline-form" >
+                <button type="submit" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#deleteTodoModal">{% trans "Delete" %}</button>
+            </div>
+            <a href="{% url 'todo:mark_done' todo.id %}">
                 <button type="" name="edit_project" class="btn btn-success">{% trans "Mark Done" %}</button>
-        </a>
+            </a>
+        </div>
 
         <div class="modal fade" id="deleteTodoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
@@ -106,7 +111,7 @@
           </div>
         </div>
         {% endif %}
-    
+
     </div>
 
 {% endblock %}

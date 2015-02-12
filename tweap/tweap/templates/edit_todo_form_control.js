@@ -1,17 +1,15 @@
 {% load i18n %}
 
-//Listener for add tag button
+//listener for add tag button
 $(document).on('click', '.addTagButton', function() {
-    // if input is empty, prevent user adding
-    if(!$(this).prev().val()) {
-        // focus on empty field and give error message
-        $(this).prev().focus();
-        $(this).prev().attr("placeholder", "{% trans 'Add Tag' %}");
-        $(this).parent().parent().addClass('has-error');
-    }
-    else {
-        $(this).parent().parent().removeClass('has-error');
-        addTagAndCleanInput($('#tag-input').val());
+    checkInputFieldAndAddTag();
+});
+
+//overwrites enter to submit form when typing in tag input field and adds text as tag
+$(document).on('keydown', '#tag-input', function(e) {
+    if ( e.which == 13 ) {
+        checkInputFieldAndAddTag();
+        e.preventDefault();
     }
 });
 
@@ -20,63 +18,6 @@ $(document).on('click', '.suggestion', function() {
     addTagAndCleanInput($(this).attr('id'));
 });
 
-function addTagAndCleanInput(newTagName) {
-    tagList.add(newTagName);
-    $('#tag-list').append('<p class="tag-outer"><span class="tag" id="' + newTagName + '"><i class="fa fa-tag"></i>' + newTagName + '</span></p>');
-    $('#tag-input').val("");
-    $('#tag-input').attr("placeholder", "{% trans 'Add Tag' %}");
-    $('#suggestions').empty();
-    $('#users').focus();
-}
-
-//Ajax-Request for TagSuggestions
-$(document).on('keyup', '#tag-input', function(e){
-    typedText = (this).value;
-    //AJAX-Request:
-    data = {search:typedText, project_id:"{{ project.id }}"};
-    $.get("{% url 'project_management:tag_suggestion' %}", data, function(output){
-        manageTagSuggestionAjaxRequest(output)
-    })
-});
-
-// overwrites enter to submit form when typing in tag input field and adds text as tag
-$(document).on('keydown', '#tag-input', function(e){
-    if ( e.which == 13 ) {
-        // if input is empty, prevent user adding
-        if(!$('#tag-input').val()) {
-            // focus on empty field and give error message
-            $('#tag-input').focus();
-            $('#tag-input').attr("placeholder", "{% trans 'Add Tag' %}");
-            $('#tag-input').parent().parent().addClass('has-error');
-        }
-        else {
-            $(this).parent().parent().removeClass('has-error');
-            addTagAndCleanInput($('#tag-input').val());
-    }
-        e.preventDefault();
-    }
-});
-
-/*
-is called on an AjaxRequest - Response
-deletes all suggestions and adds the suggestions from the response
- */
-function manageTagSuggestionAjaxRequest(data){
-    $('#suggestions').empty();
-    for(i=0;i<data.length;i++){
-        addSuggestionToContent(data[i]);
-    }
-}
-
-/*
-adds #suggestions-HTMLElements under the inputs.
- */
-function addSuggestionToContent(newTagName) {
-    $('#suggestions').append(
-        '<h3 class="suggestion" id="' + newTagName + '"><span class="label label-info focus-pointer">' + newTagName + '</span></h3>'
-    );
-}
-
 //remove tag from tag-list and array when clicked
 $(document).on('click', '.tag', function() {
     var tagToRemove = $(this).attr('id');
@@ -84,26 +25,81 @@ $(document).on('click', '.tag', function() {
     $(this).parent().remove();
 });
 
+//checks if tag input has value and add it as tag or show error
+function checkInputFieldAndAddTag() {
+    // if input is empty, prevent user adding
+    if(!$('#tag-input').val()) {
+        // focus on empty field and give error class
+        $('#tag-input').focus();
+        $('#tag-input').attr("placeholder", "{% trans 'Add Tag' %}");
+        $('#tag-input').parent().parent().addClass('has-error');
+    }
+    else {
+         $('#tag-input').parent().parent().removeClass('has-error');
+        addTagAndCleanInput($('#tag-input').val());
+    }
+}
 
-//Object is initialized in document ready, manages the tags
+//adds a new tag to the tag-list and cleans the tag-input
+function addTagAndCleanInput(newTagName) {
+    tagList.add(newTagName);
+    $('#tag-input').val("");
+    $('#tag-input').attr("placeholder", "{% trans 'Add Tag' %}");
+    $('#suggestions').empty();
+    $('#users').focus();
+}
+
+//ajax request for getting tag suggestions
+$(document).on('keyup', '#tag-input', function(e) {
+    typedText = (this).value;
+    data = {search:typedText, project_id:"{{ project.id }}"};
+    $.get("{% url 'project_management:tag_suggestion' %}", data, function(output){
+        manageTagSuggestionAjaxRequest(output)
+    })
+});
+
+//handles ajax response
+function manageTagSuggestionAjaxRequest(data) {
+    $('#suggestions').empty();
+    for(i=0;i<data.length;i++){
+        addSuggestionToContent(data[i]);
+    }
+}
+//adds tag suggestion to the suggestions div
+function addSuggestionToContent(newTagName) {
+    $('#suggestions').append(
+        '<h3 class="suggestion" id="' + newTagName + '"><span class="label label-info focus-pointer">' + newTagName + '</span></h3>'
+    );
+}
+
+//object for managing tags
 var Tags = function(){
     this.Tags = new Array();
 
     //Adds new Userstring to Users-Array (Attribute)
-    this.add = function(tagToAdd){
+    this.add = function(tagToAdd) {
         this.Tags.push(tagToAdd);
-        $('#tags').val(JSON.stringify(this.Tags));
+        this.refreshContent();
     }
 
-    this.remove = function(tagToRemove){
+    this.remove = function(tagToRemove) {
         var index = this.Tags.indexOf(tagToRemove);
         if (index > -1) {
             this.Tags.splice(index, 1);
+        }
+        this.refreshContent();
+    }
+
+    this.refreshContent = function() {
+        $('#tag-list').empty();
+        for (var i = 0; i < this.Tags.length; i++) {
+            $('#tag-list').append('<p class="tag-outer"><span class="tag" id="' + this.Tags[i] + '"><i class="fa fa-tag"></i>' + this.Tags[i] + '</span></p>');
         }
         $('#tags').val(JSON.stringify(this.Tags));
     }
 }
 
+//initial stuff
 $(document).ready(function(){
     tagList = new Tags();
 
