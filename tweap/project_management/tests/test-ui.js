@@ -3,8 +3,8 @@ var baseUrl = "http://alpha.tweap-easy-as-pie.de";
 
 casper.test.begin('create project', function suite(test) {
     casper.start(baseUrl + "/users/register", function () {
-        test.assertTitle("Tweap", "Title is ok");
         test.assertUrlMatch("/register/", "register page was found");
+        test.assertTitle("Tweap", "Title is ok");
     });
 
     casper.then(function () {

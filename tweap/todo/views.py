@@ -1,13 +1,13 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.utils.translation import ugettext
-from todo.models import Todo
 from django.contrib.auth.models import User
 from project_management.models import Project
 from project_management.tools import get_tags
 from notification_center.models import Event, Notification
+from todo.tools import *
 
 
 class CreateEdit(View):
@@ -152,31 +152,39 @@ class CreateEdit(View):
         }
         return render(request, 'todo/create_edit.html', context)
 
-
 class Delete(View):
     def get(self, request, todo_id):
-        todo = Todo.objects.get(id=todo_id)
+
+        todo = validate_for_todo(request, todo_id)
         todo.delete()
+
         return HttpResponseRedirect(reverse('project_management:project', args=(todo.project.id, )))
 
     def post(self, request, todo_id):
-        todo = Todo.objects.get(id=todo_id)
+
+        todo = validate_for_todo(request, todo_id)
         todo.delete()
+
         return HttpResponseRedirect(reverse('project_management:project', args=(todo.project.id, )))
 
 
 class MarkDone(View):
     def get(self, request, todo_id):
-        todo = Todo.objects.get(id=todo_id)
+
+        todo = validate_for_todo(request, todo_id)
         todo.done = True
         todo.save()
+
         return HttpResponseRedirect(reverse('project_management:project', args=(todo.project.id, )))
+
 
 
 class MarkUndone(View):
     def get(self, request, todo_id):
-        todo = Todo.objects.get(id=todo_id)
+
+        todo = validate_for_todo(request, todo_id)
         todo.done = False
         todo.save()
+
         return HttpResponseRedirect(reverse('project_management:project', args=(todo.project.id, )))
 
