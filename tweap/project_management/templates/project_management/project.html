@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block project_management_template %}
     <div class="panel panel-primary">
-        <div class="panel-heading panel-heading-bigger"><i class="{{ project.icon }}"></i> {{ project.name }}</div>
+        <div id="project_title_header" class="panel-heading panel-heading-bigger"><i class="{{ project.icon }}"></i> {{ project.name }}</div>
         <div class="panel-body">
             <p>
                 {{ project.description }}
@@ -11,14 +11,14 @@
                 <tr>
                     <td><strong>{% trans "Members" %}:</strong></td>
                     <td>{% for member in members %}
-                        <a href="{% url 'user_management:profile' member %}"><span class="label label-success">{{ member }}</span></a>
+                        <a href="{% url 'user_management:profile' member %}"><span class="accepted_user_label label label-success">{{ member }}</span></a>
                     {% endfor %}
                     </td>
                 </tr>
                 <tr>
                     <td><strong>{% trans "Invited" %}:</strong></td>
                     <td>{% for invitation in invitations %}
-                       <span class="bigger-label"><span class="label label-warning">{{ invitation.user.username }}</span></span>
+                       <span class="bigger-label"><span class="invited_user_label label label-warning">{{ invitation.user.username }}</span></span>
                     {% endfor %}
                     </td>
                 </tr>
@@ -26,10 +26,10 @@
         </div>
         <div class="panel-footer">
             <div class="form-group inline-form" >
-                <button type="submit" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#leaveGroupModal">{% trans "leave project" %}</button>
+                <button type="submit" id="leave_project_button" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#leaveGroupModal">{% trans "leave project" %}</button>
             </div>
             <a href="{% url 'project_management:edit' project.id %}">
-                <button type="submit" name="edit_project" class="btn btn-success">{% trans "edit project" %}</button>
+                <button type="submit" id="edit_project_button" name="edit_project" class="btn btn-success">{% trans "edit project" %}</button>
             </a>
         </div>
     </div>
@@ -105,7 +105,7 @@
             <form class="form-group inline-form" action="{% url 'project_management:leave' %}" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="project_id" value="{{ project.id }}">
-                <input type="submit" class="btn btn-danger" name="leave_project_confirm" value="{% trans "Leave Project" %}">
+                <input type="submit" class="btn btn-danger" id="leave_project_confirm_button" name="leave_project_confirm" value="{% trans "Leave Project" %}">
             </form>
           </div>
         </div>

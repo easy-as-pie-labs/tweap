@@ -16,7 +16,7 @@
     {% endfor %}
 
     <div class="jumbotron">
-    <form method="post" autocomplete="off" class="form-group" action="{% if project %} {% url 'project_management:edit' project.id %} {% else %} {% url 'project_management:create' %} {% endif %}">
+    <form id="new_project_form" method="post" autocomplete="off" class="form-group" action="{% if project %} {% url 'project_management:edit' project.id %} {% else %} {% url 'project_management:create' %} {% endif %}">
         {% csrf_token %}
         {% for field in form %}
             {{field.label_tag}}{{ field|addcssandtabindex:'form-control' }}<br>
@@ -26,7 +26,7 @@
         <div id="newInputs">
             <div class="form-group">
                 <div class="input-group date">
-                    <input id="users" type="text" tabindex="2" placeholder='{% trans "Username or eMail" %}' class="form-control member"><span class="input-group-addon addUserButton focus-pointer"><i class="fa fa-plus-circle"></i></span>
+                    <input id="users" name="userinput" type="text" tabindex="2" placeholder='{% trans "Username or eMail" %}' class="form-control member"><span class="input-group-addon addUserButton focus-pointer"><i class="fa fa-plus-circle"></i></span>
                 </div>
                 <div id="suggestions">
                 </div>
