@@ -116,13 +116,13 @@ LOGIN_URL = 'user_management:login'
 
 LOGIN_REQUIRED_URLS = (
     r'/projects/(.*)$',
-    r'/users/profile/(.*)$',
-    r'/users/editprofile/$',
-    r'/users/user_suggestion/$',
+    r'/users/(.*)$',
+    r'/todo/(.*)$',
 )
 
 LOGIN_REQUIRED_URLS_EXCEPTIONS = (
     r'/users/login$',
+    r'/users/register$',
 )
 
 LOCALE_PATHS = (
