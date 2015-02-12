@@ -488,10 +488,221 @@ class ViewsTest(TestCase):
         project.delete()
 
     def test_due_date_todo(self):
-        pass
+        test_date = "2015-02-02"
+        user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
+
+        project = Project(name=self.project_name, description=self.project_description)
+        project.save()
+        project.members.add(user)
+        project.save()
+
+        todo = Todo(title=self.todo_name, description=self.project_description)
+        todo.project = project
+        todo.save()
+
+        #Login
+        self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
+
+        #Create new todoh with due date
+        resp = self.client.post('/todo/new/project/' + str(project.id), {'title': "Hello", 'description': self.project_description, 'due_date': test_date, 'tags': ""})
+        self.assertEqual(302, resp.status_code)
+        self.assertTrue(type(resp) is HttpResponseRedirect)
+
+        test_todo = Todo.objects.get(title="Hello")
+        self.assertTrue(test_todo.get_date() == test_date)
+
+        test_date = "2014-02-02"
+
+        #Edit todoh with a new Due_date
+        resp = self.client.post('/todo/edit/' + str(todo.id), {'title': self.todo_name, 'description': self.project_description, 'due_date': test_date, 'tags': ""})
+        self.assertEqual(302, resp.status_code)
+        self.assertTrue(type(resp) is HttpResponseRedirect)
+
+        test_todo = Todo.objects.get(id=todo.id)
+        self.assertTrue(test_todo.get_date() == test_date)
+
+        todo.delete()
+        project.delete()
+        user.delete()
+        test_todo.delete()
 
     def test_complete_todo(self):
-        pass
+        user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
+        user_unassigned = User.objects.create_user('testuser2', 'test@test.de', 'testpw')
+
+        project = Project(name=self.project_name, description=self.project_description)
+        project.save()
+        project.members.add(user)
+        project.save()
+
+        todo = Todo(title=self.todo_name, description=self.project_description)
+        todo.project = project
+        todo.save()
+
+        second_todo = Todo(title=self.todo_name, description=self.project_description)
+        second_todo.project = project
+        second_todo.save()
+
+        #Login
+        self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
+
+        #clear existing Todoh via Post
+        resp = self.client.post('/todo/clear/' + str(todo.id))
+        self.assertEqual(405, resp.status_code)
+
+        test_todo = Todo.objects.get(id=todo.id)
+        self.assertFalse(test_todo.done)
+
+        #clear exisiting Todoh
+        resp = self.client.get('/todo/clear/' + str(todo.id))
+        self.assertEqual(302, resp.status_code)
+        self.assertTrue(type(resp) is HttpResponseRedirect)
+
+        test_todo = Todo.objects.get(id=todo.id)
+        self.assertTrue(test_todo.done)
+
+        #clear non-exisiting Todoh
+        resp = self.client.get('/todo/clear/999')
+        self.assertEqual(404, resp.status_code)
+
+        #Logout
+        self.client.post('/users/logout/')
+
+        #Login
+        self.client.post('/users/login/', {'username': 'testuser2', 'password': 'testpw'})
+
+        #Clear an unassigned Todoh
+        resp = self.client.get('/todo/clear/' + str(second_todo.id))
+        self.assertEqual(404, resp.status_code)
+
+        test_todo = Todo.objects.get(id=second_todo.id)
+        self.assertFalse(test_todo.done)
+
+        todo.delete()
+        second_todo.delete()
+        project.delete()
+        user.delete()
+        user_unassigned.delete()
+        test_todo.delete()
+
+
+    def test_undone_todo(self):
+        user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
+        user_unassigned = User.objects.create_user('testuser2', 'test@test.de', 'testpw')
+
+        project = Project(name=self.project_name, description=self.project_description)
+        project.save()
+        project.members.add(user)
+        project.save()
+
+        todo = Todo(title=self.todo_name, description=self.project_description)
+        todo.project = project
+        todo.done = True
+        todo.save()
+
+        second_todo = Todo(title=self.todo_name, description=self.project_description)
+        second_todo.project = project
+        second_todo.done = True
+        second_todo.save()
+
+        #Login
+        self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
+
+        #unclear existing Todoh via Post
+        resp = self.client.post('/todo/unclear/' + str(todo.id))
+        self.assertEqual(405, resp.status_code)
+
+        test_todo = Todo.objects.get(id=todo.id)
+        self.assertTrue(test_todo.done)
+
+        #unclear existing Todoh
+        resp = self.client.get('/todo/unclear/' + str(todo.id))
+        self.assertEqual(302, resp.status_code)
+        self.assertTrue(type(resp) is HttpResponseRedirect)
+
+        test_todo = Todo.objects.get(id=todo.id)
+        self.assertFalse(test_todo.done)
+
+        #unclear non-existing Todoh
+        resp = self.client.get('/todo/unclear/999')
+        self.assertEqual(404, resp.status_code)
+
+        #Logout
+        self.client.post('/users/logout/')
+
+        #Login
+        self.client.post('/users/login/', {'username': 'testuser2', 'password': 'testpw'})
+
+        #unclear an unassigned Todoh
+        resp = self.client.get('/todo/unclear/' + str(second_todo.id))
+        self.assertEqual(404, resp.status_code)
+
+        test_todo = Todo.objects.get(id=second_todo.id)
+        self.assertTrue(test_todo.done)
+
+        todo.delete()
+        second_todo.delete()
+        project.delete()
+        user.delete()
+        user_unassigned.delete()
+        test_todo.delete()
 
     def test_delete_todo(self):
-        pass
+        user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
+        user_unassigned = User.objects.create_user('testuser2', 'test@test.de', 'testpw')
+
+        project = Project(name=self.project_name, description=self.project_description)
+        project.save()
+        project.members.add(user)
+        project.save()
+
+        todo = Todo(title=self.todo_name, description=self.project_description)
+        todo.project = project
+        todo.save()
+
+        second_todo = Todo(title=self.todo_name, description=self.project_description)
+        second_todo.project = project
+        second_todo.save()
+
+        #Login
+        self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
+
+        '''#unclear existing Todoh via Get
+        resp = self.client.post('/todo/unclear/' + str(todo.id))
+        self.assertEqual(405, resp.status_code)
+
+        test_todo = Todo.objects.filter(id=todo.id)
+        self.assertTrue(test_todo.exists())
+        '''
+
+        #delete existing Todoh
+        resp = self.client.post('/todo/delete/' + str(todo.id))
+        self.assertEqual(302, resp.status_code)
+        self.assertTrue(type(resp) is HttpResponseRedirect)
+
+        test_todo = Todo.objects.filter(id=todo.id)
+        self.assertFalse(test_todo.exists())
+
+        #unclear non-existing Todoh
+        resp = self.client.get('/todo/delete/999')
+        self.assertEqual(404, resp.status_code)
+
+        #Logout
+        self.client.post('/users/logout/')
+
+        #Login
+        self.client.post('/users/login/', {'username': 'testuser2', 'password': 'testpw'})
+
+        #unclear an unassigned Todoh
+        resp = self.client.get('/todo/delete/' + str(second_todo.id))
+        self.assertEqual(404, resp.status_code)
+
+        test_todo = Todo.objects.filter(id=second_todo.id)
+        self.assertTrue(test_todo.exists())
+
+        todo.delete()
+        second_todo.delete()
+        project.delete()
+        user.delete()
+        user_unassigned.delete()
+        test_todo.delete()
