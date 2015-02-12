@@ -83,6 +83,7 @@
         <div class="panel-footer">
                 <input tabindex="3" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
             </form>
+        <a href="{% url 'project_management:project' project.id %}"><button class="btn btn-danger">{% trans "Cancel" %}</button></a>
 
             {% if todo %}
             <div class="form-group inline-form" >
