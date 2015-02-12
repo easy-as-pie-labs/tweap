@@ -22,16 +22,20 @@
         <div class="col-md-10 col-md-offset-1">
 
             {% for error, message in error_messages.items %}
-                <p class="alert alert-danger no-margin-element">{{ message }}</p>
+                <p class="alert alert-danger no-margin-element"><i class="fa fa-exclamation-triangle"></i> {{ message }}</p>
             {% endfor %}
 
-            <form method="post" autocomplete="off" class="form-group" action="{% if todo %} {% url 'todo:edit' todo.id %} {% else %} {% url 'todo:create' project.id %} {% endif %}">
+            <form method="post" id="todo-form" autocomplete="off" class="form-group" action="{% if todo %} {% url 'todo:edit' todo.id %} {% else %} {% url 'todo:create' project.id %} {% endif %}">
                 {% csrf_token %}
 
                 <div class="form-group">
                     <strong>{% trans "Title" %}</strong>
-                    <input class="form-control" type="text" name="title" value="{{ todo.title }}">
+                    <input class="form-control" type="text" id="title-input" name="title" value="{{ todo.title }}">
                 </div>
+                <div id="title_warning" class="alert alert-danger" role="alert">
+                    <i class="fa fa-exclamation-triangle"></i> {% trans "The title must not be empty!" %}
+                </div>
+
                 <div class="form-group">
                     <strong>{% trans "Description" %}</strong>
                     <textarea class="form-control" name="description">{{ todo.description }}</textarea>
@@ -43,7 +47,6 @@
                         <input type="text" readonly id="due_date" name="due_date" value='{{ date }}' class="date-field-readonly form-control"><span class="cursor-pointer input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
-
                 <div id="due_date_warning" class="alert alert-warning" role="alert">
                     <i class="fa fa-exclamation-triangle"></i> {% trans "Your choosen due date lies in the past!" %}
                 </div>
@@ -72,7 +75,7 @@
 
                 <div id="tag-list" class="form-group">
                     {% for tag in tags %}
-                        <p class="tag-outer"><span class="tag" id="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></p>
+                        <p class="tag-outer"><span class="tag" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></p>
                     {% endfor %}
                 </div>
         </div>

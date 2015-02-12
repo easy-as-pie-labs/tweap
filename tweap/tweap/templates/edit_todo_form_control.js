@@ -20,7 +20,7 @@ $(document).on('click', '.suggestion', function() {
 
 //remove tag from tag-list and array when clicked
 $(document).on('click', '.tag', function() {
-    var tagToRemove = $(this).attr('id');
+    var tagToRemove = $(this).attr('data-tag-name');
     tagList.remove(tagToRemove);
     $(this).parent().remove();
 });
@@ -93,7 +93,7 @@ var Tags = function(){
     this.refreshContent = function() {
         $('#tag-list').empty();
         for (var i = 0; i < this.Tags.length; i++) {
-            $('#tag-list').append('<p class="tag-outer"><span class="tag" id="' + this.Tags[i] + '"><i class="fa fa-tag"></i>' + this.Tags[i] + '</span></p>');
+            $('#tag-list').append('<p class="tag-outer"><span class="tag" data-tag-name="' + this.Tags[i] + '"><i class="fa fa-tag"></i>' + this.Tags[i] + '</span></p>');
         }
         $('#tags').val(JSON.stringify(this.Tags));
     }
@@ -108,8 +108,11 @@ $(document).ready(function(){
        tagList.add($(this).attr('id'));
     });
 
+    $('#title_warning').hide();
+
     $('#due_date_warning').hide();
 
+    //checks if due date lie sin past and show hint
     $('#due_date').change(function() {
         var dueDate = new Date($('#due_date').val());
         var today = new Date();
@@ -119,6 +122,25 @@ $(document).ready(function(){
             $('#due_date_warning').hide('slow');
         }
     });
+
+    //removes title warning
+    $('#title-input').keyup(function() {
+        $('#title_warning').hide('slow');
+        $('#title-input').parent().removeClass('has-error');
+    });
+
+    //checks if title is missing, prevent form submit and shows warning
+    $('#todo-form').submit(function() {
+    if(!$('#title-input').val()) {
+        $('#title_warning').show('slow');
+        $('#title-input').parent().addClass('has-error');
+        return false;
+    }
+    else {
+        return true;
+    }
+});
+
 
    $('.input-group.date').datepicker({
         format: "yyyy-mm-dd",
