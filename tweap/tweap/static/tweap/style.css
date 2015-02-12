@@ -36,11 +36,6 @@
     margin-top:5px;
 }
 
-.suggestion{
-    display:inline;
-    margin-right:5px;
-}
-
 .inline-form{
     display:inline;
 }
@@ -116,8 +111,8 @@ p#project_icon{
 }
 
 .tag-outer{
-    display:inline;
-    margin-right:5px;
+    display: inline-block;
+    margin-right: 5px;
 }
 
 .tag{
@@ -137,4 +132,9 @@ p#project_icon{
 
 .tag i{
     margin-right: 5px;
+}
+
+.suggestion{
+    display:inline;
+    margin-right:5px;
 }
