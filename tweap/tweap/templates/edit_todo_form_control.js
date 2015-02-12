@@ -36,7 +36,9 @@ function checkInputFieldAndAddTag() {
     }
     else {
          $('#tag-input').parent().parent().removeClass('has-error');
-        addTagAndCleanInput($('#tag-input').val());
+        var newTagName = $('#tag-input').val();
+        //newTagName.replace(RegExp('[ab]', 'g'), '');
+        addTagAndCleanInput(newTagName);
     }
 }
 
@@ -76,24 +78,23 @@ function addSuggestionToContent(newTagName) {
 var Tags = function(){
     this.Tags = new Array();
 
+    //for adding existing tags to array
+    this.addInit = function(tagToAdd) {
+        this.Tags.push(tagToAdd);
+        $('#tags').val(JSON.stringify(this.Tags));
+    }
+
     //Adds new Userstring to Users-Array (Attribute)
     this.add = function(tagToAdd) {
         this.Tags.push(tagToAdd);
-        this.refreshContent();
+        $('#tag-list').append('<p class="tag-outer"><span class="tag" data-tag-name="' + tagToAdd + '"><i class="fa fa-tag"></i>' + tagToAdd + '</span></p>');
+        $('#tags').val(JSON.stringify(this.Tags));
     }
 
     this.remove = function(tagToRemove) {
         var index = this.Tags.indexOf(tagToRemove);
         if (index > -1) {
             this.Tags.splice(index, 1);
-        }
-        this.refreshContent();
-    }
-
-    this.refreshContent = function() {
-        $('#tag-list').empty();
-        for (var i = 0; i < this.Tags.length; i++) {
-            $('#tag-list').append('<p class="tag-outer"><span class="tag" data-tag-name="' + this.Tags[i] + '"><i class="fa fa-tag"></i>' + this.Tags[i] + '</span></p>');
         }
         $('#tags').val(JSON.stringify(this.Tags));
     }
@@ -105,7 +106,7 @@ $(document).ready(function(){
 
     //add existing tags to tagList
     $('.tag').each(function() {
-       tagList.add($(this).attr('data-tag-name'));
+       tagList.addInit($(this).attr('data-tag-name'));
     });
 
     $('#title_warning').hide();
