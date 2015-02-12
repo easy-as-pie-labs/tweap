@@ -1,97 +1,118 @@
 {% load i18n %}
 
-//Listener for add tag button
+//listener for add tag button
 $(document).on('click', '.addTagButton', function() {
-    // if input is empty, prevent user adding
-    if(!$(this).prev().val()) {
-        // focus on empty field and give error message
-        $(this).prev().focus();
-        $(this).prev().attr("placeholder", "{% trans 'Add Tag' %}");
-        $(this).parent().parent().addClass('has-error');
-    }
-    else {
-        $(this).parent().parent().removeClass('has-error');
-        addTagAndCleanInput($('#tag-input').val());
+    checkInputFieldAndAddTag();
+});
+
+//overwrites enter to submit form when typing in tag input field and adds text as tag
+$(document).on('keydown', '#tag-input', function(e) {
+    if ( e.which == 13 ) {
+        checkInputFieldAndAddTag();
+        e.preventDefault();
     }
 });
 
 //adds clicked suggestion to tag-list
 $(document).on('click', '.suggestion', function() {
     addTagAndCleanInput($(this).attr('id'));
-    $('#suggestions').empty();
 });
 
-function addTagAndCleanInput(newTagName) {
-    tagList.add(newTagName);
-    $('#tag-list').append('<span class="tweap-tag label label-primary" id="' + newTagName + '"><i class="fa fa-tag"></i> ' + newTagName + '</span>');
-    $('#tag-input').val("");
-    $('#tag-input').attr("placeholder", "{% trans 'Add Tag' %}");
+//remove tag from tag-list and array when clicked
+$(document).on('click', '.tag', function() {
+    var tagToRemove = $(this).attr('data-tag-name');
+    tagList.remove(tagToRemove);
+    $(this).parent().remove();
+});
+
+//checks if tag input has value and add it as tag or show error
+function checkInputFieldAndAddTag() {
+    // if input is empty, prevent user adding
+    if(!$('#tag-input').val()) {
+        // focus on empty field and give error class
+        $('#tag-input').focus();
+        $('#tag-input').attr("placeholder", "{% trans 'Add Tag' %}");
+        $('#tag-input').parent().parent().addClass('has-error');
+    }
+    else {
+         $('#tag-input').parent().parent().removeClass('has-error');
+        addTagAndCleanInput($('#tag-input').val());
+    }
 }
 
-//Ajax-Request for TagSuggestions
-$(document).on('keyup', '#tag-input', function(){
-    typedText = (this).value
-    //AJAX-Request:
+//adds a new tag to the tag-list and cleans the tag-input
+function addTagAndCleanInput(newTagName) {
+    tagList.add(newTagName);
+    $('#tag-input').val("");
+    $('#tag-input').attr("placeholder", "{% trans 'Add Tag' %}");
+    $('#suggestions').empty();
+    $('#users').focus();
+}
+
+//ajax request for getting tag suggestions
+$(document).on('keyup', '#tag-input', function(e) {
+    typedText = (this).value;
     data = {search:typedText, project_id:"{{ project.id }}"};
     $.get("{% url 'project_management:tag_suggestion' %}", data, function(output){
         manageTagSuggestionAjaxRequest(output)
     })
 });
 
-/*
-is called on an AjaxRequest - Response
-deletes all suggestions and adds the suggestions from the response
- */
-function manageTagSuggestionAjaxRequest(data){
+//handles ajax response
+function manageTagSuggestionAjaxRequest(data) {
     $('#suggestions').empty();
     for(i=0;i<data.length;i++){
         addSuggestionToContent(data[i]);
     }
 }
-
-/*
-adds #suggestions-HTMLElements under the inputs.
- */
+//adds tag suggestion to the suggestions div
 function addSuggestionToContent(newTagName) {
     $('#suggestions').append(
         '<h3 class="suggestion" id="' + newTagName + '"><span class="label label-info focus-pointer">' + newTagName + '</span></h3>'
     );
 }
 
-//removes tags when clicked from tag-list and Array
-$(document).on('click', '.tweap-tag', function() {
-    var tagToRemove = $(this).attr('id');
-    tagList.remove(tagToRemove);
-    $(this).remove();
-});
-
-
-//Object is initialized on the very Beginning of this document
+//object for managing tags
 var Tags = function(){
     this.Tags = new Array();
 
     //Adds new Userstring to Users-Array (Attribute)
-    this.add = function(tagToAdd){
+    this.add = function(tagToAdd) {
         this.Tags.push(tagToAdd);
-        $('#tags').val(JSON.stringify(this.Tags));
+        this.refreshContent();
     }
 
-    this.remove = function(tagToRemove){
-        this.Tags.pop(tagToRemove);
+    this.remove = function(tagToRemove) {
+        var index = this.Tags.indexOf(tagToRemove);
+        if (index > -1) {
+            this.Tags.splice(index, 1);
+        }
+        this.refreshContent();
+    }
+
+    this.refreshContent = function() {
+        $('#tag-list').empty();
+        for (var i = 0; i < this.Tags.length; i++) {
+            $('#tag-list').append('<p class="tag-outer"><span class="tag" data-tag-name="' + this.Tags[i] + '"><i class="fa fa-tag"></i>' + this.Tags[i] + '</span></p>');
+        }
         $('#tags').val(JSON.stringify(this.Tags));
     }
 }
 
+//initial stuff
 $(document).ready(function(){
     tagList = new Tags();
 
     //add existing tags to tagList
-    $('.tweap-tag').each(function() {
+    $('.tag').each(function() {
        tagList.add($(this).attr('id'));
     });
 
+    $('#title_warning').hide();
+
     $('#due_date_warning').hide();
 
+    //checks if due date lie sin past and show hint
     $('#due_date').change(function() {
         var dueDate = new Date($('#due_date').val());
         var today = new Date();
@@ -100,5 +121,31 @@ $(document).ready(function(){
         } else {
             $('#due_date_warning').hide('slow');
         }
+    });
+
+    //removes title warning
+    $('#title-input').keyup(function() {
+        $('#title_warning').hide('slow');
+        $('#title-input').parent().removeClass('has-error');
+    });
+
+    //checks if title is missing, prevent form submit and shows warning
+    $('#todo-form').submit(function() {
+    if(!$('#title-input').val()) {
+        $('#title_warning').show('slow');
+        $('#title-input').parent().addClass('has-error');
+        return false;
+    }
+    else {
+        return true;
+    }
+});
+
+
+   $('.input-group.date').datepicker({
+        format: "yyyy-mm-dd",
+        todayBtn: "linked",
+        autoclose: true,
+        todayHighlight: true
     });
 });

@@ -1,5 +1,8 @@
+//var baseUrl = "http://127.0.0.1:8000";
+var baseUrl = "http://alpha.tweap-easy-as-pie.de";
+
 casper.test.begin('register account', function suite(test) {
-    casper.start("http://127.0.0.1:8000/users/register", function () {
+    casper.start(baseUrl + "/users/register", function () {
         test.assertTitle("Tweap", "Title is ok");
         test.assertUrlMatch("/register/", "register page was found");
     });
@@ -28,7 +31,7 @@ casper.test.begin('register account', function suite(test) {
 });
 
 casper.test.begin('login', function suite(test) {
-    casper.start("http://127.0.0.1:8000/users/login", function () {
+    casper.start(baseUrl + "/users/login", function () {
         test.assertTitle("Tweap", "Title is ok");
         test.assertUrlMatch("/login/", "login page was found");
     });
@@ -56,7 +59,7 @@ casper.test.begin('login', function suite(test) {
 });
 
 casper.test.begin('delete account', function suite(test) {
-    casper.start("http://127.0.0.1:8000/users/login", function () {
+    casper.start(baseUrl + "/users/login", function () {
         test.assertTitle("Tweap", "Title is ok");
         test.assertUrlMatch("/login/", "login page was found");
     });
@@ -100,7 +103,7 @@ casper.test.begin('delete account', function suite(test) {
 });
 
 casper.test.begin('edit profile', function suite(test) {
-    casper.start("http://127.0.0.1:8000/users/register", function () {
+    casper.start(baseUrl + "/users/register", function () {
         test.assertTitle("Tweap", "Title is ok");
         test.assertUrlMatch("/register/", "register page was found");
     });

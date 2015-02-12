@@ -35,6 +35,7 @@ $(document).on('click', '.addUserButton', function() {
     else {
         addMemberInput();
     }
+    $('#users').focus();
 });
 
 // if input is there add new field, make old field uneditable and removable
@@ -70,6 +71,24 @@ $(document).on('keyup', '#users', function(){
         manageUserSuggestionAjaxRequest(output)
     })
 
+});
+
+// overwrites enter to submit form when typing in tag input field and adds text as tag
+$(document).on('keydown', '#users', function(e){
+    if ( e.which == 13 ) {
+        // if input is empty, prevent user adding
+        if(!$('#users').val()) {
+            // focus on empty field and give error message
+            $('#users').focus();
+            $('#users').attr("placeholder", "{% trans 'Username or eMail' %}");
+            $('#users').parent().parent().addClass('has-error');
+        }
+        else {
+            addMemberInput();
+        }
+        $('#users').focus();
+        e.preventDefault();
+    }
 });
 
 //Puts the ID of an Suggestionelement into the value of the first inputelement in #newInputs and adds a new inputField

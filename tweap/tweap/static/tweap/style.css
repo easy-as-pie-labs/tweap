@@ -36,11 +36,6 @@
     margin-top:5px;
 }
 
-.suggestion{
-    display:inline;
-    margin-right:5px;
-}
-
 .inline-form{
     display:inline;
 }
@@ -115,13 +110,31 @@ p#project_icon{
     background-color: #337ab7;
 }
 
-.tweap-tag{
-    font-size: 14px !important;
-    font-weight: normal !important;
+.tag-outer{
+    display: inline-block;
+    margin-right: 5px;
 }
 
-.tweap-tag:hover{
+.tag{
+    color: #fff;
+    background-color: #337ab7;
+    font-size: 14px;
+    border-radius: 0.25em;
+    padding: 0.25em 0.75em;
+    white-space: nowrap;
+}
+
+.tag:hover{
     background-color: #d9534f;
     text-decoration: line-through;
     cursor: pointer;
+}
+
+.tag i{
+    margin-right: 5px;
+}
+
+.suggestion{
+    display:inline;
+    margin-right:5px;
 }

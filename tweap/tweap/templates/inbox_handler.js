@@ -4,10 +4,10 @@ $.ajaxSetup({
 });
 
 $(document).on('click', '.acceptInvitation', function() {
-    var id = (this).id
+    var invitationId = $(this).attr('data-invitation-id');
     var data = {
         action:"accept",
-        invitation_id:id
+        invitation_id:invitationId
     };
 
     $.post("{% url 'project_management:invitation_handler' %}", data, function(output){
@@ -16,10 +16,10 @@ $(document).on('click', '.acceptInvitation', function() {
 });
 
 $(document).on('click', '.rejectInvitation', function() {
-    var id = (this).id
+    var InvitationId = $(this).attr('data-invitation-id');
     var data = {
         action: "reject",
-        invitation_id: id
+        invitation_id: InvitationId
     };
 
     $.post("{% url 'project_management:invitation_handler' %}", data, function(output){
@@ -32,21 +32,21 @@ function manageInvitationAjaxRequest(output){
         //Accepted
        var  url = output['url'];
         window.location.href = url;
-    }else{
-        var invitation_id = output['id'];
-        $('#invitation_container_id_'+invitation_id).hide('slow', function() {
-            $('#invitation_container_id_' + invitation_id).remove();
+    } else{
+        var invitationId = output['id'];
+        $('#invitation_container_id_'+invitationId).hide('slow', function() {
+            $('#invitation_container_id_' + invitationId).remove();
         });
 
-        if ($('#invitation_list').children().length == 2){
-            removeInvitationContainer();
+        if ($('#inbox').children().length == 2){
+            removeInboxContainer();
         }
     }
 }
 
-function removeInvitationContainer(){
-    var invitationList = $('#invitation_list');
-    invitationList.parent().parent().hide('slow', function(){
-        invitationList.parent().parent().remove();
+function removeInboxContainer(){
+    var inbox = $('#inbox');
+    inbox.parent().parent().hide('slow', function(){
+        inbox.parent().parent().remove();
     });
 }

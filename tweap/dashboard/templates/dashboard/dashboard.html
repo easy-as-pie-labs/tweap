@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block js %}
 <script type="text/javascript">
-    {% include "invitation_handler.js" %}
+    {% include "inbox_handler.js" %}
 </script>
 {% endblock %}
 {% block project_management_template %}
@@ -11,14 +11,15 @@
         {% if invitations or notifications %}
         <div class="row">
             <div class="col-md-6">
-                <div class="list-group" id="invitation_list">
+                <div class="list-group" id="inbox">
                     <span class="list-group-item active"><i class="fa fa-inbox"></i> {% trans "Inbox" %}</span>
                     {% for invitation in invitations %}
 
                     <div id="invitation_container_id_{{ invitation.id }}" class="list-group-item">
-                        <p><strong>{% trans "Invitation to project" %}: {{ invitation.project.name }}</strong>&nbsp;
-                            <button id="{{ invitation.id }}" name="rejectInvitation" class="btn btn-xs btn-danger rejectInvitation pull-right"><i class="glyphicon glyphicon-remove"></i></button>
-                            <button id="{{ invitation.id }}" name="acceptInvitation" class="btn btn-xs btn-success acceptInvitation pull-right" style="margin-right: 5px;"><i class="glyphicon glyphicon-ok"></i></button>
+                        <p>
+                            <strong class="invitation_title">{% trans "Invitation to project" %}: {{ invitation.project.name }}</strong>&nbsp;
+                            <button data-invitation-id="{{ invitation.id }}" name="rejectInvitation" class="btn btn-xs btn-danger rejectInvitation pull-right"><i class="glyphicon glyphicon-remove"></i></button>
+                            <button data-invitation-id="{{ invitation.id }}" name="acceptInvitation" class="btn btn-xs btn-success acceptInvitation pull-right" style="margin-right: 5px;"><i class="glyphicon glyphicon-ok"></i></button>
                         </p>
                         <p>{{ invitation.project.description }}</p>
                     </div>

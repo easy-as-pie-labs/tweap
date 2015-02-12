@@ -107,9 +107,9 @@ class CreateEdit(View):
                     # if the post data was manipulated and a user assigned who is not in the project let's ignore it
                     if user in project.members.all():
                         todo.assignees.add(user)
+
                 todo.tags.clear()
                 tags = get_tags(form['tags'], todo.project)
-
                 for tag in tags:
                     todo.tags.add(tag)
 
@@ -155,6 +155,11 @@ class CreateEdit(View):
 
 class Delete(View):
     def get(self, request, todo_id):
+        todo = Todo.objects.get(id=todo_id)
+        todo.delete()
+        return HttpResponseRedirect(reverse('project_management:project', args=(todo.project.id, )))
+
+    def post(self, request, todo_id):
         todo = Todo.objects.get(id=todo_id)
         todo.delete()
         return HttpResponseRedirect(reverse('project_management:project', args=(todo.project.id, )))
