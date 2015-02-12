@@ -105,7 +105,7 @@ $(document).ready(function(){
 
     //add existing tags to tagList
     $('.tag').each(function() {
-       tagList.add($(this).attr('id'));
+       tagList.add($(this).attr('data-tag-name'));
     });
 
     $('#title_warning').hide();
