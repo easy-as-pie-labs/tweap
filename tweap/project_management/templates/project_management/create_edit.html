@@ -62,6 +62,7 @@
 
         <input onClick="insertHiddenValues()" tabindex="3" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
     </form>
+    <a href="{% if project %} {% url 'project_management:project' project.id %} {% else %} {% url 'dashboard:home' %} {% endif %}"><button class="btn btn-danger">{% trans "Cancel" %}</button></a>
 
     <div class="modal fade" id="projectIconModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
