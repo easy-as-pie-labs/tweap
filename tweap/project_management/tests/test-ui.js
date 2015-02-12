@@ -1,5 +1,5 @@
 //var baseUrl = "http://127.0.0.1:8000";
-var baseUrl = "http://127.0.0.1:8002";
+var baseUrl = "http://alpha.tweap-easie-as-pie.de";
 
 casper.test.begin('create project', function suite(test) {
     casper.start(baseUrl + "/users/register", function () {
