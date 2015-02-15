@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.utils.translation import ugettext
@@ -8,6 +8,7 @@ from project_management.models import Project
 from project_management.tools import get_tags
 from notification_center.models import Event, Notification
 from todo.tools import *
+import json
 
 
 class CreateEdit(View):
@@ -169,22 +170,28 @@ class Delete(View):
 
 
 class MarkDone(View):
-    def get(self, request, todo_id):
+    def post(self, request):
+
+        todo_id = request.POST.get('todo_id', '')
 
         todo = validate_for_todo(request, todo_id)
         todo.done = True
         todo.save()
+        result = {'state': True}
 
-        return HttpResponseRedirect(reverse('project_management:project', args=(todo.project.id, )))
+        return HttpResponse(json.dumps(result), content_type="application/json")
 
 
 
 class MarkUndone(View):
-    def get(self, request, todo_id):
+    def post(self, request):
+
+        todo_id = request.POST.get('todo_id', '')
 
         todo = validate_for_todo(request, todo_id)
         todo.done = False
         todo.save()
+        result = {'state': True}
 
-        return HttpResponseRedirect(reverse('project_management:project', args=(todo.project.id, )))
+        return HttpResponse(json.dumps(result), content_type="application/json")
 

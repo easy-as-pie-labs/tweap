@@ -1,5 +1,10 @@
 {% extends "project_management_template.html" %}
 {% load i18n %}
+{% block js %}
+<script type="text/javascript">
+    {% include "project_overview_control.js" %}
+</script>
+{% endblock %}
 {% block project_management_template %}
     <div class="panel panel-primary">
         <div id="project_title_header" class="panel-heading panel-heading-bigger"><i class="{{ project.icon }}"></i> {{ project.name }}</div>
@@ -50,17 +55,17 @@
                         <tbody>
                         {% for todo in todos %}
                             <tr>
-                                <td>{% if todo.done %}<del>{% endif %}{{ todo.title }}{% if todo.done %}</del>{% endif %}</td>
-                                <td>{% for assignee in todo.assignees.all %}{{ assignee }}, {% endfor %}</td>
+                                <td class="prevTd">{% if todo.done %}<del>{% endif %}{{ todo.title }}{% if todo.done %}</del>{% endif %}</td>
+                                <td class="assignee">{% for assignee in todo.assignees.all %}{{ assignee }}, {% endfor %}</td>
                                 {% if todo.done %}
                                 <td>
                                     <a href="{% url 'todo:edit' todo.id %}" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <a href="{% url 'todo:mark_undone' todo.id %}" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-repeat"></i></a>
+                                    <i data-todo-id="{{ todo.id }}" class="changeStateTodo btn btn-xs btn-success"><span class="glyphicon glyphicon-repeat"></span></i></a>
                                 </td>
                                 {% else %}
                                 <td>
                                     <a href="{% url 'todo:edit' todo.id %}" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <a href="{% url 'todo:mark_done' todo.id %}" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-ok"></i></a>
+                                    <i data-todo-id="{{ todo.id }}" class="changeStateTodo btn btn-xs btn-success"><span class="glyphicon glyphicon-ok"></span></i></a>
                                 </td>
                                 {% endif %}
                             </tr>

@@ -546,23 +546,23 @@ class ViewsTest(TestCase):
         #Login
         self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
 
-        #clear existing Todoh via Post
-        resp = self.client.post('/todo/clear/' + str(todo.id))
+        #clear existing Todoh via Get
+        resp = self.client.get('/todo/clear', {'todo_id': str(todo.id)})
         self.assertEqual(405, resp.status_code)
 
         test_todo = Todo.objects.get(id=todo.id)
         self.assertFalse(test_todo.done)
 
         #clear exisiting Todoh
-        resp = self.client.get('/todo/clear/' + str(todo.id))
-        self.assertEqual(302, resp.status_code)
-        self.assertTrue(type(resp) is HttpResponseRedirect)
+        resp = self.client.post('/todo/clear', {'todo_id': str(todo.id)})
+        self.assertEqual(200, resp.status_code)
+        self.assertTrue(type(resp) is HttpResponse)
 
         test_todo = Todo.objects.get(id=todo.id)
         self.assertTrue(test_todo.done)
 
         #clear non-exisiting Todoh
-        resp = self.client.get('/todo/clear/999')
+        resp = self.client.post('/todo/clear', {'todo_id': '999'})
         self.assertEqual(404, resp.status_code)
 
         #Logout
@@ -572,7 +572,7 @@ class ViewsTest(TestCase):
         self.client.post('/users/login/', {'username': 'testuser2', 'password': 'testpw'})
 
         #Clear an unassigned Todoh
-        resp = self.client.get('/todo/clear/' + str(second_todo.id))
+        resp = self.client.post('/todo/clear/', {'todo_id': str(second_todo.id)})
         self.assertEqual(404, resp.status_code)
 
         test_todo = Todo.objects.get(id=second_todo.id)
@@ -609,22 +609,22 @@ class ViewsTest(TestCase):
         self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
 
         #unclear existing Todoh via Post
-        resp = self.client.post('/todo/unclear/' + str(todo.id))
+        resp = self.client.get('/todo/unclear', {'todo_id': todo.id})
         self.assertEqual(405, resp.status_code)
 
         test_todo = Todo.objects.get(id=todo.id)
         self.assertTrue(test_todo.done)
 
         #unclear existing Todoh
-        resp = self.client.get('/todo/unclear/' + str(todo.id))
-        self.assertEqual(302, resp.status_code)
-        self.assertTrue(type(resp) is HttpResponseRedirect)
+        resp = self.client.post('/todo/unclear', {'todo_id': str(todo.id)})
+        self.assertEqual(200, resp.status_code)
+        self.assertTrue(type(resp) is HttpResponse)
 
         test_todo = Todo.objects.get(id=todo.id)
         self.assertFalse(test_todo.done)
 
         #unclear non-existing Todoh
-        resp = self.client.get('/todo/unclear/999')
+        resp = self.client.post('/todo/unclear', {'todo_id': '999'})
         self.assertEqual(404, resp.status_code)
 
         #Logout
@@ -634,7 +634,8 @@ class ViewsTest(TestCase):
         self.client.post('/users/login/', {'username': 'testuser2', 'password': 'testpw'})
 
         #unclear an unassigned Todoh
-        resp = self.client.get('/todo/unclear/' + str(second_todo.id))
+        secondTodo_id = second_todo.id
+        resp = self.client.post('/todo/unclear/', {'todo_id': str(secondTodo_id)})
         self.assertEqual(404, resp.status_code)
 
         test_todo = Todo.objects.get(id=second_todo.id)
@@ -667,13 +668,12 @@ class ViewsTest(TestCase):
         #Login
         self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
 
-        '''#unclear existing Todoh via Get
-        resp = self.client.post('/todo/unclear/' + str(todo.id))
+        '''#delete existing Todoh via GET
+        resp = self.client.post('/todo/delete/' + str(todo.id))
         self.assertEqual(405, resp.status_code)
 
         test_todo = Todo.objects.filter(id=todo.id)
-        self.assertTrue(test_todo.exists())
-        '''
+        self.assertTrue(test_todo.exists())'''
 
         #delete existing Todoh
         resp = self.client.post('/todo/delete/' + str(todo.id))
@@ -683,8 +683,8 @@ class ViewsTest(TestCase):
         test_todo = Todo.objects.filter(id=todo.id)
         self.assertFalse(test_todo.exists())
 
-        #unclear non-existing Todoh
-        resp = self.client.get('/todo/delete/999')
+        #delete non existing Todoh
+        resp = self.client.post('/todo/delete/999')
         self.assertEqual(404, resp.status_code)
 
         #Logout
@@ -693,12 +693,12 @@ class ViewsTest(TestCase):
         #Login
         self.client.post('/users/login/', {'username': 'testuser2', 'password': 'testpw'})
 
-        #unclear an unassigned Todoh
-        resp = self.client.get('/todo/delete/' + str(second_todo.id))
+        #delete unanssigned Todoh
+        resp = self.client.post('/todo/delete/' + str(second_todo.id))
         self.assertEqual(404, resp.status_code)
 
-        test_todo = Todo.objects.filter(id=second_todo.id)
-        self.assertTrue(test_todo.exists())
+        second_test_todo = Todo.objects.filter(id=second_todo.id)
+        self.assertTrue(second_test_todo.exists())
 
         todo.delete()
         second_todo.delete()
@@ -706,3 +706,4 @@ class ViewsTest(TestCase):
         user.delete()
         user_unassigned.delete()
         test_todo.delete()
+        second_test_todo.delete()
