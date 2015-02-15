@@ -1,8 +1,10 @@
 {% load i18n %}
+//Ajax-Setup
 $.ajaxSetup({
   data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
 });
 
+//Listener for all Done/Undone buttons of every Todoh
 $(document).on('click', '.changeStateTodo', function() {
     var child = $(this).children('span');
     var todo_id = $(this).attr('data-todo-id');
@@ -14,6 +16,7 @@ $(document).on('click', '.changeStateTodo', function() {
     }
 });
 
+//Actual Ajax-Request
 function sendChangeStateTodoAjaxRequest(action, todo_id, child) {
     var data = {
         todo_id: todo_id
@@ -32,6 +35,7 @@ function sendChangeStateTodoAjaxRequest(action, todo_id, child) {
     }
 }
 
+//Changes Button and Todoh-Text to Clear-Status (Button is on repeat and Text is in <del></del>)
 function changeStateToClear(output, child) {
     if(output['state'] == true) {
         child.removeClass('glyphicon glyphicon-ok');
@@ -43,6 +47,7 @@ function changeStateToClear(output, child) {
     }
 }
 
+//Changes Button and Todoh-Text to Unclear-Status (Button is on ok and Text is not in <del></del>)
 function changeStateToUnclear(output, child) {
     if(output['state'] == true) {
         child.removeClass('glyphicon glyphicon-repeat');
