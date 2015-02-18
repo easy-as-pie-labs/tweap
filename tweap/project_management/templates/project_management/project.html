@@ -15,7 +15,7 @@
             <table class="table">
                 <tr>
                     <td><strong>{% trans "Members" %}:</strong></td>
-                    <td>{% for member in members %}
+                    <td>{% for member in project.members.all %}
                         <a href="{% url 'user_management:profile' member %}"><span class="accepted_user_label label label-success">{{ member }}</span></a>
                     {% endfor %}
                     </td>
@@ -100,7 +100,7 @@
           </div>
           <div class="modal-body">
               <p>{% trans "Are you sure you want to leave this project?" %}</p>
-              {% if members|length == 1 and invitations|length == 0 %}
+              {% if project.members.all|length == 1 and invitations|length == 0 %}
                 <p>{% trans "Since you are the last person in this project, the project and all its data will be deleted from our servers. This action cannot be undone!" %}</p>
               {% endif %}
           </div>
