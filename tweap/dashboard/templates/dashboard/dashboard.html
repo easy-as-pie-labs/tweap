@@ -43,7 +43,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="list-group">
-                    <span class="list-group-item active toggle_header"><i class="fa fa-bullhorn"></i> {% trans "Today" %}</span>
+                    <span class="list-group-item active"><i class="fa fa-bullhorn"></i> {% trans "Today" %}</span>
                     {% if overdue or due_today %}
                         {% for todo in overdue %}
                            <a href="{% url 'todo:todo' todo.id %}" class="list-group-item"><i class="fa fa-exclamation-triangle warning_red"></i> {{ todo.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ todo.project.name }}</a>
