@@ -37,7 +37,13 @@ function checkInputFieldAndAddTag() {
     else {
          $('#tag-input').parent().parent().removeClass('has-error');
         var newTagName = $('#tag-input').val();
-        //newTagName.replace(RegExp('[ab]', 'g'), '');
+        //remove special chars
+        newTagName = newTagName.replace(/[<>\/|]/g, '').trim();
+        if (newTagName == "") {
+             $('#tag-input').val("");
+            checkInputFieldAndAddTag();
+            return;
+        }
         addTagAndCleanInput(newTagName);
     }
 }
