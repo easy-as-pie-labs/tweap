@@ -1,0 +1,147 @@
+{% extends "project_management_template.html" %}
+{% load i18n %}
+{% block js %}
+<script type="text/javascript">
+    {% include "project_overview_control.js" %}
+</script>
+{% endblock %}
+{% block project_management_template %}
+    <div class="panel panel-primary">
+        <div id="project_title_header" class="panel-heading panel-heading-bigger"><i class="{{ project.icon }}"></i> {{ project.name }}</div>
+        <div class="panel-body">
+            <p>
+                {{ project.description }}
+            </p>
+            <table class="table">
+                <tr>
+                    <td><strong>{% trans "Members" %}:</strong></td>
+                    <td>{% for member in members %}
+                        <a href="{% url 'user_management:profile' member %}"><span class="accepted_user_label label label-success">{{ member }}</span></a>
+                    {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>{% trans "Invited" %}:</strong></td>
+                    <td>{% for invitation in invitations %}
+                       <span class="bigger-label"><span class="invited_user_label label label-warning">{{ invitation.user.username }}</span></span>
+                    {% endfor %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="panel-footer">
+            <div class="form-group inline-form" >
+                <button type="submit" id="leave_project_button" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#leaveGroupModal">{% trans "leave project" %}</button>
+            </div>
+            <a href="{% url 'project_management:edit' project.id %}">
+                <button type="submit" id="edit_project_button" name="edit_project" class="btn btn-success">{% trans "edit project" %}</button>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><i class="fa fa-check-square-o"></i> {% trans "Todo's" %}</div>
+                <div class="widget-box">
+                    <div class="widget-container table-responsive">
+                        <table class="table table-hover table-striped order-table table-green">
+                        <thead>
+                            <tr>
+                                <th>{% trans "todo" %}</th>
+                                <th>{% trans "assignees" %}</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for todo in todos %}
+                            <tr>
+                                <td class="prevTd">{% if todo.done %}<del>{% endif %}{{ todo.title }}{% if todo.done %}</del>{% endif %}</td>
+                                <td class="assignee">{% for assignee in todo.assignees.all %}{{ assignee }}, {% endfor %}</td>
+                                {% if todo.done %}
+                                <td>
+                                    <a href="{% url 'todo:edit' todo.id %}" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <i data-todo-id="{{ todo.id }}" class="changeStateTodo btn btn-xs btn-success"><span class="glyphicon glyphicon-repeat"></span></i></a>
+                                </td>
+                                {% else %}
+                                <td>
+                                    <a href="{% url 'todo:edit' todo.id %}" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <i data-todo-id="{{ todo.id }}" class="changeStateTodo btn btn-xs btn-success"><span class="glyphicon glyphicon-ok"></span></i></a>
+                                </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                        <form action="{% url 'todo:create' project.id %}" method="get">
+                            <button type="submit" class="btn btn-default btn-lg">
+                                <span class="fa fa-plus" aria-hidden="true"></span> {% trans "New Todo" %}
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+            {% for todo in todos %}
+            <div class="col-md-12" >
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><i class="fa fa-check-square-o"></i> {{ todo.title }}</div>
+                    <div class="panel-body">
+                        <p><i class="fa fa-comment"></i> {{ todo.description }}</p>
+                        <p><i class="fa fa-calendar"></i> {{ todo.due_date }}</p>
+                        <p><i class="fa fa-users"></i>
+                        {% for assignee in todo.assignees.all %}
+                           <span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee }}</span>
+                        {% endfor %}
+                        </p>
+                        <p><i class="fa fa-tags"></i>
+                        {% for tag in todo.tags.all %}
+                            <span class="tag-no-interactive"><i class="fa fa-tag"></i>{{ tag.name }}</span>
+                        {% endfor %}
+                        </p>
+                    </div>
+                    <div class="panel-footer">
+                        <a href="{% url 'todo:edit' todo.id %}" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
+                        <i data-todo-id="{{ todo.id }}" class="changeStateTodo btn btn-xs btn-success pull-right"><span class="glyphicon glyphicon-ok"></span></i>
+                    </div>
+                </div>
+            </div>
+    {% endfor %}
+
+        </div>
+
+    <div class="col-md-6" >
+        <div class="panel panel-primary">
+            <div class="panel-heading"><i class="fa fa-calendar"></i> {% trans "Calendar" %}</div>
+            <div class="panel-body">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="leaveGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{% trans "Leave Project" %}</h4>
+          </div>
+          <div class="modal-body">
+              <p>{% trans "Are you sure you want to leave this project?" %}</p>
+              {% if members|length == 1 and invitations|length == 0 %}
+                <p>{% trans "Since you are the last person in this project, the project and all its data will be deleted from our servers. This action cannot be undone!" %}</p>
+              {% endif %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Don't leave group" %}</button>
+            <form class="form-group inline-form" action="{% url 'project_management:leave' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="project_id" value="{{ project.id }}">
+                <input type="submit" class="btn btn-danger" id="leave_project_confirm_button" name="leave_project_confirm" value="{% trans "Leave Project" %}">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+        </div>
+{% endblock %}

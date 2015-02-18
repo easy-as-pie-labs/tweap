@@ -115,6 +115,7 @@ p#project_icon{
     margin-right: 5px;
 }
 
+.tag-no-interactive,
 .tag{
     color: #fff;
     background-color: #337ab7;
@@ -130,6 +131,7 @@ p#project_icon{
     cursor: pointer;
 }
 
+.tag-no-interactive i,
 .tag i{
     margin-right: 5px;
 }
