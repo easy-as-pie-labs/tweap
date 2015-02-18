@@ -127,7 +127,6 @@ p#project_icon{
 
 .tag:hover{
     background-color: #d9534f;
-    text-decoration: line-through;
     cursor: pointer;
 }
 

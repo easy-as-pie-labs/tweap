@@ -39,7 +39,7 @@ var Invitations = function() {
 
     this.add = function(userToAdd) {
         this.Invitations.push(userToAdd);
-        $('#invitation-list').append('<p class="tag-outer"><span class="tag"><i class="fa fa-envelope-o"></i>' + userToAdd + '</span></p>');
+        $('#invitation-list').append('<p class="tag-outer"><span class="tag"><i class="fa fa-times-circle"></i>' + userToAdd + '</span></p>');
         $('#invitations').val(JSON.stringify(this.Invitations));
     }
 

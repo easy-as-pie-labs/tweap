@@ -41,13 +41,20 @@
                         {{ form.description|addcssandtabindex:'form-control' }}
                     </div>
 
-                    {% if members or invitations%}
+                    {% if members %}
                         <div class="from-group" id="member-list">
-                            <strong>{% trans "Members and invitations" %}</strong>
-                        <br />
+                            <strong>{% trans "Members" %}</strong>
+                            <br />
                             {% for member in members %}
                                <p class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ member.username }}</span></p>
                             {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if invitations %}
+                        <div class="from-group" id="member-list">
+                            <strong>{% trans "Invited" %}</strong>
+                            <br />
                             {% for invitation in invitations %}
                                     <p class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-envelope-o""></i>{{ invitation.user.username }}</span></p>
                             {% endfor %}
