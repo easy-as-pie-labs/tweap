@@ -6,7 +6,7 @@ from django.utils.translation import ugettext
 from django.contrib.auth.models import User
 from project_management.models import Project
 from project_management.tools import get_tags
-from notification_center.models import Event, Notification
+from notification_center.models import NotificationEvent, Notification
 from todo.tools import *
 import json
 
@@ -119,11 +119,11 @@ class CreateEdit(View):
                 # see if event type already exists in db
                 event_text = "assigned a todo to you"
                 try:
-                    event = Event.objects.get(text=event_text)
+                    notification_event = NotificationEvent.objects.get(text=event_text)
                 except:
-                    event = Event()
-                    event.text = event_text
-                    event.save()
+                    notification_event = NotificationEvent()
+                    notification_event.text = event_text
+                    notification_event.save()
 
                 # send out notifications
                 for assignee in assignees:
@@ -139,7 +139,7 @@ class CreateEdit(View):
                     notification.trigger_user = request.user
                     notification.project = project
                     notification.target_url = request.build_absolute_uri(reverse('todo:edit', args=(todo.id, )))
-                    notification.event = event
+                    notification.event = notification_event
                     notification.save()
 
                 return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))

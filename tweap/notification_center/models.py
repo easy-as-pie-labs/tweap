@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from project_management.models import Project
 
 
-class Event(models.Model):
+class NotificationEvent(models.Model):
     text = models.CharField(max_length=50, null=False)
 
     def __str__(self):
@@ -16,7 +16,7 @@ class Notification(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     project = models.ForeignKey(Project, null=False)
     target_url = models.CharField(max_length=100, blank=False)
-    event = models.ForeignKey(Event, null=False)
+    event = models.ForeignKey(NotificationEvent, null=False)
 
     def __str__(self):
         return str(self.event) + ", from " + self.trigger_user.username + ", to " + self.receiver.username

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from notification_center.models import Notification, Event
+from notification_center.models import Notification, NotificationEvent
 
-admin.site.register(Event)
+admin.site.register(NotificationEvent)
 admin.site.register(Notification)

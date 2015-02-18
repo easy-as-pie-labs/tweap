@@ -6,14 +6,14 @@ from django.utils.translation import ugettext
 from django.contrib.auth.models import User
 from project_management.models import Project
 from project_management.tools import get_tags
-from notification_center.models import Event, Notification
+from notification_center.models import NotificationEvent, Notification
 import json
 
 class CreateEdit(View):
     """
     View class for creating or editing an event
     """
-    def get(self, request, event_id, project_id):
+    def get(self, request, event_id=None, project_id=None):
 
         """if event_id is None:
             if project_id is None:
@@ -29,7 +29,7 @@ class CreateEdit(View):
 
             context"""
 
-    def post(self, request, event_id, project_id):
+    def post(self, request, event_id=None, project_id=None):
         return "empty"
 
 class Delete(View):
