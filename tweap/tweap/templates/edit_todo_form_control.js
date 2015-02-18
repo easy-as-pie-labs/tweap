@@ -48,7 +48,7 @@ function addTagAndCleanInput(newTagName) {
     $('#tag-input').val("");
     $('#tag-input').attr("placeholder", "{% trans 'Add Tag' %}");
     $('#suggestions').empty();
-    $('#users').focus();
+    $('#tag-input').focus();
 }
 
 //ajax request for getting tag suggestions
@@ -113,7 +113,7 @@ $(document).ready(function(){
 
     $('#due_date_warning').hide();
 
-    //checks if due date lie sin past and show hint
+    //checks if due date lies in past and show hint
     $('#due_date').change(function() {
         var dueDate = new Date($('#due_date').val());
         var today = new Date();

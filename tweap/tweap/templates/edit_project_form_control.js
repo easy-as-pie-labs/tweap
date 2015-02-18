@@ -1,18 +1,58 @@
 {% load i18n %}
-$(document).ready(function(){
-    newMembers = new Members();
+
+$(document).ready(function() {
+    invitationList = new Invitations();
 
     $('<p id="project_icon"><i id="projectIcon" name="projectIcon" class="{{ project.icon|default:"fa fa-folder-open-o" }} project_icon" data-toggle="modal" data-target="#projectIconModal"></i> {% trans "Click icon to change it" %}</p>')
-        .insertAfter('label[for=id_icon]');
+        .insertAfter('#icon-label');
     $('label[for=id_icon]').attr('for', 'projectIcon');
 
-    projectIconClass = '{{ project.icon|default:"fa fa-folder-open-o" }}'
+    var projectIconClass = '{{ project.icon|default:"fa fa-folder-open-o" }}';
     projectIconClass = "." + projectIconClass.split(" ")[1];
-    active = $('#projectIconModal').find(projectIconClass);
+    var active = $('#projectIconModal').find(projectIconClass);
     $(active).addClass('project_icon_chosen');
+
+    $('#name_warning').hide();
+
+    //removes title warning
+    $('#id_name').keydown(function() {
+        $('#name_warning').hide('slow');
+        $('#id_name').parent().removeClass('has-error');
+    });
+
+    //checks if name is missing, prevent form submit and shows warning
+    $('#project-form').submit(function() {
+        if (!$('#id_name').val()) {
+            $('#name_warning').show('slow');
+            $('#id_name').parent().addClass('has-error');
+            return false;
+        }
+        else {
+            return true;
+        }
+    });
 });
 
-//Adds click listener to the icons in modal
+//object for managing invitations
+var Invitations = function() {
+    this.Invitations = new Array();
+
+    this.add = function(userToAdd) {
+        this.Invitations.push(userToAdd);
+        $('#invitation-list').append('<p class="tag-outer"><span class="tag"><i class="fa fa-envelope-o"></i>' + userToAdd + '</span></p>');
+        $('#invitations').val(JSON.stringify(this.Invitations));
+    }
+
+    this.remove = function(userToRemove) {
+        var index = this.Invitations.indexOf(userToRemove);
+        if (index > -1) {
+            this.Invitations.splice(index, 1);
+        }
+        $('#invitations').val(JSON.stringify(this.Invitations));
+    }
+}
+
+//adds click listener to the icons in modal
 $(document).on('click', '.project_icon_choose', function() {
     $('.project_icon_chosen').removeClass('project_icon_chosen');
     $(this).addClass('project_icon_chosen');
@@ -22,126 +62,77 @@ $(document).on('click', '.project_icon_choose', function() {
     $('#projectIconModal').modal('hide');
 });
 
-//Adds new Inputfields
-$(document).on('click', '.addUserButton', function() {
-
-    // if input is empty, prevent user adding
-    if(!$(this).prev().val()) {
-        // focus on empty field and give error message
-        $(this).prev().focus();
-        $(this).prev().attr("placeholder", "{% trans 'Username or eMail' %}");
-        $(this).parent().parent().addClass('has-error');
-    }
-    else {
-        addMemberInput();
-    }
-    $('#users').focus();
-});
-
-// if input is there add new field, make old field uneditable and removable
-function addMemberInput(){
-    $('.addUserButton').addClass('removeUserButton');
-    $('.addUserButton').removeClass('addUserButton');
-
-    $('.removeUserButton').children().first().removeClass('fa fa-plus-circle');
-    $('.removeUserButton').children().first().addClass('fa fa-minus-circle');
-
-    $('.removeUserButton').prev().attr("disabled", true);
-
-    $('.removeUserButton').parent().parent().removeClass('has-error');
-
-    $('#newInputs').prepend(
-        "<div class='form-group'><div class='input-group date'><input id='users' type='text' placeholder='{% trans "Username or eMail" %}' class='form-control member'><span class='input-group-addon addUserButton focus-pointer'><i class='glyphicon glyphicon-plus-sign'></i></span></div></div>"
-    );
-
-    $('#suggestions').remove();
-    $('#newInputs div:first-child').after("<div id='suggestions'></div>");
-
-    $('.removeUserButton').click(function(){
-        $(this).parent().parent().remove();
-    })
-}
-
-//Ajax-Request for Usersuggestions
-$(document).on('keyup', '#users', function(){
-    typedText = (this).value
-    //AJAX-Request:
-    data = {search:typedText};
-    $.get("{% url 'user_management:user_suggestion' %}", data, function(output){
-        manageUserSuggestionAjaxRequest(output)
-    })
-
-});
-
-// overwrites enter to submit form when typing in tag input field and adds text as tag
-$(document).on('keydown', '#users', function(e){
+//overwrites enter to submit form when typing in user input field and adds text as user
+$(document).on('keydown', '#user-input', function(e) {
     if ( e.which == 13 ) {
-        // if input is empty, prevent user adding
-        if(!$('#users').val()) {
-            // focus on empty field and give error message
-            $('#users').focus();
-            $('#users').attr("placeholder", "{% trans 'Username or eMail' %}");
-            $('#users').parent().parent().addClass('has-error');
-        }
-        else {
-            addMemberInput();
-        }
-        $('#users').focus();
+        checkInputFieldAndInviteUser();
         e.preventDefault();
     }
 });
 
-//Puts the ID of an Suggestionelement into the value of the first inputelement in #newInputs and adds a new inputField
+//adds clicked suggestion to invitation-list
 $(document).on('click', '.suggestion', function() {
-    suggestionId = $(this).attr('id');
-    firstInput = $('#newInputs').find('input[type=text]').filter(':visible:first')
-    firstInput.val(suggestionId);
-    addMemberInput();
+    addUserAndCleanInput($(this).attr('id'));
 });
 
-/*
-is called on an AjaxRequest - deletes all #suggestion-HTMLElements
-and calls addSuggestionsToContent. Adding of the HTMLElements is done for each
-User inside the data-Array.
- */
-function manageUserSuggestionAjaxRequest(data){
+//listener for add tag button
+$(document).on('click', '.addUserButton', function() {
+    checkInputFieldAndAddUser();
+});
+
+
+//checks if user input has value and add it as user or show error
+function checkInputFieldAndInviteUser() {
+    // if input is empty, prevent user adding
+    if(!$('#user-input').val()) {
+        // focus on empty field and give error class
+        $('#user-input').focus();
+        $('#user-input').attr("placeholder", "{% trans 'Type in username or email' %}");
+        $('#user-input').parent().parent().addClass('has-error');
+    }
+    else {
+         $('#user-input').parent().parent().removeClass('has-error');
+        var newUser = $('#user-input').val();
+        addUserAndCleanInput(newUser);
+    }
+}
+
+//adds new user to the invitation-list and cleans the user-input
+function addUserAndCleanInput(newUser) {
+     invitationList.add(newUser);
+    $('#user-input').val("");
+    $('#user-input').attr("placeholder", "{% trans 'Type in username or email' %}");
+    $('#suggestions').empty();
+    $('#user-input').focus();
+}
+
+//ajax request for getting user suggestions
+$(document).on('keyup', '#user-input', function(e){
+    typedText = (this).value
+    data = {search:typedText};
+    $.get("{% url 'user_management:user_suggestion' %}", data, function(output){
+        manageUserSuggestionAjaxRequest(output)
+    })
+});
+
+//handles ajax response
+function manageUserSuggestionAjaxRequest(data) {
     $('#suggestions').empty();
     for(i=0;i<data.length;i++){
         addSuggestionToContent(data[i]);
     }
 }
-
-/*
-adds #suggestions-HTMLElements over the inputs.
- */
-function addSuggestionToContent(id) {
+//adds tag suggestion to the suggestions div
+function addSuggestionToContent(userSuggestion) {
     $('#suggestions').append(
-        '<h3 class="suggestion" id="' + id + '"><span class="label label-info focus-pointer">' + id + '</span></h3>'
+        '<h3 class="suggestion" id="' + userSuggestion + '"><span class="label label-info focus-pointer">' + userSuggestion + '</span></h3>'
     );
 }
 
-//Adds Userarray-JSONString to Hiddenfield
-function insertHiddenValues(){
-    inputMemberArr = $("#newInputs .member");
+//remove user from invitation-list and array when clicked
+$(document).on('click', '.tag', function() {
+    var userToRemove = $(this).attr('data-tag-name');
+    invitationList.remove(userToRemove);
+    $(this).parent().remove();
+});
 
-    for(i=0;i<inputMemberArr.length;i++){
-        newMembers.addUser(inputMemberArr.eq(i).val());
-    }
-
-    $('#hiddenValues').val(newMembers.getUsersString());
-}
-
-//Object is initialized on the very Beginning of this document
-var Members = function(){
-    this.Users = new Array();
-
-    //Adds new Userstring to Users-Array (Attribute)
-    this.addUser = function(added_user){
-        this.Users.push(added_user)
-    }
-
-    //Stringifies the Users-Arrayattribute and returns it
-    this.getUsersString = function() {
-        return JSON.stringify(this.Users);
-    }
-}

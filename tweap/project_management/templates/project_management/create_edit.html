@@ -7,118 +7,126 @@
 </script>
 {% endblock %}
 {% block project_management_template %}
-    <h1>{{ headline }}</h1>
 
-    {% for error, message in error_messages.items %}
-        {% if error == 'name' %}
-            <p class="alert alert-danger no-margin-element">{% trans "Please enter a project name!" %}</p>
-        {% endif %}
-    {% endfor %}
+    <div class="panel panel-primary">
+        <div class="panel-heading panel-heading-bigger"><i class="{{ project.icon|default:"fa fa-folder-open" }}"></i> {{ headline }}</div>
+        <div class="panel-body">
+            <div class="col-md-10 col-md-offset-1">
 
-    <div class="jumbotron">
-    <form id="new_project_form" method="post" autocomplete="off" class="form-group" action="{% if project %} {% url 'project_management:edit' project.id %} {% else %} {% url 'project_management:create' %} {% endif %}">
-        {% csrf_token %}
-        {% for field in form %}
-            {{field.label_tag}}{{ field|addcssandtabindex:'form-control' }}<br>
-        {% endfor %}
-        <input type="hidden" id="hiddenValues" name="invitations" />
-        <label for="newInputs" class="control-label">{% trans "Invite Members" %}</label>
-        <div id="newInputs">
-            <div class="form-group">
-                <div class="input-group date">
-                    <input id="users" name="userinput" type="text" tabindex="2" placeholder='{% trans "Username or eMail" %}' class="form-control member"><span class="input-group-addon addUserButton focus-pointer"><i class="fa fa-plus-circle"></i></span>
-                </div>
-                <div id="suggestions">
-                </div>
+                {% for error, message in error_messages.items %}
+                    {% if error == 'name' %}
+                        <p class="alert alert-danger no-margin-element"><i class="fa fa-exclamation-triangle"></i> {% trans "Please enter a project name!" %}</p>
+                    {% endif %}
+                {% endfor %}
+
+                <form method="post" id="project-form" autocomplete="off" class="form-group" action="{% if project %} {% url 'project_management:edit' project.id %} {% else %} {% url 'project_management:create' %} {% endif %}">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <strong id="icon-label">{% trans "Icon" %}</strong>
+                        {{ form.icon|addcssandtabindex:'form-control' }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_name" class="control-label">{% trans "Name" %}</label>
+                        {{ form.name|addcssandtabindex:'form-control' }}
+                    </div>
+
+                    <div id="name_warning" class="alert alert-danger" role="alert">
+                         <i class="fa fa-exclamation-triangle"></i> {% trans "The name must not be empty!" %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_description" class="control-label">{% trans "Description" %}</label>
+                        {{ form.description|addcssandtabindex:'form-control' }}
+                    </div>
+
+                    {% if members or invitations%}
+                        <div class="from-group" id="member-list">
+                            <strong>{% trans "Members and invitations" %}</strong>
+                        <br />
+                            {% for member in members %}
+                               <p class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ member.username }}</span></p>
+                            {% endfor %}
+                            {% for invitation in invitations %}
+                                    <p class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-envelope-o""></i>{{ invitation.user.username }}</span></p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <input type="hidden" id="invitations" name="invitations" />
+                    <div class="form-group">
+                        <label for="user-input" class="control-label">{% trans "Invite Members" %}</label>
+                        <div class="input-group symbol">
+                            <input id="user-input" type="text" tabindex="2" placeholder='{% trans "Type in username or email" %}' class="form-control"><span class="input-group-addon addUserButton focus-pointer"><i class="fa fa-plus-circle"></i></span>
+                        </div>
+                        <div id="suggestions">
+                        </div>
+                    </div>
+
+                    <div id="invitation-list" class="form-group"></div>
             </div>
         </div>
-
-        {% if members %}
-            <label for="members" class="control-label">{% trans "Members" %}</label>
-            {% for member in members %}
-                <div id="members">
-                    <div class="form-group">
-                        <div class="input-group date">
-                            <input id="member_users" type="text" class="form-control" disabled="disabled" value="{{ member }}">
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        {% if invitations %}
-            <label for="invitations" class="control-label">{% trans "Invited" %}</label>
-            {% for invitation in invitations %}
-                <div id="invitations">
-                    <div class="form-group">
-                        <div class="input-group date">
-                            <input id="invited_users" type="text" class="form-control" disabled="disabled" value="{{ invitation.user.username }}">
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        {% endif %}
-
-
-        <input onClick="insertHiddenValues()" tabindex="3" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
-    </form>
-    <a href="{% if project %} {% url 'project_management:project' project.id %} {% else %} {% url 'dashboard:home' %} {% endif %}"><button class="btn btn-danger">{% trans "Cancel" %}</button></a>
+        <div class="panel-footer">
+        <input tabindex="3" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
+                </form>
+                <a href="{% if project %} {% url 'project_management:project' project.id %} {% else %} {% url 'dashboard:home' %} {% endif %}"><button class="btn btn-default">{% trans "Cancel" %}</button></a>
+        </div>
+    </div>
 
     <div class="modal fade" id="projectIconModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">{% trans "Choose an icon for the project" %}</h4>
-          </div>
-          <div class="modal-body">
-              <div class="container">
-                  <div class="row">
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-folder-open-o project_icon_choose" id="fa fa-folder-open-o"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-birthday-cake project_icon_choose" id="fa fa-birthday-cake"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-anchor project_icon_choose" id="fa fa-anchor"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-camera project_icon_choose" id="fa fa-camera"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-coffee project_icon_choose" id="fa fa-coffee"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-flask project_icon_choose" id="fa fa-flask"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-fire project_icon_choose" id="fa fa-fire"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-cogs project_icon_choose" id="fa fa-cogs"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-motorcycle project_icon_choose" id="fa fa-motorcycle"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-road project_icon_choose" id="fa fa-road"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-space-shuttle project_icon_choose" id="fa fa-space-shuttle"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-ship project_icon_choose" id="fa fa-ship"></i></div>
-                  </div>
-                  <div class="row">
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-train project_icon_choose" id="fa fa-train"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-university project_icon_choose" id="fa fa-university"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-leaf project_icon_choose" id="fa fa-leaf"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-cubes project_icon_choose" id="fa fa-cubes"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-code project_icon_choose" id="fa fa-code"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-beer project_icon_choose" id="fa fa-beer"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-bed project_icon_choose" id="fa fa-bed"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-music project_icon_choose" id="fa fa-music"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-futbol-o project_icon_choose" id="fa fa-futbol-o"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-book project_icon_choose" id="fa fa-book"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-empire project_icon_choose" id="fa fa-empire"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-rebel project_icon_choose" id="fa fa-rebel"></i></div>
-                  </div>
-                  <div class="row">
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-graduation-cap project_icon_choose" id="fa fa-graduation-cap"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-subway project_icon_choose" id="fa fa-subway"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-trophy project_icon_choose" id="fa fa-trophy"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-microphone project_icon_choose" id="fa fa-microphone"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-bus project_icon_choose" id="fa fa-bus"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-cutlery project_icon_choose" id="fa fa-cutlery"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-life-saver project_icon_choose" id="fa life-saver"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-heart project_icon_choose" id="fa fa-heart"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-paw project_icon_choose" id="fa fa-paw"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-bug project_icon_choose" id="fa fa-bug"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-binoculars project_icon_choose" id="fa fa-binoculars"></i></div>
-                      <div class="col-md-2 col-xs-3"><i class="fa fa-bicycle project_icon_choose" id="fa fa-bicycle"></i></div>
-                  </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{% trans "Choose an icon for the project" %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-folder-open-o project_icon_choose" id="fa fa-folder-open-o"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-birthday-cake project_icon_choose" id="fa fa-birthday-cake"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-anchor project_icon_choose" id="fa fa-anchor"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-camera project_icon_choose" id="fa fa-camera"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-coffee project_icon_choose" id="fa fa-coffee"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-flask project_icon_choose" id="fa fa-flask"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-fire project_icon_choose" id="fa fa-fire"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-cogs project_icon_choose" id="fa fa-cogs"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-motorcycle project_icon_choose" id="fa fa-motorcycle"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-road project_icon_choose" id="fa fa-road"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-space-shuttle project_icon_choose" id="fa fa-space-shuttle"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-ship project_icon_choose" id="fa fa-ship"></i></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-train project_icon_choose" id="fa fa-train"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-university project_icon_choose" id="fa fa-university"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-leaf project_icon_choose" id="fa fa-leaf"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-cubes project_icon_choose" id="fa fa-cubes"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-code project_icon_choose" id="fa fa-code"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-beer project_icon_choose" id="fa fa-beer"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-bed project_icon_choose" id="fa fa-bed"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-music project_icon_choose" id="fa fa-music"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-futbol-o project_icon_choose" id="fa fa-futbol-o"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-book project_icon_choose" id="fa fa-book"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-empire project_icon_choose" id="fa fa-empire"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-rebel project_icon_choose" id="fa fa-rebel"></i></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-graduation-cap project_icon_choose" id="fa fa-graduation-cap"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-subway project_icon_choose" id="fa fa-subway"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-trophy project_icon_choose" id="fa fa-trophy"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-microphone project_icon_choose" id="fa fa-microphone"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-bus project_icon_choose" id="fa fa-bus"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-cutlery project_icon_choose" id="fa fa-cutlery"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-life-saver project_icon_choose" id="fa life-saver"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-heart project_icon_choose" id="fa fa-heart"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-paw project_icon_choose" id="fa fa-paw"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-bug project_icon_choose" id="fa fa-bug"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-binoculars project_icon_choose" id="fa fa-binoculars"></i></div>
+                        <div class="col-md-2 col-xs-3"><i class="fa fa-bicycle project_icon_choose" id="fa fa-bicycle"></i></div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-        </div>
+
 {% endblock %}
