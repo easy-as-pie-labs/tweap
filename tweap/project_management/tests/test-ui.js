@@ -289,16 +289,15 @@ casper.test.begin('edit project', function suite(test) {
 
     casper.waitForUrl(/projects/, function() {
         test.assertUrlMatch("/projects/", "redirected to project view");
+        casper.waitForSelector(".accepted_user_label", function() {
+            test.assertEvalEquals(function () {
+                return __utils__.findOne('#project_title_header').textContent;
+            }, ' edited project', "project name was edited");
+        });
+        test.assertElementCount("li.project_dropdown_li", 2, "still two projects exists for user");
+        casper.waitForSelector("#leave_project_button").thenClick("#leave_project_button");
+        casper.waitForSelector("#leave_project_confirm_button").thenClick("#leave_project_confirm_button");
     });
-
-    casper.waitForSelector(".accepted_user_label", function() {
-        test.assertEvalEquals(function () {
-            return __utils__.findOne('#project_title_header').textContent;
-        }, ' edited project', "project name was edited");
-    });
-    test.assertElementCount("li.project_dropdown_li", 2, "still two projects exists for user");
-    casper.waitForSelector("#leave_project_button").thenClick("#leave_project_button");
-    casper.waitForSelector("#leave_project_confirm_button").thenClick("#leave_project_confirm_button");
 
     casper.waitForUrl(/dashboard\/$/, function() {
         test.assertUrlMatch("/dashboard/", "redirected to dashboard");
