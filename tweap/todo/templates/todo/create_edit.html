@@ -44,7 +44,7 @@
                 <div class="form-group">
                     <label for="due_date" class="control-label">{% trans "Due Date" %}</label>
                     <div class="input-group date">
-                        <input type="text" readonly id="due_date" name="due_date" value='{{ date }}' class="date-field-readonly form-control"><span title="Pick a Due Date" class="cursor-pointer input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input type="text" readonly id="due_date" name="due_date" value='{{ todo.get_date }}' class="date-field-readonly form-control"><span title="Pick a Due Date" class="cursor-pointer input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
                 <div id="due_date_warning" class="alert alert-warning" role="alert">
@@ -55,9 +55,9 @@
                     <div class="panel-heading">{% trans "Assign members" %}</div>
 
                     <ul class="list-group">
-                        {% for member in members %}
+                        {% for member in project.members.all %}
                         <label for="assignee_{{member.username}}" class="noselect list-group-item">
-                            <input type="checkbox" name="assignees" id="assignee_{{member.username}}" value="{{member.username}}" {% for assignee in assignees %}{% if assignee == member %}checked{% endif %}{% endfor %}> {{member.username}}
+                            <input type="checkbox" name="assignees" id="assignee_{{member.username}}" value="{{member.username}}" {% for assignee in todo.assignees.all %}{% if assignee == member %}checked{% endif %}{% endfor %}> {{member.username}}
                         </label>
                     {% endfor %}
                     </ul>
@@ -74,7 +74,7 @@
                 </div>
 
                 <div id="tag-list" class="form-group">
-                    {% for tag in tags %}
+                    {% for tag in todo.tags.all %}
                         <p class="tag-outer"><span class="tag" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></p>
                     {% endfor %}
                 </div>

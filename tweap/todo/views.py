@@ -39,27 +39,16 @@ class CreateEdit(View):
 
         todo = get_object_or_404(Todo, id=todo_id)
 
-        if project_id is None:
-            project = todo.project
-        else:
-            project = Project.objects.get(project_id)
-
-        project_members = project.members.all()
-
-        tags = todo.tags.all()
+        project = todo.project
 
         # redirect if user is not in group at all
-        if request.user not in project_members:
+        if request.user not in project.members.all():
             raise Http404
         else:
             context = {
                 'headline': ugettext("Edit Todo"),
                 'todo': todo,
-                'tags': tags,
-                'members': project_members,
                 'project': project,
-                'date': todo.get_date(),
-                'assignees': todo.assignees.all(),
             }
         return render(request, 'todo/create_edit.html', context)
 
@@ -147,9 +136,7 @@ class CreateEdit(View):
         context = {
             'error_messages': {'name': ugettext("The title must not be empty!")},
             'project': project,
-            'members': project.members.all(),
             'headline': ugettext("Create new Todo"),
-            'date': todo.get_date(),
         }
         return render(request, 'todo/create_edit.html', context)
 
