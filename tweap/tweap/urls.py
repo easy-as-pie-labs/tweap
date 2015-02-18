@@ -10,6 +10,7 @@ urlpatterns = patterns(
     url(r'^users/', include('user_management.urls', namespace='user_management')),
     url(r'^projects/', include('project_management.urls', namespace='project_management')),
     url(r'^todo/', include('todo.urls', namespace='todo')),
+    url(r'^calendar/', include('cal.urls', namespace='cal')),
     url(r'^notifications/', include('notification_center.urls', namespace='notification_center')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^i18n/', include('django.conf.urls.i18n')),

@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'dashboard',
     'todo',
     'notification_center',
+    'cal',
 )
 
 MIDDLEWARE_CLASSES = (
