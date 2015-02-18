@@ -31,7 +31,6 @@ class CreateEdit(View):
                     'form': ProjectForm(instance=project),
                     'headline': ugettext("Edit project"),
                     'project': project,
-                    'members': project.members.all(),
                     'invitations': Invitation.objects.filter(project=project)
                 }
 
@@ -79,10 +78,10 @@ class Project(View):
         context = {}
         project = get_object_or_404(ProjectModel, id=project_id)
         context['project'] = project
-        context['members'] = project.members.all()
         context['invitations'] = Invitation.objects.filter(project=project)
         context['todos'] = Todo.get_all_for_project(project)
-        if request.user in context['members']:
+        members = project.members.all()
+        if request.user in members:
             return render(request, 'project_management/project.html', context)
         else:
             raise Http404

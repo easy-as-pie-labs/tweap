@@ -41,11 +41,11 @@
                         {{ form.description|addcssandtabindex:'form-control' }}
                     </div>
 
-                    {% if members %}
+                    {% if project.members.all %}
                         <div class="from-group" id="member-list">
                             <strong>{% trans "Members" %}</strong>
                             <br />
-                            {% for member in members %}
+                            {% for member in project.members.all %}
                                <p class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ member.username }}</span></p>
                             {% endfor %}
                         </div>
