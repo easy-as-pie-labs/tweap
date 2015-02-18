@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import View
 from notification_center.models import Notification
+import json
 
 
 class ViewAll(View):
@@ -22,8 +22,12 @@ class ViewOne(View):
 
 
 class MarkSeen(View):
-    def get(self, request, notification_id):
+    def post(self, request):
+
+        notification_id = request.POST.get('notificationId', '')
         notification = Notification.objects.get(id=notification_id)
-        url = notification.target_url
         notification.delete()
-        return HttpResponseRedirect(url)
+
+        result = {'state': True}
+
+        return HttpResponse(json.dumps(result), content_type="application/json")

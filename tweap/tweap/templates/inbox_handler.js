@@ -4,10 +4,39 @@ $.ajaxSetup({
 });
 
 
+
 $(document).on('click', '.toggle_header', function() {
     $(this).next('.toggle_content').slideToggle();
 });
 
+//Notificationhandling
+$(document).on('click', '.markNotificationSeen', function(){
+    console.log("trigger");
+    var notificationId = $(this).attr('data-notification-id');
+    var data = {
+        notificationId:notificationId
+    };
+
+    $.post("{% url 'notification_center:mark_seen' %}", data, function(output){
+        manageNotificationAjaxRequest(output, notificationId)
+    })
+});
+
+function manageNotificationAjaxRequest(output, notificationId){
+    console.log("ajax request");
+    if(output['state'] == true) {
+        console.log(notificationId);
+        $('#notification_container_id_' + notificationId).hide('slow', function() {
+            $('#notification_container_id_' + notificationId).remove();
+        });
+    }
+
+    if ($('#inbox-inner').children().length <= 1){
+        removeInboxContainer();
+    }
+}
+
+//Invitationhandling
 $(document).on('click', '.acceptInvitation', function() {
     var invitationId = $(this).attr('data-invitation-id');
     var data = {
@@ -16,34 +45,33 @@ $(document).on('click', '.acceptInvitation', function() {
     };
 
     $.post("{% url 'project_management:invitation_handler' %}", data, function(output){
-        manageInvitationAjaxRequest(output)
+        manageInvitationAjaxRequest(output, invitationId)
     })
 });
 
 $(document).on('click', '.rejectInvitation', function() {
-    var InvitationId = $(this).attr('data-invitation-id');
+    var invitationId = $(this).attr('data-invitation-id');
     var data = {
         action: "reject",
-        invitation_id: InvitationId
+        invitation_id: invitationId
     };
 
     $.post("{% url 'project_management:invitation_handler' %}", data, function(output){
-        manageInvitationAjaxRequest(output)
+        manageInvitationAjaxRequest(output, invitationId)
     })
 });
 
-function manageInvitationAjaxRequest(output){
+function manageInvitationAjaxRequest(output, invitationId){
     if(output['url'] != ""){
         //Accepted
        var  url = output['url'];
         window.location.href = url;
     } else{
-        var invitationId = output['id'];
         $('#invitation_container_id_'+invitationId).hide('slow', function() {
             $('#invitation_container_id_' + invitationId).remove();
         });
 
-        if ($('#inbox').children().length == 2){
+        if ($('#inbox-inner').children().length <= 1){
             removeInboxContainer();
         }
     }

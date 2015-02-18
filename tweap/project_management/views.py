@@ -121,7 +121,6 @@ class InvitationHandler(View):
                     invitation.accept()
                     result['url'] = request.build_absolute_uri(reverse('project_management:project', args=(invitation.project.id,)))
                 if action == 'reject':
-                    result['id'] = invitation_id
                     invitation.reject()
 
         return HttpResponse(json.dumps(result), content_type="application/json")
