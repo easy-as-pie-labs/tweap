@@ -29,7 +29,7 @@
                 {% csrf_token %}
 
                 <div class="form-group">
-                    <label>{% trans "Title" %}</label>
+                    <label for="title-input" class="control-label">{% trans "Title" %}</label>
                     <input class="form-control" type="text" id="title-input" name="title" value="{{ todo.title }}">
                 </div>
                 <div id="title_warning" class="alert alert-danger" role="alert">
@@ -37,12 +37,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label>{% trans "Description" %}</label>
-                    <textarea class="form-control" name="description">{{ todo.description }}</textarea>
+                    <label for="description-input" class="control-label">{% trans "Description" %}</label>
+                    <textarea class="form-control" id="description-input" name="description">{{ todo.description }}</textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>{% trans "Due Date" %}</label>
+                    <label for="due_date" class="control-label">{% trans "Due Date" %}</label>
                     <div class="input-group date">
                         <input type="text" readonly id="due_date" name="due_date" value='{{ date }}' class="date-field-readonly form-control"><span title="Pick a Due Date" class="cursor-pointer input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
@@ -65,7 +65,7 @@
 
                 <input type="hidden" id="tags" name="tags" />
                 <div class="form-group">
-                    <label>{% trans "Tags" %}</label>
+                    <label for="tag-input" class="control-label">{% trans "Tags" %}</label>
                     <div class="input-group symbol">
                         <input id="tag-input" type="text" tabindex="2" maxlength="20" placeholder='{% trans "Add Tag" %}' class="form-control"><span title="Add a Tag" class="input-group-addon addTagButton focus-pointer"><i class="fa fa-plus-circle"></i></span>
                     </div>

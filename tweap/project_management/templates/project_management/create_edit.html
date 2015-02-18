@@ -1,4 +1,4 @@
-{% extends "project_management_template.html" %}
+{% extends "todo_template.html" %}
 {% load i18n %}
 {% load myfilters %}
 {% block js %}
@@ -6,7 +6,7 @@
     {% include "edit_project_form_control.js" %}
 </script>
 {% endblock %}
-{% block project_management_template %}
+{% block todo_template %}
 
     <div class="panel panel-primary">
         <div class="panel-heading panel-heading-bigger"><i class="{{ project.icon|default:"fa fa-folder-open" }}"></i> {{ headline }}</div>
@@ -82,7 +82,7 @@
                     <h4 class="modal-title" id="myModalLabel">{% trans "Choose an icon for the project" %}</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
+                    <div class="row offset-left">
                         <div class="col-md-2 col-xs-3"><i class="fa fa-folder-open-o project_icon_choose" id="fa fa-folder-open-o"></i></div>
                         <div class="col-md-2 col-xs-3"><i class="fa fa-birthday-cake project_icon_choose" id="fa fa-birthday-cake"></i></div>
                         <div class="col-md-2 col-xs-3"><i class="fa fa-anchor project_icon_choose" id="fa fa-anchor"></i></div>
@@ -96,7 +96,7 @@
                         <div class="col-md-2 col-xs-3"><i class="fa fa-space-shuttle project_icon_choose" id="fa fa-space-shuttle"></i></div>
                         <div class="col-md-2 col-xs-3"><i class="fa fa-ship project_icon_choose" id="fa fa-ship"></i></div>
                     </div>
-                    <div class="row">
+                    <div class="row offset-left">
                         <div class="col-md-2 col-xs-3"><i class="fa fa-train project_icon_choose" id="fa fa-train"></i></div>
                         <div class="col-md-2 col-xs-3"><i class="fa fa-university project_icon_choose" id="fa fa-university"></i></div>
                         <div class="col-md-2 col-xs-3"><i class="fa fa-leaf project_icon_choose" id="fa fa-leaf"></i></div>
@@ -110,7 +110,7 @@
                         <div class="col-md-2 col-xs-3"><i class="fa fa-empire project_icon_choose" id="fa fa-empire"></i></div>
                         <div class="col-md-2 col-xs-3"><i class="fa fa-rebel project_icon_choose" id="fa fa-rebel"></i></div>
                     </div>
-                    <div class="row">
+                    <div class="row offset-left">
                         <div class="col-md-2 col-xs-3"><i class="fa fa-graduation-cap project_icon_choose" id="fa fa-graduation-cap"></i></div>
                         <div class="col-md-2 col-xs-3"><i class="fa fa-subway project_icon_choose" id="fa fa-subway"></i></div>
                         <div class="col-md-2 col-xs-3"><i class="fa fa-trophy project_icon_choose" id="fa fa-trophy"></i></div>
@@ -123,7 +123,7 @@
                         <div class="col-md-2 col-xs-3"><i class="fa fa-bug project_icon_choose" id="fa fa-bug"></i></div>
                         <div class="col-md-2 col-xs-3"><i class="fa fa-binoculars project_icon_choose" id="fa fa-binoculars"></i></div>
                         <div class="col-md-2 col-xs-3"><i class="fa fa-bicycle project_icon_choose" id="fa fa-bicycle"></i></div>
-                    </div>
+                     </div>
                 </div>
             </div>
         </div>

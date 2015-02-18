@@ -153,3 +153,8 @@ p#project_icon{
     -ms-user-select: none;
     user-select: none;
 }
+
+.offset-left {
+    padding-left: 20px;
+    padding-right: 20px;
+}
