@@ -19,8 +19,8 @@
                         <div id="invitation_container_id_{{ invitation.id }}" class="list-group-item">
                             <p>
                                 <strong class="invitation_title">{% trans "Invitation to project" %}: {{ invitation.project.name }}</strong>&nbsp;
-                                <button data-invitation-id="{{ invitation.id }}" name="rejectInvitation" class="btn btn-xs btn-danger rejectInvitation pull-right"><i class="glyphicon glyphicon-remove"></i></button>
-                                <button data-invitation-id="{{ invitation.id }}" name="acceptInvitation" class="btn btn-xs btn-success acceptInvitation pull-right" style="margin-right: 5px;"><i class="glyphicon glyphicon-ok"></i></button>
+                                <button data-invitation-id="{{ invitation.id }}" title="reject the Invitation" name="rejectInvitation" class="btn btn-xs btn-danger rejectInvitation pull-right"><i class="glyphicon glyphicon-remove"></i></button>
+                                <button data-invitation-id="{{ invitation.id }}" title="accept the Invitation" name="acceptInvitation" class="btn btn-xs btn-success acceptInvitation pull-right" style="margin-right: 5px;"><i class="glyphicon glyphicon-ok"></i></button>
                             </p>
                             <p>{{ invitation.project.description }}</p>
                         </div>
