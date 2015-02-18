@@ -3,6 +3,11 @@ $.ajaxSetup({
   data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
 });
 
+
+$(document).on('click', '.toggle_header', function() {
+    $(this).next('.toggle_content').slideToggle();
+});
+
 $(document).on('click', '.acceptInvitation', function() {
     var invitationId = $(this).attr('data-invitation-id');
     var data = {
