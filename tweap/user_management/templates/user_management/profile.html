@@ -17,7 +17,7 @@
             </tr>
             <tr>
                 <td><strong>{% trans "E-Mail" %}:</strong></td>
-                <td id="profile_email">{{ user.email }}</td>
+                <td id="profile_email"><a style="color: #333; font-size: 14px;" href="mailto:{{ user.email }}">{{ user.email }}</a></td>
             </tr>
             <tr>
                 <td><strong>{% trans "Last login" %}:</strong></td>

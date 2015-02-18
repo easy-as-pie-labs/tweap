@@ -39,9 +39,10 @@ casper.test.begin('create project', function suite(test) {
     });
 
     casper.then(function () {
-        this.evaluate(function () {
-            $('form#new_project_form').submit();
-        });
+//        this.evaluate(function () {
+//            $('form#new_project_form').submit();
+//        });
+        casper.waitForSelector('.btn').thenClick('.btn');
     });
 
     casper.waitForSelector('#project_title_header', function() {
@@ -93,13 +94,15 @@ casper.test.begin('accept project invitation', function suite(test) {
             'input[name = name]': 'anothercasper\'s project',
             'input[name = userinput]': 'casperjs'
         });
+
         casper.waitForSelector('.addUserButton').thenClick('.addUserButton');
     });
 
     casper.then(function () {
-        this.evaluate(function () {
-            $('form#new_project_form').submit();
-        });
+//        this.evaluate(function () {
+//            $('form#new_project_form').submit();
+//        });
+        casper.waitForSelector('.btn').thenClick('.btn');
     });
 
     casper.waitForSelector(".accepted_user_label", function() {
@@ -190,9 +193,10 @@ casper.test.begin('reject project invitation', function suite(test) {
     });
 
     casper.then(function () {
-        this.evaluate(function () {
-            $('form#new_project_form').submit();
-        });
+//        this.evaluate(function () {
+//            $('form#new_project_form').submit();
+//        });
+        casper.waitForSelector('.btn').thenClick('.btn');
     });
 
     casper.waitForSelector(".accepted_user_label", function () {
@@ -276,10 +280,15 @@ casper.test.begin('edit project', function suite(test) {
         });
 
         casper.then(function () {
-            this.evaluate(function () {
-                $('form#new_project_form').submit();
-            });
+//            this.evaluate(function () {
+//                $('form#new_project_form').submit();
+//            });
+            casper.waitForSelector('.btn').thenClick('.btn');
         });
+    });
+
+    casper.waitForUrl(/projects/, function() {
+        test.assertUrlMatch("/projects/", "redirected to project view");
     });
 
     casper.waitForSelector(".accepted_user_label", function() {
