@@ -29,7 +29,7 @@
                 {% csrf_token %}
 
                 <div class="form-group">
-                    <strong>{% trans "Title" %}</strong>
+                    <label>{% trans "Title" %}</label>
                     <input class="form-control" type="text" id="title-input" name="title" value="{{ todo.title }}">
                 </div>
                 <div id="title_warning" class="alert alert-danger" role="alert">
@@ -37,14 +37,14 @@
                 </div>
 
                 <div class="form-group">
-                    <strong>{% trans "Description" %}</strong>
+                    <label>{% trans "Description" %}</label>
                     <textarea class="form-control" name="description">{{ todo.description }}</textarea>
                 </div>
 
                 <div class="form-group">
-                    <strong>{% trans "Due Date" %}</strong>
+                    <label>{% trans "Due Date" %}</label>
                     <div class="input-group date">
-                        <input type="text" readonly id="due_date" name="due_date" value='{{ date }}' class="date-field-readonly form-control"><span class="cursor-pointer input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input type="text" readonly id="due_date" name="due_date" value='{{ date }}' class="date-field-readonly form-control"><span title="Pick a Due Date" class="cursor-pointer input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
                 <div id="due_date_warning" class="alert alert-warning" role="alert">
@@ -56,18 +56,18 @@
 
                     <ul class="list-group">
                         {% for member in members %}
-                        <li class="list-group-item">
-                            <input type="checkbox" name="assignees" value="{{member.username}}" {% for assignee in assignees %}{% if assignee == member %}checked{% endif %}{% endfor %}> {{member.username}}
-                        </li>
+                        <label for="assignee_{{member.username}}" class="noselect list-group-item">
+                            <input type="checkbox" name="assignees" id="assignee_{{member.username}}" value="{{member.username}}" {% for assignee in assignees %}{% if assignee == member %}checked{% endif %}{% endfor %}> {{member.username}}
+                        </label>
                     {% endfor %}
                     </ul>
                 </div>
 
                 <input type="hidden" id="tags" name="tags" />
                 <div class="form-group">
-                    <strong>{% trans "Tags" %}</strong>
+                    <label>{% trans "Tags" %}</label>
                     <div class="input-group symbol">
-                        <input id="tag-input" type="text" tabindex="2" maxlength="20" placeholder='{% trans "Add Tag" %}' class="form-control"><span class="input-group-addon addTagButton focus-pointer"><i class="fa fa-plus-circle"></i></span>
+                        <input id="tag-input" type="text" tabindex="2" maxlength="20" placeholder='{% trans "Add Tag" %}' class="form-control"><span title="Add a Tag" class="input-group-addon addTagButton focus-pointer"><i class="fa fa-plus-circle"></i></span>
                     </div>
                     <div id="suggestions">
                     </div>

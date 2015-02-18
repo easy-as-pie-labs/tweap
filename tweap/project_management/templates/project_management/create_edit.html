@@ -13,6 +13,7 @@
         <div class="panel-body">
             <div class="col-md-10 col-md-offset-1">
 
+<<<<<<< HEAD
                 {% for error, message in error_messages.items %}
                     {% if error == 'name' %}
                         <p class="alert alert-danger no-margin-element"><i class="fa fa-exclamation-triangle"></i> {% trans "Please enter a project name!" %}</p>
@@ -21,6 +22,25 @@
 
                 <form method="post" id="project-form" autocomplete="off" class="form-group" action="{% if project %} {% url 'project_management:edit' project.id %} {% else %} {% url 'project_management:create' %} {% endif %}">
                     {% csrf_token %}
+=======
+    <div class="jumbotron">
+    <form id="new_project_form" method="post" autocomplete="off" class="form-group" action="{% if project %} {% url 'project_management:edit' project.id %} {% else %} {% url 'project_management:create' %} {% endif %}">
+        {% csrf_token %}
+        {% for field in form %}
+            {{field.label_tag}}{{ field|addcssandtabindex:'form-control' }}<br>
+        {% endfor %}
+        <input type="hidden" id="hiddenValues" name="invitations" />
+        <label for="newInputs" class="control-label">{% trans "Invite Members" %}</label>
+        <div id="newInputs">
+            <div class="form-group">
+                <div class="input-group date">
+                    <input id="users" name="userinput" type="text" tabindex="2" placeholder='{% trans "Username or eMail" %}' class="form-control member"><span title="Invite a User" class="input-group-addon addUserButton focus-pointer"><i class="fa fa-plus-circle"></i></span>
+                </div>
+                <div id="suggestions">
+                </div>
+            </div>
+        </div>
+>>>>>>> ca18fc3bfdc8eb1698f63a3335820bd84d832103
 
                     <div class="form-group">
                         <strong id="icon-label">{% trans "Icon" %}</strong>
