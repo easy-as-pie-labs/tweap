@@ -110,6 +110,11 @@ p#project_icon{
     background-color: #337ab7;
 }
 
+.nobg select{
+    border-top-left-radius: 3px !important;
+    border-bottom-left-radius: 3px !important;
+}
+
 .tag-outer{
     display: inline-block;
     margin-right: 5px;
@@ -156,4 +161,9 @@ p#project_icon{
 .offset-left {
     padding-left: 20px;
     padding-right: 20px;
+}
+
+.date-addon {
+    border-bottom-right-radius: 4px !important;
+    border-top-right-radius: 4px !important;
 }

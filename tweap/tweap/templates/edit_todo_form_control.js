@@ -5,6 +5,10 @@ $(document).on('click', '.addTagButton', function() {
     checkInputFieldAndAddTag();
 });
 
+$(document).on('keydown', '#tag-input', function() {
+    $('#tag-input').parent().parent().removeClass('has-error');
+});
+
 //overwrites enter to submit form when typing in tag input field and adds text as tag
 $(document).on('keydown', '#tag-input', function(e) {
     if ( e.which == 13 ) {
@@ -119,10 +123,22 @@ $(document).ready(function(){
 
     $('#due_date_warning').hide();
 
+    $('.input-group.date').datetimepicker({
+        format: "YYYY-MM-DD"
+    });
+
+    var dueDatePicker = $('.input-group.date').data('DateTimePicker');
+
+    $('#due_date').click(function() {
+        dueDatePicker.toggle();
+    });
+
+
     //checks if due date lies in past and show hint
-    $('#due_date').change(function() {
+    $('.input-group.date').on("dp.change",function () {
         var dueDate = new Date($('#due_date').val());
         var today = new Date();
+        today = today.setDate(today.getDate() - 1);
         if (dueDate < today) {
             $('#due_date_warning').show('slow');
         } else {
@@ -138,21 +154,13 @@ $(document).ready(function(){
 
     //checks if title is missing, prevent form submit and shows warning
     $('#todo-form').submit(function() {
-    if(!$('#title-input').val()) {
-        $('#title_warning').show('slow');
-        $('#title-input').parent().addClass('has-error');
-        return false;
-    }
-    else {
-        return true;
-    }
-});
-
-
-   $('.input-group.date').datepicker({
-        format: "yyyy-mm-dd",
-        todayBtn: "linked",
-        autoclose: true,
-        todayHighlight: true
+        if(!$('#title-input').val()) {
+            $('#title_warning').show('slow');
+            $('#title-input').parent().addClass('has-error');
+            return false;
+        }
+        else {
+            return true;
+        }
     });
 });
