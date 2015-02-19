@@ -87,14 +87,15 @@ class CreateEdit(View):
                 end = form['end']
 
                 if start == '':
-                    event.start = None
-                else:
-                    event.start = start
+                    context = {
+                        'error_messages': {'name': ugettext("Invalid Entry!")},
+                        'headline': ugettext("Edit Event"),
+                        'project': project,
+                    }
+                    return render(request, 'cal/create_edit.html', context)
 
-                if end == '':
-                    event.end = None
-                else:
-                    event.end = end
+                event.start = start
+                event.end = end
 
                 event.project = project
                 attendees = form.getlist('attendees')

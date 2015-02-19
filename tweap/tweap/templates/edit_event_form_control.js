@@ -193,6 +193,7 @@ $(document).ready(function(){
         $('#start_warning').hide('slow');
         $('#start_date_warning').hide('slow');
         $('#start_date').parent().removeClass('has-error');
+        $('#end_date').val();
     });
 
     $('#end_date').onChange(function() {
