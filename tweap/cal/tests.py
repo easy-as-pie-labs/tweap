@@ -1,6 +1,7 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, request
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from project_management.models import Project
 from cal.models import Event
 from datetime import datetime
@@ -75,6 +76,18 @@ class ModelTest(TestCase):
 
         event = Event(title=self.event_name, project=project, start=datetime.now(pytz.utc), end=datetime.now(pytz.utc))
         event.save()
+
+        #Login
+        self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
+
+        #Assign valid user
+        assignees = [user_random.username]
+        resp = self.client.post('/calendar/edit/' + str(event.id), {'title': "bla", 'description': "new Description", 'start_date': "", 'end_date': "", 'assignees': assignees, 'tags': ""})
+        self.assertEqual(302, resp.status_code)
+        self.assertTrue(type(resp) is HttpResponseRedirect)
+        # TODO: add test if notifications are deleted
+        # target_url = request.build_absolute_uri(reverse('cal:edit', args=(event.id, )))
+
 
         event2 = Event(title=self.event_name2, project=project, start=datetime.now(pytz.utc), end=datetime.now(pytz.utc))
         event2.save()

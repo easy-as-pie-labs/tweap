@@ -153,10 +153,12 @@ class CreateEdit(View):
 
 class Delete(View):
 
-
     def get(self, request, event_id):
 
         event = validate_for_event(request, event_id)
+        target_url = request.build_absolute_uri(reverse('cal:edit', args=(event.id, )))
+        Notification.objects.filter(target_url=target_url).delete()
+
         event.delete()
 
         return HttpResponseRedirect(reverse('project_management:project', args=(event.project.id, )))
@@ -164,6 +166,8 @@ class Delete(View):
     def post(self, request, event_id):
 
         event = validate_for_event(request, event_id)
+        target_url = request.build_absolute_uri(reverse('cal:edit', args=(event.id, )))
+        Notification.objects.filter(target_url=target_url).delete()
         event.delete()
 
         return HttpResponseRedirect(reverse('project_management:project', args=(event.project.id, )))

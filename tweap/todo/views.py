@@ -144,6 +144,8 @@ class Delete(View):
     def get(self, request, todo_id):
 
         todo = validate_for_todo(request, todo_id)
+        target_url = request.build_absolute_uri(reverse('todo:edit', args=(todo.id, )))
+        Notification.objects.filter(target_url=target_url).delete()
         todo.delete()
 
         return HttpResponseRedirect(reverse('project_management:project', args=(todo.project.id, )))
@@ -151,6 +153,8 @@ class Delete(View):
     def post(self, request, todo_id):
 
         todo = validate_for_todo(request, todo_id)
+        target_url = request.build_absolute_uri(reverse('todo:edit', args=(todo.id, )))
+        Notification.objects.filter(target_url=target_url).delete()
         todo.delete()
 
         return HttpResponseRedirect(reverse('project_management:project', args=(todo.project.id, )))
