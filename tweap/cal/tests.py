@@ -63,3 +63,58 @@ class ModelTest(TestCase):
         project.delete()
         user.delete()
         user2.delete()
+
+    def test_delete_event(self):
+        user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
+        user_random = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
+
+        project = Project(name=self.project_name)
+        project.save()
+        project.members.add(user)
+        project.save()
+
+        event = Event(title=self.event_name, project=project, start=datetime.now(pytz.utc), end=datetime.now(pytz.utc))
+        event.save()
+
+        event2 = Event(title=self.event_name2, project=project, start=datetime.now(pytz.utc), end=datetime.now(pytz.utc))
+        event2.save()
+
+        # Login
+        self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
+
+        # delete existing event
+        resp = self.client.post('/calendar/delete/' + str(event.id))
+        self.assertEqual(302, resp.status_code)
+        self.assertTrue(type(resp) is HttpResponseRedirect)
+
+        test_event = Event.objects.filter(id=event.id)
+        self.assertFalse(test_event.exists())
+
+        '''
+            delete non existing event
+        '''
+
+        resp = self.client.post('/calendar/delete/9999')
+        self.assertEqual(404, resp.status_code)
+
+        # delete event while not in project
+        # logout
+        self.client.post('/users/logout')
+
+        # login user_random
+        self.client.post('/users/login/', {'username': 'testuser2', 'password': 'testpw'})
+
+        # delete event
+        resp = self.client.post('/calendar/delete/' + str(event2.id))
+        self.assertEqual(404, resp.status_code)
+
+        test_event2 = Event.objects.filter(id=event2.id)
+        self.assertTrue(test_event2.exists())
+
+        event.delete()
+        event2.delete()
+        project.delete()
+        user.delete()
+        user_random.delete()
+        test_event.delete()
+        test_event2.delete()
