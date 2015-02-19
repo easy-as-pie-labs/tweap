@@ -96,6 +96,39 @@ class ModelTest(TestCase):
         # cleanup
         user.delete()
 
+    def test_has_user(self):
+        user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
+        user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
+        user3 = User.objects.create_user('testuser3', 'test3@test.de', 'testpw')
+        project = Project(name=self.project_name, description=self.project_description)
+        project.save()
+
+        self.assertEqual(str(project), self.project_name)
+
+        project.members.add(user)
+        project.members.add(user2)
+        # test if users are in project now
+        self.assertTrue(project.has_user(user))
+        self.assertTrue(project.has_user(user2))
+        self.assertFalse(project.has_user(user3))
+
+        project.leave(user2)
+        project_exists = Project.objects.filter(id=project.id).exists()
+        # test if user2 is removed from project and project still exists
+        self.assertTrue(project.has_user(user))
+        self.assertFalse(project.has_user(user2))
+        self.assertFalse(project.has_user(user3))
+
+        project.leave(user)
+        project_exists = Project.objects.filter(id=project.id).exists()
+        # test if leave of last user deletes the project
+        self.assertFalse(project_exists)
+
+        # cleanup
+        user.delete()
+        user2.delete()
+        user3.delete()
+
 
 class ToolsTest(TestCase):
 

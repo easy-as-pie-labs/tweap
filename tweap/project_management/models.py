@@ -33,6 +33,11 @@ class Project(models.Model):
 
         self.save()
 
+    def has_user(self, user):
+        if user in self.members.all():
+            return True
+        return False
+
 
 class ProjectForm(ModelForm):
     """
