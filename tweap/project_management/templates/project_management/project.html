@@ -1,8 +1,16 @@
 {% extends "project_management_template.html" %}
 {% load i18n %}
+{% load staticfiles %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'tweap/css/fullcalendar.min.css' %}" />
+{% endblock %}
+
 {% block js %}
+<script src='http://fullcalendar.io/js/fullcalendar-2.1.1/lib/moment.min.js'></script>
+<script src="{% static 'tweap/js/fullcalendar.min.js' %}"></script>
 <script type="text/javascript">
     {% include "project_overview_control.js" %}
+    {% include "calendar_control.js" %}
 </script>
 {% endblock %}
 {% block project_management_template %}
@@ -85,7 +93,7 @@
     <div class="col-md-6" >
         <div class="panel panel-primary">
             <div class="panel-heading"><i class="fa fa-calendar"></i> {% trans "Calendar" %}</div>
-            <div class="panel-body">
+            <div class="panel-body" id="calendar">
 
             </div>
         </div>
