@@ -120,7 +120,7 @@ $(document).ready(function(){
     });
 
     $('.input-group.date').datetimepicker({
-        format: "YYYY-MM-DD hh-mm",
+        format: "YYYY-MM-DD",
         stepping: 5,
         icons: {
             time: "fa fa-clock-o",
