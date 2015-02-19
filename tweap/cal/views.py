@@ -144,7 +144,7 @@ class CreateEdit(View):
                 return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))
 
         context = {
-            'error_messages': {'name': ugettext("The title must not be empty!")},
+            'error_messages': {'name': ugettext("Invalid Entry")},
             'event': event,
             'project': project,
             'headline': ugettext("Create new Event"),

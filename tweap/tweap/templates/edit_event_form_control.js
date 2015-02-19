@@ -189,15 +189,7 @@ $(document).ready(function(){
     });
 
     //Removes start-date Warnings
-    $('#start_date').onChange(function() {
-        $('#start_warning').hide('slow');
-        $('#start_date_warning').hide('slow');
-        $('#start_date').parent().removeClass('has-error');
-        $('#end_date').val();
-    });
-
-    $('#end_date').onChange(function() {
-        $('#start_date_warning').hide('slow');
-        $('#end_date').parent().removeClass('has-error');
+    $('#start_date').change(function() {
+        $('#end_date').val($(this).val());
     });
 });
