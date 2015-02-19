@@ -59,3 +59,35 @@ class Event(models.Model):
         time = str("%02d" % hour) + ":" + str("%02d" % minute)
 
         return date + " " + time
+
+    def get_start_for_cal(self):
+
+        year = self.start.year
+        month = self.start.month
+        day = self.start.day
+
+        date = str("%04d" % year) + "-" + str("%02d" % month) + "-" + str("%02d" % day)
+
+        hour = self.start.hour
+        minute = self.start.minute
+        second = self.start.second
+
+        time = str("%02d" % hour) + ":" + str("%02d" % minute) + ":" + str("%02d" % second)
+
+        return date + "T" + time
+
+    def get_end_for_cal(self):
+
+        year = self.end.year
+        month = self.end.month
+        day = self.end.day
+
+        date = str("%04d" % year) + "-" + str("%02d" % month) + "-" + str("%02d" % day)
+
+        hour = self.end.hour
+        minute = self.end.minute
+        second = self.start.second
+
+        time = str("%02d" % hour) + ":" + str("%02d" % minute) + ":" + str("%02d" % second)
+
+        return date + "T" + time
