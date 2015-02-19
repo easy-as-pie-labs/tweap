@@ -12,8 +12,6 @@ $(document).ready(function() {
     var active = $('#projectIconModal').find(projectIconClass);
     $(active).addClass('project_icon_chosen');
 
-    $('#name_warning').hide();
-
     //removes title warning
     $('#id_name').keydown(function() {
         $('#name_warning').hide('slow');

@@ -5,10 +5,6 @@ $(document).on('click', '.addTagButton', function() {
     checkInputFieldAndAddTag();
 });
 
-$(document).on('keydown', '#tag-input', function() {
-    $('#tag-input').parent().parent().removeClass('has-error');
-});
-
 //overwrites enter to submit form when typing in tag input field and adds text as tag
 $(document).on('keydown', '#tag-input', function(e) {
     if ( e.which == 13 ) {
@@ -110,8 +106,54 @@ var Tags = function(){
     }
 }
 
+//checks if date lies in past and show hint
+function bindCheckInputForPastDate(elementInput, elementWarning) {
+    elementInput.change(function() {
+        var dueDate = new Date(elementInput.val());
+        var today = new Date();
+        if (dueDate < today) {
+            elementWarning.show('slow');
+        } else {
+            elementWarning.hide('slow');
+        }
+    });
+}
+
+function bindCheckInputForEmpty(firstElementInput, firstElementWarning, secondElementInput, secondElementWarning) {
+    //checks if title is missing, prevent form submit and shows warning
+    $('#event-form').submit(function() {
+        if(!firstElementInput.val()) {
+            firstElementWarning.show('slow');
+            firstElementInput.parent().addClass('has-error');
+            return false;
+        }else if(!secondElementInput.val()) {
+            secondElementWarning.show('slow');
+            secondElementInput.parent().addClass('has-error');
+            return false;
+        }
+        else {
+            return true;
+        }
+    });
+}
+
 //initial stuff
 $(document).ready(function(){
+
+    $('#start_date_picker').datepicker({
+        format: "yyyy-mm-dd",
+        todayBtn: "linked",
+        autoclose: true,
+        todayHighlight: true
+    });
+
+    $('#end_date_picker').datepicker({
+        format: "yyyy-mm-dd",
+        todayBtn: "linked",
+        autoclose: true,
+        todayHighlight: true
+    });
+
     tagList = new Tags();
 
     //add existing tags to tagList
@@ -119,43 +161,30 @@ $(document).ready(function(){
        tagList.addInit($(this).attr('data-tag-name'));
     });
 
-    $('.input-group.date').datetimepicker({
-        format: "YYYY-MM-DD"
-    });
+    titleWarning = $('#title_warning');
+    startWarning = $('#start_warning');
 
-    var dueDatePicker = $('.input-group.date').data('DateTimePicker');
+    titleElement = $('#title-input');
+    startDateElement = $('#start_date');
+    endDateElement = $('#end_date');
 
-    $('#due_date').click(function() {
-        dueDatePicker.toggle();
-    });
+    startDateWarning =  $('#start_date_warning');
+    endDateWarning =  $('#end_date_warning');
 
-    //checks if due date lies in past and show hint
-    $('.input-group.date').on("dp.change",function () {
-        var dueDate = new Date($('#due_date').val());
-        var today = new Date();
-        today = today.setDate(today.getDate() - 1);
-        if (dueDate < today) {
-            $('#due_date_warning').show('slow');
-        } else {
-            $('#due_date_warning').hide('slow');
-        }
-    });
+    bindCheckInputForPastDate($('#start_date'),  $('#start_date_warning'));
+    bindCheckInputForPastDate($('#end_date'), $('#end_date_warning'));
 
-    //removes title warning
+    //checks if title is missing, prevent form submit and shows warning
+    $('#event-form').submit(bindCheckInputForEmpty($('#title-input'), $('#title_warning'), $('#start_date'), $('#start_warning')));
+
+    //Removes Title warning
     $('#title-input').keydown(function() {
         $('#title_warning').hide('slow');
         $('#title-input').parent().removeClass('has-error');
     });
 
-    //checks if title is missing, prevent form submit and shows warning
-    $('#todo-form').submit(function() {
-        if(!$('#title-input').val()) {
-            $('#title_warning').show('slow');
-            $('#title-input').parent().addClass('has-error');
-            return false;
-        }
-        else {
-            return true;
-        }
+    //Removes start-date Warnings
+    $('#start_date').change(function() {
+        $('#end_date').val($(this).val());
     });
 });

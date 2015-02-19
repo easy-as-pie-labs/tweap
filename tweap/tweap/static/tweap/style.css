@@ -167,3 +167,7 @@ p#project_icon{
     border-bottom-right-radius: 4px !important;
     border-top-right-radius: 4px !important;
 }
+
+.hide-alert {
+    display:none;
+}
