@@ -171,11 +171,6 @@ $(document).ready(function(){
     startDateWarning =  $('#start_date_warning');
     endDateWarning =  $('#end_date_warning');
 
-    $('#start_date_warning').hide();
-    $('#end_date_warning').hide();
-    $('#title_warning').hide();
-    $('#start_warning').hide();
-
     bindCheckInputForPastDate($('#start_date'),  $('#start_date_warning'));
     bindCheckInputForPastDate($('#end_date'), $('#end_date_warning'));
 

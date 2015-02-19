@@ -115,10 +115,6 @@ $(document).ready(function(){
        tagList.addInit($(this).attr('data-tag-name'));
     });
 
-    $('#title_warning').hide();
-
-    $('#due_date_warning').hide();
-
     //checks if due date lies in past and show hint
     $('#due_date').change(function() {
         var dueDate = new Date($('#due_date').val());

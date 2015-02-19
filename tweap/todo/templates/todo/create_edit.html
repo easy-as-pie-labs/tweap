@@ -32,7 +32,7 @@
                     <label for="title-input" class="control-label">{% trans "Title" %}</label>
                     <input class="form-control" type="text" id="title-input" name="title" value="{{ todo.title }}">
                 </div>
-                <div id="title_warning" class="alert alert-danger" role="alert">
+                <div id="title_warning" class="hide-alert alert alert-danger" role="alert">
                     <i class="fa fa-exclamation-triangle"></i> {% trans "The title must not be empty!" %}
                 </div>
 
@@ -47,7 +47,7 @@
                         <input type="text" readonly id="due_date" name="due_date" value='{{ todo.get_date }}' class="date-field-readonly form-control"><span title="Pick a Due Date" class="cursor-pointer input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
-                <div id="due_date_warning" class="alert alert-warning" role="alert">
+                <div id="due_date_warning" class="hide-alert alert alert-warning" role="alert">
                     <i class="fa fa-exclamation-triangle"></i> {% trans "Your choosen due date lies in the past!" %}
                 </div>
 

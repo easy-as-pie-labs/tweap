@@ -31,7 +31,7 @@
                     <label for="title-input" class="control-label">{% trans "Title" %}</label>
                     <input class="form-control" type="text" id="title-input" name="title" value="{{ event.title }}">
                 </div>
-                <div id="title_warning" class="alert alert-danger" role="alert">
+                <div id="title_warning" class="hide-alert alert alert-danger" role="alert">
                     <i class="fa fa-exclamation-triangle"></i> {% trans "The title must not be empty!" %}
                 </div>
                 <div class="form-group">
@@ -48,10 +48,10 @@
                         <input type="text" readonly id="start_date" name="start" value='{{ event.get_start }}' class="date-field-readonly form-control"><span title="Pick a start Date" class="cursor-pointer input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
-                <div id="start_warning" class="alert alert-danger" role="alert">
+                <div id="start_warning" class="hide-alert alert alert-danger" role="alert">
                     <i class="fa fa-exclamation-triangle"></i> {% trans "The start date must not be empty!" %}
                 </div>
-                <div id="start_date_warning" class="alert alert-warning" role="alert">
+                <div id="start_date_warning" class="hide-alert alert alert-warning" role="alert">
                     <i class="fa fa-exclamation-triangle"></i> {% trans "Your choosen start date lies in the past!" %}
                 </div>
 
@@ -61,7 +61,7 @@
                         <input type="text" readonly id="end_date" name="end" value='{{ event.get_end }}' class="date-field-readonly form-control"><span title="Pick a end Date" class="cursor-pointer input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
-                <div id="end_date_warning" class="alert alert-warning" role="alert">
+                <div id="end_date_warning" class="hide-alert alert alert-warning" role="alert">
                     <i class="fa fa-exclamation-triangle"></i> {% trans "Your choosen end date lies in the past!" %}
                 </div>
 

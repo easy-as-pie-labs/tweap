@@ -157,3 +157,7 @@ p#project_icon{
     padding-left: 20px;
     padding-right: 20px;
 }
+
+.hide-alert {
+    display:none;
+}
