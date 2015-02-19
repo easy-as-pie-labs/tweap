@@ -49,9 +49,10 @@
     font-size: 16px;
 }
 
+/* for datetimepicker commented out, I thinks it's not used anymore, jawu
 table a{color:white;font-size:16px;}
 table a:hover{color:white;text-decoration: none}
-
+*/
 .errorlist {
     list-style-type: none;
     margin: 0;
@@ -161,11 +162,6 @@ p#project_icon{
 .offset-left {
     padding-left: 20px;
     padding-right: 20px;
-}
-
-.date-addon {
-    border-bottom-right-radius: 4px !important;
-    border-top-right-radius: 4px !important;
 }
 
 .hide-alert {
