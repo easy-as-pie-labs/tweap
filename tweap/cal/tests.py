@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.test import TestCase
 from django.contrib.auth.models import User
 from project_management.models import Project
@@ -11,6 +12,7 @@ class ModelTest(TestCase):
     project_name = "Testproject"
     project_name2 = "Testproject2"
     event_name = "Testevent"
+    event_name2 = "Testevent2"
 
     def test_get_all_for_project(self):
         project = Project(name=self.project_name)

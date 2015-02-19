@@ -9,6 +9,7 @@ from project_management.models import Project
 from project_management.tools import get_tags
 from notification_center.models import NotificationEvent, Notification
 from cal.models import Event
+from cal.tools import validate_for_event
 import json
 
 class CreateEdit(View):
@@ -151,10 +152,18 @@ class CreateEdit(View):
 
 class Delete(View):
 
+
     def get(self, request, event_id):
-        return "empty"
+
+        event = validate_for_event(request, event_id)
+        event.delete()
+
+        return HttpResponseRedirect(reverse('project_management:project', args=(event.project.id, )))
 
     def post(self, request, event_id):
-        return "empty"
 
+        event = validate_for_event(request, event_id)
+        event.delete()
+
+        return HttpResponseRedirect(reverse('project_management:project', args=(event.project.id, )))
 
