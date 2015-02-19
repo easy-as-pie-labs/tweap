@@ -45,7 +45,7 @@
                 <div class="form-group">
                     <label for="start_date" class="control-label">{% trans "start date" %}</label>
                     <div class="input-group date" id="start_date_picker">
-                        <input type="text" readonly id="start_date" name="start" value='{{ event.start }}' class="date-field-readonly form-control"><span title="Pick a start Date" class="cursor-pointer input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input type="text" readonly id="start_date" name="start" value='{{ event.get_start }}' class="date-field-readonly form-control"><span title="Pick a start Date" class="cursor-pointer input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
                 <div id="start_warning" class="alert alert-danger" role="alert">
@@ -58,7 +58,7 @@
                 <div class="form-group">
                     <label for="end_date" class="control-label">{% trans "end date" %}</label>
                     <div class="input-group date" id="end_date_picker">
-                        <input type="text" readonly id="end_date" name="end" value='{{ event.end }}' class="date-field-readonly form-control"><span title="Pick a end Date" class="cursor-pointer input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input type="text" readonly id="end_date" name="end" value='{{ event.get_end }}' class="date-field-readonly form-control"><span title="Pick a end Date" class="cursor-pointer input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
                 <div id="end_date_warning" class="alert alert-warning" role="alert">
@@ -116,7 +116,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
-                <form class="form-group inline-form" action="{% url 'event:delete' event.id %}" method="POST">
+                <form class="form-group inline-form" action="{% url 'cal:delete' event.id %}" method="POST">
                     {% csrf_token %}
                     <input type="submit" class="btn btn-danger" name="leave_event_confirm" value="{% trans "Delete event" %}">
                 </form>
