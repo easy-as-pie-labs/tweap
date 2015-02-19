@@ -46,16 +46,15 @@
                     <label for="due_date" class="control-label">{% trans "Due Date" %}</label>
                     <div class="input-group date">
                         <input type="text" id="due_date" name="due_date" value='{{ todo.get_date }}' class="form-control date-field-readonly" readonly />
-                        <span id="due_date_button" title="Pick a Due Date" class="cursor-pointer input-group-addon date-addon datepickerbutton"><i class="fa fa-calendar"></i></span>
+                        <span id="due_date_button" title="Pick a Due Date" class="cursor-pointer input-group-addon datepickerbutton"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
                 <div id="due_date_warning" class="hide-alert alert alert-warning" role="alert">
                     <i class="fa fa-exclamation-triangle"></i> {% trans "Your choosen due date lies in the past!" %}
                 </div>
 
+                 <label class="control-label">{% trans "Assign members" %}</label>
                 <div class="panel panel-default">
-                    <div class="panel-heading">{% trans "Assign members" %}</div>
-
                     <ul class="list-group">
                         {% for member in project.members.all %}
                         <label for="assignee_{{member.username}}" class="noselect list-group-item">

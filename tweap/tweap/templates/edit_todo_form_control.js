@@ -120,13 +120,19 @@ $(document).ready(function(){
     });
 
     $('.input-group.date').datetimepicker({
-        format: "YYYY-MM-DD"
+        format: "YYYY-MM-DD hh-mm",
+        stepping: 5,
+        icons: {
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-arrow-up",
+            down: "fa fa-arrow-down"
+        }
     });
 
-    var dueDatePicker = $('.input-group.date').data('DateTimePicker');
 
     $('#due_date').click(function() {
-        dueDatePicker.toggle();
+        $('.input-group.date').data('DateTimePicker').toggle();
     });
 
     //checks if due date lies in past and show hint
