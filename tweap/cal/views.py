@@ -35,7 +35,7 @@ class CreateEdit(View):
                 'members': project.members.all(),
             }
 
-            return render(request, 'todo/create_edit.html', context)
+            return render(request, 'cal/create_edit.html', context)
 
         event = get_object_or_404(Event, id=event_id)
 
@@ -99,7 +99,7 @@ class CreateEdit(View):
                 event.project = project
                 attendees = form.getlist('attendees')
                 event.save()
-                event.assignees.clear()
+                event.attendees.clear()
                 for attendee in attendees:
                     user = User.objects.get(username=attendee)
                     # if the post data was manipulated and a user assigned who is not in the project let's ignore it
@@ -114,7 +114,7 @@ class CreateEdit(View):
                 event.save()
 
                 # see if event type already exists in db
-                event_text = "assigned a todo to you"
+                event_text = "assigned an event to you"
                 try:
                     notification_event = NotificationEvent.objects.get(text=event_text)
                 except:
