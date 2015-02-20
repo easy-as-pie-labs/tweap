@@ -128,15 +128,39 @@ function bindCheckInputForEmpty(firstElementInput, firstElementWarning, secondEl
 $(document).ready(function(){
 
     $('#start_date_picker').datetimepicker({
-        format: "YYYY-MM-DD hh:mm"
+        format: "YYYY-MM-DD hh:mm",
+        stepping: 5,
+        useCurrent: false,
+        icons: {
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-arrow-up",
+            down: "fa fa-arrow-down"
+        }
     });
 
     $('#end_date_picker').datetimepicker({
-        format: "YYYY-MM-DD hh:mm"
+        format: "YYYY-MM-DD hh:mm",
+        stepping: 5,
+        useCurrent: false,
+        icons: {
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-arrow-up",
+            down: "fa fa-arrow-down"
+        }
     });
 
     var startDatePicker = $('#start_date_picker').data('DateTimePicker');
     var endDatePicker = $('#end_date_picker').data('DateTimePicker');
+
+    $('#start_date').click(function() {
+        startDatePicker.toggle();
+    });
+
+    $('#end_date').click(function() {
+        endDatePicker.toggle();
+    });
 
     tagList = new Tags();
 
@@ -147,34 +171,21 @@ $(document).ready(function(){
 
     //check for end date in the past for start date
     $('#start_date_picker').on("dp.change",function() {
-        var startDate = new Date($('#start_date').val());
-        var today = new Date();
-        today = today.setDate(today.getDate() - 1);
-        if (startDate < today) {
+        if (moment().diff(startDatePicker.date(), 'minutes') > 10) {
             $('#start_date_warning').show('slow');
         } else {
             $('#start_date_warning').hide('slow');
         }
-
-        //Set Inputfield for end_date=start_date + 1 h
-        var endDate = startDatePicker.date().add(1,"h").format("YYYY-MM-DD hh:mm");
-        endDatePicker.date(endDate);
-    });
-
-    //check for end date in the past for start date
-    $('#end_date_picker').on("dp.change",function() {
-        var endDate = new Date($('#end_date').val());
-        var today = new Date();
-        today = today.setDate(today.getDate() - 1);
-        if (endDate < today) {
-            $('#end_date_warning').show('slow');
-        } else {
-            $('#end_date_warning').hide('slow');
+        if ((endDatePicker.date() === null) || (endDatePicker.date().diff(startDatePicker.date()) < 0)) {
+            var endDate = startDatePicker.date().add(1,"h").format("YYYY-MM-DD hh:mm");
+            endDatePicker.date(endDate);
+            endDatePicker.minDate(startDatePicker.date());
         }
     });
 
+
     //checks if title is missing, prevent form submit and shows warning
-    $('#event-form').submit(bindCheckInputForEmpty($('#title-input'), $('#title_warning'), $('#start_date'), $('#start_warning')));
+    bindCheckInputForEmpty($('#title-input'), $('#title_warning'), $('#start_date'), $('#start_warning'));
 
     //Removes Title warning
     $('#title-input').keydown(function() {
@@ -182,8 +193,4 @@ $(document).ready(function(){
         $('#title-input').parent().removeClass('has-error');
     });
 
-    //Removes start-date Warnings
-    $('#start_date').change(function() {
-        $('#end_date').val($(this).val());
-    });
 });

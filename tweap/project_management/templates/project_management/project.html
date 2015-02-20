@@ -113,7 +113,7 @@
               {% endif %}
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Don't leave group" %}</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Don't leave project" %}</button>
             <form class="form-group inline-form" action="{% url 'project_management:leave' %}" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="project_id" value="{{ project.id }}">

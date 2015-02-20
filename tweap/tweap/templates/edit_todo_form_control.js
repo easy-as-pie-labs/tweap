@@ -122,6 +122,7 @@ $(document).ready(function(){
     $('.input-group.date').datetimepicker({
         format: "YYYY-MM-DD",
         stepping: 5,
+        useCurrent: false,
         icons: {
             time: "fa fa-clock-o",
             date: "fa fa-calendar",
@@ -137,10 +138,7 @@ $(document).ready(function(){
 
     //checks if due date lies in past and show hint
     $('.input-group.date').on("dp.change",function () {
-        var dueDate = new Date($('#due_date').val());
-        var today = new Date();
-        today = today.setDate(today.getDate() - 1);
-        if (dueDate < today) {
+        if (moment().diff($('.input-group.date').data('DateTimePicker').date(), 'minutes') > 10) {
             $('#due_date_warning').show('slow');
         } else {
             $('#due_date_warning').hide('slow');

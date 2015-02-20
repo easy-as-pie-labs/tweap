@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.utils.translation import ugettext
-from project_management.models import ProjectForm, Project as ProjectModel, Invitation, Tag
+from project_management.models import ProjectForm, Project, Invitation, Tag
 from project_management.tools import invite_users
 from todo.models import Todo
 from cal.models import Event
@@ -24,7 +24,7 @@ class CreateEdit(View):
             }
 
         else:
-            project = get_object_or_404(ProjectModel, id=project_id)
+            project = get_object_or_404(Project, id=project_id)
             if request.user not in project.members.all():
                 raise Http404
             else:
@@ -48,7 +48,7 @@ class CreateEdit(View):
             context['headline'] = ugettext("Create new project")
 
         else:
-            project = get_object_or_404(ProjectModel, id=project_id)
+            project = get_object_or_404(Project, id=project_id)
             if request.user not in project.members.all():
                 raise Http404
             else:
@@ -71,13 +71,13 @@ class CreateEdit(View):
             return render(request, 'project_management/create_edit.html', context)
 
 
-class Project(View):
+class ProjectView(View):
     """
     View class for viewing a project
     """
     def get(self, request, project_id=None):
         context = {}
-        project = get_object_or_404(ProjectModel, id=project_id)
+        project = get_object_or_404(Project, id=project_id)
         context['project'] = project
         context['invitations'] = Invitation.objects.filter(project=project)
         context['todos'] = Todo.get_all_for_project(project)
@@ -98,7 +98,7 @@ class LeaveGroup(View):
     def post(self, request):
         project_id = request.POST.get('project_id', '')
         if project_id:
-            project = get_object_or_404(ProjectModel, id=project_id)
+            project = get_object_or_404(Project, id=project_id)
             if request.user in project.members.all():
                 project.leave(request.user)
                 return HttpResponseRedirect(reverse('dashboard:home'))
