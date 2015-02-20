@@ -106,19 +106,6 @@ var Tags = function(){
     }
 }
 
-//checks if date lies in past and show hint
-function bindCheckInputForPastDate(elementInput, elementWarning) {
-    elementInput.change(function() {
-        var dueDate = new Date(elementInput.val());
-        var today = new Date();
-        if (dueDate < today) {
-            elementWarning.show('slow');
-        } else {
-            elementWarning.hide('slow');
-        }
-    });
-}
-
 function bindCheckInputForEmpty(firstElementInput, firstElementWarning, secondElementInput, secondElementWarning) {
     //checks if title is missing, prevent form submit and shows warning
     $('#event-form').submit(function() {
@@ -140,19 +127,16 @@ function bindCheckInputForEmpty(firstElementInput, firstElementWarning, secondEl
 //initial stuff
 $(document).ready(function(){
 
-    $('#start_date_picker').datepicker({
-        format: "yyyy-mm-dd",
-        todayBtn: "linked",
-        autoclose: true,
-        todayHighlight: true
+    $('#start_date_picker').datetimepicker({
+        format: "YYYY-MM-DD hh:mm"
     });
 
-    $('#end_date_picker').datepicker({
-        format: "yyyy-mm-dd",
-        todayBtn: "linked",
-        autoclose: true,
-        todayHighlight: true
+    $('#end_date_picker').datetimepicker({
+        format: "YYYY-MM-DD hh:mm"
     });
+
+    var startDatePicker = $('#start_date_picker').data('DateTimePicker');
+    var endDatePicker = $('#end_date_picker').data('DateTimePicker');
 
     tagList = new Tags();
 
@@ -161,18 +145,33 @@ $(document).ready(function(){
        tagList.addInit($(this).attr('data-tag-name'));
     });
 
-    titleWarning = $('#title_warning');
-    startWarning = $('#start_warning');
+    //check for end date in the past for start date
+    $('#start_date_picker').on("dp.change",function() {
+        var startDate = new Date($('#start_date').val());
+        var today = new Date();
+        today = today.setDate(today.getDate() - 1);
+        if (startDate < today) {
+            $('#start_date_warning').show('slow');
+        } else {
+            $('#start_date_warning').hide('slow');
+        }
 
-    titleElement = $('#title-input');
-    startDateElement = $('#start_date');
-    endDateElement = $('#end_date');
+        //Set Inputfield for end_date=start_date + 1 h
+        var endDate = startDatePicker.date().add(1,"h").format("YYYY-MM-DD hh:mm");
+        endDatePicker.date(endDate);
+    });
 
-    startDateWarning =  $('#start_date_warning');
-    endDateWarning =  $('#end_date_warning');
-
-    bindCheckInputForPastDate($('#start_date'),  $('#start_date_warning'));
-    bindCheckInputForPastDate($('#end_date'), $('#end_date_warning'));
+    //check for end date in the past for start date
+    $('#end_date_picker').on("dp.change",function() {
+        var endDate = new Date($('#end_date').val());
+        var today = new Date();
+        today = today.setDate(today.getDate() - 1);
+        if (endDate < today) {
+            $('#end_date_warning').show('slow');
+        } else {
+            $('#end_date_warning').hide('slow');
+        }
+    });
 
     //checks if title is missing, prevent form submit and shows warning
     $('#event-form').submit(bindCheckInputForEmpty($('#title-input'), $('#title_warning'), $('#start_date'), $('#start_warning')));
