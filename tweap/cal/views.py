@@ -85,7 +85,22 @@ class CreateEdit(View):
                 event.location = form['location']
 
                 start = form['start']
+                if start[-2:] == "PM":
+                    start = start[:-3]
+                    values = start.split(" ")
+                    hour = int(values[1][0:2]) + 12
+                    start = str(values[0]) + " " + str(hour) + str(values[1][2:])
+                else:
+                    start = start[:-3]
+
                 end = form['end']
+                if end[-2:] == "PM":
+                    end = end[:-3]
+                    values = end.split(" ")
+                    hour = int(values[1][0:2]) + 12
+                    end = str(values[0]) + " " + str(hour) + str(values[1][2:])
+                else:
+                    end = end[:-3]
 
                 if start == '':
                     context = {
@@ -180,4 +195,29 @@ class Delete(View):
         event.delete()
 
         return HttpResponseRedirect(reverse('project_management:project', args=(event.project.id, )))
+
+
+class UpdateFromCalendarView(View):
+    """
+    handling calendar updates via the interactive cal ui
+    :param request:
+    :return:
+    """
+    def post(self, request):
+        result = {'success': 'true'}
+        event_id = request.POST.get('event_id', '')
+        start_time = request.POST.get('start', '')
+        end_time = request.POST.get('end', '')
+
+        try:
+            event = Event.objects.get(id=event_id)
+            event.start = start_time
+            event.end = end_time
+            event.save()
+
+        except:
+            result = {'success': 'false'}
+            return HttpResponse(json.dumps(result), content_type="application/json")
+
+        return HttpResponse(json.dumps(result), content_type="application/json")
 
