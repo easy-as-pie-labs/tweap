@@ -7,6 +7,6 @@ def validate_for_todo(request, todo_id):
     todo = get_object_or_404(Todo, id=todo_id)
     project = todo.project
 
-    if request.user not in project.members.all():
-        raise Http404
-    return todo
+    if project.has_user(request.user):
+        return todo
+    raise Http404
