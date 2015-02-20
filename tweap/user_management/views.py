@@ -89,8 +89,7 @@ class Logout(View):
         :return:
         """
         django_logout(request)
-        context = {'redirect': request.GET.get('next', '')}
-        return render(request, 'user_management/logout.html', context)
+        return HttpResponseRedirect(reverse(settings.LOGIN_URL))
 
 
 class ViewProfile(View):
