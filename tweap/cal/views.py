@@ -195,17 +195,20 @@ class UpdateFromCalendarView(View):
     :return:
     """
     def post(self, request):
-        result = {'url': '', 'id': ''}
-        invitation_id = request.POST.get('invitation_id', '')
-        action = request.POST.get('action', '')
-        if invitation_id:
-            invitation = Invitation.objects.get(id=invitation_id)
-            if invitation.user == request.user:
-                if action == 'accept':
-                    invitation.accept()
-                    result['url'] = request.build_absolute_uri(reverse('project_management:project', args=(invitation.project.id,)))
-                if action == 'reject':
-                    invitation.reject()
+        result = {'success': 'true'}
+        event_id = request.POST.get('event_id', '')
+        start_time = request.POST.get('start', '')
+        end_time = request.POST.get('end', '')
+
+        try:
+            event = Event.objects.get(id=event_id)
+            event.start = start_time
+            event.end = end_time
+            event.save()
+
+        except:
+            result = {'success': 'false'}
+            return HttpResponse(json.dumps(result), content_type="application/json")
 
         return HttpResponse(json.dumps(result), content_type="application/json")
 

@@ -11,20 +11,11 @@ $(document).ready(function() {
         eventLimit: true, // allow "more" link when too many events
         eventDrop: function(event, delta, revertFunc) {
 
-            updateCalendarEntry(event);
-
-            if (!confirm("Are you sure about this change?")) {
-                revertFunc();
-            }
+            updateCalendarEntry(event, revertFunc);
         },
         eventResize: function(event, delta, revertFunc) {
 
-            updateCalendarEntry(event);
-
-            if (!confirm("is this okay?")) {
-                revertFunc();
-            }
-
+            updateCalendarEntry(event, revertFunc);
         },
         events: [
             {% for event in events %}
@@ -39,20 +30,25 @@ $(document).ready(function() {
         ],
     });
 
-    var updateCalendarEntry = function(event){
-        console.log(event.id + " now from " + event.start + " to " + event.end)
+    var updateCalendarEntry = function(event, revertFunc){
+        var start= event.start.format().replace('T', ' ');;
+        var end = event.end.format().replace('T', ' ');
 
-        var invitationId = $(this).attr('data-invitation-id');
         var data = {
-            action: "change",
             event_id: event.id,
-            start: event.start,
-            end: event.end
+            start: start,
+            end: end
         };
-        /*
-        $.post("{% url 'project_management:invitation_handler' %}", data, function(output){
-            manageInvitationAjaxRequest(output, invitationId)
-        });*/
-    };
 
+        $.post("{% url 'cal:ui_update' %}", data, function(result){
+            console.log(result)
+            if(result['success'] == 'true'){
+                // TODO: Toast style notification to inform the user that their change was successful
+                console.log('success');
+            }
+            else {
+                revertFunc();
+            }
+        });
+    };
 });
