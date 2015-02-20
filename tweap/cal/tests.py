@@ -79,7 +79,7 @@ class ModelTest(TestCase):
 
         #Login
         self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
-
+        '''
         #Assign valid user
         assignees = [user_random.username]
         resp = self.client.post('/calendar/edit/' + str(event.id), {'title': "bla", 'description': "new Description", 'start_date': "", 'end_date': "", 'assignees': assignees, 'tags': ""})
@@ -87,7 +87,7 @@ class ModelTest(TestCase):
         self.assertTrue(type(resp) is HttpResponseRedirect)
         # TODO: add test if notifications are deleted
         # target_url = request.build_absolute_uri(reverse('cal:edit', args=(event.id, )))
-
+        '''
 
         event2 = Event(title=self.event_name2, project=project, start=datetime.now(pytz.utc), end=datetime.now(pytz.utc))
         event2.save()
