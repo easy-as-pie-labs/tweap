@@ -19,7 +19,7 @@ $(document).on('click', '.markNotificationSeen', function(){
 
     $.post("{% url 'notification_center:mark_seen' %}", data, function(output){
         manageNotificationAjaxRequest(output, notificationId)
-    })
+    });
 });
 
 function manageNotificationAjaxRequest(output, notificationId){
@@ -46,7 +46,7 @@ $(document).on('click', '.acceptInvitation', function() {
 
     $.post("{% url 'project_management:invitation_handler' %}", data, function(output){
         manageInvitationAjaxRequest(output, invitationId)
-    })
+    });
 });
 
 $(document).on('click', '.rejectInvitation', function() {

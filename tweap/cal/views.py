@@ -172,3 +172,25 @@ class Delete(View):
 
         return HttpResponseRedirect(reverse('project_management:project', args=(event.project.id, )))
 
+
+class UpdateFromCalendarView(View):
+    """
+    handling calendar updates via the interactive cal ui
+    :param request:
+    :return:
+    """
+    def post(self, request):
+        result = {'url': '', 'id': ''}
+        invitation_id = request.POST.get('invitation_id', '')
+        action = request.POST.get('action', '')
+        if invitation_id:
+            invitation = Invitation.objects.get(id=invitation_id)
+            if invitation.user == request.user:
+                if action == 'accept':
+                    invitation.accept()
+                    result['url'] = request.build_absolute_uri(reverse('project_management:project', args=(invitation.project.id,)))
+                if action == 'reject':
+                    invitation.reject()
+
+        return HttpResponse(json.dumps(result), content_type="application/json")
+
