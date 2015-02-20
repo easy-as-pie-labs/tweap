@@ -91,6 +91,15 @@ class CreateEdit(View):
                 todo.project = project
                 assignees = form.getlist('assignees')
                 todo.save()
+
+                #Get already assigned assignees, for notification sending
+                already_assigned_assignees = []
+
+                for assignee in assignees:
+                    user = User.objects.get(username=assignee)
+                    if user in todo.assignees.all():
+                        already_assigned_assignees.append(user)
+
                 todo.assignees.clear()
                 for assignee in assignees:
                     user = User.objects.get(username=assignee)
@@ -120,7 +129,7 @@ class CreateEdit(View):
 
                     # We don't want a notification for the user who created this
                     # also if the post data was manipulated and a user assigned who is not in the project let's ignore it
-                    if user == request.user or user not in project.members.all():
+                    if user == request.user or user not in project.members.all() or user in already_assigned_assignees:
                         continue
 
                     notification = Notification()

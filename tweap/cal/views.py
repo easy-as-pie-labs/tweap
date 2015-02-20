@@ -101,6 +101,15 @@ class CreateEdit(View):
                 event.project = project
                 attendees = form.getlist('attendees')
                 event.save()
+
+                #Get already assigned attendees, for notification sending
+                already_assigned_attendees = []
+
+                for attendee in attendees:
+                    user = User.objects.get(username=attendee)
+                    if user in event.attendees.all():
+                        already_assigned_attendees.append(user)
+
                 event.attendees.clear()
                 for attendee in attendees:
                     user = User.objects.get(username=attendee)
@@ -130,7 +139,7 @@ class CreateEdit(View):
 
                     # We don't want a notification for the user who created this
                     # also if the post data was manipulated and a user assigned who is not in the project let's ignore it
-                    if user == request.user or user not in project.members.all():
+                    if user == request.user or user not in project.members.all() or user in already_assigned_attendees:
                         continue
 
                     notification = Notification()
