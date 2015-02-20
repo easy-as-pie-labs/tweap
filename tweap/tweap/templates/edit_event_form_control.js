@@ -177,7 +177,7 @@ $(document).ready(function(){
             $('#start_date_warning').hide('slow');
         }
         if ((endDatePicker.date() === null) || (endDatePicker.date().diff(startDatePicker.date()) < 0)) {
-            var endDate = startDatePicker.date().add(1,"h").format("YYYY-MM-DD hh:mm");
+            var endDate = startDatePicker.date().add(1, "h").format("YYYY-MM-DD hh:mm A");
             endDatePicker.date(endDate);
         }
         endDatePicker.minDate(startDatePicker.date());
