@@ -457,7 +457,7 @@ class ViewTest(TestCase):
         self.assertEqual(resp.status_code, 404)
 
         resp = self.client.get('/users/logout/')
-        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.status_code, 302)
 
         print('test: try to edit profile when not logged in')
         resp = self.client.get('/users/editprofile/')
