@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'todo',
     'notification_center',
     'cal',
+    'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (
