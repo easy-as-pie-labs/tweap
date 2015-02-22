@@ -138,9 +138,14 @@ $(document).ready(function(){
 
     //checks if due date lies in past and show hint
     $('.input-group.date').on("dp.change",function () {
-        if (moment().diff($('.input-group.date').data('DateTimePicker').date(), 'minutes') > 10) {
+
+        var pickedDate = $('.input-group.date').data('DateTimePicker').date();
+
+        // if picked date day lies before right now day
+        if (pickedDate.startOf('day').isBefore(moment().startOf('day'))) {
             $('#due_date_warning').show('slow');
-        } else {
+        }
+        else {
             $('#due_date_warning').hide('slow');
         }
     });
