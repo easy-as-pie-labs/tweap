@@ -15,11 +15,12 @@ class ViewAll(View):
 
 class ViewOne(View):
     def get(self, request, notification_id):
-        # TODO: error handling
         try:
             notification = Notification.objects.get(id=notification_id)
             url = notification.target_url
-            notification.delete()
+            if request.user == notification.receiver:
+                notification.delete()
+            # TODO: else 404?
         except Notification.DoesNotExist:
             return HttpResponseRedirect(reverse('dashboard:home'))
         return HttpResponseRedirect(url)
@@ -31,7 +32,9 @@ class MarkSeen(View):
         notification_id = request.POST.get('notificationId', '')
         try:
             notification = Notification.objects.get(id=notification_id)
-            notification.delete()
+            if request.user == notification.receiver:
+                notification.delete()
+            # TODO: else 404?
             result = {'state': True}
         except Notification.DoesNotExist:
             result = {'state': True}
