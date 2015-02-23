@@ -2,6 +2,7 @@ from django.db import models
 from django.forms import ModelForm, Textarea, HiddenInput
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy
+from django.core.urlresolvers import reverse
 
 
 class Project(models.Model):
@@ -27,12 +28,15 @@ class Project(models.Model):
 
 
         # because circular imports are not allowed
+        # models.get_model needs to be used here
+
+        # remove user from all todoh assignments in this project
         Todo = models.get_model('todo', 'Todo')
         todos = Todo.objects.filter(assignees=user, project=self)
         for todo in todos:
             todo.remove_assignee(user)
 
-        # remove user from attendees
+        # remove user from all cal attendees in this project
         Event = models.get_model('cal', 'Event')
         events = Event.objects.filter(attendees=user, project=self)
         for event in events:
@@ -41,6 +45,38 @@ class Project(models.Model):
         # remove all Notifications concerning this project
         Notification = models.get_model('notification_center', 'Notification')
         Notification.objects.filter(receiver=user, project=self).delete()
+
+        NotificationEvent = models.get_model('notification_center', 'NotificationEvent')
+
+        # notify all other users in project that the user left
+        # see if event type already exists in db
+        event_text = "left your project"
+        try:
+            notification_event = NotificationEvent.objects.get(text=event_text)
+        except:
+            notification_event = NotificationEvent()
+            notification_event.text = event_text
+            notification_event.save()
+
+        # send out notifications
+        for member in self.members.all():
+            a_user = User.objects.get(username=member.username)
+
+            # We don't want a notification for the user who created this
+            # also if the post data was manipulated and a user assigned who is not in the project let's ignore it
+            if a_user == user or a_user not in self.members.all():
+                continue
+
+            notification = Notification()
+            notification.receiver = a_user
+            notification.trigger_user = user
+            notification.project = self
+            # target_url is not needed here
+            notification.target_url = ''
+            notification.event = notification_event
+            notification.save()
+
+
 
 
         # TODO: besprechen ob wir das so wollen
