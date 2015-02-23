@@ -70,3 +70,6 @@ class Todo(models.Model):
         month = self.due_date.month
         day = self.due_date.day
         return str("%04d" % year) + "-" + str("%02d" % month) + "-" + str("%02d" % day)
+
+    def remove_assignee(self, user):
+        self.assignees.remove(user)

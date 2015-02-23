@@ -25,6 +25,24 @@ class Project(models.Model):
         """
         self.members.remove(user)
 
+
+        # because circular imports are not allowed
+        Todo = models.get_model('todo', 'Todo')
+        todos = Todo.objects.filter(assignees=user, project=self)
+        for todo in todos:
+            todo.remove_assignee(user)
+
+        # remove user from attendees
+        Event = models.get_model('cal', 'Event')
+        events = Event.objects.filter(attendees=user, project=self)
+        for event in events:
+            event.remove_attendee(user)
+
+        # remove all Notifications concerning this project
+        Notification = models.get_model('notification_center', 'Notification')
+        Notification.objects.filter(receiver=user, project=self).delete()
+
+
         # TODO: besprechen ob wir das so wollen
         if self.members.count() == 0:
             if not Invitation.objects.filter(project=self):

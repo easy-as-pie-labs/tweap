@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from project_management.models import Project, Tag
+import datetime
 
 
 class Event(models.Model):
@@ -26,6 +27,16 @@ class Event(models.Model):
     @classmethod
     def get_all_for_user(cls, user):
         return Event.objects.filter(attendees=user)
+
+    # datetime.date.today() basically takes 00:00, so we want to show today for everything >= today() and < tomorrow()
+    @classmethod
+    def get_due_today_for_user(cls, user):
+        return Event.objects.filter(attendees=user, start__gte=datetime.date.today(), start__lt=datetime.date.today() + datetime.timedelta(days=(1)))
+
+    @classmethod
+    def get_due_this_week_for_user(cls, user):
+        end_of_week = datetime.date.today() + datetime.timedelta(days=(8)) # 8 because today() is today 00:00 and we need it to be 24:00
+        return Event.objects.filter(attendees=user, start__lte=end_of_week, start__gte=datetime.date.today() + datetime.timedelta(days=(1)))
 
     def __str__(self):
         return self.title
@@ -91,3 +102,6 @@ class Event(models.Model):
         time = str("%02d" % hour) + ":" + str("%02d" % minute) + ":" + str("%02d" % second)
 
         return date + "T" + time
+
+    def remove_attendee(self, user):
+        self.attendees.remove(user)
