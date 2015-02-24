@@ -27,6 +27,11 @@ $(document).ready(function() {
             // pre-fill data and trigger modal
             $('#start_date').val(startDate.format("YYYY-MM-DD hh:mm A"));
             $('#end_date').val(endDate.format("YYYY-MM-DD hh:mm A"));
+
+            $('#new_cal_modal').on('shown.bs.modal', function () {
+                $('#title-input').focus();
+            });
+
             $('#new_cal_modal').modal('show');
         },
         events: [
