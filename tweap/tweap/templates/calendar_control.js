@@ -16,10 +16,15 @@ $(document).ready(function() {
             updateCalendarEntry(event, revertFunc);
         },
         dayClick: function(date, jsEvent, view) {
+            // trigger create event modal with date data pre-filled
 
+            // start date from clicked datetime
             startDate = date;
+
+            // end date one hour later
             endDate = moment(date).add(1, 'h');
 
+            // pre-fill data and trigger modal
             $('#start_date').val(startDate.format("YYYY-MM-DD hh:mm A"));
             $('#end_date').val(endDate.format("YYYY-MM-DD hh:mm A"));
             $('#new_cal_modal').modal('show');
