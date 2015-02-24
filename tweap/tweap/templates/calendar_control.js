@@ -16,8 +16,13 @@ $(document).ready(function() {
             updateCalendarEntry(event, revertFunc);
         },
         dayClick: function(date, jsEvent, view) {
-            console.log('Clicked on: ' + date.format());
-            // TODO: use date data to prefill a new event modal
+
+            startDate = date;
+            endDate = moment(date).add(1, 'h');
+
+            $('#start_date').val(startDate.format("YYYY-MM-DD hh:mm A"));
+            $('#end_date').val(endDate.format("YYYY-MM-DD hh:mm A"));
+            $('#new_cal_modal').modal('show');
         },
         events: [
             {% for event in events %}
