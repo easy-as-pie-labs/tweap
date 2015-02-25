@@ -164,8 +164,8 @@ class CreateEdit(View):
 
         context = {
             'error_messages': {'name': ugettext("Invalid Entry")},
-            'event': event,
             'project': project,
+            'event': event,
             'headline': ugettext("Create new Event"),
         }
         return render(request, 'cal/create_edit.html', context)
