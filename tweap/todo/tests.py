@@ -455,9 +455,6 @@ class ViewsTest(TestCase):
         self.assertEqual(302, resp.status_code)
         self.assertTrue(type(resp) is HttpResponseRedirect)
 
-        # TODO: add test if notifications are deleted
-        # target_url = request.build_absolute_uri(reverse('todo:edit', args=(todo.id, )))
-
         todo_check = Todo.objects.get(id=todo.id)
         self.assertTrue(user2 in todo_check.assignees.all())
 

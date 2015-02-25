@@ -142,11 +142,14 @@ class CreateEdit(View):
 
                 return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))
 
-        context = {
-            'error_messages': {'name': ugettext("The title must not be empty!")},
-            'project': project,
-            'headline': ugettext("Create new Todo"),
-        }
+        context = {}
+        context['error_messages'] = {'name': ugettext("Invalid Entry")}
+        context['project'] = project
+        if todo_id is not None:
+            context['todo'] = todo
+            context['headline'] = ugettext("Edit Todo")
+        else:
+            context['headline'] = ugettext("Create new Todo")
         return render(request, 'todo/create_edit.html', context)
 
 class Delete(View):

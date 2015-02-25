@@ -162,12 +162,14 @@ class CreateEdit(View):
 
                 return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))
 
-        context = {
-            'error_messages': {'name': ugettext("Invalid Entry")},
-            'project': project,
-            'event': event,
-            'headline': ugettext("Create new Event"),
-        }
+        context = {}
+        context['error_messages'] = {'name': ugettext("Invalid Entry")}
+        context['project'] = project
+        if event_id is not None:
+            context['event'] = event
+            context['headline'] = ugettext("Edit Event")
+        else:
+            context['headline'] = ugettext("Create new Event")
         return render(request, 'cal/create_edit.html', context)
 
 class Delete(View):

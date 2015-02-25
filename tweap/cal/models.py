@@ -43,6 +43,8 @@ class Event(models.Model):
 
     def get_start(self):
 
+        if self.start is None:
+            return ""
         year = self.start.year
         month = self.start.month
         day = self.start.day
@@ -75,6 +77,8 @@ class Event(models.Model):
 
     def get_end(self):
 
+        if self.end is None:
+            return ""
         year = self.end.year
         month = self.end.month
         day = self.end.day
