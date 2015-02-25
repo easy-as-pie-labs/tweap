@@ -16,23 +16,23 @@ $(document).ready(function() {
             updateCalendarEntry(event, revertFunc);
         },
         dayClick: function(date, jsEvent, view) {
+            window.location = "{% url 'cal:create' project.id %}?start=" + date.format("YYYY-MM-DD HH:mm");
             // trigger create event modal with date data pre-filled
-
             // start date from clicked datetime
-            startDate = date;
-
+            //startDate = date;
             // end date one hour later
-            endDate = moment(date).add(1, 'h');
+            //endDate = moment(date).add(1, 'h');
 
+            /*
             // pre-fill data and trigger modal
-            $('#start_date').val(startDate.format("YYYY-MM-DD hh:mm A"));
-            $('#end_date').val(endDate.format("YYYY-MM-DD hh:mm A"));
+            $('#start_date').val(startDate.format("YYYY-MM-DD HH:mm"));
+            $('#end_date').val(endDate.format("YYYY-MM-DD HH:mm"));
 
             $('#new_cal_modal').on('shown.bs.modal', function () {
                 $('#title-input').focus();
             });
 
-            $('#new_cal_modal').modal('show');
+            $('#new_cal_modal').modal('show'); */
         },
         events: [
             {% for event in events %}
