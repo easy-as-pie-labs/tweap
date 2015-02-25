@@ -2,19 +2,23 @@
 {% if user.is_authenticated %}
     <li class="dropdown">
         <a href="#" id="project_dropdown" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{% trans "Projects" %} <span class="caret"></span></a>
-          <ul id="project_dropdown_list" class="dropdown-menu" role="menu">
-              {% if projects %}
-                  {% for project in projects %}
-                    <li class="project_dropdown_li"><a href="{% url 'project_management:project' project.id %}" class="project_dropdown_a"><i class="{{ project.icon }}"></i>&nbsp;&nbsp;{{ project.name }}</a></li>
-                  {% endfor %}
-                  <li class="divider"></li>
-              {% endif %}
+            <ul id="project_dropdown_list" class="dropdown-menu" role="menu">
+                {% if projects %}
+                    {% for project in projects %}
+                        <li class="project_dropdown_li"><a href="{% url 'project_management:project' project.id %}" class="project_dropdown_a"><i class="{{ project.icon }}"></i>&nbsp;&nbsp;{{ project.name }}</a></li>
+                    {% endfor %}
+                    <li class="divider"></li>
+                {% endif %}
               <li><a id="navbar_new_link" href="{% url 'project_management:create' %}"><i class="fa fa-plus"></i>&nbsp;&nbsp;{% trans "new Project" %}</a></li>
           </ul>
+        {% if project %}
+            <li><a href="{% url 'todo:create' project.id %}"><i class="fa fa-check-square-o"></i> {% trans "new Todo" %}</a></li>
+            <li><a href="{% url 'cal:create' project.id %}"><i class="fa fa-calendar"></i> {% trans "new Event" %}</a></li>
+        {% endif %}
         </li>
-    <li><a id="navbar_profile_link" href="{% url 'user_management:profile' username %}">{% trans "Profile" %}</a></li>
-    <li><a id="navbar_logout_link" href="{% url 'user_management:logout' %}">{% trans "Logout" %}</a></li>
+    <li><a id="navbar_profile_link" href="{% url 'user_management:profile' username %}"><i class="fa fa-user"></i> {% trans "Profile" %}</a></li>
+    <li><a id="navbar_logout_link" href="{% url 'user_management:logout' %}"><i class="fa fa-sign-out"></i> {% trans "Logout" %}</a></li>
 {% else %}
-    <li><a id="navbar_login_link" href="{% url 'user_management:login' %}">{% trans "Login" %}</a></li>
+    <li><a id="navbar_login_link" href="{% url 'user_management:login' %}"><i class="fa fa-sign-in"></i> {% trans "Login" %}</a></li>
     <li><a id="navbar_register_link" href="{% url 'user_management:register' %}">{% trans "Register" %}</a></li>
 {% endif %}
