@@ -18,17 +18,26 @@
                         <div id="invitation_container_id_{{ invitation.id }}" class="list-group-item">
                             <p>
                                 <strong class="invitation_title">{% trans "Invitation to project" %}: {{ invitation.project.name }}</strong>&nbsp;
-                                <button data-invitation-id="{{ invitation.id }}" title="reject the Invitation" name="rejectInvitation" class="btn btn-xs btn-danger rejectInvitation pull-right"><i class="glyphicon glyphicon-remove"></i></button>
-                                <button data-invitation-id="{{ invitation.id }}" title="accept the Invitation" name="acceptInvitation" class="btn btn-xs btn-success acceptInvitation pull-right" style="margin-right: 5px;"><i class="glyphicon glyphicon-ok"></i></button>
+                                <span class="pull-right">
+                                    <button data-invitation-id="{{ invitation.id }}" title="accept the Invitation" name="acceptInvitation" class="btn btn-xs btn-success acceptInvitation"><i class="glyphicon glyphicon-ok"></i></button>
+                                    <button data-invitation-id="{{ invitation.id }}" title="reject the Invitation" name="rejectInvitation" class="btn btn-xs btn-danger rejectInvitation" style="margin-right:5px;"><i class="glyphicon glyphicon-remove"></i></button>
+                                </span>
                             </p>
                             <p>{{ invitation.project.description }}</p>
                         </div>
                         {% endfor %}
                         {% for notification in notifications %}
                         <div id="notification_container_id_{{ notification.id }}" class="list-group-item">
-                            <p><a href="{% url 'user_management:profile' notification.trigger_user.username %}">{{ notification.trigger_user.username }}</a> {{ notification.event.text }} in <a href="{% url 'project_management:project' notification.project.id %}">{{ notification.project.name }}</a> <span class="small">({{ notification.timestamp }})</span>
-                                <button data-notification-id="{{ notification.id }}" title="Mark as Seen" name="markNotificationSeen" class="btn btn-xs btn-success markNotificationSeen pull-right pull-right"><i class="glyphicon glyphicon-ok"></i></button>
-                                <a href="{% url 'notification_center:view' notification.id %}" data-notification-id="{{ notification.id }}" title="View" name="followNotification" class="btn btn-xs btn-primary followInvitation pull-right" style="margin-right: 5px;"><i class="glyphicon glyphicon-eye-open"></i></a>
+                            <p>
+                                {% if notification.event.text != "left the project" %}
+                                <a href="{% url 'user_management:profile' notification.trigger_user.username %}">{{ notification.trigger_user.username }}</a> {{ notification.event.text }} in <a href="{% url 'project_management:project' notification.project.id %}">{{ notification.project.name }}</a> <span class="small">({{ notification.timestamp }})</span>
+                                {% else %}
+                                {{ notification.trigger_user.username }} {{ notification.event.text }}: <a href="{% url 'project_management:project' notification.project.id %}">{{ notification.project.name }}</a> <span class="small">({{ notification.timestamp }})</span>
+                                {% endif %}
+                                <span class="pull-right">
+                                    <button data-notification-id="{{ notification.id }}" title="Mark as Seen" name="markNotificationSeen" class="btn btn-xs btn-success markNotificationSeen"><i class="glyphicon glyphicon-ok"></i></button>
+                                    <a href="{% url 'notification_center:view' notification.id %}" data-notification-id="{{ notification.id }}" title="View" name="followNotification" class="btn btn-xs btn-primary followInvitation" style="margin-right: 5px;"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                </span>
                             </p>
                         </div>
                         {% endfor %}

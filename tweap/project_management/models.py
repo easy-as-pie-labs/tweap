@@ -50,7 +50,7 @@ class Project(models.Model):
 
         # notify all other users in project that the user left
         # see if event type already exists in db
-        event_text = "left your project"
+        event_text = "left the project"
         try:
             notification_event = NotificationEvent.objects.get(text=event_text)
         except:
@@ -76,10 +76,6 @@ class Project(models.Model):
             notification.event = notification_event
             notification.save()
 
-
-
-
-        # TODO: besprechen ob wir das so wollen
         if self.members.count() == 0:
             if not Invitation.objects.filter(project=self):
                 self.delete()
