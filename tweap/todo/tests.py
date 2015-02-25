@@ -395,9 +395,6 @@ class ViewsTest(TestCase):
         self.assertTrue(type(resp) is HttpResponse)
         self.assertTrue(resp.context['error_messages'])
 
-        '''todo = Todo.objects.filter(id=todo_assigned.id)
-        self.assertTrue(todo.description == "new Description")'''
-
         #Edit existing but not assigned edit/todoh with title
         resp = self.client.post('/todo/edit/' + str(todo_unassigned.id), {'title': self.todo_name, 'description': "newer Description", 'due_date': "", 'tags': ""})
         self.assertEqual(404, resp.status_code)

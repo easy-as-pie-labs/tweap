@@ -25,7 +25,7 @@
                 <p class="alert alert-danger no-margin-element"><i class="fa fa-exclamation-triangle"></i> {{ message }}</p>
             {% endfor %}
 
-            <form method="post" id="event-form" autocomplete="off" class="form-group" action="{% if event %} {% url 'cal:edit' event.id %} {% else %} {% url 'cal:create' project.id %} {% endif %}">
+            <form method="post" id="event-form" autocomplete="off" class="form-group" action="{% if event.id %} {% url 'cal:edit' event.id %} {% else %} {% url 'cal:create' project.id %} {% endif %}">
                 {% csrf_token %}
 
                 <div class="form-group">
