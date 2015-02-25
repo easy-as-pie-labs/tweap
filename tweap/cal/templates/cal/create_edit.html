@@ -46,7 +46,7 @@
                 <div class="form-group">
                     <label for="start_date" class="control-label">{% trans "start date" %}</label>
                     <div class="input-group date" id="start_date_picker">
-                        <input type="text" readonly id="start_date" name="start" value='{{ event.get_start }}' class="date-field-readonly form-control"><span title="Pick a start Date" class="cursor-pointer input-group-addon datepickerbutton"><i class="fa fa-calendar"></i></span>
+                        <input type="text" readonly id="start_date" name="start" value='{{ event.get_start }}{{ start }}' class="date-field-readonly form-control"><span title="Pick a start Date" class="cursor-pointer input-group-addon datepickerbutton"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
                 <div id="start_warning" class="hide-alert alert alert-danger" role="alert">
@@ -59,7 +59,7 @@
                 <div class="form-group">
                     <label for="end_date" class="control-label">{% trans "end date" %}</label>
                     <div class="input-group date" id="end_date_picker">
-                        <input type="text" readonly id="end_date" name="end" value='{{ event.get_end }}' class="date-field-readonly form-control"><span title="Pick a end Date" class="cursor-pointer input-group-addon datepickerbutton"><i class="fa fa-calendar"></i></span>
+                        <input type="text" readonly id="end_date" name="end" value='{{ event.get_end }}{{ end }}' class="date-field-readonly form-control"><span title="Pick a end Date" class="cursor-pointer input-group-addon datepickerbutton"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
 

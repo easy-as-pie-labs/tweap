@@ -16,7 +16,7 @@ $(document).ready(function() {
             updateCalendarEntry(event, revertFunc);
         },
         dayClick: function(date, jsEvent, view) {
-            window.location = "{% url 'cal:create' project.id %}?start=" + date.format("YYYY-MM-DD HH:mm");
+            window.location = "{% url 'cal:create' project.id %}?start=" + date.format("YYYY-MM-DD HH:mm") + "&end=" + moment(date).add(1, 'h').format("YYYY-MM-DD HH:mm");
             // trigger create event modal with date data pre-filled
             // start date from clicked datetime
             //startDate = date;

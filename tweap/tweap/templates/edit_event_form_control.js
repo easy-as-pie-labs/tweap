@@ -162,6 +162,14 @@ $(document).ready(function(){
         endDatePicker.toggle();
     });
 
+    //check if start and end where set via get
+    if (!$('start_date').val()) {
+        if (moment().diff(startDatePicker.date(), 'minutes') > 10) {
+            $('#start_date_warning').show('slow');
+        }
+        endDatePicker.minDate(startDatePicker.date());
+    }
+
     tagList = new Tags();
 
     //add existing tags to tagList
