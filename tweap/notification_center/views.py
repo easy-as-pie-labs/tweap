@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.views.generic import View
 from notification_center.models import Notification
 from django.core.urlresolvers import reverse
@@ -9,7 +9,6 @@ import json
 class ViewAll(View):
     def get(self, request):
         notifications = Notification.objects.filter(receiver=request.user)
-
         return render(request, 'notification_center/view_all.html', {'notifications': notifications})
 
 
@@ -20,7 +19,8 @@ class ViewOne(View):
             url = notification.target_url
             if request.user == notification.receiver:
                 notification.delete()
-            # TODO: else 404?
+            else:
+                raise Http404
         except Notification.DoesNotExist:
             return HttpResponseRedirect(reverse('dashboard:home'))
         return HttpResponseRedirect(url)
@@ -34,7 +34,8 @@ class MarkSeen(View):
             notification = Notification.objects.get(id=notification_id)
             if request.user == notification.receiver:
                 notification.delete()
-            # TODO: else 404?
+            else:
+                raise Http404
             result = {'state': True}
         except Notification.DoesNotExist:
             result = {'state': True}
