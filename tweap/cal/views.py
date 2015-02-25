@@ -34,6 +34,8 @@ class CreateEdit(View):
                 'headline': ugettext("Create new Event"),
                 'project': project,
                 'members': project.members.all(),
+                'start': request.GET.get('start', ''),
+                'end': request.GET.get('end', ''),
             }
 
             return render(request, 'cal/create_edit.html', context)

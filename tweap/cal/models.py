@@ -69,7 +69,7 @@ class Event(models.Model):
         hour = self.start.hour
         minute = self.start.minute
 
-        time = str(day) + "." + str(month) + ". " + str(hour) + ":" + str(minute)
+        time = str(day) + "." + str(month) + ". " + str(hour) + ":" + str("%02d" % minute)
         return time
 
 
