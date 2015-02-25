@@ -59,7 +59,7 @@
                            <a href="{% url 'todo:todo' todo.id %}" class="list-group-item"><i class="fa fa-pencil-square-o"></i> {{ todo.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ todo.project.name }}</a>
                         {% endfor %}
                         {% for event in events_today %}
-                            <a href="{% url 'cal:edit' event.id %}" class="list-group-item"><i class="fa fa-calendar"></i> {{ event.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ event.project.name }} <span class="small pull-right">{% trans "starts" %} {{ event.start }}</span></a>
+                            <a href="{% url 'cal:edit' event.id %}" class="list-group-item"><i class="fa fa-calendar"></i> {{ event.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ event.project.name }} <span class="small pull-right">{{ event.start }}</span></a>
                         {% endfor %}
                     {% else %}
                         <div class="list-group-item"><i class="fa fa-smile-o"></i> {% trans "Looks like you got a free day!" %}</div>
@@ -72,10 +72,10 @@
                         <span class="list-group-item active"><i class="fa fa-bell-o"></i> {% trans "Next 7 days" %}</span>
                         {% if due_this_week or events_this_week %}
                              {% for todo in due_this_week %}
-                                <a href="{% url 'todo:todo' todo.id %}" class="list-group-item"><i class="fa fa-pencil-square-o"></i> {{ todo.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ todo.project.name }} <span class="small pull-right">{{ todo.due_date }}</span></a>
+                                <a href="{% url 'todo:todo' todo.id %}" class="list-group-item"><i class="fa fa-pencil-square-o"></i> {{ todo.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ todo.project.name }} <span class="small pull-right">{% trans "until" %} {{ todo.due_date }}</span></a>
                              {% endfor %}
                             {% for event in events_this_week %}
-                                <a href="{% url 'cal:edit' event.id %}" class="list-group-item"><i class="fa fa-calendar"></i> {{ event.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ event.project.name }} <span class="small pull-right">{% trans "starts" %} {{ event.start }}</span></a>
+                                <a href="{% url 'cal:edit' event.id %}" class="list-group-item"><i class="fa fa-calendar"></i> {{ event.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ event.project.name }} <span class="small pull-right">{{ event.start }}</span></a>
                             {% endfor %}
                         {% elif overdue or due_today %}
                             <div class="list-group-item"><i class="fa fa-rocket"></i> {% trans "Once you are done today, you got nothing for the rest of the week!" %}</div>

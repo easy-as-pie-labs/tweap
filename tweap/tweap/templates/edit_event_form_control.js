@@ -128,7 +128,7 @@ function bindCheckInputForEmpty(firstElementInput, firstElementWarning, secondEl
 $(document).ready(function(){
 
     $('#start_date_picker').datetimepicker({
-        format: "YYYY-MM-DD hh:mm A",
+        format: "YYYY-MM-DD HH:mm",
         stepping: 5,
         useCurrent: false,
         icons: {
@@ -140,7 +140,7 @@ $(document).ready(function(){
     });
 
     $('#end_date_picker').datetimepicker({
-        format: "YYYY-MM-DD hh:mm A",
+        format: "YYYY-MM-DD HH:mm",
         stepping: 5,
         useCurrent: false,
         icons: {
@@ -177,7 +177,7 @@ $(document).ready(function(){
             $('#start_date_warning').hide('slow');
         }
         if ((endDatePicker.date() === null) || (endDatePicker.date().diff(startDatePicker.date()) < 0)) {
-            var endDate = startDatePicker.date().add(1, "h").format("YYYY-MM-DD hh:mm A");
+            var endDate = startDatePicker.date().add(1, "h").format("YYYY-MM-DD HH:mm");
             endDatePicker.date(endDate);
         }
         endDatePicker.minDate(startDatePicker.date());

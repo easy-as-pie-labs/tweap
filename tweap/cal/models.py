@@ -63,6 +63,16 @@ class Event(models.Model):
         time = str(hour) + ":" + str(minute)
         return time
 
+    def get_start_datetime_for_dashboard(self):
+        month = self.start.month
+        day = self.start.day
+        hour = self.start.hour
+        minute = self.start.minute
+
+        time = str(day) + "." + str(month) + ". " + str(hour) + ":" + str(minute)
+        return time
+
+
     def get_end(self):
 
         year = self.end.year
