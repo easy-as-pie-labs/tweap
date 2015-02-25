@@ -12,28 +12,6 @@
               <li><a id="navbar_new_link" href="{% url 'project_management:create' %}"><i class="fa fa-plus"></i>&nbsp;&nbsp;{% trans "new Project" %}</a></li>
           </ul>
         </li>
-    <li class="dropdown">
-      {% if projects %}
-        <a href="#" id="todo_dropdown" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{% trans "new Todo" %} <span class="caret"></span></a>
-
-          <ul class="dropdown-menu" role="menu">
-              {% for project in projects %}
-                <li><a href="{% url 'todo:create' project.id %}"><i class="{{ project.icon }}"></i>&nbsp;&nbsp;{{ project.name }}</a></li>
-              {% endfor %}
-          </ul>
-    </li>
-    {% endif %}
-    <li class="dropdown">
-      {% if projects %}
-        <a href="#" id="event_dropdown" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{% trans "new Event" %} <span class="caret"></span></a>
-
-          <ul class="dropdown-menu" role="menu">
-              {% for project in projects %}
-                <li><a href="{% url 'cal:create' project.id %}"><i class="{{ project.icon }}"></i>&nbsp;&nbsp;{{ project.name }}</a></li>
-              {% endfor %}
-          </ul>
-    </li>
-    {% endif %}
     <li><a id="navbar_profile_link" href="{% url 'user_management:profile' username %}">{% trans "Profile" %}</a></li>
     <li><a id="navbar_logout_link" href="{% url 'user_management:logout' %}">{% trans "Logout" %}</a></li>
 {% else %}
