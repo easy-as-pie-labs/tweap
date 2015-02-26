@@ -62,7 +62,7 @@ class Event(models.Model):
         hour = self.start.hour
         minute = self.start.minute
 
-        time = str(hour) + ":" + str(minute)
+        time = str(hour) + ":" + str("%02d" % minute)
         return time
 
     def get_start_datetime_for_dashboard(self):

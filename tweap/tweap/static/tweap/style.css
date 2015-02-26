@@ -167,3 +167,10 @@ p#project_icon{
 .hide-alert {
     display:none;
 }
+
+/* here i some fun stuff to surprise you */
+.navbar-brand:hover i
+{
+    -webkit-animation:fa-spin 0.4s 1 linear;
+    animation:fa-spin 0.4s 1 linear;
+}

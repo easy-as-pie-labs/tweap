@@ -53,14 +53,15 @@
                     <i class="fa fa-exclamation-triangle"></i> {% trans "Your choosen due date lies in the past!" %}
                 </div>
 
-                 <label class="control-label">{% trans "Assign members" %}</label>
                 <div class="panel panel-default">
+                    <div class="panel-heading">{% trans "assign members" %}
+                    </div>
                     <ul class="list-group">
                         {% for member in project.members.all %}
-                        <label for="assignee_{{member.username}}" class="noselect list-group-item">
-                            <input type="checkbox" name="assignees" id="assignee_{{member.username}}" value="{{member.username}}" {% for assignee in todo.assignees.all %}{% if assignee == member %}checked{% endif %}{% endfor %}> {{member.username}}
-                        </label>
-                    {% endfor %}
+                            <label for="assignee_{{member.username}}" class="noselect list-group-item">
+                                <input type="checkbox" name="assignees" id="assignee_{{member.username}}" value="{{member.username}}" {% for assignee in todo.assignees.all %}{% if assignee == member %}checked{% endif %}{% endfor %}> {{member.username}}
+                            </label>
+                        {% endfor %}
                     </ul>
                 </div>
 
