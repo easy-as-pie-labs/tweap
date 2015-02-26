@@ -31,7 +31,7 @@ class CreateEdit(View):
                 raise Http404
 
             context = {
-                'headline': ugettext("Create new Event"),
+                'headline': ugettext("Create new Event in") + " " + project.name,
                 'project': project,
                 'members': project.members.all(),
                 'start': request.GET.get('start', ''),
@@ -49,7 +49,7 @@ class CreateEdit(View):
             raise Http404
         else:
             context = {
-                'headline': ugettext("Edit Event"),
+                'headline': ugettext("Edit Event in") + " " + project.name,
                 'event': event,
                 'project': project,
             }
@@ -92,7 +92,7 @@ class CreateEdit(View):
                 if start == '' or end == '':
                     context = {
                         'error_messages': {'name': ugettext("Invalid Entry!")},
-                        'headline': ugettext("Edit Event"),
+                        'headline': ugettext("Edit Even in") + " " + project.name,
                         'project': project,
                     }
                     return render(request, 'cal/create_edit.html', context)
@@ -103,7 +103,7 @@ class CreateEdit(View):
                 if event.start > event.end:
                     context = {
                         'error_messages': {'name': ugettext("Invalid Entry!")},
-                        'headline': ugettext("Edit Event"),
+                        'headline': ugettext("Edit Event in ") + " " + project.name,
                         'project': project,
                     }
                     return render(request, 'cal/create_edit.html', context)
@@ -134,31 +134,8 @@ class CreateEdit(View):
 
                 event.save()
 
-                # see if event type already exists in db
-                event_text = "assigned an event to you"
-                try:
-                    notification_event = NotificationEvent.objects.get(text=event_text)
-                except:
-                    notification_event = NotificationEvent()
-                    notification_event.text = event_text
-                    notification_event.save()
-
-                # send out notifications
-                for attendee in attendees:
-                    user = User.objects.get(username=attendee)
-
-                    # We don't want a notification for the user who created this
-                    # also if the post data was manipulated and a user assigned who is not in the project let's ignore it
-                    if user == request.user or user not in project.members.all() or user in already_assigned_attendees:
-                        continue
-
-                    notification = Notification()
-                    notification.receiver = user
-                    notification.trigger_user = request.user
-                    notification.project = project
-                    notification.target_url = request.build_absolute_uri(reverse('cal:edit', args=(event.id, )))
-                    notification.event = notification_event
-                    notification.save()
+                # create notifications for all attendees
+                Notification.bulk_create(attendees, request.user, project, request.build_absolute_uri(reverse('cal:edit', args=(event.id, ))), 'assigned an event to you')
 
                 return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))
 
@@ -167,9 +144,9 @@ class CreateEdit(View):
         context['project'] = project
         if event_id is not None:
             context['event'] = event
-            context['headline'] = ugettext("Edit Event")
+            context['headline'] = ugettext("Edit Event in ") + " " + project.name
         else:
-            context['headline'] = ugettext("Create new Event")
+            context['headline'] = ugettext("Create new Event in") + " " + project.name
         return render(request, 'cal/create_edit.html', context)
 
 class Delete(View):

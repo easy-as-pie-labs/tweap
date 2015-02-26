@@ -46,35 +46,8 @@ class Project(models.Model):
         Notification = models.get_model('notification_center', 'Notification')
         Notification.objects.filter(receiver=user, project=self).delete()
 
-        NotificationEvent = models.get_model('notification_center', 'NotificationEvent')
-
-        # notify all other users in project that the user left
-        # see if event type already exists in db
-        event_text = "left the project"
-        try:
-            notification_event = NotificationEvent.objects.get(text=event_text)
-        except:
-            notification_event = NotificationEvent()
-            notification_event.text = event_text
-            notification_event.save()
-
-        # send out notifications
-        for member in self.members.all():
-            a_user = User.objects.get(username=member.username)
-
-            # We don't want a notification for the user who created this
-            # also if the post data was manipulated and a user assigned who is not in the project let's ignore it
-            if a_user == user or a_user not in self.members.all():
-                continue
-
-            notification = Notification()
-            notification.receiver = a_user
-            notification.trigger_user = user
-            notification.project = self
-            # target_url is not needed here
-            notification.target_url = ''
-            notification.event = notification_event
-            notification.save()
+        #notify all project users
+        Notification.project_notification(user, self, '', 'left the project')
 
         if self.members.count() == 0:
             if not Invitation.objects.filter(project=self):
