@@ -195,14 +195,14 @@ class ViewTest(TestCase):
         notification.save()
 
         dat_notification = Notification.objects.get(id=notification.id)
-        print(dat_notification.target_url)
+
         # Has notification
         self.assertTrue(notification.receiver == user)
 
         # Login
         self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
 
-        # delete todoh
+        # delete todo
         resp = self.client.post('/todo/delete/'+str(todo.id))
         self.assertEqual(302, resp.status_code)
         self.assertTrue(type(resp) is HttpResponseRedirect)
@@ -323,6 +323,7 @@ class ViewTest(TestCase):
         project.delete()
         event.delete()
 
+
     def test_edit_event(self):
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
         user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
@@ -368,7 +369,7 @@ class ViewTest(TestCase):
 
         self.assertRedirects(resp, notification.target_url, 301)
 
-        self.client.post('/calendar/edit/'+str(event.id), {'title': self.todo_name, 'attendees': [user2.username], 'description': "", 'start': event.start, 'end': event.end, 'location': event.location, 'tags': ""})
+        self.client.post('/calendar/edit/'+str(event.id), {'title': self.todo_name, 'attendees': [user2.username], 'description': "", 'start': event.get_start(), 'end': event.get_end(), 'location': event.location, 'tags': ""})
         notification_check2 = Notification.objects.filter(receiver_id=user2.id).exists()
         self.assertTrue(notification_check2)
 
@@ -388,7 +389,7 @@ class ViewTest(TestCase):
         project.delete()
         event.delete()
         notification.delete()
-
+    
     def test_leave_project(self):
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
         user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
@@ -409,3 +410,4 @@ class ViewTest(TestCase):
         user.delete()
         user2.delete()
         project.delete()
+

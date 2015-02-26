@@ -256,11 +256,11 @@ class ViewTests(TestCase):
         project_unassigned.members.add(user_unassigned)
         project_unassigned.save()
 
-        event_assigned = Event(title=self.event_name, description=self.project_description, start=self.test_start_date, end=self.test_end_date)
+        event_assigned = Event(title=self.event_name, description=self.project_description, start=datetime.now(pytz.utc), end=datetime.now(pytz.utc))
         event_assigned.project = project_assigned
         event_assigned.save()
 
-        event_unassigned = Event(title=self.event_name, description=self.project_description, start=self.test_start_date, end=self.test_end_date)
+        event_unassigned = Event(title=self.event_name, description=self.project_description, start=datetime.now(pytz.utc), end=datetime.now(pytz.utc))
         event_unassigned.project = project_unassigned
         event_unassigned.save()
 
@@ -347,7 +347,7 @@ class ViewTests(TestCase):
         project.members.add(user2)
         project.save()
 
-        event = Event(title=self.event_name, description=self.project_description, start=self.test_start_date, end=self.test_end_date)
+        event = Event(title=self.event_name, description=self.project_description, start=datetime.now(pytz.utc), end=datetime.now(pytz.utc))
         event.project = project
         event.save()
 

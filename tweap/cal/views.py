@@ -11,6 +11,8 @@ from notification_center.models import NotificationEvent, Notification
 from cal.models import Event
 from cal.tools import validate_for_event
 import json
+from datetime import datetime
+import pytz
 
 class CreateEdit(View):
     """
@@ -97,8 +99,8 @@ class CreateEdit(View):
                     }
                     return render(request, 'cal/create_edit.html', context)
 
-                event.start = start
-                event.end = end
+                event.start = pytz.utc.localize(datetime.strptime(start, "%Y-%m-%d %H:%M"))
+                event.end = pytz.utc.localize(datetime.strptime(end, "%Y-%m-%d %H:%M"))
 
                 if event.start > event.end:
                     context = {
@@ -185,13 +187,13 @@ class UpdateFromCalendarView(View):
 
         try:
             event = Event.objects.get(id=event_id)
-            event.start = start_time
-            event.end = end_time
+            event.start = pytz.utc.localize(datetime.strptime(start_time, "%Y-%m-%d %H:%M"))
+            print(event.start)
+            event.end = pytz.utc.localize(datetime.strptime(end_time, "%Y-%m-%d %H:%M"))
             event.save()
 
         except:
             result = {'success': 'false'}
-            return HttpResponse(json.dumps(result), content_type="application/json")
 
         return HttpResponse(json.dumps(result), content_type="application/json")
 

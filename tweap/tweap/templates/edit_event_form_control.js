@@ -167,7 +167,9 @@ $(document).ready(function(){
         if (moment().diff(startDatePicker.date(), 'minutes') > 10) {
             $('#start_date_warning').show('slow');
         }
-        endDatePicker.minDate(startDatePicker.date());
+        if (startDatePicker.date() !== null) {
+            endDatePicker.minDate(startDatePicker.date());
+        }
     }
 
     tagList = new Tags();

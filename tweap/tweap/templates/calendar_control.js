@@ -49,8 +49,8 @@ $(document).ready(function() {
     });
 
     var updateCalendarEntry = function(event, revertFunc){
-        var start= event.start.format().replace('T', ' ');
-        var end = event.end.format().replace('T', ' ');
+        var start= event.start.format("YYYY-MM-DD HH:mm").replace('T', ' ');
+        var end = event.end.format("YYYY-MM-DD HH:mm").replace('T', ' ');
 
         var data = {
             event_id: event.id,
