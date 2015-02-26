@@ -1,10 +1,10 @@
 
 $( document ).ready(function() {
         $("a, p, span, table, h1, h2, h3, input").hover(function() {
-            if (Math.floor(Math.random() * (50)) < 5) {
+            if (Math.floor(Math.random() * (50)) < 10) {
                 console.log("go wild!");
                 var index = Math.floor(Math.random() * (classes.length));
-                $(this).toggleClass(classes[index] + " animated");
+                $(this).toggleClass(classes[index] + "  animated");
             }
             else{
                 console.log("no animation this time!");
