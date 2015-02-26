@@ -1,7 +1,7 @@
 {% load i18n %}
 {% if user.is_authenticated %}
     <li class="dropdown">
-        <a href="#" id="project_dropdown" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{% trans "Projects" %} <span class="caret"></span></a>
+        <a href="#" id="project_dropdown" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-folder-open"></i> {% trans "Projects" %} <span class="caret"></span></a>
             <ul id="project_dropdown_list" class="dropdown-menu" role="menu">
                 {% if projects %}
                     {% for project in projects %}
@@ -22,3 +22,5 @@
     <li><a id="navbar_login_link" href="{% url 'user_management:login' %}"><i class="fa fa-sign-in"></i> {% trans "Login" %}</a></li>
     <li><a id="navbar_register_link" href="{% url 'user_management:register' %}"><i class="fa fa-user-plus"></i> {% trans "Register" %}</a></li>
 {% endif %}
+
+
