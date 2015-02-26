@@ -20,7 +20,7 @@ class ViewOne(View):
             if request.user == notification.receiver:
                 notification.delete()
             else:
-                raise Http404
+                return HttpResponseRedirect(reverse('dashboard:home'))
         except Notification.DoesNotExist:
             return HttpResponseRedirect(reverse('dashboard:home'))
         return HttpResponseRedirect(url)
@@ -35,7 +35,7 @@ class MarkSeen(View):
             if request.user == notification.receiver:
                 notification.delete()
             else:
-                raise Http404
+                return HttpResponseRedirect(reverse('dashboard:home'))
             result = {'state': True}
         except Notification.DoesNotExist:
             result = {'state': True}
