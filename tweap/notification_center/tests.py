@@ -6,7 +6,7 @@ from cal.models import Event
 from notification_center.models import Notification, NotificationEvent
 from django.contrib.auth.models import User
 from datetime import datetime
-from django.http.response import HttpResponse, HttpResponseRedirect
+from django.http.response import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 
 
 class ModelTest(TestCase):
@@ -42,7 +42,7 @@ class ModelTest(TestCase):
 
         notification = Notification(receiver=user, trigger_user=user2)
         notification.project = project
-        notification.target_url = "http://dev.tweap.easy-as-pie.de/todo/edit/"+str(todo.id)
+        notification.target_url = "http://testserver/todo/edit/"+str(todo.id)
         notification.event = notification_event
         notification.save()
 
@@ -65,9 +65,9 @@ class ViewTest(TestCase):
     event_event = "assigned an event to you"
     event_left = "left your project"
 
-    dashboard = "/dashboard"
+    dashboard = "/dashboard/"
 
-    def view_notification(self): #TODO FAILING TEST
+    def test_view_notification(self):
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
         user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
 
@@ -87,36 +87,34 @@ class ViewTest(TestCase):
             notification_event.text = self.event_todo
             notification_event.save()
 
-        notification = Notification(receiver=user, trigger_user=user2)
-        notification.project = project
-        notification.target_url = "http://dev.tweap.easy-as-pie.de/todo/edit/"+str(todo.id)
-        notification.event = notification_event
+        notification = Notification(receiver=user, trigger_user=user2, project=project, event=notification_event)
+        notification.target_url = "http://testserver/todo/edit/"+str(todo.id)
         notification.save()
 
         # Has notification
         self.assertTrue(notification.receiver == user)
 
+
+        notification_check = Notification.objects.get(id=notification.id)
+        self.assertTrue(user == notification_check.receiver)
+
         # Login
         self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
 
-        resp = self.client.get('/notifications/view/'+str(notification.id))
-        self.assertEqual(302, resp.status_code)
-        self.assertTrue(type(resp) is HttpResponseRedirect)
-
-        # notification deleted
-        self.assertFalse(notification.receiver == user)
+        # notification delete, by viewing it
         url = '/todo/edit/'+str(todo.id)
+        resp = self.client.get('/notifications/view/'+str(notification.id), follow=True)
 
-        # redirected to correct url
-        self.assertRedirects(resp, url)
+        notification_check = Notification.objects.filter(id=notification.id).exists()
+        self.assertFalse(notification_check)
 
+        # redirects to correct url
+        self.assertRedirects(resp, url, 301)
 
-        resp = self.client.get('/notifications/view/'+str(notification.id))
-        self.assertEqual(302, resp.status_code)
-        self.assertTrue(type(resp) is HttpResponseRedirect)
+        resp = self.client.get('/notifications/view/'+str(notification.id), follow=True)
 
-        # redirected to dashboard
-        self.assertRedirects(resp, self.dashboard)
+        # redirects to dashboard
+        self.assertRedirects(resp, self.dashboard, 301)
 
         user.delete()
         user2.delete()
@@ -124,7 +122,7 @@ class ViewTest(TestCase):
         todo.delete()
         notification.delete()
 
-    def mark_notification(self): #TODO FAILING TEST
+    def test_mark_notification(self):
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
         user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
 
@@ -146,7 +144,7 @@ class ViewTest(TestCase):
 
         notification = Notification(receiver=user, trigger_user=user2)
         notification.project = project
-        notification.target_url = "http://dev.tweap.easy-as-pie.de/todo/edit/"+str(todo.id)
+        notification.target_url = "http://testserver/todo/edit/"+str(todo.id)
         notification.event = notification_event
         notification.save()
 
@@ -161,7 +159,8 @@ class ViewTest(TestCase):
                          HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
         # notification deleted
-        self.assertFalse(notification.receiver == user)
+        notification_check = Notification.objects.filter(id=notification.id).exists()
+        self.assertFalse(notification_check)
 
         user.delete()
         user2.delete()
@@ -169,7 +168,7 @@ class ViewTest(TestCase):
         todo.delete()
         notification.delete()
 
-    def delete_todo(self): #TODO FAILING TEST
+    def test_delete_todo(self):
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
         user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
 
@@ -191,10 +190,12 @@ class ViewTest(TestCase):
 
         notification = Notification(receiver=user, trigger_user=user2)
         notification.project = project
-        notification.target_url = "http://dev.tweap.easy-as-pie.de/todo/edit/"+str(todo.id)
+        notification.target_url = "http://testserver/todo/edit/"+str(todo.id)
         notification.event = notification_event
         notification.save()
 
+        dat_notification = Notification.objects.get(id=notification.id)
+        print(dat_notification.target_url)
         # Has notification
         self.assertTrue(notification.receiver == user)
 
@@ -202,12 +203,14 @@ class ViewTest(TestCase):
         self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
 
         # delete todoh
-        resp = self.client.post('todo/delete'+str(todo.id))
+        resp = self.client.post('/todo/delete/'+str(todo.id))
         self.assertEqual(302, resp.status_code)
         self.assertTrue(type(resp) is HttpResponseRedirect)
 
+        self.assertFalse(Todo.objects.filter(id=todo.id).exists())
         # notification deleted
-        self.assertFalse(notification.receiver == user)
+        notification_check = Notification.objects.filter(receiver_id=user.id).exists()
+        self.assertFalse(notification_check)
 
         user.delete()
         user2.delete()
@@ -215,7 +218,7 @@ class ViewTest(TestCase):
         todo.delete()
         notification.delete()
 
-    def edit_todo(self): #TODO FAILING TEST
+    def test_edit_todo(self):
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
         user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
 
@@ -237,7 +240,7 @@ class ViewTest(TestCase):
 
         notification = Notification(receiver=user, trigger_user=user2)
         notification.project = project
-        notification.target_url = "http://dev.tweap.easy-as-pie.de/todo/edit/"+str(todo.id)
+        notification.target_url = "http://testserver/todo/edit/"+str(todo.id)
         notification.event = notification_event
         notification.save()
 
@@ -248,28 +251,37 @@ class ViewTest(TestCase):
         self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
 
         # edit todoh
-        resp = self.client.get('notifications/view'+str(notification.id))
-        self.assertEqual(302, resp.status_code)
-        self.assertTrue(type(resp) is HttpResponseRedirect)
+
+        # notification delete, by viewing it
+        url = '/todo/edit/'+str(todo.id)
+        resp = self.client.get('/notifications/view/'+str(notification.id), follow=True)
+
+        # redirects to correct url
+        self.assertRedirects(resp, url, 301)
 
         # notification deleted
-        self.assertFalse(notification.receiver == user)
-        self.assertFalse(notification.receiver == user2)
+        notification_check = Notification.objects.filter(receiver_id=user.id).exists()
+        notification_check2 = Notification.objects.filter(receiver_id=user2.id).exists()
+        self.assertFalse(notification_check)
+        self.assertFalse(notification_check2)
 
-        self.assertRedirects(resp, notification.target_url)
+        self.assertRedirects(resp, notification.target_url, 301)
 
-        self.client.post('/todo/edit/'+str(todo.id), {'title': self.todo_name, 'assignees': ['testuser2']})
+        assignees = [user2.username]
+        self.client.post('/todo/edit/' + str(todo.id), {'title': self.todo_name, 'description': "new Description", 'due_date': "", 'assignees': assignees, 'tags': ""})
 
-        response = self.client.get('/notifications/view/2')
-        self.assertRedirects(response, self.dashboard)
+        resp = self.client.get('/notifications/view/'+str(notification.id+1), follow=True)
+
+        # redirects to dashboard
+        self.assertRedirects(resp, self.dashboard, 301)
 
         # logout
         self.client.post('users/logout/')
 
         self.client.post('/users/login/', {'username': 'testuser2', 'password': 'testpw'})
 
-        response = self.client.get('/notifications/view/2')
-        self.assertRedirects(response, '/todo/edit/'+str(todo.id))
+        response = self.client.get('/notifications/view/'+str(notification.id+1), follow=True)
+        self.assertRedirects(response, '/todo/edit/'+str(todo.id), 301)
 
         user.delete()
         user2.delete()
@@ -277,7 +289,7 @@ class ViewTest(TestCase):
         todo.delete()
         notification.delete()
 
-    def delete_event(self): #TODO FAILING TEST
+    def test_delete_event(self):
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
         user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
 
@@ -300,15 +312,18 @@ class ViewTest(TestCase):
 
         self.assertRedirects(resp, '/projects/'+str(project.id))
 
-        # notification created
-        self.assertTrue(Notification.objects.filter(receiver_id=user2.id))
+        # notification deleted
+        notification_check = Notification.objects.filter(receiver_id=user.id).exists()
+        notification_check2 = Notification.objects.filter(receiver_id=user2.id).exists()
+        self.assertFalse(notification_check)
+        self.assertFalse(notification_check2)
 
         user.delete()
         user2.delete()
         project.delete()
         event.delete()
 
-    def edit_event(self): #TODO FAILING TEST
+    def test_edit_event(self):
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
         user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
 
@@ -330,7 +345,7 @@ class ViewTest(TestCase):
 
         notification = Notification(receiver=user, trigger_user=user2)
         notification.project = project
-        notification.target_url = "http://dev.tweap.easy-as-pie.de/calendar/edit/"+str(event.id)
+        notification.target_url = "http://testserver/calendar/edit/"+str(event.id)
         notification.event = notification_event
         notification.save()
 
@@ -341,28 +356,32 @@ class ViewTest(TestCase):
         self.client.post('/users/login/', {'username': 'testuser', 'password': 'testpw'})
 
         # edit event
-        resp = self.client.get('notifications/view'+str(notification.id))
-        self.assertEqual(302, resp.status_code)
-        self.assertTrue(type(resp) is HttpResponseRedirect)
+        url = '/calendar/edit/'+str(event.id)
+        resp = self.client.get('/notifications/view/'+str(notification.id), follow=True)
+        self.assertRedirects(resp, url, 301)
 
         # notification deleted
-        self.assertFalse(notification.receiver == user)
-        self.assertFalse(notification.receiver == user2)
+        notification_check = Notification.objects.filter(receiver_id=user.id).exists()
+        notification_check2 = Notification.objects.filter(receiver_id=user2.id).exists()
+        self.assertFalse(notification_check)
+        self.assertFalse(notification_check2)
 
-        self.assertRedirects(resp, notification.target_url)
+        self.assertRedirects(resp, notification.target_url, 301)
 
-        self.client.post('/calendar/edit/'+str(event.id), {'title': self.todo_name, 'assignees': ['testuser2']})
+        self.client.post('/calendar/edit/'+str(event.id), {'title': self.todo_name, 'attendees': [user2.username], 'description': "", 'start': event.start, 'end': event.end, 'location': event.location, 'tags': ""})
+        notification_check2 = Notification.objects.filter(receiver_id=user2.id).exists()
+        self.assertTrue(notification_check2)
 
-        response = self.client.get('/notifications/view/2')
-        self.assertRedirects(response, self.dashboard)
+        response = self.client.get('/notifications/view/'+str(notification.id+1), follow=True)
+        self.assertRedirects(response, self.dashboard, 301)
 
         # logout
         self.client.post('users/logout/')
 
         self.client.post('/users/login/', {'username': 'testuser2', 'password': 'testpw'})
 
-        response = self.client.get('/notifications/view/2')
-        self.assertRedirects(response, '/calendar/edit/'+str(event.id))
+        response = self.client.get('/notifications/view/'+str(notification.id+1), follow=True)
+        self.assertRedirects(response, '/calendar/edit/'+str(event.id), 301)
 
         user.delete()
         user2.delete()

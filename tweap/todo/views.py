@@ -30,7 +30,7 @@ class CreateEdit(View):
                 raise Http404
 
             context = {
-                'headline': ugettext("Create new Todo"),
+                'headline': ugettext("Create new Todo in") + " " + project.name,
                 'project': project,
                 'members': project.members.all(),
             }
@@ -46,7 +46,7 @@ class CreateEdit(View):
             raise Http404
         else:
             context = {
-                'headline': ugettext("Edit Todo"),
+                'headline': ugettext("Edit Todo in") + " " + project.name,
                 'todo': todo,
                 'project': project,
             }
@@ -114,31 +114,8 @@ class CreateEdit(View):
 
                 todo.save()
 
-                # see if event type already exists in db
-                event_text = "assigned a todo to you"
-                try:
-                    notification_event = NotificationEvent.objects.get(text=event_text)
-                except:
-                    notification_event = NotificationEvent()
-                    notification_event.text = event_text
-                    notification_event.save()
-
-                # send out notifications
-                for assignee in assignees:
-                    user = User.objects.get(username=assignee)
-
-                    # We don't want a notification for the user who created this
-                    # also if the post data was manipulated and a user assigned who is not in the project let's ignore it
-                    if user == request.user or user not in project.members.all() or user in already_assigned_assignees:
-                        continue
-
-                    notification = Notification()
-                    notification.receiver = user
-                    notification.trigger_user = request.user
-                    notification.project = project
-                    notification.target_url = request.build_absolute_uri(reverse('todo:edit', args=(todo.id, )))
-                    notification.event = notification_event
-                    notification.save()
+                # create notifications for all assignees
+                Notification.bulk_create(assignees, request.user, project, request.build_absolute_uri(reverse('todo:edit', args=(todo.id, ))), 'assigned a todo to you')
 
                 return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))
 
@@ -147,9 +124,9 @@ class CreateEdit(View):
         context['project'] = project
         if todo_id is not None:
             context['todo'] = todo
-            context['headline'] = ugettext("Edit Todo")
+            context['headline'] = ugettext("Edit Todo in") + " " + project.name
         else:
-            context['headline'] = ugettext("Create new Todo")
+            context['headline'] = ugettext("Create new Todo in") + " " + project.name
         return render(request, 'todo/create_edit.html', context)
 
 class Delete(View):

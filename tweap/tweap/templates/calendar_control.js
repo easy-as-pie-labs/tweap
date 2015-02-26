@@ -9,6 +9,7 @@ $(document).ready(function() {
         },
         editable: true,
         eventLimit: true, // allow "more" link when too many events
+        timeFormat: 'H:mm',
         eventDrop: function(event, delta, revertFunc) {
             updateCalendarEntry(event, revertFunc);
         },

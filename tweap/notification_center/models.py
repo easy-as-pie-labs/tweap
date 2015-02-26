@@ -20,3 +20,54 @@ class Notification(models.Model):
 
     def __str__(self):
         return str(self.event) + ", from " + self.trigger_user.username + ", to " + self.receiver.username
+
+    @classmethod
+    def create(cls, receiver, trigger_user, project, target_url, event_string):
+        """
+        create a notification for a user
+        :param receiver:
+        :param trigger_user:
+        :param timestamp:
+        :param project:
+        :param target_url:
+        :param event_string:
+        :return:
+        """
+        if receiver == trigger_user:
+            return
+
+        event = NotificationEvent.objects.filter(text=event_string)
+        if event.exists():
+            event = event.first()
+        else:
+            event = NotificationEvent()
+            event.text = event_string
+            event.save()
+
+        cls(receiver=receiver, trigger_user=trigger_user, project=project, target_url=target_url, event=event).save()
+
+
+    @classmethod
+    def bulk_create(cls, username_list, trigger_user, project, target_url, event_string):
+        """
+        create a notification for a bunch of people
+        :param receiver_list:
+        :param trigger_user:
+        :param timestamp:
+        :param project:
+        :param target_url:
+        :param event_string:
+        :return:
+        """
+        for username in username_list:
+            receiver = User.objects.get(username=username)
+            cls.create(receiver, trigger_user, project, target_url, event_string)
+
+    @classmethod
+    def project_notification(cls, trigger_user, project, target_url, event_string):
+        for receiver in project.members.all():
+            cls.create(receiver, trigger_user, project, target_url, event_string)
+
+
+
+
