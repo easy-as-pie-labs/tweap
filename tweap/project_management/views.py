@@ -80,7 +80,17 @@ class ProjectView(View):
         project = get_object_or_404(Project, id=project_id)
         context['project'] = project
         context['invitations'] = Invitation.objects.filter(project=project)
-        context['todos'] = Todo.get_all_for_project(project)
+
+        overdue = Todo.get_open_overdue_for_project(project)
+        today = Todo.get_open_due_today_for_project(project)
+        closed = Todo.get_closed_for_project(project)
+        rest = Todo.get_open_rest_for_project(project)
+
+        context['todo_overdue'] = overdue
+        context['todo_today'] = today
+        context['todo_closed'] = closed
+        context['todo_rest'] = rest
+
         context['events'] = Event.get_all_for_project(project)
         members = project.members.all()
         if request.user in members:

@@ -17,44 +17,51 @@
 {% endblock %}
 
 {% block project_management_template %}
-    <div class="panel panel-primary">
-        <div id="project_title_header" class="panel-heading panel-heading-bigger"><i class="{{ project.icon }}"></i> {{ project.name }}</div>
-        <div class="panel-body">
-            <p>
-                {{ project.description }}
-            </p>
-            <table class="table">
-                <tr>
-                    <td><strong>{% trans "Members" %}:</strong></td>
-                    <td>{% for member in project.members.all %}
-                        <a href="{% url 'user_management:profile' member %}"><span class="accepted_user_label label label-success">{{ member }}</span></a>
-                    {% endfor %}
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>{% trans "Invited" %}:</strong></td>
-                    <td>{% for invitation in invitations %}
-                       <span class="bigger-label"><span class="invited_user_label label label-warning">{{ invitation.user.username }}</span></span>
-                    {% endfor %}
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="panel-footer">
-            <div class="form-group inline-form" >
-                <button type="submit" id="leave_project_button" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#leaveGroupModal">{% trans "leave project" %}</button>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div id="project_title_header" class="noselect toggle_header panel-heading"><i class="{{ project.icon }}"></i> You are in the epic and cool and very productive project <b>{{ project.name }}</b> </div>
+                <div class="toggle_content" style="display: none">
+                    <div class="panel-body">
+                        <p>
+                            {{ project.description }}
+                        </p>
+                        <table class="table">
+                            <tr>
+                                <td><strong>{% trans "Members" %}:</strong></td>
+                                <td>{% for member in project.members.all %}
+                                       <a href="{% url 'user_management:profile' member %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ member.username }}</span></a>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>{% trans "Invited" %}:</strong></td>
+                                <td>{% for invitation in invitations %}
+                                            <p class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-envelope-o""></i>{{ invitation.user.username }}</span></p>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="form-group inline-form" >
+                            <button type="submit" id="leave_project_button" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#leaveGroupModal">{% trans "leave project" %}</button>
+                        </div>
+                        <a href="{% url 'project_management:edit' project.id %}">
+                            <button type="submit" id="edit_project_button" name="edit_project" class="btn btn-success">{% trans "edit project" %}</button>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <a href="{% url 'project_management:edit' project.id %}">
-                <button type="submit" id="edit_project_button" name="edit_project" class="btn btn-success">{% trans "edit project" %}</button>
-            </a>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-primary">
-                <div class="panel-heading"><i class="fa fa-check-square-o"></i> {% trans "Todo's" %}</div>
-                <div class="widget-box">
-                    <div class="widget-container table-responsive">
+                <div class="panel-heading noselect toggle_header"><i class="fa fa-check-square-o"></i> {% trans "Todo's" %}</div>
+                <div class="toggle_content">
+                    <div class="widget-box">
+                    <!--<div class="widget-container table-responsive">
                         <table class="table table-hover table-striped order-table table-green">
                         <thead>
                             <tr>
@@ -89,20 +96,111 @@
                             </button>
                         </form>
 
+                    </div>-->
+                        {% for todo in todo_overdue %}
+                    <div class="panel panel-danger" style="margin: 7px;">
+                        <div class="panel-heading noselect toggle_header">{{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-square-o fa-lg"></i></span></div>
+                        <div class="panel-body toggle_content hide-alert">
+                           <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ todo.description }}</p>
+                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>{{ todo.due_date }}</p>
+                            <p><i class="fa fa-fw fa-users fa-lg"></i>
+                            {% for assignee in todo.assignees.all %}
+                                <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                            {% endfor %}
+                            </p>
+                            <p><i class="fa fa-fw fa-tags fa-lg"></i>
+                            {% for tag in todo.tags.all %}
+                                <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                            {% endfor %}
+                            </p>
+                            <hr style="margin-top:5px;margin-bottom:10px;">
+                            <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-2x fa-pencil-square-o"></i></a></span>
+                        </div>
                     </div>
+                    {% endfor %}
+                        {% for todo in todo_today %}
+                    <div class="panel panel-warning" style="margin: 7px;">
+                        <div class="panel-heading noselect toggle_header">{{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-square-o fa-lg"></i></span></div>
+                        <div class="panel-body toggle_content hide-alert">
+                           <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ todo.description }}</p>
+                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>{{ todo.due_date }}</p>
+                            <p><i class="fa fa-fw fa-users fa-lg"></i>
+                            {% for assignee in todo.assignees.all %}
+                                <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                            {% endfor %}
+                            </p>
+                            <p><i class="fa fa-fw fa-tags fa-lg"></i>
+                            {% for tag in todo.tags.all %}
+                                <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                            {% endfor %}
+                            </p>
+                            <hr style="margin-top:5px;margin-bottom:10px;">
+                            <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-2x fa-pencil-square-o"></i></a></span>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                        <div  id="todo_rest_box">
+                        {% for todo in todo_rest %}
+                    <div class="panel panel-default" style="margin: 7px;">
+                        <div class="panel-heading noselect toggle_header">{{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-square-o fa-lg"></i></span></div>
+                        <div class="panel-body toggle_content hide-alert">
+                           <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ todo.description }}</p>
+                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>{{ todo.due_date }}</p>
+                            <p><i class="fa fa-fw fa-users fa-lg"></i>
+                            {% for assignee in todo.assignees.all %}
+                                <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                            {% endfor %}
+                            </p>
+                            <p><i class="fa fa-fw fa-tags fa-lg"></i>
+                            {% for tag in todo.tags.all %}
+                                <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                            {% endfor %}
+                            </p>
+                            <hr style="margin-top:5px;margin-bottom:10px;">
+                            <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-2x fa-pencil-square-o"></i></a></span>
+                        </div>
+                    </div>
+                        {% endfor %}
+                            </div>
+                        <hr style="margin: 10px">
+                        <div id="todo_closed_box">
+                        {% for todo in todo_closed %}
+                    <div class="panel panel-default" style="margin: 7px; opacity: 0.4;">
+                        <div class="panel-heading noselect toggle_header">{{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-refresh fa-lg"></i></span></div>
+                        <div class="panel-body toggle_content hide-alert">
+                           <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ todo.description }}</p>
+                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>{{ todo.due_date }}</p>
+                            <p><i class="fa fa-fw fa-users fa-lg"></i>
+                            {% for assignee in todo.assignees.all %}
+                                <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                            {% endfor %}
+                            </p>
+                            <p><i class="fa fa-fw fa-tags fa-lg"></i>
+                            {% for tag in todo.tags.all %}
+                                <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                            {% endfor %}
+                            </p>
+                            <hr style="margin-top:5px;margin-bottom:10px;">
+                            <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-2x fa-pencil-square-o"></i></a></span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                            </div>
+                </div>
                 </div>
             </div>
         </div>
-    <div class="col-md-6" >
-        <div class="panel panel-primary">
-            <div class="panel-heading"><i class="fa fa-calendar"></i> {% trans "Calendar" %}</div>
-            <div class="panel-body" id="calendar">
+        <div class="col-md-6" >
+            <div class="panel panel-primary">
+                <div class="panel-heading"><i class="fa fa-calendar"></i> {% trans "Calendar" %}</div>
+                <div class="panel-body" id="calendar">
 
+                </div>
             </div>
         </div>
     </div>
-
-        <div class="modal fade" id="leaveGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="leaveGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -126,5 +224,4 @@
             </div>
           </div>
         </div>
-</div>
 {% endblock %}

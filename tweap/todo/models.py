@@ -28,8 +28,20 @@ class Todo(models.Model):
         return Todo.objects.filter(project=project, done=False)
 
     @classmethod
+    def get_open_overdue_for_project(cls, project):
+        return Todo.objects.filter(project=project, done=False, due_date__isnull=False, due_date__lt=datetime.date.today())
+
+    @classmethod
+    def get_open_due_today_for_project(cls, project):
+        return Todo.objects.filter(project=project, done=False, due_date__isnull=False, due_date=datetime.date.today())
+
+    @classmethod
     def get_closed_for_project(cls, project):
         return Todo.objects.filter(project=project, done=True)
+
+    @classmethod
+    def get_open_rest_for_project(cls, project):
+        return Todo.objects.filter(project=project, done=False, due_date__isnull=False, due_date__gt=datetime.date.today()) | Todo.objects.filter(project=project, done=False, due_date__isnull=True)
 
     @classmethod
     def get_all_for_user(cls, user):
