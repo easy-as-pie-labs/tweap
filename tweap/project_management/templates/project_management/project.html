@@ -20,7 +20,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div id="project_title_header" class="noselect toggle_header panel-heading"><i class="{{ project.icon }}"></i> You are in the epic and cool and very productive project <b>{{ project.name }}</b> </div>
+                <div id="project_title_header" class="noselect toggle_header panel-heading"><i class="{{ project.icon }}"></i> You are currently viewing the project <b>{{ project.name }}</b> </div>
                 <div class="toggle_content" style="display: none">
                     <div class="panel-body">
                         <p>
@@ -193,8 +193,8 @@
         </div>
         <div class="col-md-6" >
             <div class="panel panel-primary">
-                <div class="panel-heading"><i class="fa fa-calendar"></i> {% trans "Calendar" %}</div>
-                <div class="panel-body" id="calendar">
+                <div class="panel-heading noselect toggle_header"><i class="fa fa-calendar"></i> {% trans "Calendar" %}</div>
+                <div class="panel-body toggle_content" id="calendar">
 
                 </div>
             </div>
