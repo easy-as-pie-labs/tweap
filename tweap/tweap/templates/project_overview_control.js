@@ -46,10 +46,14 @@ function changeStateToClear(output, child) {
     if(output['state'] == true) {
         var todo_item = child.parent().parent().parent();
 
+        child.removeClass('fa fa-fw fa-square-o fa-lg');
+        child.addClass('fa fa-fw fa-check-square-o fa-lg');
+
         todo_item.fadeOut(function() {
             todo_item.remove();
             $('#todo_closed_box').append(todo_item);
-            child.removeClass('fa fa-fw fa-square-o fa-lg');
+
+            child.removeClass('fa fa-fw fa-check-square-o fa-lg');
             child.addClass('fa fa-fw fa-refresh fa-lg');
 
             var panel_header = todo_item.first();
