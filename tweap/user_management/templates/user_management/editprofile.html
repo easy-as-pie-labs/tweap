@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block user_management_template %}
     <div class="well well-lg panel">
-        <h2>{% trans "Your profile" %}</h2>
+        <h1>{% trans "Edit your profile" %}</h1><br>
         {% for error, message in error_messages.items %}
             <p class="alert alert-danger no-margin-element">{{ message }}</p>
         {% endfor %}
@@ -81,9 +81,9 @@
                 <td><input class="form-control" type="number" name="housenumber" value="{% if not profile_address.house_number %}{% else %}{{ profile_address.house_number }}{% endif %}"></td>
             </tr>
         </table>
-            <button id="save_changes" class="btn btn-primary btn-lg">{% trans "Save Changes" %}</button>
+            <button id="save_changes" class="btn btn-primary">{% trans "Save Changes" %}</button>
         </form>
-        <a href="{% url 'user_management:delete_account' %}"><button id="delete_account" name="delete_account" class="btn btn-danger btn-lg">{% trans "Delete account" %}</button></a>
+        <a href="{% url 'user_management:delete_account' %}"><button id="delete_account" name="delete_account" class="btn btn-danger">{% trans "Delete account" %}</button></a>
         </div>
     </div>
 {% endblock %}

@@ -4,10 +4,11 @@
 {% block user_management_template %}
         <div class="well well-lg panel">
             {% if user.id == request_user.id %}
-                <h2>{% trans "Your profile" %}</h2>
+                <h1>{% trans "Your profile" %}</h1>
             {% else %}
-                <h2>{{user.username}}'s {% trans "profile" %}</h2>
+                <h1>{{user.username}}'s {% trans "profile" %}</h1>
             {% endif %}
+            <br>
             {% if user.profile.picture %}
                 <img class="col-md-6 col-xs-12" src="{{ user.profile.picture.url}}">
             {% endif %}
@@ -38,9 +39,7 @@
                 </tr>
             </table>
             {% if user.id == request_user.id %}
-            <form class="form-group" action="{% url 'user_management:edit_profile' %}" method="GET">
-                <button id="make_changes" type="submit" name="make_changes" class="btn btn-primary btn-lg">{% trans "Make Changes" %}</button>
-            </form>
+            <a href="{% url 'user_management:edit_profile' %}"><button id="make_changes" type="submit" name="make_changes" class="btn btn-primary">{% trans "Make Changes" %}</button></a>
             {% endif %}
         </div>
 {% endblock %}
