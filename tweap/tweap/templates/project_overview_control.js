@@ -96,7 +96,7 @@ function changeStateToUnclear(output, child) {
 
             todo_item.fadeTo('default', 1);
 
-            $('.fa-square-o').hover(function () {
+            child.hover(function () {
                 $(this).removeClass('fa-square-o');
                 $(this).addClass('fa-check-square-o');
             }, function () {
