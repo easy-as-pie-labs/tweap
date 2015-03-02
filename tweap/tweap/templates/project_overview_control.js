@@ -5,7 +5,7 @@ $.ajaxSetup({
 });
 
 $(document).ready(function () {
-    $('.fa-square-o').hover(function () {
+    $('.hover-change').hover(function () {
         $(this).removeClass('fa-square-o');
         $(this).addClass('fa-check-square-o');
     }, function () {
@@ -13,7 +13,7 @@ $(document).ready(function () {
         $(this).addClass('fa-square-o')
     });
 
-    $('.fa-check-square-o').hover(function () {
+    $('.hover-reopen').hover(function () {
         $(this).removeClass('fa-check-square-o');
         $(this).addClass('fa-refresh');
     }, function () {

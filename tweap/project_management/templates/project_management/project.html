@@ -99,7 +99,7 @@
                     </div>-->
                         {% for todo in todo_overdue %}
                     <div class="panel panel-danger" style="margin: 7px;">
-                        <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right" style="margin-right: 10px"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-square-o fa-lg"></i></span></div>
+                        <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right" style="margin-right: 10px"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-square-o fa-lg hover-change"></i></span></div>
                         <div class="panel-body toggle_content hide-alert">
                            <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ todo.description }}</p>
                             <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>{{ todo.due_date }}</p>
@@ -120,7 +120,7 @@
                     {% endfor %}
                         {% for todo in todo_today %}
                     <div class="panel panel-warning" style="margin: 7px;">
-                        <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-square-o fa-lg"></i></span></div>
+                        <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-square-o fa-lg hover-change"></i></span></div>
                         <div class="panel-body toggle_content hide-alert">
                            <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ todo.description }}</p>
                             <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>{{ todo.due_date }}</p>
@@ -143,7 +143,7 @@
                         <div  id="todo_rest_box">
                         {% for todo in todo_rest %}
                     <div class="panel panel-default" style="margin: 7px;">
-                        <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-square-o fa-lg"></i></span></div>
+                        <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-square-o fa-lg hover-change"></i></span></div>
                         <div class="panel-body toggle_content hide-alert">
                            <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ todo.description }}</p>
                             <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>{{ todo.due_date }}</p>
@@ -167,7 +167,7 @@
                         <div id="todo_closed_box">
                         {% for todo in todo_closed %}
                     <div class="panel panel-default" style="margin: 7px; opacity: 0.4;">
-                        <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-check-square-o fa-lg"></i></span></div>
+                        <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-check-square-o fa-lg hover-reopen"></i></span></div>
                         <div class="panel-body toggle_content hide-alert">
                            <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ todo.description }}</p>
                             <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>{{ todo.due_date }}</p>
@@ -252,9 +252,9 @@
                     </div>
                     {% endfor %}
                 </div>
+                </div>
             </div>
         </div>
-    </div>
     <div class="modal fade" id="leaveGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
