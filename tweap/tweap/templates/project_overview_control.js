@@ -12,9 +12,7 @@ $(document).ready(function () {
         $(this).removeClass('fa-check-square-o');
         $(this).addClass('fa-square-o')
     });
-});
 
-$(document).ready(function () {
     $('.fa-check-square-o').hover(function () {
         $(this).removeClass('fa-check-square-o');
         $(this).addClass('fa-refresh');
@@ -28,7 +26,7 @@ $(document).ready(function () {
 $(document).on('click', '.changeStateTodo', function(e) {
     var child = $(this).children('i');
     var todo_id = $(this).attr('data-todo-id');
-    
+
     if(child.hasClass("fa-refresh")){
         sendChangeStateTodoAjaxRequest("unclear", todo_id, child);
     }else{
@@ -40,6 +38,7 @@ $(document).on('click', '.changeStateTodo', function(e) {
 
 $(document).on('click', '.toggle_header', function() {
     $(this).next('.toggle_content').slideToggle();
+    $(this).children().first().toggleClass('fa-rotate-90')
 });
 
 //Actual Ajax-Request
