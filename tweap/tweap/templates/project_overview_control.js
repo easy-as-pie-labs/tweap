@@ -107,23 +107,24 @@ function changeStateToUnclear(output, child) {
             var currentDate = new Date();
             currentDate.setHours(1, 0, 0);
 
-            var panelClass = "panel panel-default";
 
             //comparing due_date with current date to choose a color for todoh
-            if(currentDate > due_date) {
-                panelClass = "panel panel-danger";
-            }
 
             if(currentDate.getDay() === due_date.getDay() &&
                 currentDate.getMonth() === due_date.getMonth() &&
                 currentDate.getYear() === due_date.getYear()
             ) {
-                panelClass = "panel panel-warning";
+                todo_item.addClass("panel panel-warning");
+                $('#todo_today_box').append(todo_item);
+            }else if(currentDate > due_date) {
+                todo_item.addClass("panel panel-danger");
+                $('#todo_overdue_box').append(todo_item);
+            }else {
+                $('#todo_rest_box').append(todo_item);
             }
 
-            todo_item.addClass(panelClass);
 
-            $('#todo_rest_box').append(todo_item);
+
 
             var panel_header = todo_item.first();
             // close open togglebox and change icon
