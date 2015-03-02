@@ -14,17 +14,6 @@ $(document).ready(function () {
     });
 });
 
-// should work on reopened todos
-$(document).bind('DOMSubtreeModified', function () {
-    $('.fa-square-o').hover(function () {
-        $(this).removeClass('fa-square-o');
-        $(this).addClass('fa-check-square-o');
-    }, function () {
-        $(this).removeClass('fa-check-square-o');
-        $(this).addClass('fa-square-o')
-    });
-});
-
 //Listener for all Done/Undone buttons of every Todoh
 $(document).on('click', '.changeStateTodo', function(e) {
     var child = $(this).children('i');
@@ -97,15 +86,23 @@ function changeStateToUnclear(output, child) {
         todo_item.fadeOut(function() {
             todo_item.remove();
             $('#todo_rest_box').append(todo_item);
-            child.removeClass('fa fa-fw fa-refresh fa-lg');
-            child.addClass('fa fa-fw fa-square-o fa-lg');
-
             // TODO: check due_date and give color accordingly?
 
             var panel_header = todo_item.first();
             panel_header.children().first().next('.toggle_content').hide();
 
+            child.removeClass('fa fa-fw fa-refresh fa-lg');
+            child.addClass('fa fa-fw fa-square-o fa-lg');
+
             todo_item.fadeTo('default', 1);
+
+            $('.fa-square-o').hover(function () {
+                $(this).removeClass('fa-square-o');
+                $(this).addClass('fa-check-square-o');
+            }, function () {
+                $(this).removeClass('fa-check-square-o');
+                $(this).addClass('fa-square-o')
+            });
         });
     }
 }
