@@ -46,8 +46,9 @@ class Project(models.Model):
         Notification = models.get_model('notification_center', 'Notification')
         Notification.objects.filter(receiver=user, project=self).delete()
 
-        #notify all project users
-        Notification.project_notification(user, self, '', 'left the project')
+        # notify all project users
+        target_url = reverse('project_management:project', args=(self.id, ))
+        Notification.project_notification(user, self, target_url, 'left the project')
 
         if self.members.count() == 0:
             if not Invitation.objects.filter(project=self):
