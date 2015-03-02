@@ -28,8 +28,17 @@ $(document).on('click', '.changeStateTodo', function(e) {
 
 $(document).on('click', '.toggle_header', function() {
     $(this).next('.toggle_content').slideToggle();
-    $(this).children().first().toggleClass('fa-chevron-right');
-    $(this).children().first().toggleClass('fa-chevron-down');
+
+    var iconHolder = $(this).children().first();
+
+    if(iconHolder.hasClass('fa-chevron-right')) {
+        iconHolder.removeClass('fa-chevron-right');
+        iconHolder.addClass('fa-chevron-down');
+    }
+    else if(iconHolder.hasClass('fa-chevron-down')){
+        iconHolder.removeClass('fa-chevron-down');
+        iconHolder.addClass('fa-chevron-right');
+    }
 });
 
 //Actual Ajax-Request
