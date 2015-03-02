@@ -26,11 +26,22 @@ $(document).on('click', '.changeStateTodo', function(e) {
     e.stopPropagation();
 });
 
+// toggle box and indicator icons
 $(document).on('click', '.toggle_header', function() {
     $(this).next('.toggle_content').slideToggle();
 
     var iconHolder = $(this).children().first();
+    toggleIcon(iconHolder);
 
+    var rightIconHolder = $(this).children().last();
+    toggleIcon(rightIconHolder);
+});
+
+/**
+ * changes toggle indicator icon (open / closed) for given jquery element
+ * @param iconHolder
+ */
+function toggleIcon(iconHolder){
     if(iconHolder.hasClass('fa-chevron-right')) {
         iconHolder.removeClass('fa-chevron-right');
         iconHolder.addClass('fa-chevron-down');
@@ -39,7 +50,7 @@ $(document).on('click', '.toggle_header', function() {
         iconHolder.removeClass('fa-chevron-down');
         iconHolder.addClass('fa-chevron-right');
     }
-});
+}
 
 //Actual Ajax-Request
 function sendChangeStateTodoAjaxRequest(action, todo_id, child) {

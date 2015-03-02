@@ -13,6 +13,7 @@ function initCalendar() {
         editable: true,
         eventLimit: true, // allow "more" link when too many events
         timeFormat: 'H:mm',
+        axisFormat: 'H:mm',
         eventDrop: function(event, delta, revertFunc) {
             updateCalendarEntry(event, revertFunc);
         },
