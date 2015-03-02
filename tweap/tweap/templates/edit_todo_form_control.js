@@ -123,6 +123,7 @@ $(document).ready(function(){
         format: "YYYY-MM-DD",
         stepping: 5,
         useCurrent: false,
+        showClear: true,
         icons: {
             time: "fa fa-clock-o",
             date: "fa fa-calendar",
