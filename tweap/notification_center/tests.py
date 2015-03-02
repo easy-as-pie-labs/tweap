@@ -122,6 +122,7 @@ class ViewTest(TestCase):
         todo.delete()
         notification.delete()
 
+
     def test_mark_notification(self):
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
         user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
@@ -168,6 +169,7 @@ class ViewTest(TestCase):
         todo.delete()
         notification.delete()
 
+
     def test_delete_todo(self):
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
         user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
@@ -193,8 +195,6 @@ class ViewTest(TestCase):
         notification.target_url = "http://testserver/todo/edit/"+str(todo.id)
         notification.event = notification_event
         notification.save()
-
-        dat_notification = Notification.objects.get(id=notification.id)
 
         # Has notification
         self.assertTrue(notification.receiver == user)
@@ -323,7 +323,6 @@ class ViewTest(TestCase):
         project.delete()
         event.delete()
 
-
     def test_edit_event(self):
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
         user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
@@ -389,7 +388,7 @@ class ViewTest(TestCase):
         project.delete()
         event.delete()
         notification.delete()
-    
+
     def test_leave_project(self):
         user = User.objects.create_user('testuser', 'test@test.de', 'testpw')
         user2 = User.objects.create_user('testuser2', 'test2@test.de', 'testpw')
@@ -410,4 +409,3 @@ class ViewTest(TestCase):
         user.delete()
         user2.delete()
         project.delete()
-
