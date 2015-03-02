@@ -198,3 +198,23 @@ p#project_icon{
         display:block;
     }
 }
+
+
+.todo-table {
+    display: table;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.todo-table > div {
+    display: table-row;
+}
+
+.todo-table > div > div {
+    display: table-cell;
+    padding-right: 10px;
+}
+
+.todo-table-spacer {
+    height: 15px;
+}
