@@ -74,7 +74,7 @@
                                 <div class="todo-table-spacer"></div>
                                 <div>
                                     <div><i class="fa fa-fw fa-calendar"></i></div>
-                                    <div>{% if todo.due_date == None %}{% trans "No due date" %}{% else %}{{ todo.due_date }}{% endif %}</div>
+                                    <div>{% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}</div>
                                 </div>
                                 <div class="todo-table-spacer"></div>
                                 <div>
@@ -117,7 +117,7 @@
                                 <div class="todo-table-spacer"></div>
                                 <div>
                                     <div><i class="fa fa-fw fa-calendar"></i></div>
-                                    <div>{% if todo.due_date == None %}{% trans "No due date" %}{% else %}{{ todo.due_date }}{% endif %}</div>
+                                    <div>{% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}</div>
                                 </div>
                                 <div class="todo-table-spacer"></div>
                                 <div>
@@ -161,7 +161,7 @@
                                 <div class="todo-table-spacer"></div>
                                 <div>
                                     <div><i class="fa fa-fw fa-calendar"></i></div>
-                                    <div>{% if todo.due_date == None %}{% trans "No due date" %}{% else %}{{ todo.due_date }}{% endif %}</div>
+                                    <div>{% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}</div>
                                 </div>
                                 <div class="todo-table-spacer"></div>
                                 <div>
@@ -207,7 +207,7 @@
                                 <div class="todo-table-spacer"></div>
                                 <div>
                                     <div><i class="fa fa-fw fa-calendar"></i></div>
-                                    <div>{% if todo.due_date == None %}{% trans "No due date" %}{% else %}{{ todo.due_date }}{% endif %}</div>
+                                    <div>{% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}</div>
                                 </div>
                                 <div class="todo-table-spacer"></div>
                                 <div>
