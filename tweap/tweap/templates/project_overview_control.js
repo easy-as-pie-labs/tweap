@@ -98,20 +98,26 @@ function changeStateToUnclear(output, child) {
         todo_item.fadeOut(function() {
             todo_item.remove();
 
+            //Get due_date from span of todoh
             var due_date = todo_item.find('.due-date');
             due_date = due_date.attr('data-date');
             due_date = new Date(due_date);
 
+            //Get current date
             var currentDate = new Date();
             currentDate.setHours(1, 0, 0);
 
             var panelClass = "panel panel-default";
 
-            if(currentDate.getDate() > due_date.getDate()) {
+            //comparing due_date with current date to choose a color for todoh
+            if(currentDate > due_date) {
                 panelClass = "panel panel-danger";
             }
 
-            if(currentDate.getDate() === due_date.getDate()) {
+            if(currentDate.getDay() === due_date.getDay() &&
+                currentDate.getMonth() === due_date.getMonth() &&
+                currentDate.getYear() === due_date.getYear()
+            ) {
                 panelClass = "panel panel-warning";
             }
 
