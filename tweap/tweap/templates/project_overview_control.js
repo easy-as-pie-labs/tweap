@@ -26,11 +26,22 @@ $(document).on('click', '.changeStateTodo', function(e) {
     e.stopPropagation();
 });
 
+// toggle box and indicator icons
 $(document).on('click', '.toggle_header', function() {
     $(this).next('.toggle_content').slideToggle();
 
     var iconHolder = $(this).children().first();
+    toggleIcon(iconHolder);
 
+    var rightIconHolder = $(this).children().last();
+    toggleIcon(rightIconHolder);
+});
+
+/**
+ * changes toggle indicator icon (open / closed) for given jquery element
+ * @param iconHolder
+ */
+function toggleIcon(iconHolder){
     if(iconHolder.hasClass('fa-chevron-right')) {
         iconHolder.removeClass('fa-chevron-right');
         iconHolder.addClass('fa-chevron-down');
@@ -39,7 +50,7 @@ $(document).on('click', '.toggle_header', function() {
         iconHolder.removeClass('fa-chevron-down');
         iconHolder.addClass('fa-chevron-right');
     }
-});
+}
 
 //Actual Ajax-Request
 function sendChangeStateTodoAjaxRequest(action, todo_id, child) {
@@ -107,23 +118,24 @@ function changeStateToUnclear(output, child) {
             var currentDate = new Date();
             currentDate.setHours(1, 0, 0);
 
-            var panelClass = "panel panel-default";
 
             //comparing due_date with current date to choose a color for todoh
-            if(currentDate > due_date) {
-                panelClass = "panel panel-danger";
-            }
 
             if(currentDate.getDay() === due_date.getDay() &&
                 currentDate.getMonth() === due_date.getMonth() &&
                 currentDate.getYear() === due_date.getYear()
             ) {
-                panelClass = "panel panel-warning";
+                todo_item.addClass("panel panel-warning");
+                $('#todo_today_box').append(todo_item);
+            }else if(currentDate > due_date) {
+                todo_item.addClass("panel panel-danger");
+                $('#todo_overdue_box').append(todo_item);
+            }else {
+                $('#todo_rest_box').append(todo_item);
             }
 
-            todo_item.addClass(panelClass);
 
-            $('#todo_rest_box').append(todo_item);
+
 
             var panel_header = todo_item.first();
             // close open togglebox and change icon

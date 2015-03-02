@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="list-group" id="inbox">
-                    <span class="list-group-item active noselect toggle_header"><i class="fa fa-inbox"></i> {% trans "Inbox" %}</span>
+                    <span class="list-group-item active noselect toggle_header"><i class="fa fa-inbox"></i> {% trans "Inbox" %}<i class="pull-right fa fa-chevron-right"></i></span>
                     <div class="toggle_content" id="inbox-inner">
                         {% for invitation in invitations %}
                         <div id="invitation_container_id_{{ invitation.id }}" class="list-group-item">

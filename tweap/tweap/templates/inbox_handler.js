@@ -3,10 +3,20 @@ $.ajaxSetup({
   data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
 });
 
-
-
+// toggle box and indicator icons
 $(document).on('click', '.toggle_header', function() {
     $(this).next('.toggle_content').slideToggle();
+
+    var iconHolder = $(this).children().last();
+
+    if(iconHolder.hasClass('fa-chevron-right')) {
+        iconHolder.removeClass('fa-chevron-right');
+        iconHolder.addClass('fa-chevron-down');
+    }
+    else if(iconHolder.hasClass('fa-chevron-down')){
+        iconHolder.removeClass('fa-chevron-down');
+        iconHolder.addClass('fa-chevron-right');
+    }
 });
 
 //Notificationhandling
