@@ -167,7 +167,7 @@
                         <div id="todo_closed_box">
                         {% for todo in todo_closed %}
                     <div class="panel panel-default" style="margin: 7px; opacity: 0.4;">
-                        <div class="panel-heading noselect toggle_header">{{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-refresh fa-lg"></i></span></div>
+                        <div class="panel-heading noselect toggle_header">{{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-check-square-o fa-lg"></i></span></div>
                         <div class="panel-body toggle_content hide-alert">
                            <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ todo.description }}</p>
                             <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>{{ todo.due_date }}</p>
