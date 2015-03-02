@@ -105,7 +105,7 @@
                                {{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}
                            </p>
                             <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>
-                                {% if todo.due_date == None %}{% trans "No due date" %}{% else %}{{ todo.due_date }}{% endif %}
+                                {% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}
                             </p>
                             <p><i class="fa fa-fw fa-users fa-lg"></i>
                             {% for assignee in todo.assignees.all %}
@@ -134,7 +134,7 @@
                                {{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}
                            </p>
                             <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>
-                                {% if todo.due_date == None %}{% trans "No due date" %}{% else %}{{ todo.due_date }}{% endif %}
+                                {% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}
                             </p>
                             <p><i class="fa fa-fw fa-users fa-lg"></i>
                             {% for assignee in todo.assignees.all %}
@@ -165,7 +165,7 @@
                                {{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}
                            </p>
                             <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>
-                                {% if todo.due_date == None %}{% trans "No due date" %}{% else %}{{ todo.due_date }}{% endif %}
+                                {% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}
                             </p>
                             <p><i class="fa fa-fw fa-users fa-lg"></i>
                             {% for assignee in todo.assignees.all %}
@@ -197,7 +197,7 @@
                                 {{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}
                            </p>
                             <p> <i class="fa fa-fw fa-calendar-o fa-lg"></i>
-                                {% if todo.due_date == None %}{% trans "No due date" %}{% else %}{{ todo.due_date }}{% endif %}
+                                {% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}
                             </p>
                             <p><i class="fa fa-fw fa-users fa-lg"></i>
                             {% for assignee in todo.assignees.all %}

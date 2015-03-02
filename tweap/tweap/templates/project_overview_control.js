@@ -102,8 +102,27 @@ function changeStateToUnclear(output, child) {
 
         todo_item.fadeOut(function() {
             todo_item.remove();
+
+            var due_date = todo_item.find('.due-date');
+            due_date = due_date.attr('data-date');
+            due_date = new Date(due_date);
+
+            var currentDate = new Date();
+            currentDate.setHours(1, 0, 0);
+
+            var panelClass = "panel panel-default";
+
+            if(currentDate.getDate() > due_date.getDate()) {
+                panelClass = "panel panel-danger";
+            }
+
+            if(currentDate.getDate() === due_date.getDate()) {
+                panelClass = "panel panel-warning";
+            }
+
+            todo_item.addClass(panelClass);
+
             $('#todo_rest_box').append(todo_item);
-            // TODO: check due_date and give color accordingly?
 
             var panel_header = todo_item.first();
             panel_header.children().first().next('.toggle_content').hide();
