@@ -38,7 +38,8 @@ $(document).on('click', '.changeStateTodo', function(e) {
 
 $(document).on('click', '.toggle_header', function() {
     $(this).next('.toggle_content').slideToggle();
-    $(this).children().first().toggleClass('fa-rotate-90')
+    $(this).children().first().toggleClass('fa-chevron-right')
+    $(this).children().first().toggleClass('fa-chevron-down')
 });
 
 //Actual Ajax-Request
