@@ -86,7 +86,7 @@ class Todo(models.Model):
     def get_date_for_dashboard(self):
         month = self.due_date.month
         day = self.due_date.day
-        time = str(day) + "." + str(month)
+        time = str(day) + "." + str(month) + "."
         return time
 
     def remove_assignee(self, user):

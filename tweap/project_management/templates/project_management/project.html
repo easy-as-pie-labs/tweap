@@ -101,16 +101,24 @@
                     <div class="panel panel-danger" style="margin: 7px;">
                         <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right" style="margin-right: 10px"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-square-o fa-lg"></i></span></div>
                         <div class="panel-body toggle_content hide-alert">
-                           <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ todo.description }}</p>
-                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>{{ todo.due_date }}</p>
+                           <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>
+                               {{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}
+                           </p>
+                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>
+                                {% if todo.due_date == None %}{% trans "No due date" %}{% else %}{{ todo.due_date }}{% endif %}
+                            </p>
                             <p><i class="fa fa-fw fa-users fa-lg"></i>
                             {% for assignee in todo.assignees.all %}
                                 <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                                {% empty %}
+                                {% trans "No assigned users" %}
                             {% endfor %}
                             </p>
                             <p><i class="fa fa-fw fa-tags fa-lg"></i>
                             {% for tag in todo.tags.all %}
                                 <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                {% empty %}
+                                {% trans "No tags" %}
                             {% endfor %}
                             </p>
                             <hr style="margin-top:5px;margin-bottom:10px;">
@@ -122,16 +130,24 @@
                     <div class="panel panel-warning" style="margin: 7px;">
                         <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-square-o fa-lg"></i></span></div>
                         <div class="panel-body toggle_content hide-alert">
-                           <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ todo.description }}</p>
-                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>{{ todo.due_date }}</p>
+                           <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>
+                               {{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}
+                           </p>
+                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>
+                                {% if todo.due_date == None %}{% trans "No due date" %}{% else %}{{ todo.due_date }}{% endif %}
+                            </p>
                             <p><i class="fa fa-fw fa-users fa-lg"></i>
                             {% for assignee in todo.assignees.all %}
                                 <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                                 {% empty %}
+                                {% trans "No assigned users" %}
                             {% endfor %}
                             </p>
                             <p><i class="fa fa-fw fa-tags fa-lg"></i>
                             {% for tag in todo.tags.all %}
                                 <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                {% empty %}
+                                {% trans "No tags" %}
                             {% endfor %}
                             </p>
                             <hr style="margin-top:5px;margin-bottom:10px;">
@@ -145,16 +161,24 @@
                     <div class="panel panel-default" style="margin: 7px;">
                         <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-square-o fa-lg"></i></span></div>
                         <div class="panel-body toggle_content hide-alert">
-                           <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ todo.description }}</p>
-                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>{{ todo.due_date }}</p>
+                           <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>
+                               {{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}
+                           </p>
+                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>
+                                {% if todo.due_date == None %}{% trans "No due date" %}{% else %}{{ todo.due_date }}{% endif %}
+                            </p>
                             <p><i class="fa fa-fw fa-users fa-lg"></i>
                             {% for assignee in todo.assignees.all %}
                                 <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                                 {% empty %}
+                                {% trans "No assigned users" %}
                             {% endfor %}
                             </p>
                             <p><i class="fa fa-fw fa-tags fa-lg"></i>
                             {% for tag in todo.tags.all %}
                                 <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                {% empty %}
+                                {% trans "No tags" %}
                             {% endfor %}
                             </p>
                             <hr style="margin-top:5px;margin-bottom:10px;">
@@ -169,16 +193,24 @@
                     <div class="panel panel-default" style="margin: 7px; opacity: 0.4;">
                         <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-check-square-o fa-lg"></i></span></div>
                         <div class="panel-body toggle_content hide-alert">
-                           <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ todo.description }}</p>
-                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i>{{ todo.due_date }}</p>
+                           <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>
+                                {{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}
+                           </p>
+                            <p> <i class="fa fa-fw fa-calendar-o fa-lg"></i>
+                                {% if todo.due_date == None %}{% trans "No due date" %}{% else %}{{ todo.due_date }}{% endif %}
+                            </p>
                             <p><i class="fa fa-fw fa-users fa-lg"></i>
                             {% for assignee in todo.assignees.all %}
                                 <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                                 {% empty %}
+                                {% trans "No assigned users" %}
                             {% endfor %}
                             </p>
                             <p><i class="fa fa-fw fa-tags fa-lg"></i>
                             {% for tag in todo.tags.all %}
                                 <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                {% empty %}
+                                {% trans "No tags" %}
                             {% endfor %}
                             </p>
                             <hr style="margin-top:5px;margin-bottom:10px;">
