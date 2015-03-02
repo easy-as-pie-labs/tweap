@@ -51,8 +51,8 @@
 
 /* for datetimepicker commented out, I thinks it's not used anymore, jawu
 table a{color:white;font-size:16px;}
-table a:hover{color:white;text-decoration: none}
-*/
+table a:hover{color:white;text-decoration: none} */
+
 .errorlist {
     list-style-type: none;
     margin: 0;
@@ -119,6 +119,10 @@ p#project_icon{
 .tag-outer{
     display: inline-block;
     margin-right: 5px;
+}
+
+.tag-outer:hover {
+    text-decoration: none;
 }
 
 .tag-no-interactive,
