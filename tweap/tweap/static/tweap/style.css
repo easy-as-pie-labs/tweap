@@ -174,3 +174,23 @@ p#project_icon{
     -webkit-animation:fa-spin 0.4s 1 linear;
     animation:fa-spin 0.4s 1 linear;
 }
+
+@media (max-width: 768px) {
+    .small-cal {
+        display:block;
+    }
+
+    .big-cal {
+        display:none;
+    }
+}
+
+@media (min-width: 769px) {
+    .small-cal {
+        display:none;
+    }
+
+    .big-cal {
+        display:block;
+    }
+}

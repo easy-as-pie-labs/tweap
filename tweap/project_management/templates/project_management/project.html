@@ -191,11 +191,65 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6" >
+        <div class="col-md-6" id="big-cal">
             <div class="panel panel-primary">
                 <div class="panel-heading noselect toggle_header"><i class="fa fa-calendar"></i> {% trans "Calendar" %}</div>
                 <div class="panel-body toggle_content" id="calendar">
 
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" id="small-cal">
+            <div class="panel panel-primary">
+                <div class="panel-heading noselect toggle_header"><i class="fa fa-calendar"></i> {% trans "Calendar" %}</div>
+                <div class="panel-body toggle_content">
+                    {% for event in future %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading noselect toggle_header">{{ event.title }}<span class="pull-right">{{ event.start }}</span></div>
+                        <div class="panel-body toggle_content hide-alert">
+                            <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ event.description }}</p>
+                            <p><i class="fa fa-fw fa-map-marker fa-lg"></i>{{ event.location }}</p>
+                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>Start: </strong>{{ event.start }}</p>
+                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>End: </strong>{{ event.end }}</p>
+                            <p><i class="fa fa-fw fa-users fa-lg"></i>
+                            {% for attendee in event.attendees.all %}
+                                <a href="{% url 'user_management:profile' attendee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ attendee.username }}</span></a>
+                            {% endfor %}
+                            </p>
+                            <p><i class="fa fa-fw fa-tags fa-lg"></i>
+                            {% for tag in event.tags.all %}
+                                <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                            {% endfor %}
+                            </p>
+                            <hr style="margin-top:5px;margin-bottom:10px;">
+                            <span class="pull-right"><a href="{% url 'cal:edit' event.id %}"><i style="color: #337AB7;" class="fa fa-2x fa-pencil-square-o"></i></a></span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <hr style="margin: 10px">
+                    {% for event in past %}
+                    <div class="panel panel-default" style="opacity: 0.4;">
+                        <div class="panel-heading noselect toggle_header">{{ event.title }}<span class="pull-right">{{ event.start }}</span></div>
+                        <div class="panel-body toggle_content hide-alert">
+                            <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ event.description }}</p>
+                            <p><i class="fa fa-fw fa-map-marker fa-lg"></i>{{ event.location }}</p>
+                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>Start: </strong>{{ event.start }}</p>
+                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>End: </strong>{{ event.end }}</p>
+                            <p><i class="fa fa-fw fa-users fa-lg"></i>
+                            {% for attendee in event.attendees.all %}
+                                <a href="{% url 'user_management:profile' attendee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ attendee.username }}</span></a>
+                            {% endfor %}
+                            </p>
+                            <p><i class="fa fa-fw fa-tags fa-lg"></i>
+                            {% for tag in event.tags.all %}
+                                <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                            {% endfor %}
+                            </p>
+                            <hr style="margin-top:5px;margin-bottom:10px;">
+                            <span class="pull-right"><a href="{% url 'cal:edit' event.id %}"><i style="color: #337AB7;" class="fa fa-2x fa-pencil-square-o"></i></a></span>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

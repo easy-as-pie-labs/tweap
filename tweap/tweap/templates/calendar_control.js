@@ -1,6 +1,9 @@
 {% load i18n %}
 $(document).ready(function() {
+    initCalendar();
+});
 
+function initCalendar() {
     $('#calendar').fullCalendar({
         header: {
             left: 'prev,next today',
@@ -69,4 +72,7 @@ $(document).ready(function() {
             }
         });
     };
-});
+
+    $("#big-cal").addClass("big-cal");
+    $("#small-cal").addClass("small-cal");
+}

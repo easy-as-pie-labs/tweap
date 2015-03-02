@@ -7,6 +7,8 @@ from project_management.models import ProjectForm, Project, Invitation, Tag
 from project_management.tools import invite_users
 from todo.models import Todo
 from cal.models import Event
+import datetime
+import pytz
 import json
 
 
@@ -92,6 +94,19 @@ class ProjectView(View):
         context['todo_rest'] = rest
 
         context['events'] = Event.get_all_for_project(project)
+
+        future = []
+        past = []
+
+        for event in context['events']:
+            if datetime.datetime.now(pytz.utc) <= event.start:
+                future.append(event)
+            else:
+                past.append(event)
+
+        context['future'] = future
+        context['past'] = past
+
         members = project.members.all()
         if request.user in members:
             return render(request, 'project_management/project.html', context)
