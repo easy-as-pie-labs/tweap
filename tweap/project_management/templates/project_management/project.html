@@ -202,10 +202,11 @@
         <div class="col-md-6" id="small-cal">
             <div class="panel panel-primary">
                 <div class="panel-heading noselect toggle_header"><i class="fa fa-calendar"></i> {% trans "Calendar" %}</div>
-                <div class="panel-body toggle_content">
+                <div class="toggle_content">
+                    <div class="widget-box">
                     {% for event in future %}
-                    <div class="panel panel-default">
-                        <div class="panel-heading noselect toggle_header">{{ event.title }}<span class="pull-right">{{ event.start }}</span></div>
+                    <div class="panel panel-default" style="margin: 7px;">
+                        <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ event.title }}<span class="pull-right">{{ event.start }}</span></div>
                         <div class="panel-body toggle_content hide-alert">
                             <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ event.description }}</p>
                             <p><i class="fa fa-fw fa-map-marker fa-lg"></i>{{ event.location }}</p>
