@@ -17,11 +17,11 @@ class Home(View):
             for entry in todo_week:
                 entry.due_date = entry.get_date_for_dashboard()
 
-            cal_today = Event.get_due_today_for_user(request.user)
+            cal_today = Event.get_start_today_for_user(request.user)
             for entry in cal_today:
                 entry.start = entry.get_start_time_for_dashboard()
 
-            cal_week = Event.get_due_this_week_for_user(request.user)
+            cal_week = Event.get_start_this_week_for_user(request.user)
             for entry in cal_week:
                 entry.start = entry.get_start_datetime_for_dashboard()
 

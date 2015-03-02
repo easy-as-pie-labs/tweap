@@ -12,6 +12,14 @@ $(document).ready(function () {
         $(this).removeClass('fa-check-square-o');
         $(this).addClass('fa-square-o')
     });
+
+    $('.fa-check-square-o').hover(function () {
+        $(this).removeClass('fa-check-square-o');
+        $(this).addClass('fa-refresh');
+    }, function () {
+        $(this).removeClass('fa-refresh-o');
+        $(this).addClass('fa-check-square-o')
+    });
 });
 
 //Listener for all Done/Undone buttons of every Todoh
@@ -30,6 +38,8 @@ $(document).on('click', '.changeStateTodo', function(e) {
 
 $(document).on('click', '.toggle_header', function() {
     $(this).next('.toggle_content').slideToggle();
+    $(this).children().first().toggleClass('fa-chevron-right')
+    $(this).children().first().toggleClass('fa-chevron-down')
 });
 
 //Actual Ajax-Request
@@ -63,9 +73,6 @@ function changeStateToClear(output, child) {
             todo_item.remove();
             $('#todo_closed_box').append(todo_item);
 
-            child.removeClass('fa fa-fw fa-check-square-o fa-lg');
-            child.addClass('fa fa-fw fa-refresh fa-lg');
-
             var panel_header = todo_item.first();
             panel_header.children().first().next('.toggle_content').hide();
 
@@ -73,7 +80,17 @@ function changeStateToClear(output, child) {
             panel_header.removeClass("panel-warning");
             panel_header.addClass("panel-default");
 
-            todo_item.fadeTo('default', 0.4);
+            todo_item.fadeTo('default', 0.4, function() {
+
+            });
+
+            child.hover(function () {
+                $(this).removeClass('fa-check-square-o');
+                $(this).addClass('fa-refresh');
+            }, function () {
+                $(this).removeClass('fa-refresh');
+                $(this).addClass('fa-check-square-o')
+            });
         });
     }
 }
