@@ -5,21 +5,11 @@ $.ajaxSetup({
 });
 
 $(document).ready(function () {
-    $('.hover-change').hover(function () {
-        $(this).removeClass('fa-square-o');
-        $(this).addClass('fa-check-square-o');
-    }, function () {
-        $(this).removeClass('fa-check-square-o');
-        $(this).addClass('fa-square-o')
-    });
 
-    $('.hover-reopen').hover(function () {
-        $(this).removeClass('fa-check-square-o');
-        $(this).addClass('fa-refresh');
-    }, function () {
-        $(this).removeClass('fa-refresh-o');
-        $(this).addClass('fa-check-square-o')
-    });
+    addHoverClassChange($('.hover-change'), 'fa-square-o', 'fa-check-square-o');
+
+    addHoverClassChange($('.hover-reopen'), 'fa-check-square-o', 'fa-refresh');
+
 });
 
 //Listener for all Done/Undone buttons of every Todoh
@@ -38,8 +28,8 @@ $(document).on('click', '.changeStateTodo', function(e) {
 
 $(document).on('click', '.toggle_header', function() {
     $(this).next('.toggle_content').slideToggle();
-    $(this).children().first().toggleClass('fa-chevron-right')
-    $(this).children().first().toggleClass('fa-chevron-down')
+    $(this).children().first().toggleClass('fa-chevron-right');
+    $(this).children().first().toggleClass('fa-chevron-down');
 });
 
 //Actual Ajax-Request
@@ -50,13 +40,13 @@ function sendChangeStateTodoAjaxRequest(action, todo_id, child) {
 
     if(action == "clear") {
         $.post("{% url 'todo:mark_done' %}", data, function(output){
-            changeStateToClear(output, child)
+            changeStateToClear(output, child);
         })
     }
 
     if(action == "unclear") {
         $.post("{% url 'todo:mark_undone' %}", data, function(output){
-            changeStateToUnclear(output, child)
+            changeStateToUnclear(output, child);
         })
     }
 }
@@ -66,31 +56,27 @@ function changeStateToClear(output, child) {
     if(output['state'] == true) {
         var todo_item = child.parent().parent().parent();
 
-        child.removeClass('fa fa-fw fa-square-o fa-lg');
-        child.addClass('fa fa-fw fa-check-square-o fa-lg');
-
         todo_item.fadeOut(function() {
             todo_item.remove();
             $('#todo_closed_box').append(todo_item);
 
             var panel_header = todo_item.first();
+
+            // close open togglebox and change icon
             panel_header.children().first().next('.toggle_content').hide();
+            panel_header.children().first().children().first().removeClass('fa-chevron-down');
+            panel_header.children().first().children().first().addClass('fa-chevron-right');
 
             panel_header.removeClass("panel-danger");
             panel_header.removeClass("panel-warning");
             panel_header.addClass("panel-default");
 
-            todo_item.fadeTo('default', 0.4, function() {
+            child.removeClass('fa fa-fw fa-square-o fa-lg');
+            child.addClass('fa fa-fw fa-check-square-o fa-lg');
 
-            });
+            todo_item.fadeTo('default', 0.4);
 
-            child.hover(function () {
-                $(this).removeClass('fa-check-square-o');
-                $(this).addClass('fa-refresh');
-            }, function () {
-                $(this).removeClass('fa-refresh');
-                $(this).addClass('fa-check-square-o')
-            });
+            addHoverClassChange(child, 'fa-check-square-o', 'fa-refresh');
         });
     }
 }
@@ -106,20 +92,33 @@ function changeStateToUnclear(output, child) {
             // TODO: check due_date and give color accordingly?
 
             var panel_header = todo_item.first();
+            // close open togglebox and change icon
             panel_header.children().first().next('.toggle_content').hide();
+            panel_header.children().first().children().first().removeClass('fa-chevron-down');
+            panel_header.children().first().children().first().addClass('fa-chevron-right');
 
             child.removeClass('fa fa-fw fa-refresh fa-lg');
             child.addClass('fa fa-fw fa-square-o fa-lg');
 
             todo_item.fadeTo('default', 1);
 
-            child.hover(function () {
-                $(this).removeClass('fa-square-o');
-                $(this).addClass('fa-check-square-o');
-            }, function () {
-                $(this).removeClass('fa-check-square-o');
-                $(this).addClass('fa-square-o')
-            });
+            addHoverClassChange(child, 'fa-square-o', 'fa-check-square-o');
         });
     }
+}
+
+/**
+ * adds jquery hover event
+ * @param element jquery element
+ * @param baseClass class shown on default
+ * @param hoverClass class shown on hover
+ */
+function addHoverClassChange(element, baseClass, hoverClass) {
+    element.hover(function () {
+        $(this).removeClass(baseClass);
+        $(this).addClass(hoverClass);
+    }, function () {
+        $(this).removeClass(hoverClass);
+        $(this).addClass(baseClass);
+    });
 }
