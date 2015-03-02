@@ -4,6 +4,27 @@ $.ajaxSetup({
   data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
 });
 
+$(document).ready(function () {
+    $('.fa-square-o').hover(function () {
+        $(this).removeClass('fa-square-o');
+        $(this).addClass('fa-check-square-o');
+    }, function () {
+        $(this).removeClass('fa-check-square-o');
+        $(this).addClass('fa-square-o')
+    });
+});
+
+// should work on reopened todos
+$(document).bind('DOMSubtreeModified', function () {
+    $('.fa-square-o').hover(function () {
+        $(this).removeClass('fa-square-o');
+        $(this).addClass('fa-check-square-o');
+    }, function () {
+        $(this).removeClass('fa-check-square-o');
+        $(this).addClass('fa-square-o')
+    });
+});
+
 //Listener for all Done/Undone buttons of every Todoh
 $(document).on('click', '.changeStateTodo', function(e) {
     var child = $(this).children('i');
