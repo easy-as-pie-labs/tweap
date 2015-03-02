@@ -1,7 +1,11 @@
 {% load i18n %}
 {% if user.is_authenticated %}
     <li class="dropdown">
+        {% if project %}
+        <a href="#" id="project_dropdown" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="{{project.icon}}"></i> {{project.name}} <span class="caret"></span></a>
+        {% else %}
         <a href="#" id="project_dropdown" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-folder-open"></i> {% trans "Projects" %} <span class="caret"></span></a>
+        {% endif %}
             <ul id="project_dropdown_list" class="dropdown-menu" role="menu">
                 {% if projects %}
                     {% for project in projects %}
