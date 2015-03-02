@@ -219,7 +219,7 @@ p#project_icon{
     height: 15px;
 }
 
-/*
+
 body {
     background-image: url("img/bridge-bg.jpg");
     background-attachment: fixed;
@@ -231,6 +231,8 @@ body {
 .panel {
     opacity: 0.95;
 }
-*/
 
+.opaque-well {
+    opacity: 0.8;
+}
 

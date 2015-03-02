@@ -2,43 +2,45 @@
 {% load i18n %}
 {% load static %}
 {% block user_management_template %}
-        {% if user.id == request_user.id %}
-            <h2>{% trans "Your profile" %}</h2>
-        {% else %}
-            <h2>{{user.username}}'s {% trans "profile" %}</h2>
-        {% endif %}
-        {% if user.profile.picture %}
-            <img class="col-md-6 col-xs-12" src="{{ user.profile.picture.url}}">
-        {% endif %}
-        <table class="table">
-            <tr>
-                <td><strong>{% trans "Username" %}: </strong></td>
-                <td id="profile_username">{{ user.username }}</td>
-            </tr>
-            <tr>
-                <td><strong>{% trans "E-Mail" %}:</strong></td>
-                <td id="profile_email"><a style="color: #333; font-size: 14px;" href="mailto:{{ user.email }}">{{ user.email }}</a></td>
-            </tr>
-            <tr>
-                <td><strong>{% trans "Last login" %}:</strong></td>
-                <td id="profile_lastlogin">{{ user.last_login }}</td>
-            </tr>
-            <tr>
-                <td><strong>{% trans "Name" %}:</strong></td>
-                <td id="profile_name">{{ name|default:"" }}</td>
-            </tr>
-            <tr>
-                <td><strong>{% trans "Phone" %}:</strong></td>
-                <td id="profile_phone">{{ user.profile.telephone|default:"" }}</td>
-            </tr>
-            <tr>
-                <td><strong>{% trans "Address" %}:</strong></td>
-                <td id="profile_address">{{ profile_address|default:"" }}</td>
-            </tr>
-        </table>
-        {% if user.id == request_user.id %}
-        <form class="form-group" action="{% url 'user_management:edit_profile' %}" method="GET">
-            <button id="make_changes" type="submit" name="make_changes" class="btn btn-primary btn-lg">{% trans "Make Changes" %}</button>
-        </form>
-        {% endif %}
+        <div class="well well-lg panel">
+            {% if user.id == request_user.id %}
+                <h2>{% trans "Your profile" %}</h2>
+            {% else %}
+                <h2>{{user.username}}'s {% trans "profile" %}</h2>
+            {% endif %}
+            {% if user.profile.picture %}
+                <img class="col-md-6 col-xs-12" src="{{ user.profile.picture.url}}">
+            {% endif %}
+            <table class="table">
+                <tr>
+                    <td><strong>{% trans "Username" %}: </strong></td>
+                    <td id="profile_username">{{ user.username }}</td>
+                </tr>
+                <tr>
+                    <td><strong>{% trans "E-Mail" %}:</strong></td>
+                    <td id="profile_email"><a style="color: #333; font-size: 14px;" href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+                </tr>
+                <tr>
+                    <td><strong>{% trans "Last login" %}:</strong></td>
+                    <td id="profile_lastlogin">{{ user.last_login }}</td>
+                </tr>
+                <tr>
+                    <td><strong>{% trans "Name" %}:</strong></td>
+                    <td id="profile_name">{{ name|default:"" }}</td>
+                </tr>
+                <tr>
+                    <td><strong>{% trans "Phone" %}:</strong></td>
+                    <td id="profile_phone">{{ user.profile.telephone|default:"" }}</td>
+                </tr>
+                <tr>
+                    <td><strong>{% trans "Address" %}:</strong></td>
+                    <td id="profile_address">{{ profile_address|default:"" }}</td>
+                </tr>
+            </table>
+            {% if user.id == request_user.id %}
+            <form class="form-group" action="{% url 'user_management:edit_profile' %}" method="GET">
+                <button id="make_changes" type="submit" name="make_changes" class="btn btn-primary btn-lg">{% trans "Make Changes" %}</button>
+            </form>
+            {% endif %}
+        </div>
 {% endblock %}

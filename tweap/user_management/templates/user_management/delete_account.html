@@ -2,21 +2,22 @@
 {% load i18n %}
 {% load static %}
 {% block user_management_template %}
-
-    <h2>{% trans "Do you really want to delete your tweap account?" %}</h2>
-    <p>{% trans "Deleting your account cannot be undone. If you delete your account, all your data will be deleted from our servers, your account will be removed from all projects and subsequently empty projects will be deleted." %}</p>
-    {% if error %}
-        <div class="alert alert-danger no-margin-element">{{ error }}</div>
-    {%  endif %}
-    <form class="form-group" action="{% url 'user_management:delete_account' %}" method="POST">
-        {% csrf_token %}
-        <div class="checkbox">
-          <label>
-            <input id="confirm" type="checkbox" name="confirm" value="i am sure">
-            {% trans "I am sure" %}
-          </label>
-        </div>
-        <button id="delete_account" name="delete_account" type="submit" class="btn btn-danger btn-lg">{% trans "Delete account" %}</button>
-    </form>
-
+    <div class="well well-lg panel">
+        <h2>{% trans "Do you really want to delete your tweap account?" %}</h2>
+        <p>{% trans "Deleting your account cannot be undone. If you delete your account, all your data will be deleted from our servers, your account will be removed from all projects and subsequently empty projects will be deleted." %}</p>
+        {% if error %}
+            <div class="alert alert-danger no-margin-element">{{ error }}</div>
+        {%  endif %}
+        <form class="form-group" action="{% url 'user_management:delete_account' %}" method="POST">
+            {% csrf_token %}
+            <div class="checkbox">
+              <label>
+                <input id="confirm" type="checkbox" name="confirm" value="i am sure">
+                {% trans "I am sure" %}
+              </label>
+            </div>
+            <button id="delete_account" name="delete_account" type="submit" class="btn btn-danger btn-lg">{% trans "Delete account" %}</button>
+            <a href="{% url 'user_management:edit_profile' %}" class="btn btn-default btn-lg">{% trans "Cancel" %}</a>
+        </form>
+    </div>
 {% endblock %}

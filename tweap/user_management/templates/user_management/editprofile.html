@@ -1,6 +1,7 @@
 {% extends "user_management_template.html" %}
 {% load i18n %}
 {% block user_management_template %}
+    <div class="well well-lg panel">
         <h2>{% trans "Your profile" %}</h2>
         {% for error, message in error_messages.items %}
             <p class="alert alert-danger no-margin-element">{{ message }}</p>
@@ -82,7 +83,7 @@
         </table>
             <button id="save_changes" class="btn btn-primary btn-lg">{% trans "Save Changes" %}</button>
         </form>
-    <a href="{% url 'user_management:delete_account' %}"><button id="delete_account" name="delete_account" class="btn btn-danger btn-lg">{% trans "Delete account" %}</button></a>
+        <a href="{% url 'user_management:delete_account' %}"><button id="delete_account" name="delete_account" class="btn btn-danger btn-lg">{% trans "Delete account" %}</button></a>
+        </div>
     </div>
-</div>
 {% endblock %}
