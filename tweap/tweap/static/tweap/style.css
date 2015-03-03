@@ -119,6 +119,8 @@ p#project_icon{
 .tag-outer{
     display: inline-block;
     margin-right: 5px;
+    margin-bottom: 10px;
+    margin-top: 1px;
 }
 
 .tag-outer:hover {

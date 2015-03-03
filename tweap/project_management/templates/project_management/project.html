@@ -32,7 +32,7 @@
                         <tr>
                             <td><strong>{% trans "Members" %}:</strong></td>
                             <td>{% for member in project.members.all %}
-                                   <a href="{% url 'user_management:profile' member %}" class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ member.username }}</span></a>
+                                   <a href="{% url 'user_management:profile' member %}" class="tag-outer "><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ member.username }}</span></a>
                                 {% endfor %}
                             </td>
                         </tr>
@@ -157,7 +157,7 @@
                                         </div>
                                         <div>
                                             {% for assignee in todo.assignees.all %}
-                                                <a href="{% url 'user_management:profile' assignee %}" class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                                                <a href="{% url 'user_management:profile' assignee %}" class="tag-outer "><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
                                                 {% empty %}
                                                 {% trans "No assigned users" %}
                                             {% endfor %}
@@ -170,7 +170,7 @@
                                         </div>
                                         <div>
                                             {% for tag in todo.tags.all %}
-                                                <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                                <span class="tag-outer "><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
                                                 {% empty %}
                                                 {% trans "No tags" %}
                                             {% endfor %}
@@ -216,7 +216,7 @@
                                     </div>
                                     <div>
                                         {% for assignee in todo.assignees.all %}
-                                            <a href="{% url 'user_management:profile' assignee %}" class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                                            <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
                                             {% empty %}
                                             {% trans "No assigned users" %}
                                         {% endfor %}
@@ -229,7 +229,7 @@
                                     </div>
                                     <div>
                                         {% for tag in todo.tags.all %}
-                                            <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                            <span class="tag-outer"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
                                             {% empty %}
                                             {% trans "No tags" %}
                                         {% endfor %}
@@ -273,7 +273,7 @@
                                                 </div>
                                                 <div>
                                                     {% for assignee in todo.assignees.all %}
-                                                        <a href="{% url 'user_management:profile' assignee %}" class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                                                        <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
                                                         {% empty %}
                                                         {% trans "No assigned users" %}
                                                     {% endfor %}
@@ -286,7 +286,7 @@
                                                 </div>
                                                 <div>
                                                     {% for tag in todo.tags.all %}
-                                                        <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                                        <span class="tag-outer"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
                                                         {% empty %}
                                                         {% trans "No tags" %}
                                                     {% endfor %}
@@ -337,7 +337,7 @@
                                     </p>
                                     <p><i class="fa fa-fw fa-tags fa-lg"></i>
                                     {% for tag in event.tags.all %}
-                                        <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                        <span class="tag-outer"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
                                     {% endfor %}
                                     </p>
                                     <hr style="margin-top:5px;margin-bottom:10px;">
@@ -363,7 +363,7 @@
                                     </p>
                                     <p><i class="fa fa-fw fa-tags fa-lg"></i>
                                     {% for tag in event.tags.all %}
-                                        <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                        <span class="tag-outer"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
                                     {% endfor %}
                                     </p>
                                     <hr style="margin-top:5px;margin-bottom:10px;">
