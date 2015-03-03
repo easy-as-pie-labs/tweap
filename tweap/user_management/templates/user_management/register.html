@@ -10,7 +10,7 @@
                 {% csrf_token %}
                 <div class="input-group input-group-lg" style="margin-bottom:7px;">
                     <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-                    <input class="form-control" type="text" name="username" placeholder="{% trans "Username" %}" value="{{ username_field }}" tabindex="1" required>
+                    <input class="form-control" type="text" name="username" placeholder="{% trans "Username" %}" value="{{ username_field }}" tabindex="1" required autofocus="autofocus">
                 </div>
                 <div class="input-group input-group-lg" style="margin-bottom:7px;">
                     <span class="input-group-addon"><i class="fa fa-envelope fa-fw"></i></span>
