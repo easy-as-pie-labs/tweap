@@ -32,7 +32,7 @@
                         <tr>
                             <td><strong>{% trans "Members" %}:</strong></td>
                             <td>{% for member in project.members.all %}
-                                   <a href="{% url 'user_management:profile' member %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ member.username }}</span></a>
+                                   <a href="{% url 'user_management:profile' member %}" class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ member.username }}</span></a>
                                 {% endfor %}
                             </td>
                         </tr>
@@ -98,7 +98,7 @@
                                         </div>
                                         <div>
                                             {% for assignee in todo.assignees.all %}
-                                                <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                                                <a href="{% url 'user_management:profile' assignee %}" class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
                                                 {% empty %}
                                                 {% trans "No assigned users" %}
                                             {% endfor %}
@@ -157,7 +157,7 @@
                                         </div>
                                         <div>
                                             {% for assignee in todo.assignees.all %}
-                                                <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                                                <a href="{% url 'user_management:profile' assignee %}" class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
                                                 {% empty %}
                                                 {% trans "No assigned users" %}
                                             {% endfor %}
@@ -216,7 +216,7 @@
                                     </div>
                                     <div>
                                         {% for assignee in todo.assignees.all %}
-                                            <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                                            <a href="{% url 'user_management:profile' assignee %}" class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
                                             {% empty %}
                                             {% trans "No assigned users" %}
                                         {% endfor %}
@@ -273,7 +273,7 @@
                                                 </div>
                                                 <div>
                                                     {% for assignee in todo.assignees.all %}
-                                                        <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                                                        <a href="{% url 'user_management:profile' assignee %}" class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
                                                         {% empty %}
                                                         {% trans "No assigned users" %}
                                                     {% endfor %}
