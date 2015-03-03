@@ -19,9 +19,31 @@ $(document).on('click', '.toggle_header', function() {
     }
 });
 
+$(document).on('click', '#clearAllNotifications', function() {
+    data = {};
+
+    $.post("{% url 'notification_center:mark_all_seen' %}", data, function(result){
+
+        var notificationElements = $('.notification-item');
+
+        var invitationItems = $('.invitation-item');
+        if(invitationItems.length == 0) {
+
+            $('#inbox').parent().parent().slideUp(function() {
+                notificationElements.remove();
+            })
+        }
+        else {
+            notificationElements.slideUp(function() {
+                notificationElements.remove();
+            });
+        }
+    });
+});
+
 //Notificationhandling
 $(document).on('click', '.markNotificationSeen', function(){
-    console.log("trigger");
+
     var notificationId = $(this).attr('data-notification-id');
     var data = {
         notificationId:notificationId
