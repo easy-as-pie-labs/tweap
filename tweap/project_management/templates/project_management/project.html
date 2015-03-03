@@ -17,69 +17,85 @@
 {% endblock %}
 
 {% block project_management_template %}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div id="project_title_header" class="noselect toggle_header panel-heading"><i class="{{ project.icon }}"></i> You are in the project <b>{{ project.name }}</b><i class="pull-right fa fa-chevron-right"></i></div>
-                <div class="toggle_content" style="display: none">
-                    <div class="panel-body">
-                        <p>
-                            {{ project.description }}
-                        </p>
-                        <table class="table">
-                            <tr>
-                                <td><strong>{% trans "Members" %}:</strong></td>
-                                <td>{% for member in project.members.all %}
-                                       <a href="{% url 'user_management:profile' member %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ member.username }}</span></a>
-                                    {% endfor %}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><strong>{% trans "Invited" %}:</strong></td>
-                                <td>{% for invitation in invitations %}
-                                            <p class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-envelope-o""></i>{{ invitation.user.username }}</span></p>
-                                    {% endfor %}
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="panel-footer">
-                        <div class="form-group inline-form" >
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div id="project_title_header" class="noselect toggle_header panel-heading">
+                <i class="{{ project.icon }}"></i> You are in the project <b>{{ project.name }}</b><i class="pull-right fa fa-chevron-right"></i>
+            </div>
+            <div class="toggle_content" style="display: none">
+                <div class="panel-body">
+                    <p>
+                        {{ project.description }}
+                    </p>
+                    <table class="table">
+                        <tr>
+                            <td><strong>{% trans "Members" %}:</strong></td>
+                            <td>{% for member in project.members.all %}
+                                   <a href="{% url 'user_management:profile' member %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ member.username }}</span></a>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>{% trans "Invited" %}:</strong></td>
+                            <td>{% for invitation in invitations %}
+                                        <p class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-envelope-o""></i>{{ invitation.user.username }}</span></p>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="panel-footer">
+                    <div class="form-group inline-form" >
                             <button type="submit" id="leave_project_button" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#leaveGroupModal">{% trans "leave project" %}</button>
-                        </div>
-                        <a href="{% url 'project_management:edit' project.id %}">
-                            <button type="submit" id="edit_project_button" name="edit_project" class="btn btn-success">{% trans "edit project" %}</button>
-                        </a>
                     </div>
+                    <a href="{% url 'project_management:edit' project.id %}">
+                        <button type="submit" id="edit_project_button" name="edit_project" class="btn btn-success">{% trans "edit project" %}</button>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading noselect toggle_header"><i class="fa fa-check-square-o"></i> {% trans "Todo's" %}<i class="pull-right fa fa-chevron-down"></i></div>
-                <div class="toggle_content">
-                    <div class="widget-box">
-
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading noselect toggle_header">
+                <i class="fa fa-check-square-o"></i> {% trans "Todo's" %}<i class="pull-right fa fa-chevron-down"></i>
+            </div>
+            <div class="toggle_content">
+                <div class="widget-box">
                     <div id="todo_overdue_box">
                         {% for todo in todo_overdue %}
                         <div class="panel panel-danger" style="margin: 7px;">
-                            <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-square-o fa-lg hover-change"></i></span></div>
+                            <div class="panel-heading noselect toggle_header">
+                                <i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right">
+                                <i class="fa fa-fw fa-square-o fa-lg hover-change"></i></span>
+                            </div>
                             <div class="panel-body toggle_content hide-alert">
                                <div class="todo-table">
                                     <div>
-                                        <div><i class="fa fa-fw fa-file-text-o"></i></div>
-                                        <div><span>{{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}</span></div>
+                                        <div>
+                                            <i class="fa fa-fw fa-file-text-o"></i>
+                                        </div>
+                                        <div>
+                                            <span>{{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}</span>
+                                        </div>
                                     </div>
                                     <div class="todo-table-spacer"></div>
                                     <div>
-                                        <div><i class="fa fa-fw fa-calendar"></i></div>
-                                        <div>{% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}</div>
+                                        <div>
+                                            <i class="fa fa-fw fa-calendar"></i>
+                                        </div>
+                                        <div>
+                                            {% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}
+                                        </div>
                                     </div>
                                     <div class="todo-table-spacer"></div>
                                     <div>
-                                        <div><i class="fa fa-fw fa-users"></i></div>
+                                        <div>
+                                            <i class="fa fa-fw fa-users"></i>
+                                        </div>
                                         <div>
                                             {% for assignee in todo.assignees.all %}
                                                 <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
@@ -90,7 +106,9 @@
                                     </div>
                                     <div class="todo-table-spacer"></div>
                                     <div>
-                                        <div><i class="fa fa-fw fa-tags"></i></div>
+                                        <div>
+                                            <i class="fa fa-fw fa-tags"></i>
+                                        </div>
                                         <div>
                                             {% for tag in todo.tags.all %}
                                                 <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
@@ -109,21 +127,34 @@
                     <div id="todo_today_box">
                         {% for todo in todo_today %}
                         <div class="panel panel-warning" style="margin: 7px;">
-                            <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-square-o fa-lg hover-change"></i></span></div>
+                            <div class="panel-heading noselect toggle_header">
+                                <i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right">
+                                <i class="fa fa-fw fa-square-o fa-lg hover-change"></i></span>
+                            </div>
                             <div class="panel-body toggle_content hide-alert">
                                <div class="todo-table">
                                     <div>
-                                        <div><i class="fa fa-fw fa-file-text-o"></i></div>
-                                        <div><span>{{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}</span></div>
+                                        <div>
+                                            <i class="fa fa-fw fa-file-text-o"></i>
+                                        </div>
+                                        <div>
+                                            <span>{{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}</span>
+                                        </div>
                                     </div>
                                     <div class="todo-table-spacer"></div>
                                     <div>
-                                        <div><i class="fa fa-fw fa-calendar"></i></div>
-                                        <div>{% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}</div>
+                                        <div>
+                                            <i class="fa fa-fw fa-calendar"></i>
+                                        </div>
+                                        <div>
+                                            {% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}
+                                        </div>
                                     </div>
                                     <div class="todo-table-spacer"></div>
                                     <div>
-                                        <div><i class="fa fa-fw fa-users"></i></div>
+                                        <div>
+                                            <i class="fa fa-fw fa-users"></i>
+                                        </div>
                                         <div>
                                             {% for assignee in todo.assignees.all %}
                                                 <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
@@ -134,7 +165,9 @@
                                     </div>
                                     <div class="todo-table-spacer"></div>
                                     <div>
-                                        <div><i class="fa fa-fw fa-tags"></i></div>
+                                        <div>
+                                            <i class="fa fa-fw fa-tags"></i>
+                                        </div>
                                         <div>
                                             {% for tag in todo.tags.all %}
                                                 <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
@@ -150,25 +183,37 @@
                         </div>
                     {% endfor %}
                     </div>
-
                     <div id="todo_rest_box">
                     {% for todo in todo_rest %}
                     <div class="panel panel-default" style="margin: 7px;">
-                        <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-square-o fa-lg hover-change"></i></span></div>
+                        <div class="panel-heading noselect toggle_header">
+                            <i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right">
+                            <i class="fa fa-fw fa-square-o fa-lg hover-change"></i></span>
+                        </div>
                         <div class="panel-body toggle_content hide-alert">
                             <div class="todo-table">
                                 <div>
-                                    <div><i class="fa fa-fw fa-file-text-o"></i></div>
-                                    <div><span>{{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}</span></div>
+                                    <div>
+                                        <i class="fa fa-fw fa-file-text-o"></i>
+                                    </div>
+                                    <div>
+                                        <span>{{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}</span>
+                                    </div>
                                 </div>
                                 <div class="todo-table-spacer"></div>
                                 <div>
-                                    <div><i class="fa fa-fw fa-calendar"></i></div>
-                                    <div>{% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}</div>
+                                    <div>
+                                        <i class="fa fa-fw fa-calendar"></i>
+                                    </div>
+                                    <div>
+                                        {% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}
+                                    </div>
                                 </div>
                                 <div class="todo-table-spacer"></div>
                                 <div>
-                                    <div><i class="fa fa-fw fa-users"></i></div>
+                                    <div>
+                                        <i class="fa fa-fw fa-users"></i>
+                                    </div>
                                     <div>
                                         {% for assignee in todo.assignees.all %}
                                             <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
@@ -179,7 +224,9 @@
                                 </div>
                                 <div class="todo-table-spacer"></div>
                                 <div>
-                                    <div><i class="fa fa-fw fa-tags"></i></div>
+                                    <div>
+                                        <i class="fa fa-fw fa-tags"></i>
+                                    </div>
                                     <div>
                                         {% for tag in todo.tags.all %}
                                             <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
@@ -197,140 +244,160 @@
                     </div>
                         <hr style="margin: 10px">
                         <div id="todo_closed_box">
+                            {% for todo in todo_closed %}
+                            <div class="panel panel-default" style="margin: 7px; opacity: 0.4;">
+                                <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-check-square-o fa-lg hover-reopen"></i></span></div>
+                                    <div class="panel-body toggle_content hide-alert">
+                                        <div class="todo-table">
+                                            <div>
+                                                <div>
+                                                    <i class="fa fa-fw fa-file-text-o"></i>
+                                                </div>
+                                                <div>
+                                                    <span>{{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}</span>
+                                                </div>
+                                            </div>
+                                            <div class="todo-table-spacer"></div>
+                                            <div>
+                                                <div>
+                                                    <i class="fa fa-fw fa-calendar"></i>
+                                                </div>
+                                                <div>
+                                                    {% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="todo-table-spacer"></div>
+                                            <div>
+                                                <div>
+                                                    <i class="fa fa-fw fa-users"></i>
+                                                </div>
+                                                <div>
+                                                    {% for assignee in todo.assignees.all %}
+                                                        <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                                                        {% empty %}
+                                                        {% trans "No assigned users" %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                            <div class="todo-table-spacer"></div>
+                                            <div>
+                                                <div>
+                                                    <i class="fa fa-fw fa-tags"></i>
+                                                </div>
+                                                <div>
+                                                    {% for tag in todo.tags.all %}
+                                                        <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                                        {% empty %}
+                                                        {% trans "No tags" %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr style="margin-top:5px;margin-bottom:10px;">
+                                        <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" id="big-cal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading noselect toggle_header">
+                        <i class="fa fa-calendar"></i> {% trans "Calendar" %}<i class="pull-right fa fa-chevron-down"></i>
+                    </div>
+                    <div class="panel-body toggle_content" id="calendar">
 
-                    {% for todo in todo_closed %}
-                    <div class="panel panel-default" style="margin: 7px; opacity: 0.4;">
-                        <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-check-square-o fa-lg hover-reopen"></i></span></div>
-                        <div class="panel-body toggle_content hide-alert">
-                            <div class="todo-table">
-                                <div>
-                                    <div><i class="fa fa-fw fa-file-text-o"></i></div>
-                                    <div><span>{{ todo.description }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" id="small-cal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading noselect toggle_header"><i class="fa fa-calendar">
+                        </i> {% trans "Calendar" %}<i class="pull-right fa fa-chevron-down"></i>
+                    </div>
+                    <div class="toggle_content">
+                        <div class="widget-box">
+                            {% for event in future %}
+                            <div class="panel panel-default" style="margin: 7px;">
+                                <div class="panel-heading noselect toggle_header">
+                                    <i class="fa fa-chevron-right"></i> {{ event.title }}<span class="pull-right">{{ event.start }}</span>
                                 </div>
-                                <div class="todo-table-spacer"></div>
-                                <div>
-                                    <div><i class="fa fa-fw fa-calendar"></i></div>
-                                    <div>{% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}</div>
-                                </div>
-                                <div class="todo-table-spacer"></div>
-                                <div>
-                                    <div><i class="fa fa-fw fa-users"></i></div>
-                                    <div>
-                                        {% for assignee in todo.assignees.all %}
-                                            <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
-                                            {% empty %}
-                                            {% trans "No assigned users" %}
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                <div class="todo-table-spacer"></div>
-                                <div>
-                                    <div><i class="fa fa-fw fa-tags"></i></div>
-                                    <div>
-                                        {% for tag in todo.tags.all %}
-                                            <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
-                                            {% empty %}
-                                            {% trans "No tags" %}
-                                        {% endfor %}
-                                    </div>
+                                <div class="panel-body toggle_content hide-alert">
+                                    <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ event.description }}</p>
+                                    <p><i class="fa fa-fw fa-map-marker fa-lg"></i>{{ event.location }}</p>
+                                    <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>Start: </strong>{{ event.start }}</p>
+                                    <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>End: </strong>{{ event.end }}</p>
+                                    <p><i class="fa fa-fw fa-users fa-lg"></i>
+                                    {% for attendee in event.attendees.all %}
+                                        <a href="{% url 'user_management:profile' attendee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ attendee.username }}</span></a>
+                                    {% endfor %}
+                                    </p>
+                                    <p><i class="fa fa-fw fa-tags fa-lg"></i>
+                                    {% for tag in event.tags.all %}
+                                        <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                    {% endfor %}
+                                    </p>
+                                    <hr style="margin-top:5px;margin-bottom:10px;">
+                                    <span class="pull-right"><a href="{% url 'cal:edit' event.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
                                 </div>
                             </div>
-                            <hr style="margin-top:5px;margin-bottom:10px;">
-                            <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
+                            {% endfor %}
+                            <hr style="margin: 10px">
+                            {% for event in past %}
+                            <div class="panel panel-default" style="opacity: 0.4;">
+                                <div class="panel-heading noselect toggle_header">
+                                    {{ event.title }}<span class="pull-right">{{ event.start }}</span>
+                                </div>
+                                <div class="panel-body toggle_content hide-alert">
+                                    <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ event.description }}</p>
+                                    <p><i class="fa fa-fw fa-map-marker fa-lg"></i>{{ event.location }}</p>
+                                    <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>Start: </strong>{{ event.start }}</p>
+                                    <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>End: </strong>{{ event.end }}</p>
+                                    <p><i class="fa fa-fw fa-users fa-lg"></i>
+                                    {% for attendee in event.attendees.all %}
+                                        <a href="{% url 'user_management:profile' attendee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ attendee.username }}</span></a>
+                                    {% endfor %}
+                                    </p>
+                                    <p><i class="fa fa-fw fa-tags fa-lg"></i>
+                                    {% for tag in event.tags.all %}
+                                        <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                    {% endfor %}
+                                    </p>
+                                    <hr style="margin-top:5px;margin-bottom:10px;">
+                                    <span class="pull-right"><a href="{% url 'cal:edit' event.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
-                    {% endfor %}
-                </div>
-                </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6" id="big-cal">
-            <div class="panel panel-primary">
-                <div class="panel-heading noselect toggle_header"><i class="fa fa-calendar"></i> {% trans "Calendar" %}<i class="pull-right fa fa-chevron-down"></i></div>
-                <div class="panel-body toggle_content" id="calendar">
-
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6" id="small-cal">
-            <div class="panel panel-primary">
-                <div class="panel-heading noselect toggle_header"><i class="fa fa-calendar"></i> {% trans "Calendar" %}<i class="pull-right fa fa-chevron-down"></i></div>
-                <div class="toggle_content">
-                    <div class="widget-box">
-                    {% for event in future %}
-                    <div class="panel panel-default" style="margin: 7px;">
-                        <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ event.title }}<span class="pull-right">{{ event.start }}</span></div>
-                        <div class="panel-body toggle_content hide-alert">
-                            <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ event.description }}</p>
-                            <p><i class="fa fa-fw fa-map-marker fa-lg"></i>{{ event.location }}</p>
-                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>Start: </strong>{{ event.start }}</p>
-                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>End: </strong>{{ event.end }}</p>
-                            <p><i class="fa fa-fw fa-users fa-lg"></i>
-                            {% for attendee in event.attendees.all %}
-                                <a href="{% url 'user_management:profile' attendee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ attendee.username }}</span></a>
-                            {% endfor %}
-                            </p>
-                            <p><i class="fa fa-fw fa-tags fa-lg"></i>
-                            {% for tag in event.tags.all %}
-                                <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
-                            {% endfor %}
-                            </p>
-                            <hr style="margin-top:5px;margin-bottom:10px;">
-                            <span class="pull-right"><a href="{% url 'cal:edit' event.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
-                        </div>
-                    </div>
-                    {% endfor %}
-                    <hr style="margin: 10px">
-                    {% for event in past %}
-                    <div class="panel panel-default" style="opacity: 0.4;">
-                        <div class="panel-heading noselect toggle_header">{{ event.title }}<span class="pull-right">{{ event.start }}</span></div>
-                        <div class="panel-body toggle_content hide-alert">
-                            <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ event.description }}</p>
-                            <p><i class="fa fa-fw fa-map-marker fa-lg"></i>{{ event.location }}</p>
-                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>Start: </strong>{{ event.start }}</p>
-                            <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>End: </strong>{{ event.end }}</p>
-                            <p><i class="fa fa-fw fa-users fa-lg"></i>
-                            {% for attendee in event.attendees.all %}
-                                <a href="{% url 'user_management:profile' attendee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ attendee.username }}</span></a>
-                            {% endfor %}
-                            </p>
-                            <p><i class="fa fa-fw fa-tags fa-lg"></i>
-                            {% for tag in event.tags.all %}
-                                <span class="tag-outer" style="margin-bottom: 10px;"><span class="tag" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
-                            {% endfor %}
-                            </p>
-                            <hr style="margin-top:5px;margin-bottom:10px;">
-                            <span class="pull-right"><a href="{% url 'cal:edit' event.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                </div>
-            </div>
-        </div>
-    <div class="modal fade" id="leaveGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
+<div class="modal fade" id="leaveGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">{% trans "Leave Project" %}</h4>
-              </div>
-              <div class="modal-body">
-                  <p>{% trans "Are you sure you want to leave this project?" %}</p>
-                  {% if project.members.all|length == 1 and invitations|length == 0 %}
-                    <p>{% trans "Since you are the last person in this project, the project and all its data will be deleted from our servers. This action cannot be undone!" %}</p>
-                  {% endif %}
-              </div>
-              <div class="modal-footer">
+            </div>
+            <div class="modal-body">
+                <p>{% trans "Are you sure you want to leave this project?" %}</p>
+              {% if project.members.all|length == 1 and invitations|length == 0 %}
+                <p>{% trans "Since you are the last person in this project, the project and all its data will be deleted from our servers. This action cannot be undone!" %}</p>
+              {% endif %}
+            </div>
+            <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Don't leave project" %}</button>
                 <form class="form-group inline-form" action="{% url 'project_management:leave' %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="project_id" value="{{ project.id }}">
                     <input type="submit" class="btn btn-danger" id="leave_project_confirm_button" name="leave_project_confirm" value="{% trans "Leave Project" %}">
                 </form>
-              </div>
             </div>
-          </div>
         </div>
+    </div>
+</div>
 {% endblock %}

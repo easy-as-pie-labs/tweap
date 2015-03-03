@@ -16,7 +16,6 @@
 <!--  -->
 {% endblock %}
 {% block todo_template %}
-
     <div class="panel panel-primary">
         <div class="panel-heading panel-heading-bigger"><i class="fa fa-check-square-o"></i> {{ headline }}</div>
         <div class="panel-body">
@@ -95,7 +94,7 @@
             <button type="submit" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#deleteTodoModal">{% trans "Delete" %}</button>
 
         </div>
-
+        </div>
         <div class="modal fade" id="deleteTodoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -117,7 +116,4 @@
           </div>
         </div>
         {% endif %}
-
-    </div>
-
 {% endblock %}
