@@ -63,10 +63,8 @@ function initCalendar() {
         };
 
         $.post("{% url 'cal:ui_update' %}", data, function(result){
-            console.log(result)
             if(result['success'] == 'true'){
                 // TODO: Toast style notification to inform the user that their change was successful
-                console.log('success');
             }
             else {
                 revertFunc();
