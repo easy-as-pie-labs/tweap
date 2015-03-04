@@ -11,5 +11,7 @@ urlpatterns = patterns(
     url(r'^editprofile/$', views.EditProfile.as_view(), name='edit_profile'),
     url(r'^upload_picture/$', views.UploadPicture.as_view(), name='upload_picture'),
     url(r'^user_suggestion/$', views.UserSuggestion.as_view(), name='user_suggestion'),
-
+    url(r'^lost_password/$', views.LostPassword.as_view(), name='lost_password'),
+    url(r'^reset_password/(?P<reset_token>[a-z0-9]+)/$', views.ResetPassword.as_view(), name='reset_password'),
+    url(r'^reset_password/$', views.ResetPassword.as_view(), name='reset_password'),
 )

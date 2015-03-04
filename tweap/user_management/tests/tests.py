@@ -1,11 +1,8 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from user_management.models import Profile, ProfileAddress
+from user_management.models import Profile, ProfileAddress, PasswordResetToken
 from project_management.models import Project
-from django.http.response import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.wait import WebDriverWait
+from django.http.response import HttpResponseNotAllowed
 
 
 class UserManagementTest(TestCase):
@@ -522,3 +519,150 @@ class ViewTest(TestCase):
         self.assertEqual(picture, '')
         # TODO: Upload here the image
 
+
+class TestResetPassword(TestCase):
+    def test_request_page_get(self):
+        # get request
+        resp = self.client.get('/users/lost_password/')
+        self.assertEqual(resp.status_code, 200)
+
+    def test_request_page_redirect_when_logged_in(self):
+        # register user and log in
+        resp = self.client.post('/users/register/', {'username': 'resetpwuser', 'email': 'reset@password.de', 'password': 'testpw'})
+        self.assertEqual(resp.status_code, 302)
+        resp = self.client.get('/users/lost_password/')
+        self.assertEqual(resp.status_code, 302)
+        # cleanup
+        resp = self.client.get('/users/logout/')
+        User.objects.get(username='resetpwuser').delete()
+
+    def test_request_page_post_empty_form(self):
+        # post request with no form data
+        resp = self.client.post('/users/lost_password/', {})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue('error_message' in resp.context)
+
+    def test_request_page_post_empty_string(self):
+        # post request with empty string as username input
+        resp = self.client.post('/users/lost_password/', {'username': ''})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue('error_message' in resp.context)
+
+    def test_request_page_non_existing_user(self):
+        # post request with non existing user
+        resp = self.client.post('/users/lost_password/', {'username': 'nouser'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue('error_message' in resp.context)
+
+    def test_request_page_for_existing_user(self):
+        # post request with existing username
+        # create user
+        user = User.objects.create_user('resetpwuser', 'reset@password.de', 'testpw')
+        # check if success
+        resp = self.client.post('/users/lost_password/', {'username': 'resetpwuser'})
+        self.assertTrue('success_message' in resp.context)
+        # check if token was generated and stored in db
+        tokens = PasswordResetToken.objects.filter(user=user)
+        self.assertEquals(1, len(tokens))
+        # once again to check if old token was be deleted
+        resp = self.client.post('/users/lost_password/', {'username': 'resetpwuser'})
+        self.assertTrue('success_message' in resp.context)
+        tokens = PasswordResetToken.objects.filter(user=user)
+        self.assertEquals(1, len(tokens))
+        # cleanup
+        PasswordResetToken.objects.get(user=user).delete()
+        user.delete()
+
+    def test_reset_page_get_no_token(self):
+        # test reset page with no reset_token
+        resp = self.client.get('/users/reset_password/')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue('wrong_token' in resp.context)
+
+    def test_reset_page_get_invalid_token(self):
+        # test reset page with invalid reset_token
+        resp = self.client.get('/users/reset_password/abcd1234/')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue('wrong_token' in resp.context)
+
+    def test_reset_page_get_correct_token(self):
+        # test reset page with correct reset_token
+        user = User.objects.create_user('resetpwuser', 'reset@password.de', 'testpw')
+        token = PasswordResetToken(user=user, token='abcd1234')
+        token.save()
+        resp = self.client.get('/users/reset_password/abcd1234/')
+        self.assertEqual(resp.status_code, 200)
+        self.assertFalse('wrong_token' in resp.context)
+        # cleanup
+        token.delete()
+        user.delete()
+
+    def test_reset_page_post_empty_form(self):
+        # test reset page with correct reset_token
+        user = User.objects.create_user('resetpwuser', 'reset@password.de', 'testpw')
+        token = PasswordResetToken(user=user, token='abcd1234')
+        token.save()
+        resp = self.client.post('/users/reset_password/abcd1234/', {})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue('error_message' in resp.context)
+        # cleanup
+        token.delete()
+        user.delete()
+
+    def test_reset_page_post_empty_fields(self):
+        # test reset page with correct reset_token
+        user = User.objects.create_user('resetpwuser', 'reset@password.de', 'testpw')
+        token = PasswordResetToken(user=user, token='abcd1234')
+        token.save()
+        resp = self.client.post('/users/reset_password/abcd1234/', {'password': "", 'password2': ""})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue('error_message' in resp.context)
+        # cleanup
+        token.delete()
+        user.delete()
+
+    def test_reset_page_post_no_match(self):
+        # test reset page with correct reset_token
+        user = User.objects.create_user('resetpwuser', 'reset@password.de', 'testpw')
+        token = PasswordResetToken(user=user, token='abcd1234')
+        token.save()
+        resp = self.client.post('/users/reset_password/abcd1234/', {'password': "test123", 'password2': "test234"})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue('error_message' in resp.context)
+        # cleanup
+        token.delete()
+        user.delete()
+
+    def test_reset_page_post_user_as_pw(self):
+        # test reset page with correct reset_token
+        user = User.objects.create_user('resetpwuser', 'reset@password.de', 'testpw')
+        token = PasswordResetToken(user=user, token='abcd1234')
+        token.save()
+        resp = self.client.post('/users/reset_password/abcd1234/', {'password': "resetpwuser", 'password2': "resetpwuser"})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue('error_message' in resp.context)
+        # cleanup
+        token.delete()
+        user.delete()
+
+    def test_reset_page_post_email_as_pw(self):
+        # test reset page with correct reset_token
+        user = User.objects.create_user('resetpwuser', 'reset@password.de', 'testpw')
+        token = PasswordResetToken(user=user, token='abcd1234')
+        token.save()
+        resp = self.client.post('/users/reset_password/abcd1234/', {'password': "reset@password.de", 'password2': "reset@password.de"})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue('error_message' in resp.context)
+        # cleanup
+        token.delete()
+        user.delete()
+
+    def test_reset_page_post_success(self):
+        # test reset page with correct reset_token
+        user = User.objects.create_user('resetpwuser', 'reset@password.de', 'testpw')
+        PasswordResetToken(user=user, token='abcd1234').save()
+        resp = self.client.post('/users/reset_password/abcd1234/', {'password': "newpw", 'password2': "newpw"})
+        self.assertEqual(resp.status_code, 302)
+        self.assertFalse(PasswordResetToken.objects.filter(user=user).exists())
+        # cleanup
+        user.delete()

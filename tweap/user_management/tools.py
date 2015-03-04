@@ -1,10 +1,16 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as django_login
-from user_management.models import Profile
+from user_management.models import Profile, PasswordResetToken
 from project_management.models import Project, Invitation
 from django.utils.translation import ugettext
 from user_management.models import ProfileAddress
+from django.db import IntegrityError
+from django.core.mail import send_mail
 import re
+import hashlib
+import random
+import datetime
+import pytz
 
 bad_passwords = ('123', 'abc',)  # TODO: füllen
 
@@ -134,3 +140,71 @@ def delete_user(user):
     # delete user and log out
     user.profile.address.delete()
     user.delete()
+
+def send_password_reset_link(user, url):
+    """
+    creates a reset password token for an user, stores it in db and sends it via email
+    :param user: the user who gets the reset token
+    :return: True when created and sended token, False when user doesn't exists
+    """
+    try:
+        user = User.objects.get(username=user)
+        # if old tokens are in the database delete them
+        PasswordResetToken.objects.filter(user=user).delete()
+        # TODO: think about much more secure hash generation
+        reset_token = hashlib.md5((str(datetime.datetime.now()) + str(random.randint(0, 9999999999999999999))).encode('utf-8')).hexdigest()
+        PasswordResetToken(user=user, token=reset_token).save()
+        email_text = ugettext("You requested a password reset link, so here it is!\n""Click the following link to reset your password:\n") +\
+            url + reset_token + ugettext("\n\nHappy tweaping!")
+        send_mail(ugettext('Set your new tweap password'), email_text, 'tweap@easy-as-pie.de', [user.email], fail_silently=True)
+        return "success"
+    except User.DoesNotExist:
+        return "user_error"
+    except IntegrityError:
+        # if the same hash is present in db, try again
+        send_password_reset_link(user)
+    except OSError:
+        return "mail_error"
+
+def check_token(reset_token):
+    """
+    checks an password reset token for existence and
+    :param reset_token: token to check
+    :return: user of token when token is valid, False when not
+    """
+    try:
+        token = PasswordResetToken.objects.get(token=reset_token)
+        if token.timestamp > (datetime.datetime.now(pytz.utc) - datetime.timedelta(days=(1))):
+            return token.user
+        else:
+            token.delete()
+            return False
+    except PasswordResetToken.DoesNotExist:
+        return False
+
+def validate_reset_password_form(form, user):
+    """
+    checks password guidelines for new password
+    :param form: the form data
+    :param user: the user whos changing password
+    :return: error message and if no errors, the new password
+    """
+    error = ""
+    new_password = ""
+    if 'password' in form and 'password' in form:
+        password = str(form['password']).strip()
+        password2 = str(form['password2']).strip()
+        if password and password2:
+            if password != password2:
+                error = ugettext("Passwords do not match!")
+            elif password in bad_passwords or \
+               password == user.username or \
+               password == user.email:
+                error = ugettext("The password is super weak!")
+            else:
+                new_password = password
+        else:
+            error = ugettext("All fields must be filled out!")
+    else:
+        error = ugettext("An error occurred during form transfer.")
+    return error, new_password

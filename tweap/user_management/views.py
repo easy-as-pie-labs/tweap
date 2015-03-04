@@ -5,8 +5,8 @@ from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.conf import settings
 from django.contrib.auth import logout as django_logout
-from user_management.models import ProfileAddress
-from user_management.tools import validate_registration_form, register_and_login, login, validate_profile_form, delete_user
+from user_management.models import ProfileAddress, PasswordResetToken
+from user_management.tools import validate_registration_form, register_and_login, login, validate_profile_form, delete_user, send_password_reset_link, check_token, validate_reset_password_form
 from django.utils.translation import ugettext
 from django.contrib.auth.models import User
 import json
@@ -267,3 +267,61 @@ class UserSuggestion(View):
                 if user != request.user:
                     result.append(user.username)
         return HttpResponse(json.dumps(result), content_type="application/json")
+
+
+class LostPassword(View):
+    """
+    view class for requesting link via email to reset user password
+    """
+    def get(self, request):
+        if request.user.is_authenticated():
+            return redirect(reverse(settings.LOGIN_REDIRECT_URL))
+        return render(request, 'user_management/lost_password.html', {})
+
+    def post(self, request):
+        username = request.POST.get('username', '').strip().lower()
+        if username:
+            result = send_password_reset_link(username, request.build_absolute_uri(reverse('user_management:reset_password')))
+            if result == "user_error":
+                context = {'error_message': ugettext("Sorry, we couldn't find that user!")}
+            if result == "mail_error":
+                context = {'error_message': ugettext("Sorry, we couldn't send the email. That's our fault. Please try again later!")}
+            if result == "success":
+                context = {'success_message': ugettext("We've send you a link to reset your password.")}
+        else:
+            context = {'error_message': ugettext("Username must not be empty!")}
+
+        return render(request, 'user_management/lost_password.html', context)
+
+
+class ResetPassword(View):
+    """
+    view class for password reset
+    """
+    def get(self, request, reset_token=None):
+        if request.user.is_authenticated():
+            return redirect(reverse(settings.LOGIN_REDIRECT_URL))
+        context = {'reset_token': reset_token}
+        if not check_token(reset_token):
+            context['wrong_token'] = ugettext("This link is not valid.")
+        return render(request, 'user_management/reset_password.html', context)
+
+    def post(self, request, reset_token):
+        user = check_token(reset_token)
+        if not user:
+            return render(request, 'user_management/reset_password.html', {'wrong_token': ugettext("This link is not valid.")})
+        error, password = validate_reset_password_form(request.POST, user)
+        if error:
+            return render(request, 'user_management/reset_password.html', {'reset_token': reset_token, 'error_message': error})
+        else:
+            user.set_password(password)
+            user.save()
+            PasswordResetToken.objects.get(token=reset_token).delete()
+            if login(user.username, password, request):
+                return redirect(reverse(settings.LOGIN_REDIRECT_URL))
+            else:
+                return render(request, 'user_management/reset_password.html', {'reset_token': reset_token, 'error_message': ugettext("There was an error during login!")})
+
+
+
+

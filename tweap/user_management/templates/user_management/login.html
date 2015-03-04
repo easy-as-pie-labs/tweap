@@ -17,7 +17,8 @@
                 <input class="form-control" type="password" name="password" placeholder="{% trans "Password" %}" tabindex="2" required>
             </div>
             <input type="hidden" name="next" value="{{ redirect }}">
-                <input class="btn btn-lg btn-primary btn-middle" type="submit" value="{% trans "Login" %}" tabindex="3" class="btn btn-success">
+            <input class="btn btn-lg btn-primary btn-middle" type="submit" value="{% trans "Login" %}" tabindex="3" class="btn btn-success">
+            <p class="text-center" style="margin-top:15px; margin-bottom: 0;"><a href="{% url 'user_management:lost_password' %}">{% trans "I don't remember my password" %}</a></p>
         </form>
     </div>
 {% endblock %}

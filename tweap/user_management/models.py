@@ -142,9 +142,10 @@ class Profile(models.Model):
         return profile
 
 
+class PasswordResetToken(models.Model):
+    user = models.ForeignKey(User)
+    token = models.CharField(max_length=32, unique=True)
+    timestamp = models.DateTimeField(auto_now=True)
 
-
-
-
-
-
+    def __str__(self):
+        return "PasswordResetToken for " + str(self.user.username)
