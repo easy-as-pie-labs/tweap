@@ -137,7 +137,7 @@ class CreateEdit(View):
                 event.save()
 
                 # create notifications for all attendees
-                Notification.bulk_create(attendees, request.user, project, request.build_absolute_uri(reverse('cal:edit', args=(event.id, ))), 'assigned an event to you')
+                Notification.bulk_create(attendees, request.user, project, request.build_absolute_uri(reverse('cal:edit', args=(event.id, ))), 'added you to an event')
 
                 return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))
 
