@@ -75,7 +75,7 @@ $(document).on('click', '.suggestion', function() {
 
 //listener for add tag button
 $(document).on('click', '.addUserButton', function() {
-    checkInputFieldAndAddUser();
+    checkInputFieldAndInviteUser();
 });
 
 
