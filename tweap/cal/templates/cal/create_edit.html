@@ -70,7 +70,7 @@
                         <label for="attend_all" class="noselect list-group-item">
                             <input type="checkbox" name="attend_all" id="attend_all"> {% trans "select all" %}
                         </label>
-                        {% for member in project.members.all %}
+                        {% for member in members %}
                         <label for="assignee_{{member.username}}" class="noselect list-group-item">
                             <input type="checkbox" name="attendees" id="assignee_{{member.username}}" value="{{member.username}}" {% for attendee in event.attendees.all %}{% if attendee == member %}checked{% endif %}{% endfor %}> {{member.username}}
                         </label>

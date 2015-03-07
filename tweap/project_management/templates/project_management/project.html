@@ -31,7 +31,7 @@
                     <table class="table">
                         <tr>
                             <td><strong>{% trans "Members" %}:</strong></td>
-                            <td>{% for member in project.members.all %}
+                            <td>{% for member in members %}
                                    <a href="{% url 'user_management:profile' member %}" class="tag-outer "><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ member.username }}</span></a>
                                 {% endfor %}
                             </td>
@@ -97,7 +97,7 @@
                                             <i class="fa fa-fw fa-users"></i>
                                         </div>
                                         <div>
-                                            {% for assignee in todo.assignees.all %}
+                                            {% for assignee in todo.assignees.all|dictsort:"username" %}
                                                 <a href="{% url 'user_management:profile' assignee %}" class="tag-outer" style="margin-bottom: 10px;"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
                                                 {% empty %}
                                                 {% trans "No assigned users" %}
@@ -156,7 +156,7 @@
                                             <i class="fa fa-fw fa-users"></i>
                                         </div>
                                         <div>
-                                            {% for assignee in todo.assignees.all %}
+                                            {% for assignee in todo.assignees.all|dictsort:"username" %}
                                                 <a href="{% url 'user_management:profile' assignee %}" class="tag-outer "><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
                                                 {% empty %}
                                                 {% trans "No assigned users" %}
@@ -215,7 +215,7 @@
                                         <i class="fa fa-fw fa-users"></i>
                                     </div>
                                     <div>
-                                        {% for assignee in todo.assignees.all %}
+                                        {% for assignee in todo.assignees.all|dictsort:"username" %}
                                             <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
                                             {% empty %}
                                             {% trans "No assigned users" %}
@@ -272,7 +272,7 @@
                                                     <i class="fa fa-fw fa-users"></i>
                                                 </div>
                                                 <div>
-                                                    {% for assignee in todo.assignees.all %}
+                                                    {% for assignee in todo.assignees.all|dictsort:"username" %}
                                                         <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
                                                         {% empty %}
                                                         {% trans "No assigned users" %}
@@ -331,7 +331,7 @@
                                     <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>Start: </strong>{{ event.start }}</p>
                                     <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>End: </strong>{{ event.end }}</p>
                                     <p><i class="fa fa-fw fa-users fa-lg"></i>
-                                    {% for attendee in event.attendees.all %}
+                                    {% for attendee in event.attendees.all|dictsort:"username" %}
                                         <a href="{% url 'user_management:profile' attendee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ attendee.username }}</span></a>
                                     {% endfor %}
                                     </p>

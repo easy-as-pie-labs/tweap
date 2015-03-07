@@ -94,6 +94,7 @@ class ProjectView(View):
         context['todo_rest'] = rest
 
         context['events'] = Event.get_all_for_project(project)
+        context['members'] = project.members.order_by('username')
 
         future = []
         past = []

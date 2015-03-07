@@ -32,7 +32,7 @@ class CreateEdit(View):
             context = {
                 'headline': ugettext("Create new Todo in") + " " + project.name,
                 'project': project,
-                'members': project.members.all(),
+                'members': project.members.order_by('username'),
             }
 
             return render(request, 'todo/create_edit.html', context)
@@ -49,6 +49,7 @@ class CreateEdit(View):
                 'headline': ugettext("Edit Todo in") + " " + project.name,
                 'todo': todo,
                 'project': project,
+                'members': project.members.order_by('username'),
             }
         return render(request, 'todo/create_edit.html', context)
 

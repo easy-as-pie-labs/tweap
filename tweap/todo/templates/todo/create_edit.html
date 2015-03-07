@@ -59,7 +59,7 @@
                         <label for="assign_all" class="noselect list-group-item">
                             <input type="checkbox" name="assign_all" onClick="toggle(this)" id="assign_all"> {% trans "assign all" %}
                         </label>
-                        {% for member in project.members.all %}
+                        {% for member in members %}
                             <label for="assignee_{{member.username}}" class="noselect list-group-item">
                                 <input type="checkbox" name="assignees" id="assignee_{{member.username}}" value="{{member.username}}" {% for assignee in todo.assignees.all %}{% if assignee == member %}checked{% endif %}{% endfor %}> {{member.username}}
                             </label>
