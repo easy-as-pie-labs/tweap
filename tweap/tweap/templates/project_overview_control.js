@@ -120,8 +120,7 @@ function changeStateToUnclear(output, child) {
 
 
             //comparing due_date with current date to choose a color for todoh
-
-            if(currentDate.getDay() === due_date.getDay() &&
+            if(currentDate.getDate() === due_date.getDate() &&
                 currentDate.getMonth() === due_date.getMonth() &&
                 currentDate.getYear() === due_date.getYear()
             ) {
