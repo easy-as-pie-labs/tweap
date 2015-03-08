@@ -12,6 +12,23 @@ $(document).ready(function () {
 
 });
 
+$(document).on('click', '#quickTodo', function(e) {
+    e.stopPropagation();
+});
+
+$(document).on('click', '#quickTodoButton', function(e) {
+    var title = $('#quickTodo').val();
+    console.log("add todo with title: " + title);
+    e.stopPropagation();
+});
+
+$(document).on('keydown', '#quickTodo', function(e) {
+    if ( e.which == 13 ) {
+        var title = $('#quickTodo').val();
+        console.log("add todo with title: " + title);
+    }
+});
+
 //Listener for all Done/Undone buttons of every Todoh
 $(document).on('click', '.changeStateTodo', function(e) {
     var child = $(this).children('i');

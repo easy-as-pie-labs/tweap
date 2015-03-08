@@ -61,7 +61,11 @@
     <div class="col-md-6">
         <div class="panel panel-primary">
             <div class="panel-heading noselect toggle_header">
-                <i class="fa fa-check-square-o"></i> {% trans "Todo's" %}<i class="pull-right fa fa-chevron-down"></i>
+                <i class="fa fa-check-square-o"></i> {% trans "Todo's" %} <i class="pull-right fa fa-chevron-down"></i>
+                <div class="input-group">
+                    <input type="text" id="quickTodo" class="form-control" placeholder="Quickly enter a todo">
+                    <span id="quickTodoButton" class="input-group-addon"><i class="fa fa-plus"></i></span>
+                </div>
             </div>
             <div class="toggle_content">
                 <div class="widget-box">
