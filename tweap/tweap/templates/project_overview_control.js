@@ -18,16 +18,39 @@ $(document).on('click', '#quickTodo', function(e) {
 
 $(document).on('click', '#quickTodoButton', function(e) {
     var title = $('#quickTodo').val();
-    console.log("add todo with title: " + title);
+    quickAddTodo(title);
     e.stopPropagation();
 });
 
 $(document).on('keydown', '#quickTodo', function(e) {
     if ( e.which == 13 ) {
         var title = $('#quickTodo').val();
-        console.log("add todo with title: " + title);
+        quickAddTodo(title);
     }
 });
+
+var quickAddTodo = function(title) {
+    console.log("add todo with title: " + title);
+
+    // TODO: get current project differently (currently from url substring)
+
+    var url = document.URL;
+    var project_id = url.substr(url.lastIndexOf('/') + 1);
+
+    var data = {
+        project_id: project_id,
+        title: title
+    };
+
+    $.post("{% url 'todo:quick_add' %}", data, function(output){
+        console.log(output);
+
+        // clear entered text if success
+        if(output['success'] == true) {
+            $('#quickTodo').val('')
+        }
+    })
+};
 
 //Listener for all Done/Undone buttons of every Todoh
 $(document).on('click', '.changeStateTodo', function(e) {

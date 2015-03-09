@@ -176,3 +176,20 @@ class MarkUndone(View):
 
         return HttpResponse(json.dumps(result), content_type="application/json")
 
+
+class QuickAdd(View):
+    def post(self, request):
+        project_id = int(request.POST.get('project_id', ''))
+        title = request.POST.get('title', '')
+        result = {}
+        try:
+            project = Project.objects.get(id=project_id)
+            todo = Todo(project=project, title=title, description='')
+            todo.save()
+
+            result = {'success': True, 'id': todo.id, 'title': title}
+        except:
+            result = {'success': False}
+
+        return HttpResponse(json.dumps(result), content_type="application/json")
+

@@ -9,4 +9,5 @@ urlpatterns = patterns(
     url(r'^delete/(?P<todo_id>\d+)$', views.Delete.as_view(), name='delete'),
     url(r'^clear$', views.MarkDone.as_view(), name='mark_done'),
     url(r'^unclear$', views.MarkUndone.as_view(), name='mark_undone'),
+    url(r'^quickadd/$', views.QuickAdd.as_view(), name='quick_add'),
 )
