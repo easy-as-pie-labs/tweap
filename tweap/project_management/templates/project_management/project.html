@@ -26,7 +26,7 @@
             <div class="toggle_content" style="display: none">
                 <div class="panel-body">
                     <p>
-                        {{ project.description }}
+                        {% with description=project.description|urlize %}{{ description|linebreaksbr }}{% endwith %}
                     </p>
                     <table class="table">
                         <tr>
@@ -87,7 +87,7 @@
                                             <i class="fa fa-fw fa-file-text-o"></i>
                                         </div>
                                         <div>
-                                            <span>{{ todo.description|linebreaksbr }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}</span>
+                                            <span>{% with description=todo.description|urlize %}{{ description|linebreaksbr }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}{% endwith %}</span>
                                         </div>
                                     </div>
                                     <div class="todo-table-spacer"></div>
@@ -146,7 +146,7 @@
                                             <i class="fa fa-fw fa-file-text-o"></i>
                                         </div>
                                         <div>
-                                            <span>{{ todo.description|linebreaksbr }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}</span>
+                                            <span>{% with description=todo.description|urlize %}{{ description|linebreaksbr }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}{% endwith %}</span>
                                         </div>
                                     </div>
                                     <div class="todo-table-spacer"></div>
@@ -205,7 +205,7 @@
                                         <i class="fa fa-fw fa-file-text-o"></i>
                                     </div>
                                     <div>
-                                        <span>{{ todo.description|linebreaksbr }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}</span>
+                                        <span>{% with description=todo.description|urlize %}{{ description|linebreaksbr }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}{% endwith %}</span>
                                     </div>
                                 </div>
                                 <div class="todo-table-spacer"></div>
@@ -262,7 +262,7 @@
                                                     <i class="fa fa-fw fa-file-text-o"></i>
                                                 </div>
                                                 <div>
-                                                    <span>{{ todo.description|linebreaksbr }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}</span>
+                                                    <span>{% with description=todo.description|urlize %}{{ description|linebreaksbr }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}{% endwith %}</span>
                                                 </div>
                                             </div>
                                             <div class="todo-table-spacer"></div>
@@ -334,7 +334,7 @@
                                     <i class="fa fa-chevron-right"></i> {{ event.title }}<span class="pull-right">{{ event.start }}</span>
                                 </div>
                                 <div class="panel-body toggle_content hide-alert">
-                                    <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ event.description|linebreaksbr }}</p>
+                                    <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{% with description=event.description|urlize %}{{ description|linebreaksbr }}{% endwith %}</p>
                                     <p><i class="fa fa-fw fa-map-marker fa-lg"></i>{{ event.location }}</p>
                                     <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>Start: </strong>{{ event.start }}</p>
                                     <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>End: </strong>{{ event.end }}</p>
@@ -360,7 +360,7 @@
                                     {{ event.title }}<span class="pull-right">{{ event.start }}</span>
                                 </div>
                                 <div class="panel-body toggle_content hide-alert">
-                                    <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{{ event.description }}</p>
+                                    <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{% with description=event.description|urlize %}{{ description|linebreaksbr }}{% endwith %}</p>
                                     <p><i class="fa fa-fw fa-map-marker fa-lg"></i>{{ event.location }}</p>
                                     <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>Start: </strong>{{ event.start }}</p>
                                     <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>End: </strong>{{ event.end }}</p>
