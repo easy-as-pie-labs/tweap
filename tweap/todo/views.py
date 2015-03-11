@@ -5,9 +5,10 @@ from django.views.generic import View
 from django.utils.translation import ugettext
 from django.contrib.auth.models import User
 from project_management.models import Project
-from project_management.tools import get_tags
+from project_management.tools import get_tags, make_tag
 from notification_center.models import NotificationEvent, Notification
 from todo.tools import *
+from tweap.tools import StringParser
 import json
 
 
@@ -180,16 +181,39 @@ class MarkUndone(View):
 class QuickAdd(View):
     def post(self, request):
         project_id = int(request.POST.get('project_id', ''))
-        title = request.POST.get('title', '')
+        text = request.POST.get('title', '')
+
+        sp = StringParser({'@': 'users', '#': 'tags'}, 'title')
+        data = sp.parse(text)
+
+        title = data['title']
+
         result = {}
         try:
             project = Project.objects.get(id=project_id)
             todo = Todo(project=project, title=title, description='')
             todo.save()
 
-            result = {'success': True, 'id': todo.id, 'title': title}
+            for username in data['users']:
+                try:
+                    user = User.objects.get(username=username)
+
+                    if user in project.members.all():
+                        todo.assignees.add(user)
+                except:
+                    pass
+
+            for tag in data['tags']:
+                try:
+                    todo.tags.add(make_tag(tag, project))
+                except:
+                    pass
+
+            todo.save()
+
+            result = {'success': True, 'id': todo.id, 'title': title, 'tags': data['tags']}
         except:
-            result = {'success': False}
+            result = {'success': False, 'tags': data['tags']}
 
         return HttpResponse(json.dumps(result), content_type="application/json")
 

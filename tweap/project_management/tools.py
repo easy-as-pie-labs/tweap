@@ -57,3 +57,25 @@ def get_tags(tag_list, project):
     return tags
 
 
+def make_tag(tag_text, project):
+    '''
+    makes a tag from tag text
+    :param tag_text:
+    :param project:
+    :return:
+    '''
+    tag = tag_text.lower().strip()
+    if tag:
+        try:
+            tag_object = Tag.objects.get(project=project, name=tag)
+        except Tag.DoesNotExist:
+            tag_object = Tag(project=project, name=tag)
+            try:
+                tag_object.save()
+            # if someone manipulates post-data and tries to create tags longer than 20 chars
+            except:
+                tag_object = None
+    return tag_object
+
+
+
