@@ -122,6 +122,7 @@ LOGIN_REQUIRED_URLS = (
     r'/users/profile/(.*)$',
     r'/users/editprofile/$',
     r'/users/user_suggestion/$',
+    r'/settings/$',
 )
 
 LOGIN_REQUIRED_URLS_EXCEPTIONS = (
