@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'tweap/css/bootstrap.css' %}" />
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <script src="{% static 'tweap/js/bootstrap.js' %}"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     {% block css %}{% endblock %}
     {% block js %}{% endblock %}
     <title>{% block title %}Tweap{% endblock %}</title>
@@ -35,6 +36,11 @@
                         {% block navigation %}{% endblock %}
                     </ul>
                     <ul class="nav navbar-nav pull-right">
+                        {% if user.is_authenticated %}
+                            <li><a id="navbar_profile_link" href="{% url 'user_management:profile' username %}"><i class="fa fa-user"></i> {% trans "Profile" %}</a></li>
+                            <li><a id="navbar_settings_link" href="{% url 'settings:settings' %}"><i class="fa fa-sliders"></i> {% trans "Settings" %}</a></li>
+                            <li><a id="navbar_logout_link" href="{% url 'user_management:logout' %}"><i class="fa fa-sign-out"></i> {% trans "Logout" %}</a></li>
+                        {% endif %}
                         <li class="pull-right">
                             <form class="input-group input-group-sm nobg" action="{% url 'set_language' %}" method="post">
                                 {% csrf_token %}

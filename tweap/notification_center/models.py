@@ -5,6 +5,8 @@ from project_management.models import Project
 
 class NotificationEvent(models.Model):
     text = models.CharField(max_length=50, null=False)
+    # is shown in settings pane
+    description = models.CharField(max_length=50, null=False)
 
     def __str__(self):
         return self.text

@@ -20,8 +20,6 @@
             <li><a href="{% url 'cal:create' project.id %}"><i class="fa fa-calendar"></i> {% trans "new Event" %}</a></li>
         {% endif %}
         </li>
-    <li><a id="navbar_profile_link" href="{% url 'user_management:profile' username %}"><i class="fa fa-user"></i> {% trans "Profile" %}</a></li>
-    <li><a id="navbar_logout_link" href="{% url 'user_management:logout' %}"><i class="fa fa-sign-out"></i> {% trans "Logout" %}</a></li>
 {% else %}
     <li><a id="navbar_login_link" href="{% url 'user_management:login' %}"><i class="fa fa-sign-in"></i> {% trans "Login" %}</a></li>
     <li><a id="navbar_register_link" href="{% url 'user_management:register' %}"><i class="fa fa-user-plus"></i> {% trans "Register" %}</a></li>

@@ -1,0 +1,63 @@
+{% extends "project_management_template.html" %}
+{% load i18n %}
+{% block js %}
+<script>
+    $(function() {
+        $("#sortable").sortable({
+            stop: function(event, ui) {
+                givePositionalNumbers();
+            }
+        });
+        $( "#sortable" ).disableSelection();
+    });
+
+    function givePositionalNumbers() {
+        var count = 0;
+        $('.ui-state-default').each(function(){
+            console.log(count + ". " + $(this).text());
+            count++;
+        });
+    }
+</script>
+{% endblock %}
+{% block project_management_template %}
+    <div class="well well-lg panel col-md-8 col-md-offset-2">
+        <div class="row">
+            <h1>{% trans "Settings" %}</h1>
+        </div>
+
+        <div class="row">
+            <h2>Notification Settings</h2>
+            <p>Tell us how you want to be notified about new events!</p>
+            <div class="list-group col-md-6">
+                {% for type in event_types %}
+                    <div class="list-group-item">
+                        {{ type.description }} <br>
+                        <input type="checkbox" name="notification" value="email" checked> Via Email,
+                        <input type="checkbox" name="notification" value="dashboard" checked> In Dashboard
+
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="row">
+            <h2>Project Order</h2>
+            <p>Order your projects, so whenever there's a list of your projects, this order will be kept.</p>
+
+            <ul id="sortable" class="list-group col-md-6 hover-pointer">
+            {% for project in projects %}
+                <li class="ui-state-default list-group-item"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span> {{project.name}}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="row">
+            <h2>Language Preference</h2>
+            <p>No matter from where you connect, your tweap will always be in this language</p>
+            <input name="lang" type="radio" checked> English</input> <br>
+            <input name="lang" type="radio"> Deutsch</input> <br>
+            <input name="lang" type="radio"> Polski</input> <br>
+        </div>
+    </div>
+
+{% endblock %}
