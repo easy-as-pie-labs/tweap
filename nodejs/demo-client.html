@@ -19,7 +19,9 @@
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
 
-    <button id="new-conv">Emit new Conv</button>
+    <button id="auth">auth</button>
+    <button id="reauth">reauth</button>
+    <button id="messa">message</button>
 
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
@@ -27,7 +29,11 @@
     <script>
       var socket = io('http://localhost:3000');
 
-      socket.emit('login', 'jawu');
+      var message = {
+        'username': 'jawu',
+        'reAuthToken': 'ra'
+      };
+      //socket.emit('auth', message);
 
       $('form').submit(function(){
         mes = {};
@@ -38,8 +44,16 @@
         return false;
       });
 
-      $('#new-conv').click(function(){
-        socket.emit('startNewConversation', {});
+      $('#auth').click(function(){
+        socket.emit('auth', message);
+      });
+
+      $('#reauth').click(function(){
+        socket.emit('reauth', message);
+      });
+
+      $('#messa').click(function(){
+        socket.emit('message', {'conversation': 'abc', 'text': 'blabla'});
       });
 
       socket.on('message', function(msg){
