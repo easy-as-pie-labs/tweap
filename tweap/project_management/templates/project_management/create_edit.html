@@ -1,9 +1,9 @@
-{% extends "todo_template.html" %}
+{% extends "todo/todo_template.html" %}
 {% load i18n %}
 {% load myfilters %}
 {% block js %}
 <script type="text/javascript">
-    {% include "edit_project_form_control.js" %}
+    {% include "project_management/js/edit_project_form_control.js" %}
 </script>
 {% endblock %}
 {% block todo_template %}
