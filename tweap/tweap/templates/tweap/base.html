@@ -67,6 +67,7 @@
         {% endblock %}
         </div>
     </div>
+    {% if user.is_authenticated %}
     <div id="chat-container">
         <div class="container">
             <div id="chat-panel" class="panel panel-primary">
@@ -89,5 +90,6 @@
             </div>
         </div>
     </div>
+    {% endif %}
 </body>
 </html>

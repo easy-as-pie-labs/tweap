@@ -71,7 +71,7 @@ def create_tutorial_project(user):
     todo.assignees.add(user)
     todo.save()
 
-    todo = Todo(title="You already completed this todo!", project=tutorial)
+    todo = Todo(title="Alice already completed this todo!", project=tutorial)
     todo.save()
     todo.description = "Yay!"
     todo.due_date = datetime.date.today() - datetime.timedelta(days=3)
