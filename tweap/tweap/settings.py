@@ -79,6 +79,10 @@ DATABASES = {
         'NAME': 'tweap',
         'USER': 'root',
         'PASSWORD': 'tweap',
+        'OPTIONS': {
+            'charset': 'utf8',
+            'use_unicode': True,
+        },
     }
 }
 
