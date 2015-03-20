@@ -10,12 +10,7 @@ define(function() {
 
         this.addClient = function (client) {
             clients.push(client);
-            /*
-            //add client to conversation rooms
-            for (var conversation of getConversationsOfUser(client.username)) {
-                client.socket.join(conversation);
-            }
-            */
+            this.showClients();
         };
 
         this.removeClient = function (client) {
@@ -51,14 +46,15 @@ define(function() {
 
 
         this.showClients = function () {
-            console.log("\nClients");
-            console.log("|------------------------------------------|\n" +
-                        "|Username\tSocket\t\tconnected? |\n" +
-                        "|------------------------------------------|");
+            console.log(".-------------------------------------------------.");
+            console.log("| Clients: " + clients.length + "\t\t\t\t\t  |");
+            console.log("|-------------------------------------------------|\n" +
+                        "| Username\tSocket\t\t\tconnected |\n" +
+                        "|-------------------------------------------------|");
             for (var client of clients) {
-                console.log("|" + client.username + "\t\t" + client.socket.id + "\t" + client.connected + "   \t|");
+                console.log("| " + client.username + "\t\t" + client.socket.id + "\t" + client.connected + "\t  |");
             }
-            console.log("|__________________________________________|");
+            console.log("|_________________________________________________|");
         };
     }
 

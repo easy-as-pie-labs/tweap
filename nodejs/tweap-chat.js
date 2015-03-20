@@ -15,5 +15,4 @@ console.log("tweap-chat running on port 3000...");
 
 io.on('connection', function(socket) {
     new Communicator(socket, clientManager, io);
-    console.log("new connection established");
 });
