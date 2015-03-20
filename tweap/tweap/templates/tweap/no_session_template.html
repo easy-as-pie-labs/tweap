@@ -1,0 +1,10 @@
+{% extends "tweap/base.html" %}
+{% load i18n %}
+{% block navigation %}
+    {% include "tweap/navigation.html" %}
+{% endblock %}
+{% block content %}
+<div class="row">
+    {% block no_session_template %}{% endblock %}
+</div>
+{% endblock %}

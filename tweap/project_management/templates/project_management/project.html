@@ -1,4 +1,4 @@
-{% extends "project_management_template.html" %}
+{% extends "project_management/project_management_template.html" %}
 {% load i18n %}
 {% load staticfiles %}
 {% block css %}
@@ -11,8 +11,8 @@
 <script src="{% static 'tweap/js/fullcalendar.min.js' %}"></script>
 <script src="{% static 'tweap/js/moment-with-locales.min.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
-    {% include "project_overview_control.js" %}
-    {% include "calendar_control.js" %}
+    {% include "project_management/js/project_overview_control.js" %}
+    {% include "cal/js/calendar_control.js" %}
 </script>
 {% endblock %}
 
