@@ -11,6 +11,7 @@ from todo.tools import *
 from tweap.tools import StringParser
 import json
 import datetime
+from django.core import serializers
 
 
 class CreateEdit(View):
@@ -214,9 +215,23 @@ class QuickAdd(View):
 
             todo.save()
 
-            result = {'success': True, 'id': todo.id, 'title': title, 'tags': data['tags']}
+            if title == '':
+                todo.delete()
+                raise Exception
+
+            tags = todo.tags.all().only('name')
+            tags_list = []
+            for tag in tags:
+                tags_list.append(tag.name)
+
+            assignees = todo.assignees.all().only('username')
+            assignee_list = []
+            for assignee in assignees:
+                assignee_list.append(assignee.username)
+
+            result = {'success': True, 'id': todo.id, 'title': todo.title, 'tags': tags_list, 'users': assignee_list}
         except:
-            result = {'success': False, 'tags': data['tags']}
+            result = {'success': False}
 
         return HttpResponse(json.dumps(result), content_type="application/json")
 
