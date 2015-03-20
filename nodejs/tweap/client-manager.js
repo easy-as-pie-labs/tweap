@@ -20,12 +20,13 @@ define(function() {
             }
         };
 
-        this.getClientByUsername = function (username) {
+        this.getClientByUsername = function (username, connected) {
             for (var client of
             clients
             )
             {
                 if (client.username === username) {
+                  if ((connected === false && client.connected === false) || (connected == undefined) || (connected === true))
                     return client;
                 }
             }

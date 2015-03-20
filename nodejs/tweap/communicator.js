@@ -66,16 +66,16 @@ define(function() {
 
         this.client = new Client(credentials.username, this.socket);
         this.clientManager.addClient(this.client);
-        this.newAuthToken();
+        this.generateNewAuthToken();
         this.addToConversations();
     };
 
     Communicator.prototype.reAuthenticate = function(credentials) {
-        this.client = this.clientManager.getClientByUsername(credentials.username);
+        this.client = this.clientManager.getClientByUsername(credentials.username, false);
         if (this.client && !this.client.connected && (credentials.reAuthToken === this.client.authToken)) {
             this.client.connected = true;
             this.client.socket = this.socket;
-            this.newAuthToken();
+            this.generateNewAuthToken();
             this.addToConversations();
         } else {
             //maybe error message to client
@@ -114,7 +114,7 @@ define(function() {
 
     /* Tools */
 
-    Communicator.prototype.newAuthToken = function() {
+    Communicator.prototype.generateNewAuthToken = function() {
         if (this.client) {
             var hash = (Date.now() * Math.random()) + " ~ " + this.client.username;
             this.client.authToken = crypto.createHash('md5').update(hash).digest('hex');

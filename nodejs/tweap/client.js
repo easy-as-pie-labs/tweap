@@ -7,7 +7,6 @@ define(function() {
         this.username = username;
         this.socket = socket;
         this.connected = true;
-        this.authenticated = false;
         this.authToken = undefined;
     }
 
