@@ -246,3 +246,7 @@ p#project_icon{
 .opaque-well {
     opacity: 0.8;
 }
+
+.disabled-input {
+    color: #888;
+}

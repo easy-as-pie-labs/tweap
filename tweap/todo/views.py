@@ -36,6 +36,7 @@ class CreateEdit(View):
                 'headline': ugettext("Create new Todo in") + " " + project.name,
                 'project': project,
                 'members': project.members.order_by('username'),
+                'invitees': project.get_invited_users()
             }
 
             return render(request, 'todo/create_edit.html', context)
