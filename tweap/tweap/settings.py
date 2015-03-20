@@ -80,7 +80,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'tweap',
         'OPTIONS': {
-            'charset': 'utf8',
+            'charset': 'utf8mb4',
             'use_unicode': True,
         },
     }
