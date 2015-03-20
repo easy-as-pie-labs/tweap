@@ -6,6 +6,10 @@ from django.http.response import HttpResponseNotAllowed
 
 
 class UserManagementTest(TestCase):
+    def setUp(self):
+        user = User.objects.create_user('alice', 'alice@test.de', 'testpw')
+        user2 = User.objects.create_user('bob', 'bob@test.de', 'testpw')
+
     def test_home(self):
 
         print("__Test Dashboard__")
@@ -421,6 +425,10 @@ class UserManagementTest(TestCase):
 
 
 class ViewTest(TestCase):
+    def setUp(self):
+        user = User.objects.create_user('alice', 'alice@test.de', 'testpw')
+        user2 = User.objects.create_user('bob', 'bob@test.de', 'testpw')
+
     def test_view_access_denied(self):
 
         print("__Test Access denied__")
@@ -521,6 +529,10 @@ class ViewTest(TestCase):
 
 
 class TestResetPassword(TestCase):
+    def setUp(self):
+        user = User.objects.create_user('alice', 'alice@test.de', 'testpw')
+        user2 = User.objects.create_user('bob', 'bob@test.de', 'testpw')
+
     def test_request_page_get(self):
         # get request
         resp = self.client.get('/users/lost_password/')
