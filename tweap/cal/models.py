@@ -32,12 +32,19 @@ class Event(models.Model):
     # datetime.date.today() basically takes 00:00, so we want to show today for everything >= today() and < tomorrow()
     @classmethod
     def get_start_today_for_user(cls, user):
-        return Event.objects.filter(attendees=user, start__gte=datetime.datetime.now(pytz.utc), start__lt=datetime.datetime.now(pytz.utc) + datetime.timedelta(days=(1)))
+        now = datetime.datetime.now(pytz.utc)
+        today = now.replace(hour=0,minute=0,second=0)
+        tomorrow = today + datetime.timedelta(days=(1))
+        return Event.objects.filter(attendees=user, start__gte=today, start__lt=tomorrow)
+
 
     @classmethod
     def get_start_this_week_for_user(cls, user):
-        end_of_week = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=(8)) # 8 because today() is today 00:00 and we need it to be 24:00
-        return Event.objects.filter(attendees=user, start__lte=end_of_week, start__gte=datetime.datetime.now(pytz.utc) + datetime.timedelta(days=(1)))
+        now = datetime.datetime.now(pytz.utc)
+        today = now.replace(hour=0,minute=0,second=0)
+        tomorrow = today + datetime.timedelta(days=(1))
+        end_of_week = today + datetime.timedelta(days=(7)) # 8 because today() is today 00:00 and we need it to be 24:00
+        return Event.objects.filter(attendees=user, start__lt=end_of_week, start__gte=tomorrow)
 
     def __str__(self):
         return self.title

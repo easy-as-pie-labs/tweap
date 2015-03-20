@@ -62,6 +62,13 @@ class Project(models.Model):
             return True
         return False
 
+    def get_invited_users(self):
+        invitations = Invitation.objects.filter(project=self)
+        users = []
+        for invite in invitations:
+            users.append(invite.user)
+        return users
+
 
 class ProjectForm(ModelForm):
     """

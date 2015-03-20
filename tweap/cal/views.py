@@ -36,6 +36,7 @@ class CreateEdit(View):
                 'headline': ugettext("Create new Event in") + " " + project.name,
                 'project': project,
                 'members': project.members.order_by('username'),
+                'invitees': project.get_invited_users(),
                 'start': request.GET.get('start', ''),
                 'end': request.GET.get('end', ''),
             }
