@@ -8,7 +8,7 @@ define(function() {
         this.socket = socket;
         this.connected = true;
         this.authenticated = false;
-        this.token = undefined;
+        this.authToken = undefined;
     }
 
     return Client;

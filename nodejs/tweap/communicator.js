@@ -5,6 +5,7 @@ if (typeof define !== 'function') {
 define(function() {
 
     var Client = require('./client.js');
+    var crypto = require('crypto');
 
     // this object is only for development and must be replaced by an api to tweap-django!
     var tweap = {
@@ -16,6 +17,9 @@ define(function() {
         },
         getOrAddConversation: function(userlist) {
             return {'id': 123, 'users': ['tpei', 'shonyyyy', 'googlez', 'jawu']}
+        },
+        getConversationsOfUser: function(username) {
+            return ["1234", "432", "1243"];
         }
     };
 
@@ -25,24 +29,26 @@ define(function() {
         this.io = io;
         this.client = undefined;
 
+        var that = this;
+
         this.socket.on('auth', function(data) {
-            this.authenticate(data)
+            that.authenticate(data)
         });
 
         this.socket.on('re-auth', function(data) {
-            this.reAuthenticate(data)
+            that.reAuthenticate(data)
         });
 
         this.socket.on('disconnect', function() {
-            this.disconnect()
+            that.disconnect()
         });
 
         this.socket.on('message', function(data) {
-            this.spreadMessage(data)
+            that.spreadMessage(data)
         });
 
         this.socket.on('conversation-request', function(data) {
-            this.handleConversation(data)
+            that.handleConversation(data)
         });
 
         // online / offline state requests
@@ -60,13 +66,17 @@ define(function() {
 
         this.client = new Client(credentials.username, this.socket);
         this.clientManager.addClient(this.client);
+        this.newAuthToken();
+        this.addToConversations();
     };
 
     Communicator.prototype.reAuthenticate = function(credentials) {
         this.client = this.clientManager.getClientByUsername(credentials.username);
-        if (this.client && !this.client.connected && credentials.reAuthToken == this.client.reAuthToken) {
+        if (this.client && !this.client.connected && (credentials.reAuthToken === this.client.authToken)) {
             this.client.connected = true;
             this.client.socket = this.socket;
+            this.newAuthToken();
+            this.addToConversations();
         } else {
             //maybe error message to client
             this.socket.disconnect();
@@ -80,11 +90,7 @@ define(function() {
     };
 
     Communicator.prototype.spreadMessage = function(message) {
-        if (!this.client) {
-            //maybe error message to client
-            return;
-        } else {
-            //check if user is in that room
+        if (this.client && (this.socket.rooms.indexOf(message.conversation) !== -1)) {
             message.sender = this.client.username;
             message.timestamp = Date.now();
             this.io.to(message.conversation).emit('message', message);
@@ -93,10 +99,7 @@ define(function() {
     };
 
     Communicator.prototype.handleConversation = function(userlist) {
-        if (!this.client) {
-            //maybe error message to client
-            return;
-        } else {
+        if (this.client) {
             var conversation = tweap.getOrAddConversation(userlist.users)
             for (var username of conversation.users) {
                 var userClient = this.clientManager.getClientByUsername(username);
@@ -105,6 +108,25 @@ define(function() {
                 }
             }
             this.socket.emit('conversation-response', conversation);
+        }
+    };
+
+
+    /* Tools */
+
+    Communicator.prototype.newAuthToken = function() {
+        if (this.client) {
+            var hash = (Date.now() * Math.random()) + " ~ " + this.client.username;
+            this.client.authToken = crypto.createHash('md5').update(hash).digest('hex');
+            this.socket.emit('auth-success', {'token': this.client.authToken});
+        }
+    };
+
+    Communicator.prototype.addToConversations = function() {
+        if (this.client) {
+            for (var conversation of tweap.getConversationsOfUser(this.client.username)) {
+                this.client.socket.join(conversation);
+            }
         }
     };
 

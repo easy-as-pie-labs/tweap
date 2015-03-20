@@ -30,7 +30,7 @@
       var socket = io('http://localhost:3000');
 
       var message = {
-        'username': 'jawu',
+        'username': 'jagjdbvhdfskofsbfzwu',
         'reAuthToken': 'ra'
       };
       //socket.emit('auth', message);
@@ -49,11 +49,11 @@
       });
 
       $('#reauth').click(function(){
-        socket.emit('reauth', message);
+        socket.emit('re-auth', message);
       });
 
       $('#messa').click(function(){
-        socket.emit('message', {'conversation': 'abc', 'text': 'blabla'});
+        socket.emit('message', {'conversation': '432222', 'text': 'blabla'});
       });
 
       socket.on('message', function(msg){
