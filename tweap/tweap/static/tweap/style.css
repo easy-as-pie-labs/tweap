@@ -130,7 +130,7 @@ p#project_icon{
     border-bottom-left-radius: 3px !important;
 }
 
-.tag-outer{
+.tag-outer, .tag-outer-no-hover{
     display: inline-block;
     margin-right: 5px;
     margin-bottom: 10px;
@@ -149,6 +149,19 @@ p#project_icon{
     border-radius: 0.25em;
     padding: 0.25em 0.75em;
     white-space: nowrap;
+}
+
+.tag-no-hover{
+    color: #fff;
+    background-color: #337ab7;
+    font-size: 14px;
+    border-radius: 0.25em;
+    padding: 0.25em 0.75em;
+    white-space: nowrap;
+}
+
+.tag-no-hover:hover{
+    cursor: pointer;
 }
 
 .tag:hover{

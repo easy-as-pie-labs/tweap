@@ -1,4 +1,6 @@
 {% load i18n %}
+var ENTER_KEY = 13;
+var SPACE_KEY = 32;
 
 //listener for add tag button
 $(document).on('click', '.addTagButton', function() {
@@ -7,7 +9,7 @@ $(document).on('click', '.addTagButton', function() {
 
 //overwrites enter to submit form when typing in tag input field and adds text as tag
 $(document).on('keydown', '#tag-input', function(e) {
-    if ( e.which == 13 ) {
+    if ( e.which == ENTER_KEY || e.which == SPACE_KEY) {
         checkInputFieldAndAddTag();
         e.preventDefault();
     }
@@ -76,26 +78,26 @@ function manageTagSuggestionAjaxRequest(data) {
 //adds tag suggestion to the suggestions div
 function addSuggestionToContent(newTagName) {
     $('#suggestions').append(
-        '<h3 class="suggestion" id="' + newTagName + '"><span class="label label-info focus-pointer">' + newTagName + '</span></h3>'
+        '<p class="tag-outer-no-hover suggestion" id="'+newTagName+'"><span class="tag-no-hover" data-tag-name="'+newTagName+'"><i class="fa fa-tag"></i> '+newTagName+'</span></p>'
     );
 }
 
 //object for managing tags
 var Tags = function(){
-    this.Tags = new Array();
+    this.Tags = [];
 
     //for adding existing tags to array
     this.addInit = function(tagToAdd) {
         this.Tags.push(tagToAdd);
         $('#tags').val(JSON.stringify(this.Tags));
-    }
+    };
 
     //Adds new Userstring to Users-Array (Attribute)
     this.add = function(tagToAdd) {
         this.Tags.push(tagToAdd);
         $('#tag-list').append('<p class="tag-outer"><span class="tag" data-tag-name="' + tagToAdd + '"><i class="fa fa-tag"></i>' + tagToAdd + '</span></p>');
         $('#tags').val(JSON.stringify(this.Tags));
-    }
+    };
 
     this.remove = function(tagToRemove) {
         var index = this.Tags.indexOf(tagToRemove);
@@ -104,7 +106,7 @@ var Tags = function(){
         }
         $('#tags').val(JSON.stringify(this.Tags));
     }
-}
+};
 
 function bindCheckInputForEmpty(firstElementInput, firstElementWarning, secondElementInput, secondElementWarning) {
     //checks if title is missing, prevent form submit and shows warning
