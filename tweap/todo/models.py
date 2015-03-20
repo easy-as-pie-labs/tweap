@@ -15,6 +15,7 @@ class Todo(models.Model):
     project = models.ForeignKey(Project)
     tags = models.ManyToManyField(Tag, null=True, blank=True)
     done = models.BooleanField(default=False)
+    completed_date = models.DateField(null=True, blank=True)
 
     class Meta:
         ordering = ['due_date', 'project__name']
@@ -37,7 +38,7 @@ class Todo(models.Model):
 
     @classmethod
     def get_closed_for_project(cls, project):
-        return Todo.objects.filter(project=project, done=True)
+        return Todo.objects.filter(project=project, done=True).order_by('-completed_date', 'title')
 
     @classmethod
     def get_open_rest_for_project(cls, project):

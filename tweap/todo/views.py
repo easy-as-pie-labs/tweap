@@ -10,6 +10,7 @@ from notification_center.models import NotificationEvent, Notification
 from todo.tools import *
 from tweap.tools import StringParser
 import json
+import datetime
 
 
 class CreateEdit(View):
@@ -158,6 +159,7 @@ class MarkDone(View):
 
         todo = validate_for_todo(request, todo_id)
         todo.done = True
+        todo.completed_date = datetime.datetime.today()
         todo.save()
         result = {'state': True}
 
@@ -172,6 +174,7 @@ class MarkUndone(View):
 
         todo = validate_for_todo(request, todo_id)
         todo.done = False
+        todo.completed_date = None
         todo.save()
         result = {'state': True}
 
