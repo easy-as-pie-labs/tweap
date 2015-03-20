@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'notification_center',
     'cal',
     'debug_toolbar',
+    'chat',
 )
 
 MIDDLEWARE_CLASSES = (

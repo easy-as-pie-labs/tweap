@@ -12,6 +12,7 @@ urlpatterns = patterns(
     url(r'^todo/', include('todo.urls', namespace='todo')),
     url(r'^calendar/', include('cal.urls', namespace='cal')),
     url(r'^notifications/', include('notification_center.urls', namespace='notification_center')),
+    url(r'^chat/', include('chat.urls', namespace='chat')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^i18n/', include('django.conf.urls.i18n')),
 )
