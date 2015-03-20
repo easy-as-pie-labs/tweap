@@ -12,6 +12,7 @@ import random
 import datetime
 import pytz
 
+
 bad_passwords = ('123', 'abc',)  # TODO: füllen
 
 

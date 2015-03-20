@@ -1,9 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 from os.path import splitext
-from project_management.models import Project
+from project_management.models import Project, Invitation
+from todo.models import Todo
+from cal.models import Event
 import random
 import hashlib
+import datetime
 from django.utils.translation import ugettext
 # default charfield length 50 chars, just to be safe
 
@@ -19,6 +22,88 @@ def get_filename(instance, filename):
     filename, file_extension = splitext(filename)
     filename = hashlib.md5(str(str(instance.user.id) + str(random.randint(1000, 9999))).encode('utf-8')).hexdigest()
     return 'profile_pictures/' + filename + file_extension
+
+
+def create_tutorial_project(user):
+    """
+    create a tutorial project for a newly registered user
+    :param user:
+    :return:
+    """
+    #2. create a new project, add one demo user as member, one as invited
+    #3. create at least four todos (one overdue, one due today, one due tomorrow, one already checked off)
+    #4 create two calendar entries (one due today, one in two days)
+
+    # get tutorial users alice and bob
+    alice = User.objects.get(username='alice')
+    bob = User.objects.get(username='bob')
+
+    # create tutorial project, add user and alice
+    tutorial = Project(name="Tutorial", icon="fa fa-recycle", description="This is just a Tutorial, so that you can get the hang of tweap!")
+    tutorial.save()
+    tutorial.members.add(user)
+    tutorial.members.add(alice)
+    tutorial.save()
+
+    # invite bob
+    Invitation(user=bob, project=tutorial).save()
+
+    # create todos
+    todo = Todo(title="This is an overdue todo!", project=tutorial)
+    todo.save()
+    todo.description = "You should really get going on this one!"
+    todo.due_date = datetime.date.today() - datetime.timedelta(days=1)
+    todo.assignees.add(user)
+    todo.assignees.add(alice)
+    todo.save()
+
+    todo = Todo(title="This is due today!", project=tutorial)
+    todo.save()
+    todo.description = "You planned to do this today, so why don't you?"
+    todo.due_date = datetime.date.today()
+    todo.assignees.add(user)
+    todo.save()
+
+    todo = Todo(title="This is due tomorrow!", project=tutorial)
+    todo.save()
+    todo.description = "You still got some time left..."
+    todo.due_date = datetime.date.today() + datetime.timedelta(days=1)
+    todo.assignees.add(user)
+    todo.save()
+
+    todo = Todo(title="You already completed this todo!", project=tutorial)
+    todo.save()
+    todo.description = "Yay!"
+    todo.due_date = datetime.date.today() - datetime.timedelta(days=3)
+    todo.done = True
+    todo.assignees.add(alice)
+    todo.save()
+
+    # create events
+    event = Event(title="It's happening later today!", project=tutorial)
+    event.start = datetime.datetime.today() + datetime.timedelta(hours=1)
+    event.end = datetime.datetime.today() + datetime.timedelta(hours=2)
+    event.save()
+    event.location = "At Alice's place!"
+    event.attendees.add(user)
+    event.attendees.add(alice)
+    event.save()
+
+    event = Event(title="Weekly team meeting", project=tutorial)
+    event.start = datetime.datetime.today() + datetime.timedelta(days=4, hours=1)
+    event.end = datetime.datetime.today() + datetime.timedelta(days=4, hours=2)
+    event.save()
+    event.attendees.add(user)
+    event.attendees.add(alice)
+    event.save()
+
+    event = Event(title="Weekly team meeting", project=tutorial)
+    event.start = datetime.datetime.today() - datetime.timedelta(days=3)
+    event.end = datetime.datetime.today() - datetime.timedelta(days=3)
+    event.save()
+    event.attendees.add(user)
+    event.attendees.add(alice)
+    event.save()
 
 
 class ProfileAddress(models.Model):
@@ -139,6 +224,7 @@ class Profile(models.Model):
         :return: the created instance
         """
         profile = cls(user=user)
+        create_tutorial_project(user)
         return profile
 
 
