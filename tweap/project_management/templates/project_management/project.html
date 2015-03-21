@@ -141,6 +141,17 @@
                                 </div>
                                 <hr style="margin-top:5px;margin-bottom:10px;">
                                 <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
+                                {% ifequal todo.assignment 'none' %}
+                                <span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                    <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>
+                                </span>
+                                {% endifequal %}
+
+                                {% ifequal todo.assignment 'you' %}
+                                <span class="unassignme-maker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                    <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="unassign yourself from this todo" class="fa fa-fw fa-star fa-lg"></i>
+                                </span>
+                                {% endifequal %}
                             </div>
                         </div>
                         {% endfor %}
@@ -214,6 +225,17 @@
                                 </div>
                                 <hr style="margin-top:5px;margin-bottom:10px;">
                                 <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
+                                {% ifequal todo.assignment 'none' %}
+                                <span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                    <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>
+                                </span>
+                                {% endifequal %}
+
+                                {% ifequal todo.assignment 'you' %}
+                                <span class="unassignme-maker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                    <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="unassign yourself from this todo" class="fa fa-fw fa-star fa-lg"></i>
+                                </span>
+                                {% endifequal %}
                             </div>
                         </div>
                     {% endfor %}
@@ -370,6 +392,17 @@
                                         </div>
                                         <hr style="margin-top:5px;margin-bottom:10px;">
                                         <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
+                                        {% ifequal todo.assignment 'none' %}
+                                        <span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                            <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>
+                                        </span>
+                                        {% endifequal %}
+
+                                        {% ifequal todo.assignment 'you' %}
+                                        <span class="unassignme-maker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                            <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="unassign yourself from this todo" class="fa fa-fw fa-star fa-lg"></i>
+                                        </span>
+                                        {% endifequal %}
                                     </div>
                                 </div>
                                 {% endfor %}
