@@ -6,22 +6,7 @@ define(function() {
 
     var Client = require('./client.js');
     var crypto = require('crypto');
-
-    // this object is only for development and must be replaced by an api to tweap-django!
-    var tweap = {
-        checkCredentials: function(username, password) {
-            return true;
-        },
-        addMessage: function(message) {
-            return true;
-        },
-        getOrAddConversation: function(userlist) {
-            return {'id': 123, 'users': ['tpei', 'shonyyyy', 'googlez', 'jawu']}
-        },
-        getConversationsOfUser: function(username) {
-            return ["1234", "432", "1243"];
-        }
-    };
+    var tweap = require('./tweap-interface.js');
 
     function Communicator(socket, clientManager, io) {
         this.socket = socket;
@@ -68,6 +53,8 @@ define(function() {
         this.clientManager.addClient(this.client);
         this.generateNewAuthToken();
         this.addToConversations();
+
+        tweap.makeRequest('add', 'datatest');
     };
 
     Communicator.prototype.reAuthenticate = function(credentials) {
@@ -116,8 +103,10 @@ define(function() {
 
     Communicator.prototype.generateNewAuthToken = function() {
         if (this.client) {
+            var oldAuthToken = this.client.authToken;
             var hash = (Date.now() * Math.random()) + " ~ " + this.client.username;
             this.client.authToken = crypto.createHash('md5').update(hash).digest('hex');
+            tweap.updateAuthToken(this.client.username, this.client.authToken, oldAuthToken);
             this.socket.emit('auth-success', {'token': this.client.authToken});
         }
     };
