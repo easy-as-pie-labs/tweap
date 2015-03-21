@@ -22,14 +22,14 @@ function toggleIcon(iconHolder, element){
         iconHolder.removeClass('fa-chevron-right');
         iconHolder.addClass('fa-chevron-down');
         if(element.parent().attr('id') == "chat-panel") {
-            removeBadge();
+            chatPanelToggleUpCycle();
         }
     }
     else if(iconHolder.hasClass('fa-chevron-down')){
         iconHolder.removeClass('fa-chevron-down');
         iconHolder.addClass('fa-chevron-right');
         if(element.parent().attr('id') == "chat-panel") {
-            addBadge();
+            chatPanelToggleDownCycle();
         }
     }
 }
