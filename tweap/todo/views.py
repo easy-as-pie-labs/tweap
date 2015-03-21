@@ -230,6 +230,7 @@ class QuickAdd(View):
             for assignee in assignees:
                 assignee_list.append(assignee.username)
 
+            Notification.bulk_create(assignees, request.user, project, request.build_absolute_uri(reverse('todo:edit', args=(todo.id, ))), 'assigned a todo to you')
             result = {'success': True, 'id': todo.id, 'title': todo.title, 'tags': tags_list, 'users': assignee_list}
         except:
             result = {'success': False}
