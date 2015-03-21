@@ -106,7 +106,7 @@ class ProjectView(View):
                 past.append(event)
 
         context['future'] = future
-        context['past'] = past
+        context['past'] = past[-5:][::-1] # only shows 5 past entries, in descending date order
 
         members = project.members.all()
         if request.user in members:
