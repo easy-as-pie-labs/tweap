@@ -4,12 +4,16 @@ $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
 });
 
+var COMPLETED_TODO_LIMIT = 3;
+var todoState = 'hidden';
+
 $(document).ready(function () {
 
     addHoverClassChange($('.hover-change'), 'fa-square-o', 'fa-check-square-o');
 
     addHoverClassChange($('.hover-reopen'), 'fa-check-square-o', 'fa-refresh');
 
+    hideClosedTodos();
 });
 
 $(document).on('click', '#quickTodo', function (e) {
@@ -28,6 +32,49 @@ $(document).on('keydown', '#quickTodo', function (e) {
         quickAddTodo(title);
     }
 });
+
+var hideClosedTodos = function() {
+    $('#show-all').remove();
+    $('#show-less').remove();
+    var box = $('#todo_closed_box');
+    var todos = box.children();
+    for(var i = 0; i < todos.length; i++){
+        if(i >= COMPLETED_TODO_LIMIT) {
+            $(todos[i]).hide();
+        }
+    }
+
+    if(todos.length >= COMPLETED_TODO_LIMIT){
+        var surplus = todos.length - COMPLETED_TODO_LIMIT;
+        box.append('<span id="show-all" class="noselect hover-underline cursor-pointer" style="margin: 10px;">show ' + surplus + ' more completed todos</span>');
+        $('#show-all').click(function() {
+            showClosedTodos();
+        });
+    }
+
+    todoState = 'hidden';
+};
+
+var showClosedTodos = function() {
+    $('#show-all').remove();
+    $('#show-less').remove();
+
+    var box = $('#todo_closed_box');
+    var todos = box.children();
+    for(var i = 0; i < todos.length; i++){
+        $(todos[i]).show();
+    }
+
+    if(todos.length >= COMPLETED_TODO_LIMIT){
+        var surplus = todos.length - COMPLETED_TODO_LIMIT;
+        box.append('<span id="show-less" class="noselect hover-underline cursor-pointer" style="margin: 10px;">{% trans "hide completed todos" %}</span>')
+        $('#show-less').click(function(){
+            hideClosedTodos();
+        });
+    }
+
+    todoState = 'shown';
+};
 
 var quickAddTodo = function (title) {
     console.log("add todo with title: " + title);
@@ -177,7 +224,7 @@ function changeStateToClear(output, child) {
 
         todo_item.fadeOut(function () {
             todo_item.remove();
-            $('#todo_closed_box').append(todo_item);
+            $('#todo_closed_box').prepend(todo_item);
 
             var panel_header = todo_item.first();
 
@@ -196,6 +243,9 @@ function changeStateToClear(output, child) {
             todo_item.fadeTo('default', 0.4);
 
             addHoverClassChange(child, 'fa-check-square-o', 'fa-refresh');
+
+            if(todoState == 'hidden')
+                hideClosedTodos();
         });
     }
 }
@@ -244,6 +294,11 @@ function changeStateToUnclear(output, child) {
             todo_item.fadeTo('default', 1);
 
             addHoverClassChange(child, 'fa-square-o', 'fa-check-square-o');
+
+            if(todoState == 'hidden'){
+                showClosedTodos();
+                hideClosedTodos();
+            }
         });
     }
 }

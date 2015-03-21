@@ -263,3 +263,7 @@ p#project_icon{
 .disabled-input {
     color: #888;
 }
+
+.hover-underline:hover {
+    text-decoration: underline;
+}
