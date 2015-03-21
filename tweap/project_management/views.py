@@ -16,7 +16,6 @@ class CreateEdit(View):
     """
     View class for creating or editing a project
     """
-
     def get(self, request, project_id=None):
 
         if project_id is None:
@@ -38,8 +37,6 @@ class CreateEdit(View):
                 }
 
         return render(request, 'project_management/create_edit.html', context)
-
-
 
     def post(self, request, project_id=None):
 
@@ -88,10 +85,10 @@ class ProjectView(View):
         closed = Todo.get_closed_for_project(project)
         rest = Todo.get_open_rest_for_project(project)
 
-        context['todo_overdue'] = overdue
-        context['todo_today'] = today
-        context['todo_closed'] = closed
-        context['todo_rest'] = rest
+        context['todo_overdue'] = self.mark_todo_assignment(overdue, request.user)
+        context['todo_today'] = self.mark_todo_assignment(today, request.user)
+        context['todo_closed'] = self.mark_todo_assignment(closed, request.user)
+        context['todo_rest'] = self.mark_todo_assignment(rest, request.user)
 
         context['events'] = Event.get_all_for_project(project)
         context['members'] = project.members.order_by('username')
@@ -114,6 +111,26 @@ class ProjectView(View):
         else:
             raise Http404
 
+    @classmethod
+    def mark_todo_assignment(cls, queryset, user):
+        """
+        adds assignment field to todos in queryset,
+        so that we now who is working on a todo
+        (for frontend usage)
+        :param queryset: queryset of todos
+        :param user: user to check assignment for
+        :return: queryset of todos
+        """
+        for todo in queryset:
+            assignees = todo.assignees.all()
+            if len(assignees) == 0:
+                todo.assignment = 'none'
+            elif user in assignees:
+                todo.assignment = 'you'
+            else:
+                todo.assignment = 'someone'
+
+        return queryset
 
 class LeaveGroup(View):
     """

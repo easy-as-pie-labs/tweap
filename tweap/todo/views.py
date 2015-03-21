@@ -226,14 +226,46 @@ class QuickAdd(View):
                 tags_list.append(tag.name)
 
             assignees = todo.assignees.all().only('username')
+
+            assignment = ''
+            if len(assignees) == 0:
+                assignment = 'none'
+            elif request.user in assignees:
+                assignment = 'you'
+            else:
+                assignment = 'someone'
+
             assignee_list = []
             for assignee in assignees:
                 assignee_list.append(assignee.username)
 
             Notification.bulk_create(assignees, request.user, project, request.build_absolute_uri(reverse('todo:edit', args=(todo.id, ))), 'assigned a todo to you')
-            result = {'success': True, 'id': todo.id, 'title': todo.title, 'tags': tags_list, 'users': assignee_list}
+            result = {'success': True, 'id': todo.id, 'title': todo.title, 'tags': tags_list, 'users': assignee_list, 'assignment': assignment}
         except:
             result = {'success': False}
 
         return HttpResponse(json.dumps(result), content_type="application/json")
 
+
+class QuickAssign(View):
+    def post(self, request):
+        todo_id = int(request.POST.get('todo_id', ''))
+        user = request.user
+        todo = Todo.objects.get(id=todo_id)
+        todo.assignees.add(user)
+        todo.save()
+        result = {'success': True, 'message': 'assigned user'}
+
+        return HttpResponse(json.dumps(result), content_type="application/json")
+
+
+class QuickUnAssign(View):
+    def post(self, request):
+        todo_id = int(request.POST.get('todo_id', ''))
+        user = request.user
+        todo = Todo.objects.get(id=todo_id)
+        todo.assignees.remove(user)
+        todo.save()
+        result = {'success': True, 'message': 'unassigned user'}
+
+        return HttpResponse(json.dumps(result), content_type="application/json")

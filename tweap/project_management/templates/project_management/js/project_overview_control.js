@@ -4,7 +4,10 @@ $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
 });
 
+var ENTER_KEY_CODE = 13;
 var COMPLETED_TODO_LIMIT = 3;
+var ASSIGN_ME_ICON = 'fa-star';
+var UNASSIGN_ME_ICON = 'fa-star-o';
 var todoState = 'hidden';
 
 $(document).ready(function () {
@@ -14,6 +17,68 @@ $(document).ready(function () {
     addHoverClassChange($('.hover-reopen'), 'fa-check-square-o', 'fa-refresh');
 
     hideClosedTodos();
+
+    var assign_user = $('.'+ASSIGN_ME_ICON);
+    var unassign_user = $('.'+UNASSIGN_ME_ICON);
+
+    // hovers from empty star to filled star
+    assign_user.hover(function () {
+        $(this).removeClass(ASSIGN_ME_ICON);
+        $(this).addClass(UNASSIGN_ME_ICON);
+    }, function () {
+        if(unassign_user.attr('data-changed-state') == 'false') {
+            $(this).removeClass(UNASSIGN_ME_ICON);
+            $(this).addClass(ASSIGN_ME_ICON);
+        }
+        else {
+            // except if the user clicked
+            $(this).attr('data-changed-state', 'true');
+
+            // todo: add new hover effect for changed class
+        }
+    });
+
+    // hovers from a filled star to an empty one
+    unassign_user.hover(function () {
+        $(this).removeClass(UNASSIGN_ME_ICON);
+        $(this).addClass(ASSIGN_ME_ICON);
+    }, function () {
+        if(unassign_user.attr('data-changed-state') == 'false') {
+            $(this).removeClass(ASSIGN_ME_ICON);
+            $(this).addClass(UNASSIGN_ME_ICON);
+        }
+        else {
+            // except when the user clicked
+            $(this).attr('data-changed-state', 'true');
+
+            // todo: add new hover effect for changed class
+        }
+    });
+
+    // click on opposite icon, because of hover effect
+    unassign_user.click(function() {
+        var todoId = $(this).attr('data-todo-id');
+        var that = this;
+        $.post("{% url 'todo:quick_assign' %}", { 'todo_id': todoId }, function (output) {
+            if(output['success']) {
+                console.log($(that).attr('data-changed-state'));
+                $(that).attr('data-changed-state', 'true');
+                console.log($(that).attr('data-changed-state'));
+            }
+        });
+    });
+
+    assign_user.click(function() {
+        var todoId = $(this).attr('data-todo-id');
+        var that = this;
+        $.post("{% url 'todo:quick_unassign' %}", { 'todo_id': todoId }, function (output) {
+            if(output['success']) {
+                console.log($(that).attr('data-changed-state'));
+                $(that).attr('data-changed-state', 'true');
+                console.log($(that).attr('data-changed-state'));
+            }
+        });
+    });
 });
 
 $(document).on('click', '#quickTodo', function (e) {
@@ -27,7 +92,7 @@ $(document).on('click', '#quickTodoButton', function (e) {
 });
 
 $(document).on('keydown', '#quickTodo', function (e) {
-    if (e.which == 13) {
+    if (e.which == ENTER_KEY_CODE) {
         var title = $('#quickTodo').val();
         quickAddTodo(title);
     }
@@ -100,6 +165,7 @@ var quickAddTodo = function (title) {
             var users = output['users'];
             var tags = output['tags'];
             var title = output['title'];
+            var assignment = output['assignment'];
 
             generateTodoDomElement(id, title, users, tags);
 
@@ -107,8 +173,19 @@ var quickAddTodo = function (title) {
 
             var element = '<div class="panel panel-default" style="margin: 7px; display: none;" id="element-' + id + '">' +
                 '<div class="panel-heading noselect toggle_header">' +
-                    '<i class="fa fa-chevron-right"></i> ' + title + ' <span data-todo-id="' + id + '" class="changeStateTodo pull-right">' +
-                    '<i id="toggle-' + id + '"class="fa fa-fw fa-square-o fa-lg hover-change"></i></span>' +
+                    '<i class="fa fa-chevron-right"></i> ' + title +
+                    ' <span data-todo-id="' + id + '" class="changeStateTodo pull-right">' +
+                        '<i id="toggle-' + id + '"class="fa fa-fw fa-square-o fa-lg hover-change"></i>'+
+                '</span>';
+
+            if(assignment == "none") {
+                element += '<span data-todo-id="'+id+'" class="assignee-marker pull-right"><i title="no one is currently working on this todo" class="fa fa-fw fa-exclamation fa-lg"></i></span>'
+            }
+            else if (assignment == "you") {
+                element += '<span data-todo-id="'+id+'" class="assignee-marker pull-right"><i title="no one is currently working on this todo" class="fa fa-fw fa-eye fa-lg"></i></span>'
+            }
+
+            element +=
                 '</div>' +
                 '<div class="panel-body toggle_content hide-alert">' +
                     '<div class="todo-table">' +
@@ -222,8 +299,13 @@ function changeStateToClear(output, child) {
     if (output['state'] == true) {
         var todo_item = child.parent().parent().parent();
 
+
         todo_item.fadeOut(function () {
             todo_item.remove();
+
+            // hide assignment marker
+            todo_item.find('.assignee-marker').hide();
+
             $('#todo_closed_box').prepend(todo_item);
 
             var panel_header = todo_item.first();
@@ -257,6 +339,9 @@ function changeStateToUnclear(output, child) {
 
         todo_item.fadeOut(function () {
             todo_item.remove();
+
+            // show assignment marker
+            todo_item.find('.assignee-marker').show();
 
             //Get due_date from span of todoh
             var due_date = todo_item.find('.due-date');
