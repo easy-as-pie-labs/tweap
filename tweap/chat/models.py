@@ -26,6 +26,19 @@ class Conversation(models.Model):
 
         return conversation
 
+    def get_messages(self, oldest_message):
+        count = Message.objects.filter(conversation=self).count()
+        if count == 0:
+            return []
+        if oldest_message:
+            messages = Message.objects.filter(conversation=self).filter(timestamp__lt=oldest_message.timestamp).order_by('-timestamp')[:20]
+        else:
+            messages = Message.objects.filter(conversation=self).order_by('-timestamp')[:20]
+
+        return messages
+
+
+
 
 class Message(models.Model):
     conversation = models.ForeignKey(Conversation)

@@ -36,7 +36,14 @@ define(function() {
             that.handleConversation(data)
         });
 
-        // online / offline state requests
+        this.socket.on('get-messages', function(data) {
+            that.loadMessages(data);
+        });
+
+        //test stuff remove later!
+        this.socket.on('test', function(data) {
+            tweap.makeRequest(JSON.parse(data));
+        });
     }
 
     Communicator.prototype.authenticate = function(credentials) {
@@ -44,7 +51,6 @@ define(function() {
             return;
         }
         if (!tweap.checkCredentials(credentials.username, credentials.password)) {
-            //maybe error message to client
             this.socket.disconnect();
             return;
         }
@@ -53,26 +59,40 @@ define(function() {
         this.clientManager.addClient(this.client);
         this.generateNewAuthToken();
         this.addToConversations();
-
-        tweap.makeRequest('add', 'datatest');
     };
 
     Communicator.prototype.reAuthenticate = function(credentials) {
         this.client = this.clientManager.getClientByUsername(credentials.username, false);
-        if (this.client && !this.client.connected && (credentials.reAuthToken === this.client.authToken)) {
-            this.client.connected = true;
-            this.client.socket = this.socket;
-            this.generateNewAuthToken();
-            this.addToConversations();
+        if (this.client) {
+            if (!this.client.connected && (credentials.authToken === this.client.authToken)) {
+                this.client.connected = true;
+                this.client.socket = this.socket;
+                this.generateNewAuthToken();
+                this.addToConversations();
+                return;
+            }
         } else {
-            //maybe error message to client
-            this.socket.disconnect();
+            for (var authToken of tweap.getAuthTokensForUser(credentials.username)) {
+                if (credentials.authToken === authToken) {
+                    this.client = new Client(credentials.username, this.socket);
+                    this.clientManager.addClient(this.client);
+                    this.generateNewAuthToken();
+                    this.addToConversations();
+                    return;
+                }
+            }
         }
+        this.socket.disconnect();
     };
 
     Communicator.prototype.disconnect = function() {
         if (this.client) {
             this.client.connected = false;
+            setTimeout(function() {
+                if (!this.client.connected) {
+                    this.clientManager.removeClient(this.client);
+                }
+            }.bind(this), 10000);
         }
     };
 
@@ -98,6 +118,12 @@ define(function() {
         }
     };
 
+    Communicator.prototype.loadMessages = function(messageRequest) {
+        if (this.client && (this.socket.rooms.indexOf(messageRequest.conversation) !== -1)) {
+            return tweap.getMessages(messageRequest);
+        }
+    }
+
 
     /* Tools */
 
@@ -107,7 +133,7 @@ define(function() {
             var hash = (Date.now() * Math.random()) + " ~ " + this.client.username;
             this.client.authToken = crypto.createHash('md5').update(hash).digest('hex');
             tweap.updateAuthToken(this.client.username, this.client.authToken, oldAuthToken);
-            this.socket.emit('auth-success', {'token': this.client.authToken});
+            this.socket.emit('auth-success', {'authToken': this.client.authToken});
         }
     };
 

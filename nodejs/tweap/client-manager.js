@@ -17,14 +17,12 @@ define(function() {
             var index = clients.indexOf(client);
             if (index > -1) {
                 clients.splice(index, 1);
+                console.log("removed client: " + client.username);
             }
         };
 
         this.getClientByUsername = function (username, connected) {
-            for (var client of
-            clients
-            )
-            {
+            for (var client of clients) {
                 if (client.username === username) {
                   if ((connected === false && client.connected === false) || (connected == undefined) || (connected === true))
                     return client;
@@ -34,10 +32,7 @@ define(function() {
         };
 
         this.getClientBySocket = function (socket) {
-            for (var client of
-            clients
-            )
-            {
+            for (var client of clients) {
                 if (client.socket === socket) {
                     return client;
                 }

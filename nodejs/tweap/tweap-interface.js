@@ -30,19 +30,25 @@ define(function() {
             return true;
          },
 
-         makeRequest: function(action, data, cb) {
-             data = {
-                 'action': action,
-                 'data': data
-             };
-             najax({ url:tweapUrl, type:'POST', data:JSON.stringify(data) })
+         getAuthTokensForUser: function(username) {
+             var authTokens = ["123abc"];
+             return authTokens;
+         },
+
+         getMessages: function(messageRequest) {
+             return true;
+         },
+
+         makeRequest: function(data, cb) {
+             var dat = {};
+             dat.request = JSON.stringify(data);
+
+             najax({ url:tweapUrl, type:'POST', data:dat })
                 .success(function(resp){
-                    console.log(resp.data);
-                    console.log("success");
+                    console.log(resp);
                 })
                 .error(function(err){
                     console.log(err);
-                    console.log("error");
                 });
          }
     };

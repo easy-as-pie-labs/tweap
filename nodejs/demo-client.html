@@ -9,6 +9,8 @@
     <button id="auth">auth</button>
     <button id="reauth">reauth</button>
     <button id="messa">message</button>
+    <br>
+    <input type="text" size="100" id="input-field" /><button id="test">test</button>
 
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
@@ -41,6 +43,10 @@
 
       $('#messa').click(function(){
         socket.emit('message', {'conversation': '432222', 'text': 'blabla'});
+      });
+
+      $('#test').click(function(){
+        socket.emit('test', $('#input-field').val());
       });
 
       socket.on('message', function(msg){
