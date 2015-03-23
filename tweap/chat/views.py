@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from chat.models import Conversation, Message, AuthToken
 import json
+import traceback
 
 
 @csrf_exempt
@@ -11,21 +12,18 @@ def api(request):
     if not request.method == 'POST' or request.META['REMOTE_ADDR'] != "127.0.0.1":
         return HttpResponse(status=403)
 
-    print(request.POST.get('request'))
-    data = json.loads(request.POST.get('request', ''))
-
-    action = data.get('action')
-    result = {}
-    result.status = "OK"
-
     try:
+
+        result = {'status': "OK"}
+        data = json.loads(request.POST.get('request', ''))
+        action = data.get('action', '')
 
         if action == "checkCredentials":
             user = authenticate(username=data.get('username'), password=data.get('password'))
             if user:
-                result.authResult = "OK"
+                result['authResult'] = "OK"
             else:
-                result.authResult = "ERROR"
+                result['authResult'] = "ERROR"
 
         elif action == "addMessage":
             conversation = Conversation.objects.get(id=data.get('message').get('conversation'))
@@ -34,32 +32,33 @@ def api(request):
 
         elif action == "getMessages":
             conversation = Conversation.objects.get(id=data.get('conversation'))
-            message = Message.objects.filter(id=data.get('messageId'))
-            if not message.exists():
+            if data.get('messageId'):
+                message = Message.objects.get(id=data.get('messageId'))
+            else:
                 message = None
-            result.messages = conversation.get_messages(message)
+            result['messages'] = conversation.get_messages(message)
 
         elif action == "getOrAddConversation":
             users = []
             for user in data.get('userlist'):
                 # TODO: check if users are connected users
-                users.append(User.objects.filter(username=user))
+                users.append(User.objects.get(username=user))
             if len(users) > 1:
                 conversation = Conversation.find_by_users_or_create(users)
-                result.conversation = {}
-                result.conversation.id = conversation.id
-                result.conversation.users = []
+                result['conversation'] = {}
+                result['conversation']['id'] = conversation.id
+                result['conversation']['users'] = []
                 for user in users:
-                    result.conversation.users.append(user.username)
+                    result['conversation']['users'].append(user.username)
             else:
-                result.status = "ERROR - there must be at least 2 users in a conversation"
+                result['status'] = "ERROR - there must be at least 2 users in a conversation"
 
         elif action == "getConversationsOfUser":
             user = User.objects.get(username=data.get('username'))
             conversations = Conversation.get_conversations_of_user(user)
-            result.conversations = []
+            result['conversations'] = []
             for conversation in conversations:
-                result.conversations.append(conversation.id)
+                result['conversations'].append(conversation.id)
 
         elif action == "updateAuthToken":
             user = User.objects.get(username=data.get('username'))
@@ -68,22 +67,24 @@ def api(request):
         elif action == "getAuthTokensForUser":
             user = User.objects.get(username=data.get('username'))
             tokens = AuthToken.get_for_user(user)
-            result.authTokens = []
+            result['authTokens'] = []
             for token in tokens:
-                result.authTokens.append[token.token]
+                result['authTokens'].append(token.token)
 
         elif action == "version":
-            result.version = "v0.1"
+            result['version'] = "v0.1"
 
         else:
-            result.status = "ERROR - unknown action"
+            result['status'] = "ERROR - unknown action"
 
-    except conversation.DoesNotExist:
-        result.status = "ERROR - unknown conversation"
+    except Conversation.DoesNotExist:
+        result['status'] = "ERROR - unknown conversation"
     except User.DoesNotExist:
-        result.status = "ERROR - unknown user"
+        result['status'] = "ERROR - unknown user"
     except Exception as e:
-        result.status = "ERROR - " + Exception.__name__
+        result['status'] = "ERROR - " + e.__str__()
+        print("ERROR - " + e.__str__())
+        print(type(e))
+        print(traceback.print_tb(e.__traceback__))
 
-    print(result)
     return HttpResponse(json.dumps(result), content_type="application/json")
