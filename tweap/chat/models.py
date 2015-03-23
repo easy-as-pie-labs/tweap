@@ -71,10 +71,6 @@ class AuthToken(models.Model):
     token = models.CharField(max_length=32)
 
     @classmethod
-    def get_for_user(cls, user):
-        return AuthToken.objects.filter(user=user)
-
-    @classmethod
     def create_or_update_for_user(cls, user, new_token, old_token=None):
         if not old_token:
             AuthToken(user=user, token=new_token).save()

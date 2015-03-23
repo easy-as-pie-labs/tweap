@@ -22,8 +22,19 @@ def api(request):
             user = authenticate(username=data.get('username'), password=data.get('password'))
             if user:
                 result['authResult'] = "OK"
+                result['username'] = user.username;
             else:
                 result['authResult'] = "ERROR"
+
+        elif action == "checkAuthToken":
+            user = User.objects.get(username=data.get('username'))
+            token = AuthToken.objects.filter(user=user, token=data.get('authToken'))
+            if token.exists():
+                result['authResult'] = "OK"
+                result['username'] = user.username
+            else:
+                result['authResult'] = "ERROR"
+
 
         elif action == "addMessage":
             conversation = Conversation.objects.get(id=data.get('message').get('conversation'))
@@ -64,13 +75,6 @@ def api(request):
             user = User.objects.get(username=data.get('username'))
             AuthToken.create_or_update_for_user(user, data.get('newAuthToken'), data.get('oldAuthToken'))
 
-        elif action == "getAuthTokensForUser":
-            user = User.objects.get(username=data.get('username'))
-            tokens = AuthToken.get_for_user(user)
-            result['authTokens'] = []
-            for token in tokens:
-                result['authTokens'].append(token.token)
-
         elif action == "version":
             result['version'] = "v0.1"
 
@@ -82,7 +86,7 @@ def api(request):
     except User.DoesNotExist:
         result['status'] = "ERROR - unknown user"
     except Exception as e:
-        result['status'] = "ERROR - " + e.__str__()
+        result['status'] = "ERROR - unexpected error"
         print("ERROR - " + e.__str__())
         print(type(e))
         print(traceback.print_tb(e.__traceback__))

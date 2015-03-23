@@ -6,7 +6,9 @@ define(function() {
 
     var Client = require('./client.js');
     var crypto = require('crypto');
-    var tweap = require('./tweap-interface.js');
+    var najax = require('../libs/najax.js');
+
+    var tweapUrl = "http://127.0.0.1:8000/chat/api/";
 
     function Communicator(socket, clientManager, io) {
         this.socket = socket;
@@ -33,32 +35,37 @@ define(function() {
         });
 
         this.socket.on('conversation-request', function(data) {
-            that.handleConversation(data)
+            that.conversationRequestHandler(data)
         });
 
         this.socket.on('get-messages', function(data) {
             that.loadMessages(data);
         });
 
-        //test stuff remove later!
-        this.socket.on('test', function(data) {
-            tweap.makeRequest(JSON.parse(data));
-        });
     }
 
     Communicator.prototype.authenticate = function(credentials) {
         if (this.clientManager.getClientBySocket(this.socket)) {
             return;
         }
-        if (!tweap.checkCredentials(credentials.username, credentials.password)) {
+        var data = {
+            'action': 'checkCredentials',
+            'username': credentials.username,
+            'password': credentials.password
+        };
+        this.makeRequest(data, this.authenticateCB, this);
+    };
+
+    Communicator.prototype.authenticateCB = function(data) {
+        if (data.status === "OK" && data.authResult === "OK") {
+            this.client = new Client(data.username, this.socket);
+            this.clientManager.addClient(this.client);
+            this.generateNewAuthToken();
+            this.addToConversations();
+        } else {
             this.socket.disconnect();
             return;
         }
-
-        this.client = new Client(credentials.username, this.socket);
-        this.clientManager.addClient(this.client);
-        this.generateNewAuthToken();
-        this.addToConversations();
     };
 
     Communicator.prototype.reAuthenticate = function(credentials) {
@@ -72,17 +79,13 @@ define(function() {
                 return;
             }
         } else {
-            for (var authToken of tweap.getAuthTokensForUser(credentials.username)) {
-                if (credentials.authToken === authToken) {
-                    this.client = new Client(credentials.username, this.socket);
-                    this.clientManager.addClient(this.client);
-                    this.generateNewAuthToken();
-                    this.addToConversations();
-                    return;
-                }
-            }
+            var data = {
+                'action': 'checkAuthToken',
+                'username': credentials.username,
+                'authToken': credentials.authToken
+            };
+            this.makeRequest(data, this.authenticateCB, this);
         }
-        this.socket.disconnect();
     };
 
     Communicator.prototype.disconnect = function() {
@@ -101,28 +104,55 @@ define(function() {
             message.sender = this.client.username;
             message.timestamp = Date.now();
             this.io.to(message.conversation).emit('message', message);
-            tweap.addMessage(message);
+
+            var data = {
+                 'action': 'addMessage',
+                 'message': message
+             };
+             this.makeRequest(data);
         }
     };
 
-    Communicator.prototype.handleConversation = function(userlist) {
+    Communicator.prototype.conversationRequestHandler = function(userlist) {
         if (this.client) {
-            var conversation = tweap.getOrAddConversation(userlist.users)
-            for (var username of conversation.users) {
+            var data = {
+                'action': 'getOrAddConversation',
+                'userlist': userlist
+            };
+            this.makeRequest(data, this.conversationRequestHandlerCB, this);
+        }
+    };
+
+    Communicator.prototype.conversationRequestHandlerCB = function(data) {
+        if (data.status === "OK") {
+            for (var username of data.conversation.users) {
                 var userClient = this.clientManager.getClientByUsername(username);
                 if (userClient) {
-                    userClient.socket.join(conversation.id);
+                    userClient.socket.join(data.conversation.id);
                 }
             }
-            this.socket.emit('conversation-response', conversation);
+            this.socket.emit('conversation-response', data.conversation);
         }
     };
 
     Communicator.prototype.loadMessages = function(messageRequest) {
         if (this.client && (this.socket.rooms.indexOf(messageRequest.conversation) !== -1)) {
-            return tweap.getMessages(messageRequest);
+            var data = {
+                'action': 'getMessages',
+                'conversation': messageRequest.conversation
+            };
+            if (messageRequest.messageId != undefined) {
+                data.messageId = messageId;
+            }
+            this.makeRequest(data, this.loadMessagesCB, this);
         }
-    }
+    };
+
+    Communicator.prototype.loadMessagesCB = function(data) {
+        if (data.status === "OK") {
+            this.socket.emit('message-response', data.messages);
+        }
+    };
 
 
     /* Tools */
@@ -132,18 +162,50 @@ define(function() {
             var oldAuthToken = this.client.authToken;
             var hash = (Date.now() * Math.random()) + " ~ " + this.client.username;
             this.client.authToken = crypto.createHash('md5').update(hash).digest('hex');
-            tweap.updateAuthToken(this.client.username, this.client.authToken, oldAuthToken);
             this.socket.emit('auth-success', {'authToken': this.client.authToken});
+
+            var data = {
+                'action': 'updateAuthToken',
+                'username': this.client.username,
+                'newAuthToken': this.client.authToken,
+                'oldAuthToken': oldAuthToken
+            };
+            this.makeRequest(data);
         }
     };
 
     Communicator.prototype.addToConversations = function() {
         if (this.client) {
-            for (var conversation of tweap.getConversationsOfUser(this.client.username)) {
+            var data = {
+                'action': 'getConversationsOfUser',
+                'username': this.client.username
+            };
+            this.makeRequest(data, this.addToConversationsCB, this);
+        }
+    };
+
+    Communicator.prototype.addToConversationsCB = function(data) {
+        if (data.status === "OK") {
+            for (var conversation of data.conversations) {
                 this.client.socket.join(conversation);
             }
         }
     };
+
+    Communicator.prototype.makeRequest = function(data, callback, communicator) {
+         var dat = {};
+         dat.request = JSON.stringify(data);
+
+         najax({ url:tweapUrl, type:'POST', data:dat})
+             .success(function(resp){
+                 if (callback != undefined) {
+                     callback.call(communicator, JSON.parse(resp));
+                 }
+             })
+             .error(function(err){
+                 console.log(err);
+             });
+     };
 
     return Communicator;
 
