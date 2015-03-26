@@ -97,13 +97,13 @@ class CreateEdit(View):
                 assignees = form.getlist('assignees')
                 todo.save()
 
-                #Get already assigned assignees, for notification sending
-                already_assigned_assignees = []
+                # only get assignees that weren't assigned before (for notifications)
+                not_yet_assigned = []
 
                 for assignee in assignees:
                     user = User.objects.get(username=assignee)
-                    if user in todo.assignees.all():
-                        already_assigned_assignees.append(user)
+                    if user not in todo.assignees.all():
+                        not_yet_assigned.append(user)
 
                 todo.assignees.clear()
                 for assignee in assignees:
@@ -120,7 +120,7 @@ class CreateEdit(View):
                 todo.save()
 
                 # create notifications for all assignees
-                Notification.bulk_create(assignees, request.user, project, request.build_absolute_uri(reverse('todo:edit', args=(todo.id, ))), 'assigned a todo to you')
+                Notification.bulk_create(not_yet_assigned, request.user, project, request.build_absolute_uri(reverse('todo:edit', args=(todo.id, ))), 'assigned a todo to you')
 
                 return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))
 
