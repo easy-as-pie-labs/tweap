@@ -141,17 +141,16 @@
                                 </div>
                                 <hr style="margin-top:5px;margin-bottom:10px;">
                                 <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
-                                {% ifequal todo.assignment 'none' %}
-                                <span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">
-                                    <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>
-                                </span>
-                                {% endifequal %}
-
                                 {% ifequal todo.assignment 'you' %}
                                 <span class="unassignme-maker pull-right cursor-pointer noselect" style="margin-right: 5px;">
                                     <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="unassign yourself from this todo" class="fa fa-fw fa-star fa-lg"></i>
                                 </span>
                                 {% endifequal %}
+                                {% ifnotequal todo.assignment 'you' %}
+                                <span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                    <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>
+                                </span>
+                                {% endifnotequal %}
                             </div>
                         </div>
                         {% endfor %}
@@ -225,17 +224,16 @@
                                 </div>
                                 <hr style="margin-top:5px;margin-bottom:10px;">
                                 <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
-                                {% ifequal todo.assignment 'none' %}
-                                <span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">
-                                    <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>
-                                </span>
-                                {% endifequal %}
-
                                 {% ifequal todo.assignment 'you' %}
                                 <span class="unassignme-maker pull-right cursor-pointer noselect" style="margin-right: 5px;">
                                     <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="unassign yourself from this todo" class="fa fa-fw fa-star fa-lg"></i>
                                 </span>
                                 {% endifequal %}
+                                {% ifnotequal todo.assignment 'you' %}
+                                <span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                    <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>
+                                </span>
+                                {% endifnotequal %}
                             </div>
                         </div>
                     {% endfor %}
@@ -309,107 +307,105 @@
                             </div>
                             <hr style="margin-top:5px;margin-bottom:10px;">
                             <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
-                            {% ifequal todo.assignment 'none' %}
-                            <span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">
-                                <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>
-                            </span>
-                            {% endifequal %}
-
                             {% ifequal todo.assignment 'you' %}
                             <span class="unassignme-maker pull-right cursor-pointer noselect" style="margin-right: 5px;">
                                 <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="unassign yourself from this todo" class="fa fa-fw fa-star fa-lg"></i>
                             </span>
                             {% endifequal %}
+                            {% ifnotequal todo.assignment 'you' %}
+                            <span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>
+                            </span>
+                            {% endifnotequal %}
                         </div>
                     </div>
                     {% endfor %}
                     </div>
-                        <hr style="margin: 10px">
-                        <div id="todo_closed_box">
-                            {% for todo in todo_closed %}
-                            <div class="panel panel-default" style="margin: 7px; opacity: 0.4;">
-                                <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }}
-                                    <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right">
-                                        <i class="fa fa-fw fa-check-square-o fa-lg hover-reopen"></i>
-                                    </span>
-                                    {% ifequal todo.assignment 'none' %}
-                                    <span data-todo-id="{{ todo.id }}" class="assignee-marker pull-right" style="display: none;">
-                                        <i title="no one is currently working on this todo" class="fa fa-fw fa-exclamation fa-lg"></i>
-                                    </span>
-                                    {% endifequal %}
+                    <hr style="margin: 10px">
+                    <div id="todo_closed_box">
+                        {% for todo in todo_closed %}
+                        <div class="panel panel-default" style="margin: 7px; opacity: 0.4;">
+                            <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }}
+                                <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right">
+                                    <i class="fa fa-fw fa-check-square-o fa-lg hover-reopen"></i>
+                                </span>
+                                {% ifequal todo.assignment 'none' %}
+                                <span data-todo-id="{{ todo.id }}" class="assignee-marker pull-right" style="display: none;">
+                                    <i title="no one is currently working on this todo" class="fa fa-fw fa-exclamation fa-lg"></i>
+                                </span>
+                                {% endifequal %}
 
-                                    {% ifequal todo.assignment 'you' %}
-                                    <span data-todo-id="{{ todo.id }}" class="assignee-marker pull-right" style="display: none;">
-                                        <i title="this todo is assigned to you" class="fa fa-fw fa-eye fa-lg"></i>
-                                    </span>
-                                    {% endifequal %}
-                                </div>
-                                    <div class="panel-body toggle_content hide-alert">
-                                        <div class="todo-table">
+                                {% ifequal todo.assignment 'you' %}
+                                <span data-todo-id="{{ todo.id }}" class="assignee-marker pull-right" style="display: none;">
+                                    <i title="this todo is assigned to you" class="fa fa-fw fa-eye fa-lg"></i>
+                                </span>
+                                {% endifequal %}
+                            </div>
+                                <div class="panel-body toggle_content hide-alert">
+                                    <div class="todo-table">
+                                        <div>
                                             <div>
-                                                <div>
-                                                    <i class="fa fa-fw fa-file-text-o"></i>
-                                                </div>
-                                                <div>
-                                                    <span>{% with description=todo.description|urlize %}{{ description|linebreaksbr }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}{% endwith %}</span>
-                                                </div>
+                                                <i class="fa fa-fw fa-file-text-o"></i>
                                             </div>
-                                            <div class="todo-table-spacer"></div>
                                             <div>
-                                                <div>
-                                                    <i class="fa fa-fw fa-calendar"></i>
-                                                </div>
-                                                <div>
-                                                    {% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}
-                                                </div>
-                                            </div>
-                                            <div class="todo-table-spacer"></div>
-                                            <div>
-                                                <div>
-                                                    <i class="fa fa-fw fa-users"></i>
-                                                </div>
-                                                <div>
-                                                    {% for assignee in todo.assignees.all|dictsort:"username" %}
-                                                        <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
-                                                        {% empty %}
-                                                        {% trans "No assigned users" %}
-                                                    {% endfor %}
-                                                </div>
-                                            </div>
-                                            <div class="todo-table-spacer"></div>
-                                            <div>
-                                                <div>
-                                                    <i class="fa fa-fw fa-tags"></i>
-                                                </div>
-                                                <div>
-                                                    {% for tag in todo.tags.all %}
-                                                        <span class="tag-outer"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
-                                                        {% empty %}
-                                                        {% trans "No tags" %}
-                                                    {% endfor %}
-                                                </div>
+                                                <span>{% with description=todo.description|urlize %}{{ description|linebreaksbr }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}{% endwith %}</span>
                                             </div>
                                         </div>
-                                        <hr style="margin-top:5px;margin-bottom:10px;">
-                                        <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
-                                        {% ifequal todo.assignment 'none' %}
-                                        <span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">
-                                            <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>
-                                        </span>
-                                        {% endifequal %}
-
-                                        {% ifequal todo.assignment 'you' %}
-                                        <span class="unassignme-maker pull-right cursor-pointer noselect" style="margin-right: 5px;">
-                                            <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="unassign yourself from this todo" class="fa fa-fw fa-star fa-lg"></i>
-                                        </span>
-                                        {% endifequal %}
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div>
+                                                <i class="fa fa-fw fa-calendar"></i>
+                                            </div>
+                                            <div>
+                                                {% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div>
+                                                <i class="fa fa-fw fa-users"></i>
+                                            </div>
+                                            <div>
+                                                {% for assignee in todo.assignees.all|dictsort:"username" %}
+                                                    <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                                                    {% empty %}
+                                                    {% trans "No assigned users" %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div>
+                                                <i class="fa fa-fw fa-tags"></i>
+                                            </div>
+                                            <div>
+                                                {% for tag in todo.tags.all %}
+                                                    <span class="tag-outer"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                                    {% empty %}
+                                                    {% trans "No tags" %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
                                     </div>
+                                    <hr style="margin-top:5px;margin-bottom:10px;">
+                                    <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
+                                    {% ifequal todo.assignment 'you' %}
+                                    <span class="unassignme-maker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                        <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="unassign yourself from this todo" class="fa fa-fw fa-star fa-lg"></i>
+                                    </span>
+                                    {% endifequal %}
+                                    {% ifnotequal todo.assignment 'you' %}
+                                    <span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                        <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>
+                                    </span>
+                                    {% endifnotequal %}
                                 </div>
-                                {% endfor %}
                             </div>
+                            {% endfor %}
                         </div>
-                    </div>
                 </div>
+            </div>
+        </div>
             </div>
             <div class="col-md-6" id="big-cal">
                 <div class="panel panel-primary">

@@ -227,7 +227,6 @@ class QuickAdd(View):
 
             assignees = todo.assignees.all().only('username')
 
-            assignment = ''
             if len(assignees) == 0:
                 assignment = 'none'
             elif request.user in assignees:
@@ -254,7 +253,34 @@ class QuickAssign(View):
         todo = Todo.objects.get(id=todo_id)
         todo.assignees.add(user)
         todo.save()
-        result = {'success': True, 'message': 'assigned user'}
+
+        tags = todo.tags.all().only('name')
+        tags_list = []
+        for tag in tags:
+            tags_list.append(tag.name)
+
+        assignees = todo.assignees.all().only('username')
+
+        if len(assignees) == 0:
+            assignment = 'none'
+        elif request.user in assignees:
+            assignment = 'you'
+        else:
+            assignment = 'someone'
+
+        assignee_list = []
+        for assignee in assignees:
+            assignee_list.append(assignee.username)
+
+        result = {'success': True, 'id': todo.id, 'title': todo.title, 'tags': tags_list, 'users': assignee_list, 'assignment': assignment}
+        try:
+            due_date = todo.due_date
+            if due_date is not None:
+                result['year'] = todo.due_date.year
+                result['month'] = todo.due_date.month
+                result['day'] = todo.due_date.day
+        except:
+            pass
 
         return HttpResponse(json.dumps(result), content_type="application/json")
 
@@ -266,6 +292,33 @@ class QuickUnAssign(View):
         todo = Todo.objects.get(id=todo_id)
         todo.assignees.remove(user)
         todo.save()
-        result = {'success': True, 'message': 'unassigned user'}
+
+        tags = todo.tags.all().only('name')
+        tags_list = []
+        for tag in tags:
+            tags_list.append(tag.name)
+
+        assignees = todo.assignees.all().only('username')
+
+        if len(assignees) == 0:
+            assignment = 'none'
+        elif request.user in assignees:
+            assignment = 'you'
+        else:
+            assignment = 'someone'
+
+        assignee_list = []
+        for assignee in assignees:
+            assignee_list.append(assignee.username)
+
+        result = {'success': True, 'id': todo.id, 'title': todo.title, 'tags': tags_list, 'users': assignee_list, 'assignment': assignment}
+        try:
+            due_date = todo.due_date
+            if due_date is not None:
+                result['year'] = todo.due_date.year
+                result['month'] = todo.due_date.month
+                result['day'] = todo.due_date.day
+        except:
+            pass
 
         return HttpResponse(json.dumps(result), content_type="application/json")

@@ -18,68 +18,112 @@ $(document).ready(function () {
 
     hideClosedTodos();
 
+    addAssigmentActions();
+
+});
+
+var addAssigmentActions = function() {
     var assign_user = $('.'+ASSIGN_ME_ICON);
     var unassign_user = $('.'+UNASSIGN_ME_ICON);
 
-    // hovers from empty star to filled star
-    assign_user.hover(function () {
-        $(this).removeClass(ASSIGN_ME_ICON);
-        $(this).addClass(UNASSIGN_ME_ICON);
+    addAssignmentHover(assign_user, ASSIGN_ME_ICON, UNASSIGN_ME_ICON);
+    addAssignmentHover(unassign_user, UNASSIGN_ME_ICON, ASSIGN_ME_ICON);
+    // click on opposite icon, because of hover effect
+    addAssignmentClick(unassign_user, "assign");
+    addAssignmentClick(assign_user, "unassign");
+};
+
+/**
+ * classchange on hover over element
+ * @param element to change class of
+ * @param from base clase
+ * @param to hover class
+ */
+var addAssignmentHover = function(element, from, to){
+    element.hover(function () {
+        $(this).removeClass(from);
+        $(this).addClass(to);
     }, function () {
-        if(unassign_user.attr('data-changed-state') == 'false') {
-            $(this).removeClass(UNASSIGN_ME_ICON);
-            $(this).addClass(ASSIGN_ME_ICON);
+        if($(this).attr('data-changed-state') == 'false') {
+            $(this).removeClass(to);
+            $(this).addClass(from);
         }
         else {
             // except if the user clicked
             $(this).attr('data-changed-state', 'true');
 
-            // todo: add new hover effect for changed class
+            // change hover effect
+            addAssignmentHover($(this), to, from);
         }
     });
+};
 
-    // hovers from a filled star to an empty one
-    unassign_user.hover(function () {
-        $(this).removeClass(UNASSIGN_ME_ICON);
-        $(this).addClass(ASSIGN_ME_ICON);
-    }, function () {
-        if(unassign_user.attr('data-changed-state') == 'false') {
-            $(this).removeClass(ASSIGN_ME_ICON);
-            $(this).addClass(UNASSIGN_ME_ICON);
-        }
-        else {
-            // except when the user clicked
-            $(this).attr('data-changed-state', 'true');
-
-            // todo: add new hover effect for changed class
-        }
-    });
-
-    // click on opposite icon, because of hover effect
-    unassign_user.click(function() {
+/**
+ * adds assign / unassign click listener to element
+ * @param element to add click listener to
+ * @param type ["assign"|"unassign"] determines action to take
+ */
+var addAssignmentClick = function(element, type) {
+    element.click(function() {
         var todoId = $(this).attr('data-todo-id');
         var that = this;
-        $.post("{% url 'todo:quick_assign' %}", { 'todo_id': todoId }, function (output) {
-            if(output['success']) {
-                console.log($(that).attr('data-changed-state'));
-                $(that).attr('data-changed-state', 'true');
-                console.log($(that).attr('data-changed-state'));
-            }
-        });
-    });
 
-    assign_user.click(function() {
-        var todoId = $(this).attr('data-todo-id');
-        var that = this;
-        $.post("{% url 'todo:quick_unassign' %}", { 'todo_id': todoId }, function (output) {
-            if(output['success']) {
-                console.log($(that).attr('data-changed-state'));
-                $(that).attr('data-changed-state', 'true');
-                console.log($(that).attr('data-changed-state'));
-            }
-        });
+        if(type == "assign"){
+            $.post("{% url 'todo:quick_assign' %}", { 'todo_id': todoId }, function (output) {
+                if(output['success']) {
+                    updateAssigned(output, that);
+                }
+            });
+        }
+        else if (type == "unassign") {
+            $.post("{% url 'todo:quick_unassign' %}", { 'todo_id': todoId }, function (output) {
+                if(output['success']) {
+                    updateAssigned(output, that);
+                }
+            });
+        }
     });
-});
+};
+
+var updateAssigned = function(output, that){
+    var id = output['id'];
+    var users = output['users'];
+    var tags = output['tags'];
+    var title = output['title'];
+    var assignment = output['assignment'];
+    var year = output['year'];
+    var month = output['month'];
+    var day = output['day'];
+
+    //Get current date
+    var currentDate = new Date();
+    currentDate.setHours(0, 0, 0);
+
+    var due_date = new Date(year, month-1, day, 0, 0, 0, 0);
+
+    var element = "";
+    if(year == null){
+        element = generateTodoDomElement(id, title, users, tags, assignment, "", 'default', 'open');
+    } else if (currentDate.getDate() === due_date.getDate() &&
+        currentDate.getMonth() === due_date.getMonth() &&
+        currentDate.getYear() === due_date.getYear()
+    ) {
+        element = generateTodoDomElement(id, title, users, tags, assignment, due_date, 'warning', 'open');
+    } else if (currentDate > due_date) {
+        element = generateTodoDomElement(id, title, users, tags, assignment, due_date, 'danger', 'open');
+    }
+
+    $(that).parentsUntil($('.panel')).parent().replaceWith(element);
+
+    var newElement = $('#element-' + id);
+    var toggleIcon = newElement.find($('.toggle_header')).children().first();
+    toggleIcon.removeClass('fa-chevron-right');
+    toggleIcon.addClass('fa-chevron-down');
+
+    newElement.show();
+    newElement.find($('.toggle_content')).show();
+    addAssigmentActions();
+};
 
 $(document).on('click', '#quickTodo', function (e) {
     e.stopPropagation();
@@ -98,6 +142,10 @@ $(document).on('keydown', '#quickTodo', function (e) {
     }
 });
 
+/**
+ * hides all closed todos (except the first x)
+ * and shows a "show more todos" clickable text
+ */
 var hideClosedTodos = function() {
     $('#show-all').remove();
     $('#show-less').remove();
@@ -120,6 +168,9 @@ var hideClosedTodos = function() {
     todoState = 'hidden';
 };
 
+/**
+ * shows all closed todos and offers option to hide them again
+ */
 var showClosedTodos = function() {
     $('#show-all').remove();
     $('#show-less').remove();
@@ -141,6 +192,11 @@ var showClosedTodos = function() {
     todoState = 'shown';
 };
 
+/**
+ * toggled when the user hits enter or the plus button
+ * in quick add todo box
+ * @param title of new todoitem
+ */
 var quickAddTodo = function (title) {
     console.log("add todo with title: " + title);
 
@@ -167,11 +223,39 @@ var quickAddTodo = function (title) {
             var title = output['title'];
             var assignment = output['assignment'];
 
-            generateTodoDomElement(id, title, users, tags);
+            var element = generateTodoDomElement(id, title, users, tags, assignment, "", "default", "closed");
 
-            var url = "../todo/edit/" + id;
+            $('#todo_rest_box').prepend(element);
+            var newElement = $('#element-' + id);
+            newElement.fadeIn();
+            var hoverChange = $('#toggle-' + id);
+            addHoverClassChange(hoverChange, 'fa-square-o', 'fa-check-square-o');
+        }
+    })
+};
 
-            var element = '<div class="panel panel-default" style="margin: 7px; display: none;" id="element-' + id + '">' +
+/**
+ * generates todoelement
+ * @param id - db id of element
+ * @param title - title of todoelement
+ * @param users - assigned users
+ * @param tags - added tags
+ * @param assignment - assignment string (you|none|someone)
+ * @param due_date - due date
+ * @param type - css header class ["default"|"warning"|"danger"]
+ * @param toggleState - ["open"|"closed"]
+ * @returns {string} - todoelement
+ */
+var generateTodoDomElement = function (id, title, users, tags, assignment, due_date, type, toggleState) {
+
+    var monthNames = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
+
+    var url = "../todo/edit/" + id;
+
+            var element = '<div class="panel panel-';
+            element += type + '" style="margin: 7px; display: none" id="element-' + id + '">' +
                 '<div class="panel-heading noselect toggle_header">' +
                     '<i class="fa fa-chevron-right"></i> ' + title +
                     ' <span data-todo-id="' + id + '" class="changeStateTodo pull-right">' +
@@ -202,8 +286,14 @@ var quickAddTodo = function (title) {
                                 '<div>' +
                                     '<i class="fa fa-fw fa-calendar"></i>' +
                             '</div>' +
-                            '<div>' +
-                                    '{% trans "No due date" %}' +
+                            '<div>';
+    if (due_date == "")
+        element += '{% trans "No due date" %}';
+    else {
+        element += monthNames[due_date.getMonth()] + " " + due_date.getDate() + ", " + due_date.getFullYear();
+    }
+
+    element +=
                             '</div>' +
                         '</div>' +
                         '<div class="todo-table-spacer"></div>' +
@@ -243,22 +333,26 @@ var quickAddTodo = function (title) {
                 '</div>' +
                 '</div>' +
                     '<hr style="margin-top:5px;margin-bottom:10px;">' +
-                    '<span class="pull-right"><a href="' + url + '"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>' +
+                    '<span class="pull-right"><a href="' + url + '"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>';
+
+            if(assignment == "you") {
+                element += '<span class="unassignme-maker pull-right cursor-pointer noselect" style="margin-right: 5px;">'+
+                                '<i data-changed-state="false" data-todo-id="'+id+'" style="color: #337AB7;" title="unassign yourself from this todo" class="fa fa-fw fa-star fa-lg"></i>'+
+                            '</span>';
+            }
+            else {
+                element += '<span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">'+
+                                '<i data-changed-state="false" data-todo-id="'+id+'" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>'+
+                            '</span>';
+            }
+
+
+            element +=
                 '</div>' +
                 '</div>';
 
+    return element;
 
-            $('#todo_rest_box').prepend(element);
-            var newElement = $('#element-' + id);
-            newElement.fadeIn();
-            var hoverChange = $('#toggle-' + id);
-            addHoverClassChange(hoverChange, 'fa-square-o', 'fa-check-square-o');
-        }
-    })
-};
-
-var generateTodoDomElement = function (id, title, users, tags) {
-    console.log("id: " + id + ", title: " + title + ", users: " + users + ", tags: " + tags);
 };
 
 //Listener for all Done/Undone buttons of every Todoh
