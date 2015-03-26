@@ -20,14 +20,11 @@
         <div class="panel-heading panel-heading-bigger"><i class="fa fa-check-square-o"></i> {{ headline }}</div>
         <div class="panel-body">
             <div class="col-md-10 col-md-offset-1">
-
-            {% for error, message in error_messages.items %}
+                {% for error, message in error_messages.items %}
                 <p class="alert alert-danger no-margin-element"><i class="fa fa-exclamation-triangle"></i> {{ message }}</p>
-            {% endfor %}
-
-            <form method="post" id="event-form" autocomplete="off" class="form-group" action="{% if event %} {% url 'cal:edit' event.id %} {% else %} {% url 'cal:create' project.id %} {% endif %}">
+                {% endfor %}
+                 <form method="post" id="event-form" autocomplete="off" class="form-group" action="{% if event %} {% url 'cal:edit' event.id %} {% else %} {% url 'cal:create' project.id %} {% endif %}">
                 {% csrf_token %}
-
                 <div class="form-group">
                     <label for="title-input" class="control-label">{% trans "Title" %}</label>
                     <input class="form-control" type="text" id="title-input" name="title" value="{{ event.title }}">
@@ -98,18 +95,18 @@
                         <p class="tag-outer"><span class="tag" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></p>
                     {% endfor %}
                 </div>
-        </div>
+            </div>
         </div>
         <div class="panel-footer">
-                <input tabindex="3" name="create_save" type="submit" class="btn btn-primary" value='{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}'>
-            </form>
-            <a href="{% url 'project_management:project' project.id %}"><button class="btn btn-default">{% trans "Cancel" %}</button></a>
-
+            <input tabindex="3" name="create_save" type="submit" class="btn btn-primary" value='{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}'>
+            <a class="btn btn-default" href="{% url 'project_management:project' project.id %}">{% trans "Cancel" %}</a>
             {% if event %}
-            <button type="submit" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#deleteEventModal">{% trans "Delete" %}</button>
-
+            <span type="submit" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#deleteEventModal">{% trans "Delete" %}</span>
+            {% endif %}
+            </form>
         </div>
         </div>
+        {% if event %}
         <div class="modal fade" id="deleteEventModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -124,7 +121,7 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
                 <form class="form-group inline-form" action="{% url 'cal:delete' event.id %}" method="POST">
                     {% csrf_token %}
-                    <input type="submit" class="btn btn-danger" name="leave_event_confirm" value="{% trans "Delete event" %}">
+                    <input type="submit" class="btn btn-danger" name="leave_event_confirm" value='{% trans "Delete event" %}'>
                 </form>
               </div>
             </div>
