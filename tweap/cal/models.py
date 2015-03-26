@@ -33,17 +33,22 @@ class Event(models.Model):
     @classmethod
     def get_start_today_for_user(cls, user):
         now = datetime.datetime.now(pytz.utc)
-        today = now.replace(hour=0,minute=0,second=0)
-        tomorrow = today + datetime.timedelta(days=(1))
-        return Event.objects.filter(attendees=user, start__gte=today, start__lt=tomorrow)
+        now = now - datetime.timedelta(days=(1))
+
+        # fixes strange bug where 00:00 was included even though it's supposed to be less than (not equals)
+        now = now.replace(hour=23, minute=59, second=59)
+        tomorrow = now + datetime.timedelta(days=(1))
+        #tomorrow = tomorrow.replace(hour=0,minute=0,second=0)
+        return Event.objects.filter(attendees=user, start__gte=now, start__lt=tomorrow)
 
 
     @classmethod
     def get_start_this_week_for_user(cls, user):
         now = datetime.datetime.now(pytz.utc)
         today = now.replace(hour=0,minute=0,second=0)
-        tomorrow = today + datetime.timedelta(days=(1))
-        end_of_week = today + datetime.timedelta(days=(7)) # 8 because today() is today 00:00 and we need it to be 24:00
+        # fixes strange bug where 00:00 wasn't included even though it's supposed to be less than and equals
+        tomorrow = now.replace(hour=23, minute=59, second=59)
+        end_of_week = today + datetime.timedelta(days=(7))
         return Event.objects.filter(attendees=user, start__lt=end_of_week, start__gte=tomorrow)
 
     def __str__(self):
