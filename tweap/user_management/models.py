@@ -35,8 +35,20 @@ def create_tutorial_project(user):
     #4 create two calendar entries (one due today, one in two days)
 
     # get tutorial users alice and bob
-    alice = User.objects.get(username='alice')
-    bob = User.objects.get(username='bob')
+    try:
+        alice = User.objects.get(username='alice')
+    except:
+        alice = User.objects.create_user('alice', 'alice@test.de', 'testpw')
+        profile = Profile.create(alice)
+        profile.save()
+
+    try:
+        bob = User.objects.get(username='bob')
+    except:
+        bob = User.objects.create_user('bob', 'bob@test.de', 'testpw')
+        profile = Profile.create(bob)
+        profile.save()
+
 
     # create tutorial project, add user and alice
     tutorial = Project(name="Tutorial", icon="fa fa-recycle", description="This is just a Tutorial, so that you can get the hang of tweap!")
