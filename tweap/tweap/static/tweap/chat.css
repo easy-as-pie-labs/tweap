@@ -73,3 +73,8 @@
 .msg-count {
     margin-left:5px;
 }
+
+#chat-content h1 {
+    font-size: 20px;
+    margin-top:0px;
+}

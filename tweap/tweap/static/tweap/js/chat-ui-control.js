@@ -2,19 +2,17 @@ $(document).ready(function(){
     addBadge();
     updateBadge("22");
 
-    addNewPersonChatButton(1, "jawu");
-    addNewPersonChatButton(2, "tpei");
-    addNewPersonChatButton(3, "goggelz");
-    addNewGroupChatButton(6, "iLab");
-    addNewPersonChatButton(7, "shony");
+    //Loads Active Chats. This is the way it has to be treated
+    var activeChatArray = new Array();
+    activeChatArray.push(new ActiveChat(1, "jawu", "person"));
+    activeChatArray.push(new ActiveChat(2, "tpei", "person"));
+    activeChatArray.push(new ActiveChat(77, "iLab", "group"));
+    activeChatArray.push(new ActiveChat(4, "goggelz", "person"));
 
-    addPartnerMessage("Hi Jonas", "shony", "12:00");
-    addOwnMessage("Na, wie gehts?", "12:01");
-    addPartnerMessage("Kann mich nicht beklagen und dir so?", "shony", "12:01");
-    addOwnMessage("Ditooooo :) was gibts ?", "12:03");
-    addPartnerMessage("Jaja kein smalltalk, gleich zu Sache haha, ok ;)", "shony", "12:04");
-    addPartnerMessage("Also: Könntest du mir freitag beim Umzug helfen?", "shony", "12:04");
+    localStorage.setItem("activeChats", JSON.stringify(activeChatArray));
+    //End of active Chatssaving
 
+    //Initialization of Chat
     var child = $('#chat-panel').children().first();
     var chatIcon = child.children().first();
     var chatBody = $('#chat-panel .panel-body');
@@ -32,16 +30,18 @@ $(document).on('click', '#send-message', function (e) {
     writeMessage();
 });
 
-$(document).on('click', '.chat-btn', function (e) {
-    var chatId = $(this).attr('data-chat-id');
-    activateChat(chatId);
-});
-
 $(document).on('keydown', '#message-text', function(e) {
     if (e.which == 13) {
         writeMessage();
     }
 });
+
+//All active Chats are saved as an Object of this kind in an Array
+ActiveChat = function(id, chatname, chatType) {
+    this.id = id;
+    this.chatname = chatname;
+    this.chatType = chatType;
+}
 
 //Called on every toggleevent(toggle down)
 function addBadge() {
@@ -94,6 +94,9 @@ function addNewPersonChatButton(chatId, name) {
         '</div>';
 
     $('#chat-buttons').append(chatButtonString);
+    $('#chat-buttons').find("[data-chat-id='" + chatId + "']").click(function(){
+        activateChat(chatId);
+    });
 }
 
 function addNewGroupChatButton(chatId, name) {
@@ -104,6 +107,9 @@ function addNewGroupChatButton(chatId, name) {
         '</div>';
 
     $('#chat-buttons').append(chatButtonString);
+    $('#chat-buttons').find("[data-chat-id='" + chatId + "']").click(function(){
+        activateChat(chatId);
+    });
 }
 
 function writeMessage() {
@@ -127,24 +133,67 @@ function updateScroll(){
     chatContent.scrollTop = chatContent.scrollHeight;
 }
 
+function emptyContents() {
+    $('#chat-content').empty();
+    $('#chat-buttons').empty();
+}
+
 function activateChat(chatId) {
-    var elements = $('.chat-btn');//.find("[data-chat-id='" + chatId + "']");
-    elements.removeClass('btn-primary');
-    elements.removeClass('btn-default');
-    elements.addClass('btn-default');
+    emptyContents();
 
-    var element = $(document).find("[data-chat-id='" + chatId + "']");
-    element.addClass('btn-primary');
-    localStorage.setItem("activeChatId", chatId);
+    if(localStorage.getItem("activeChats") === null) {
+        activateOverview();
+    } else {
+        var openChats = JSON.parse(localStorage.getItem("activeChats"));
+        for (var i = 0; i < openChats.length; i++) {
+            var addChatId = openChats[i].id;
+            var chatName = openChats[i].chatname;
 
-    //get Data array or anything else and use addOwnMessage() and addPartnerMessage()
+            if (openChats[i].chatType == "person") {
+                addNewPersonChatButton(addChatId, chatName);
+            } else {
+                addNewGroupChatButton(addChatId, chatName);
+            }
+        }
+        var elements = $('.chat-btn');
+        elements.removeClass('btn-primary');
+        elements.removeClass('btn-default');
+        elements.addClass('btn-default');
+
+        var element = $(document).find("[data-chat-id='" + chatId + "']");
+        element.addClass('btn-primary');
+        localStorage.setItem("activeChatId", chatId);
+
+        //TODO: get Data array or anything else and use addOwnMessage() and addPartnerMessage()
+        addPartnerMessage("Hi Jonas", "shony", "12:00");
+        addOwnMessage("Na, wie gehts?", "12:01");
+        addPartnerMessage("Kann mich nicht beklagen und dir so?", "shony", "12:01");
+        addOwnMessage("Ditooooo :) was gibts ?", "12:03");
+        addPartnerMessage("Jaja kein smalltalk, gleich zu Sache haha, ok ;)", "shony", "12:04");
+        addPartnerMessage("Also: Könntest du mir freitag beim Umzug helfen?", "shony", "12:04");
+    }
+}
+
+//TODO: Hier Dictionary für Ausgabe beachten
+function activateOverview() {
+    var overViewHtmlString = '<h1>Chats</h1>';
+    $('#chat-content').empty().append(overViewHtmlString);
+    localStorage.setItem("overView", false);
 }
 
 function chatPanelToggleUpCycle() {
     removeBadge();
     updateScroll();
-    activateChat(localStorage.getItem("activeChatId"));
+    if(localStorage.getItem("overView") != "True") {
+        activateChat(localStorage.getItem("activeChatId"));
+    } else {
+        activateOverview();
+    }
     localStorage.setItem("chatToggleStatus", true);
+}
+
+function appendPossibleGroupChat() {
+
 }
 
 function chatPanelToggleDownCycle() {
