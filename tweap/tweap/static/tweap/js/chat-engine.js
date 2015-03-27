@@ -4,14 +4,17 @@ function ChatManager() {
     var conversations = [];
 
     var socket = io('http://127.0.0.1:3000');
-    reAuthenticate();
 
-
-    var reAuthenticate = function() {
-        socket.emit('re-auth', localStorage.getItem('chat-creds'));
+    this.reAuthenticate = function() {
+        var fakeCreds = {
+            'username': 'jawu',
+            'authToken': 'a8d48d3ff5a205fb0da5481940d63b63'
+        };
+        localStorage.setItem('chat-creds', JSON.stringify(fakeCreds));
+        socket.emit('re-auth', JSON.parse(localStorage.getItem('chat-creds')));
         username = JSON.parse(localStorage.getItem('chat-creds')).username;
-        console.log("send re-auth");
     };
+    this.reAuthenticate();
 
     this.sendMessage = function(text) {
         var message = {

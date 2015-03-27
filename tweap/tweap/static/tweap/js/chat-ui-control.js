@@ -24,6 +24,8 @@ $(document).ready(function(){
         chatPanelToggleUpCycle();
     }
 
+    var chatManager = new ChatManager();
+
 });
 
 $(document).on('click', '#send-message', function (e) {
