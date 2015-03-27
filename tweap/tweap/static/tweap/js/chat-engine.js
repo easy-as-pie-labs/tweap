@@ -6,19 +6,20 @@ function ChatManager() {
     var socket = io('http://127.0.0.1:3000');
 
     this.reAuthenticate = function() {
+
         var fakeCreds = {
             'username': 'jawu',
             'authToken': 'a8d48d3ff5a205fb0da5481940d63b63'
         };
         localStorage.setItem('chat-creds', JSON.stringify(fakeCreds));
+
         socket.emit('re-auth', JSON.parse(localStorage.getItem('chat-creds')));
         username = JSON.parse(localStorage.getItem('chat-creds')).username;
     };
-    this.reAuthenticate();
 
     this.sendMessage = function(text) {
         var message = {
-            'conversation': currentConversation.id,
+            'conversation': currentConversation.getId(),
             'text': text
         };
         socket.emit('message', message);
@@ -30,7 +31,7 @@ function ChatManager() {
 
     this.getOldMessages = function() {
         var messageRequest = {
-            'conversation': currentConversation.id,
+            'conversation': currentConversation.getId(),
             'messageId': currentConversation.getOldestMessage().id
         };
         this.socket.emit('get-messages', messageRequest);
@@ -41,9 +42,9 @@ function ChatManager() {
     };
 
     var findConversationById = function(conversationId) {
-        for (var i = 0; i < this.conversations.length; i++) {
-            if (this.conversations[i].id == conversationId) {
-                return conversation[i];
+        for (var i = 0; i < conversations.length; i++) {
+            if (conversations[i].getId() == conversationId) {
+                return conversations[i];
             }
         }
         return false;
@@ -58,10 +59,12 @@ function ChatManager() {
     socket.on('message', function(message) {
         var conversation = findConversationById(message.conversation);
         if (conversation) {
-            conversation.addMessage(message);
+            conversation.addNewMessage(message, username);
             // add badge to conv on gui
         } else {
-            conversations.push(new Conversation(message.conversation, [message.sender, username]));
+            conversation = new Conversation(message.conversation, [message.sender, username]);
+            conversations.push(conversation);
+            conversation.addNewMessage(message, username);
             // add conv to gui
             // add badge to conv on gui
         }
@@ -85,12 +88,20 @@ function ChatManager() {
         }
     });
 
+
+    /* initial stuff */
+    this.reAuthenticate();
+    conversations.push(new Conversation(19, ['jawu']));
+    currentConversation = findConversationById(19);
+
 }
 
 function Conversation(id, users) {
     var id = id;
     var users = users;
     var messages = [];
+
+    addNewPersonChatButton(id, id);
 
     this.getOldestMessage = function() {
         if (messages.length > 0) {
@@ -100,19 +111,34 @@ function Conversation(id, users) {
         }
     };
 
-    this.getMessages = function() {
-        return messages;
+    this.showMessages = function(username) {
+        for (var i = 0; i < messages.length; i++) {
+            if (messages[i].sender === username) {
+                addOwnMessage(messages[i].text, messages[i].sender, messages[i].timestamp);
+            } else {
+                addPartnerMessage(messages[i].text, messages[i].timestamp);
+            }
+        }
     };
 
     this.addOldMessages = function(oldMessages) {
         messages.unshift(oldMessages);
     };
 
-    this.addNewMessage = function(newMessage) {
+    this.addNewMessage = function(newMessage, username) {
         messages.push(newMessage);
+        if (newMessage.sender === username) {
+            addOwnMessage(newMessage.text, newMessage.sender, newMessage.timestamp);
+        } else {
+            addPartnerMessage(newMessage.text, newMessage.timestamp);
+        }
     };
 
     this.addUsers = function(newUsers) {
         users = newUsers;
-    }
+    };
+
+    this.getId = function() {
+        return id;
+    };
 }
