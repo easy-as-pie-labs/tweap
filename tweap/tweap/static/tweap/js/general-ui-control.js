@@ -41,13 +41,13 @@ function chatToggle(chatHeader) {
     if(iconHolderFirst.hasClass('fa-chevron-right')) {
         chatHeader.next('.toggle_content').slideToggle();
         toggleIcon(iconHolderFirst);
-        chatPanelToggleUpCycle();
+        chatUi.chatPanelToggleUpCycle();
 
     }else if(iconHolderFirst.hasClass('fa-chevron-down')) {
         // if we're minimizing it, we only want the new messages badge AFTER the transition is complete
         chatHeader.next('.toggle_content').slideToggle(function(){
             toggleIcon(iconHolderFirst);
-            chatPanelToggleDownCycle();
+            chatUi.chatPanelToggleDownCycle();
         });
     }
 
