@@ -18,6 +18,10 @@ define(function() {
 
         var that = this;
 
+        this.socket.on('auth-status', function() {
+            that.sendAuthStatus();
+        })
+
         this.socket.on('auth', function(data) {
             that.authenticate(data);
         });
@@ -43,6 +47,18 @@ define(function() {
         });
 
     }
+
+    Communicator.prototype.sendAuthStatus = function() {
+        var status = "UNAUTHENTICATED";
+        if (this.client) {
+            if (this.client.connected) {
+                status = "CONNECTED";
+            } else {
+                status = "DISCONNECTED";
+            }
+        }
+        this.socket.emit('auth-status', {'status': status});
+    };
 
     Communicator.prototype.authenticate = function(credentials) {
         if (this.clientManager.getClientBySocket(this.socket)) {
