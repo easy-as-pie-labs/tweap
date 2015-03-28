@@ -116,7 +116,7 @@ function emptyConversation() {
 
 function activateChat(chatId) {
     emptyConversation();
-    chatManager.setCurrentConversation(chatId);
+    chatManager.changeConversation(chatId);
 
 
     var elements = $('.chat-btn');
@@ -138,9 +138,7 @@ function activateOverview() {
 function chatPanelToggleUpCycle() {
     removeBadge();
     updateScroll();
-    if(localStorage.getItem("overView") != "True") {
-        activateChat(localStorage.getItem("activeChatId"));
-    } else {
+    if(localStorage.getItem("overView") == "True") {
         activateOverview();
     }
     localStorage.setItem("chatToggleStatus", true);

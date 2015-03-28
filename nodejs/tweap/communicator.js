@@ -38,6 +38,10 @@ define(function() {
             that.spreadMessage(data);
         });
 
+        this.socket.on('get-conversations', function() {
+            that.conversationGetter();
+        });
+
         this.socket.on('conversation-request', function(data) {
             that.conversationRequestHandler(data);
         });
@@ -129,6 +133,22 @@ define(function() {
         }
     };
 
+    Communicator.prototype.conversationGetter = function() {
+        if (this.client) {
+            var data = {
+                'action': 'getConversationsOfUser',
+                'username': this.client.username
+            };
+            this.makeRequest(data, this.conversationGetterCB, this);
+        }
+    };
+
+    Communicator.prototype.conversationGetterCB = function(data) {
+        if (data.status === "OK") {
+            this.socket.emit('conversation-list', data.conversations);
+        }
+    }
+
     Communicator.prototype.conversationRequestHandler = function(userlist) {
         if (this.client) {
             var data = {
@@ -158,7 +178,7 @@ define(function() {
                 'conversation': messageRequest.conversation
             };
             if (messageRequest.messageId != undefined) {
-                data.messageId = messageId;
+                data.messageId = messageRequest.messageId;
             }
             this.makeRequest(data, this.loadMessagesCB, this);
         }
