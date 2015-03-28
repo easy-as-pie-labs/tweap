@@ -131,7 +131,7 @@ ChatUi = function() {
 
     this.activateChat = function(chatId) {
         this.emptyConversation();
-        //chatManager.setCurrentConversation(chatId);
+        chatManager.changeConversation(chatId);
 
         var elements = $('.chat-btn');
         elements.removeClass('btn-primary');

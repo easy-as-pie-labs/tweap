@@ -223,7 +223,7 @@ define(function() {
     Communicator.prototype.addToConversationsCB = function(data) {
         if (data.status === "OK") {
             for (var conversation of data.conversations) {
-                this.client.socket.join(conversation);
+                this.client.socket.join(conversation.id);
             }
         }
     };
