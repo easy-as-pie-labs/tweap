@@ -87,12 +87,14 @@
                     </div>
             </div>
         </div>
-        <div class="panel-footer">
+        <div class="panel-footer clearfix">
+            {% if todo %}
+            <span type="submit" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#deleteTodoModal">{% trans "Delete" %}</span>
+            {% endif %}
+            <span class="pull-right">
                 <input tabindex="3" name="create_save" type="submit" class="btn btn-primary" value='{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}'>
                 <a class="btn btn-default" href="{% url 'project_management:project' project.id %}">{% trans "Cancel" %}</a>
-                {% if todo %}
-                <span type="submit" name="leave_project" class="btn btn-danger" data-toggle="modal" data-target="#deleteTodoModal">{% trans "Delete" %}</span>
-                {% endif %}
+            </span>
             </form>
         </div>
         </div>
