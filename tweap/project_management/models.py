@@ -59,7 +59,8 @@ class Project(models.Model):
 
         if self.members.count() == 0:
             if not Invitation.objects.filter(project=self):
-                self.conversation.delete()
+                if self.conversation is not None:
+                    self.conversation.delete()
                 self.delete()
                 return
 
