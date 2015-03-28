@@ -1,4 +1,7 @@
+var chatManager;
+
 $(document).ready(function(){
+    /*
     addBadge();
     updateBadge("22");
 
@@ -12,6 +15,7 @@ $(document).ready(function(){
     localStorage.setItem("activeChats", JSON.stringify(activeChatArray));
     //End of active Chatssaving
 
+    */
     //Initialization of Chat
     var child = $('#chat-panel').children().first();
     var chatIcon = child.children().first();
@@ -23,6 +27,8 @@ $(document).ready(function(){
         chatBody.show();
         chatPanelToggleUpCycle();
     }
+
+    chatManager = new ChatManager();
 
 });
 
@@ -117,6 +123,7 @@ function writeMessage() {
 
     var msg = $('#message-text').val();
     if(msg != "") {
+        /*
         var date = new Date();
         var h = date.getHours();
         var m = date.getMinutes();
@@ -124,6 +131,8 @@ function writeMessage() {
         var time = h + ":" + m;
 
         addOwnMessage(msg, time);
+        */
+        chatManager.sendMessage($('#message-text').val());
         $('#message-text').val("");
     }
 }

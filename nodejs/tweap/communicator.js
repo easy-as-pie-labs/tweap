@@ -19,23 +19,23 @@ define(function() {
         var that = this;
 
         this.socket.on('auth', function(data) {
-            that.authenticate(data)
+            that.authenticate(data);
         });
 
         this.socket.on('re-auth', function(data) {
-            that.reAuthenticate(data)
+            that.reAuthenticate(data);
         });
 
         this.socket.on('disconnect', function() {
-            that.disconnect()
+            that.disconnect();
         });
 
         this.socket.on('message', function(data) {
-            that.spreadMessage(data)
+            that.spreadMessage(data);
         });
 
         this.socket.on('conversation-request', function(data) {
-            that.conversationRequestHandler(data)
+            that.conversationRequestHandler(data);
         });
 
         this.socket.on('get-messages', function(data) {
