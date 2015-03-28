@@ -222,7 +222,7 @@ function Conversation(id, users, name) {
 
     console.log(this.name);
     if (this.name == null) {
-        chatUi.addNewPersonChatButton(id, id);
+        chatUi.addNewPersonChatButton(id, this.users);
     } else {
         chatUi.addNewGroupChatButton(id, name);
     }

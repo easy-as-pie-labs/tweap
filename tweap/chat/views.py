@@ -69,9 +69,11 @@ def api(request):
             conversations = Conversation.get_conversations_of_user(user)
             result['conversations'] = []
             for conversation in conversations:
+                user_string = "test" # TODO: add other users
                 conversation_object = {
                     'id': conversation.id,
-                    'name': conversation.name
+                    'name': conversation.name,
+                    'users': user_string
                 }
                 result['conversations'].append(conversation_object)
 
