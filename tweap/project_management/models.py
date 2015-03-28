@@ -3,6 +3,7 @@ from django.forms import ModelForm, Textarea, HiddenInput
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy
 from django.core.urlresolvers import reverse
+from chat.models import Conversation
 
 
 class Project(models.Model):
@@ -12,6 +13,7 @@ class Project(models.Model):
     name = models.CharField(max_length=100)
     icon = models.CharField(max_length=30, default='fa fa-folder-open-o')
     description = models.CharField(max_length=1000, blank=True, null=True)
+    conversation = models.ForeignKey(Conversation, null=True, blank=True)
     members = models.ManyToManyField(User)
 
     def __str__(self):
@@ -25,6 +27,11 @@ class Project(models.Model):
         :return:
         """
         self.members.remove(user)
+        self.save()
+
+        if self.conversation is not None:
+            self.conversation.members.remove(user)
+            self.conversation.save()
 
 
         # because circular imports are not allowed
@@ -52,10 +59,9 @@ class Project(models.Model):
 
         if self.members.count() == 0:
             if not Invitation.objects.filter(project=self):
+                self.conversation.delete()
                 self.delete()
                 return
-
-        self.save()
 
     def has_user(self, user):
         if user in self.members.all():
@@ -108,6 +114,11 @@ class Invitation(models.Model):
         user = User.objects.get(id=self.user.id)
         project.members.add(user)
         project.save()
+
+        if project.conversation is not None:
+            project.conversation.members.add(user)
+            project.conversation.save()
+
         self.delete()
 
     def reject(self):

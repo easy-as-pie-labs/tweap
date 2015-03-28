@@ -10,7 +10,7 @@ from cal.models import Event
 import datetime
 import pytz
 import json
-
+from chat.models import Conversation
 
 class CreateEdit(View):
     """
@@ -41,6 +41,8 @@ class CreateEdit(View):
     def post(self, request, project_id=None):
 
         context = {}
+        old_project_name = ''
+        new_project_name = ''
 
         if project_id is None:
             form = ProjectForm(request.POST)
@@ -55,11 +57,27 @@ class CreateEdit(View):
                 context['headline'] = ugettext("Edit project")
                 context['project'] = project
 
+                old_project_name = project.name
+
         if form.is_valid():
             project = form.save()
             if project_id is None:
                 project.members.add(request.user)
+
+                conversation = Conversation(name=project.name)
+                conversation.save()
+                conversation.members.add(request.user)
+                conversation.save()
+
+                project.conversation = conversation
                 project.save()
+            else:
+                if old_project_name != project.name:
+                    # project name was changed
+                    conversation = project.conversation
+                    conversation.name = project.name
+                    conversation.save()
+
             if 'invitations' in request.POST:
                 invite_users(request.POST['invitations'], project)
             return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))

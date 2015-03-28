@@ -32,7 +32,7 @@ class UserManagementTest(TestCase):
 
     def test_register(self):
 
-        print("__Test Regisration__")
+        print("__Test Registration__")
 
         # site available
         print("Test: site available")
@@ -434,6 +434,8 @@ class UserManagementTest(TestCase):
         self.assertEqual(ProfileAddress.objects.filter(id=address_id).count(), 0)
         self.assertEqual(Project.objects.filter(members=user).count(), 0)
         self.assertEqual(Project.objects.filter(id=project2.id).count(), 0)
+
+
 
 
 class ViewTest(TestCase):
