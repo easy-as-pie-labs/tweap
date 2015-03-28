@@ -75,6 +75,18 @@ class UserManagementTest(TestCase):
         self.assertFalse('username_field' in resp.context)
         self.assertEqual('test2@test.de', resp.context['email_field'])
 
+        # username not allowed (me, all, alice and bob are blocked usernames)
+        print("Test: username not allowed")
+        resp = self.client.post('/users/register/', {'username': 'me', 'email': 'test2@test.de', 'password': 'testpw'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue('username' in resp.context['error_messages'])
+        self.assertFalse('email' in resp.context['error_messages'])
+        self.assertFalse('password' in resp.context['error_messages'])
+        self.assertFalse('blank' in resp.context['error_messages'])
+        self.assertFalse('form' in resp.context['error_messages'])
+        self.assertFalse('username_field' in resp.context)
+        self.assertEqual('test2@test.de', resp.context['email_field'])
+
         # username contains non alphanumerical symbols
         print("Test: username contains non alphanumerical symbols")
         resp = self.client.post('/users/register/', {'username': 'tes@t!', 'email': 'test2@test.de', 'password': 'testpw'})
