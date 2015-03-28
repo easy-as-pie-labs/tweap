@@ -1,8 +1,8 @@
 // toggle box and indicator icons
 $(document).on('click', '.toggle_header', function() {
-    if($(this).parent().attr('id') == "chat-panel")
+    if($(this).parent().attr('id') == "chat-panel") {
         chatToggle($(this));
-    else {
+    } else {
         $(this).next('.toggle_content').slideToggle();
 
         var iconHolderFirst = $(this).children().first();
@@ -14,7 +14,6 @@ $(document).on('click', '.toggle_header', function() {
             toggleIcon(iconHolderLast);
         }
     }
-
 });
 
 /**

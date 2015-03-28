@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 
 class Conversation(models.Model):
+    name = models.CharField(max_length=100, blank=True, null=True)
     members = models.ManyToManyField(User)
 
     @classmethod

@@ -1,21 +1,7 @@
 var chatManager;
 
 $(document).ready(function(){
-    /*
-    addBadge();
-    updateBadge("22");
 
-    //Loads Active Chats. This is the way it has to be treated
-    var activeChatArray = new Array();
-    activeChatArray.push(new ActiveChat(1, "jawu", "person"));
-    activeChatArray.push(new ActiveChat(2, "tpei", "person"));
-    activeChatArray.push(new ActiveChat(77, "iLab", "group"));
-    activeChatArray.push(new ActiveChat(4, "goggelz", "person"));
-
-    localStorage.setItem("activeChats", JSON.stringify(activeChatArray));
-    //End of active Chatssaving
-
-    */
     //Initialization of Chat
     var child = $('#chat-panel').children().first();
     var chatIcon = child.children().first();
@@ -42,13 +28,6 @@ $(document).on('keydown', '#message-text', function(e) {
     }
 });
 
-//All active Chats are saved as an Object of this kind in an Array
-ActiveChat = function(id, chatname, chatType) {
-    this.id = id;
-    this.chatname = chatname;
-    this.chatType = chatType;
-}
-
 //Called on every toggleevent(toggle down)
 function addBadge() {
     /*
@@ -56,7 +35,7 @@ function addBadge() {
     * Please extend this Method for this constraint
      */
     var panelHeading = $("#chat-panel").children().first();
-    panelHeading.append('<span class="badge">30</span>');
+    panelHeading.append('<span class="badge">0</span>');
 }
 
 //Called on every toggleevent (toggle up)
@@ -119,19 +98,8 @@ function addNewGroupChatButton(chatId, name) {
 }
 
 function writeMessage() {
-    //Code for backend to write a message here:
-
     var msg = $('#message-text').val();
     if(msg != "") {
-        /*
-        var date = new Date();
-        var h = date.getHours();
-        var m = date.getMinutes();
-
-        var time = h + ":" + m;
-
-        addOwnMessage(msg, time);
-        */
         chatManager.sendMessage($('#message-text').val());
         $('#message-text').val("");
     }
@@ -142,45 +110,22 @@ function updateScroll(){
     chatContent.scrollTop = chatContent.scrollHeight;
 }
 
-function emptyContents() {
+function emptyConversation() {
     $('#chat-content').empty();
-    $('#chat-buttons').empty();
 }
 
 function activateChat(chatId) {
-    emptyContents();
+    emptyConversation();
+    chatManager.setCurrentConversation(chatId);
 
-    if(localStorage.getItem("activeChats") === null) {
-        activateOverview();
-    } else {
-        var openChats = JSON.parse(localStorage.getItem("activeChats"));
-        for (var i = 0; i < openChats.length; i++) {
-            var addChatId = openChats[i].id;
-            var chatName = openChats[i].chatname;
 
-            if (openChats[i].chatType == "person") {
-                addNewPersonChatButton(addChatId, chatName);
-            } else {
-                addNewGroupChatButton(addChatId, chatName);
-            }
-        }
-        var elements = $('.chat-btn');
-        elements.removeClass('btn-primary');
-        elements.removeClass('btn-default');
-        elements.addClass('btn-default');
+    var elements = $('.chat-btn');
+    elements.removeClass('btn-primary');
+    elements.removeClass('btn-default');
+    elements.addClass('btn-default');
 
-        var element = $(document).find("[data-chat-id='" + chatId + "']");
-        element.addClass('btn-primary');
-        localStorage.setItem("activeChatId", chatId);
-
-        //TODO: get Data array or anything else and use addOwnMessage() and addPartnerMessage()
-        addPartnerMessage("Hi Jonas", "shony", "12:00");
-        addOwnMessage("Na, wie gehts?", "12:01");
-        addPartnerMessage("Kann mich nicht beklagen und dir so?", "shony", "12:01");
-        addOwnMessage("Ditooooo :) was gibts ?", "12:03");
-        addPartnerMessage("Jaja kein smalltalk, gleich zu Sache haha, ok ;)", "shony", "12:04");
-        addPartnerMessage("Also: Könntest du mir freitag beim Umzug helfen?", "shony", "12:04");
-    }
+    var element = $(document).find("[data-chat-id='" + chatId + "']");
+    element.addClass('btn-primary');
 }
 
 //TODO: Hier Dictionary für Ausgabe beachten
