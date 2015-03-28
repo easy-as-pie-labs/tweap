@@ -16,9 +16,6 @@ $(document).ready(function() {
         chatUi.chatPanelToggleUpCycle();
     }
 
-    chatUi.activateOverview();
-    chatUi.addNewGroupChatButton(2, "iLab");
-    chatUi.addNewGroupChatButton(6, "Heide-Park");
 });
 
 $(document).on('click', '#send-message', function (e) {

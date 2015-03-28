@@ -3,7 +3,7 @@ ChatManager = function() {
     var currentConversation;
     var conversations = [];
 
-    var socket = io('http://127.0.0.1:3000');
+    var socket = io('http://dev.tweap.easy-as-pie.de:3000');
 
     var that = this;
 
