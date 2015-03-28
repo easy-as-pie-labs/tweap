@@ -39,6 +39,7 @@ function initCalendar() {
 
             $('#new_cal_modal').modal('show'); */
         },
+
         events: [
             {% for event in events %}
             {
@@ -50,6 +51,10 @@ function initCalendar() {
             },
             {% endfor %}
         ],
+
+        eventRender: function (event, element) {
+            element.find('.fc-title').html(event.title);
+        }
     });
 
     var updateCalendarEntry = function(event, revertFunc){

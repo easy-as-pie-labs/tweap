@@ -12,6 +12,7 @@
                 <div class="list-group" id="inbox">
                     <span class="list-group-item active noselect toggle_header"><i class="fa fa-inbox"></i> {% trans "Notifications" %}<i class="pull-right fa fa-chevron-down"></i></span>
                     <div class="toggle_content" id="inbox-inner">
+                        <div class="list-group-item hide"></div>
                         {% for invitation in invitations %}
                         <div id="invitation_container_id_{{ invitation.id }}" class="list-group-item invitation-item">
                             <p>

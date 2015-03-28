@@ -35,7 +35,9 @@ class Home(View):
                 event.type = 'event'
             while True:
                 if len(todos) > 0 and len(events) > 0:
-                    if todos[0].due_date.year == events[0].start.year and todos[0].due_date.month == events[0].start.month and todos[0].due_date.day < events[0].start.day:
+                    if (todos[0].due_date.year == events[0].start.year and todos[0].due_date.month == events[0].start.month and todos[0].due_date.day < events[0].start.day) \
+                            or (todos[0].due_date.month < events[0].start.month) \
+                            or (todos[0].due_date.year < events[0].start.year):
                         week_events_todos.append(todos[0])
                         del todos[0]
                     else:

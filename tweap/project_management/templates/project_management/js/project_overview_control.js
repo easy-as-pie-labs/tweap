@@ -226,8 +226,7 @@ var quickAddTodo = function (title) {
             $('#todo_rest_box').prepend(element);
             var newElement = $('#element-' + id);
             newElement.fadeIn();
-            var hoverChange = $('#toggle-' + id);
-            addHoverClassChange(hoverChange, 'fa-square-o', 'fa-check-square-o');
+            addAssigmentActions();
         }
     })
 };

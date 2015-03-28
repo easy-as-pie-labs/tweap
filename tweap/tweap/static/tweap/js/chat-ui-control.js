@@ -102,7 +102,6 @@ chatUi = function() {
             '</div>';
 
         $('#chat-buttons').append(chatButtonString);
-
         this.appendListenerToChatButtons(chatId);
     }
 
@@ -129,7 +128,7 @@ chatUi = function() {
         var chatContent = document.getElementById("chat-content");
         chatContent.scrollTop = chatContent.scrollHeight;
     }
-
+    
     this.emptyConversation = function() {
         $('#chat-content').empty();
     }

@@ -54,6 +54,7 @@ class CreateEdit(View):
                 'todo': todo,
                 'project': project,
                 'members': project.members.order_by('username'),
+                'invitees': project.get_invited_users()
             }
         return render(request, 'todo/create_edit.html', context)
 
