@@ -17,6 +17,8 @@ $(document).ready(function() {
     }
 
     chatUi.activateOverview();
+    chatUi.addNewGroupChatButton(2, "iLab");
+    chatUi.addNewGroupChatButton(6, "Heide-Park");
 });
 
 $(document).on('click', '#send-message', function (e) {
@@ -27,6 +29,10 @@ $(document).on('keydown', '#message-text', function(e) {
     if (e.which == 13) {
         chatUi.writeMessage();
     }
+});
+
+$(document).on('click', '#all-chats', function (e) {
+    chatUi.activateOverview();
 });
 
 ChatUi = function() {
@@ -127,12 +133,23 @@ ChatUi = function() {
     
     this.emptyConversation = function() {
         $('#chat-content').empty();
+        $('#chat-message').empty();
+    }
+
+    //TODO: Hier Dictionary für Ausgabe beachten
+
+    this.appendChatMessageInput = function() {
+        var htmlString = '<input id="message-text" type="text" class="form-control" placeholder="Your Message" aria-describedby="sizing-addon2">' +
+            '<span id="send-message" class="input-group-addon btn">' +
+            '<span class="fa fa-send fa-lg"></span>' +
+            '</span>';
+        $('#chat-message').append(htmlString);
     }
 
     this.activateChat = function(chatId) {
         this.emptyConversation();
         //chatManager.setCurrentConversation(chatId);
-
+        this.appendChatMessageInput();
         var elements = $('.chat-btn');
         elements.removeClass('btn-primary');
         elements.removeClass('btn-default');
@@ -152,13 +169,14 @@ ChatUi = function() {
     //TODO: Hier Dictionary für Ausgabe beachten
     this.activateOverview = function() {
 
+        this.emptyConversation();
         chatManager.requestConversations();
 
         var overViewHtmlString = '<h2>Open Projectchat</h2>' +
             '<ul id="group-chats" class="nav nav-pills"></ul>' +
             '<h2>Open Chat with a single person</h2>' +
             '<ul id="person-chats" class="nav nav-pills"></ul>';
-        $('#chat-content').empty().append(overViewHtmlString);
+        $('#chat-content').append(overViewHtmlString);
         localStorage.setItem("overView", true);
     }
 

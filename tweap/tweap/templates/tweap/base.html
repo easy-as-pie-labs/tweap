@@ -80,13 +80,13 @@
                 </div>
                 <div class="panel-body toggle_content hide-alert">
                     <div id="chat-buttons" class="btn-group btn-group-justified" role="group" aria-label="...">
-
                     </div>
+                    <div id="all-chats"><span class="fa fa-user-plus"></span>{% trans "all active chats" %}</div>
                     <hr>
                     <div id="chat-content">
                     </div>
                     <hr>
-                    <div class="input-group">
+                    <div id="chat-message" class="input-group">
                         <input id="message-text" type="text" class="form-control" placeholder="{% trans 'Your message' %}" aria-describedby="sizing-addon2">
                         <span id="send-message" class="input-group-addon btn"><span class="fa fa-send fa-lg"></span></span>
                     </div>

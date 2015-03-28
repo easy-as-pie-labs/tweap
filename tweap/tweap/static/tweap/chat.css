@@ -91,3 +91,13 @@
 .psbl-chat-btn {
     margin-bottom:5px;
 }
+
+#all-chats {
+    margin-top:10px;
+    margin-bottom: -10px;
+}
+
+#all-chats:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
