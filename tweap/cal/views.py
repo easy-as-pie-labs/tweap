@@ -55,7 +55,8 @@ class CreateEdit(View):
                 'headline': ugettext("Edit Event in") + " " + project.name,
                 'event': event,
                 'project': project,
-                'members': project.members.order_by('username')
+                'members': project.members.order_by('username'),
+                'invitees': project.get_invited_users(),
             }
         return render(request, 'cal/create_edit.html', context)
 
