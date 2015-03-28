@@ -192,7 +192,6 @@ class QuickAdd(View):
         data = sp.parse(text)
 
         title = data['title']
-
         result = {}
         try:
             project = Project.objects.get(id=project_id)
@@ -201,10 +200,16 @@ class QuickAdd(View):
 
             for username in data['users']:
                 try:
-                    user = User.objects.get(username=username)
+                    if username == 'me':
+                        todo.assignees.add(request.user)
+                    elif username == 'all':
+                        for user in project.members.all():
+                            todo.assignees.add(user)
+                    else:
+                        user = User.objects.get(username=username)
 
-                    if user in project.members.all():
-                        todo.assignees.add(user)
+                        if user in project.members.all():
+                            todo.assignees.add(user)
                 except:
                     pass
 

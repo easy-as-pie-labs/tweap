@@ -198,7 +198,6 @@ var showClosedTodos = function() {
  * @param title of new todoitem
  */
 var quickAddTodo = function (title) {
-    console.log("add todo with title: " + title);
 
     // TODO: get current project differently (currently from url substring)
 
@@ -211,7 +210,6 @@ var quickAddTodo = function (title) {
     };
 
     $.post("{% url 'todo:quick_add' %}", data, function (output) {
-        console.log(output);
 
         // clear entered text if success
         if (output['success'] == true) {

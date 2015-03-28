@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from os.path import splitext
 from project_management.models import Project, Invitation
+from django.core.exceptions import ObjectDoesNotExist
 from todo.models import Todo
 from cal.models import Event
 import random
@@ -37,14 +38,14 @@ def create_tutorial_project(user):
     # get tutorial users alice and bob
     try:
         alice = User.objects.get(username='alice')
-    except:
+    except ObjectDoesNotExist:
         alice = User.objects.create_user('alice', 'alice@test.de', 'testpw')
         profile = Profile.create(alice)
         profile.save()
 
     try:
         bob = User.objects.get(username='bob')
-    except:
+    except ObjectDoesNotExist:
         bob = User.objects.create_user('bob', 'bob@test.de', 'testpw')
         profile = Profile.create(bob)
         profile.save()
