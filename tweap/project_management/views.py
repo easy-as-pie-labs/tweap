@@ -75,8 +75,9 @@ class CreateEdit(View):
                 if old_project_name != project.name:
                     # project name was changed
                     conversation = project.conversation
-                    conversation.name = project.name
-                    conversation.save()
+                    if conversation is not None:
+                        conversation.name = project.name
+                        conversation.save()
 
             if 'invitations' in request.POST:
                 invite_users(request.POST['invitations'], project)
