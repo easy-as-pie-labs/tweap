@@ -150,6 +150,8 @@ ChatUi = function() {
         this.emptyConversation();
         //chatManager.setCurrentConversation(chatId);
         this.appendChatMessageInput();
+        chatManager.changeConversation(chatId);
+
         var elements = $('.chat-btn');
         elements.removeClass('btn-primary');
         elements.removeClass('btn-default');

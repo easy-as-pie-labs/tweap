@@ -1,6 +1,6 @@
 ChatManager = function() {
-    var username = undefined;
-    var currentConversation = undefined;
+    var username;
+    var currentConversation;
     var conversations = [];
 
     var socket = io('http://127.0.0.1:3000');
@@ -191,7 +191,6 @@ ChatManager = function() {
                 projectConversations.push(conversations[i]);
             } else {
                 personConversations.push(conversations[i]);
-                personConversations[personConversations.length-1].name = conversations[i].id;
             }
         }
         chatUi.addConversationsToOverview(projectConversations, personConversations);
@@ -221,8 +220,13 @@ function Conversation(id, users, name) {
     this.name = name;
     this.messages = [];
 
-    // TODO: difference between person/project
-    chatUi.addNewPersonChatButton(id, name);
+    console.log(this.name);
+    if (this.name == null) {
+        chatUi.addNewPersonChatButton(id, id);
+    } else {
+        chatUi.addNewGroupChatButton(id, name);
+    }
+
 
     this.getOldestMessage = function() {
         if (this.messages.length > 0) {
