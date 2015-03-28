@@ -17,7 +17,7 @@ define(function() {
             var index = clients.indexOf(client);
             if (index > -1) {
                 clients.splice(index, 1);
-                console.log("removed client: " + client.username);
+                this.showClients();
             }
         };
 

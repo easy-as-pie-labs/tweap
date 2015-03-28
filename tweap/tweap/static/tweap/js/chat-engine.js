@@ -9,25 +9,14 @@ ChatManager = function() {
 
     /* METHODS FOR COMMUNICATION WITH SERVER */
 
-    var getAuthStatus = function() {
-        socket.emit('auth-status');
-    };
-
-    var authenticate = function(username, password) {
-        socket.emit('auth', {'username': 'jawu', 'password': 'test'});
+    var authenticate = function() {
+        username = JSON.parse(localStorage.getItem('chat-raw-credentials')).username;
+        socket.emit('auth', JSON.parse(localStorage.getItem('chat-raw-credentials')));
     };
 
     var reAuthenticate = function() {
-        /*
-        var fakeCreds = {
-            'username': 'jawu',
-            'authToken': 'a8d48d3ff5a205fb0da5481940d63b63'
-        };
-        localStorage.setItem('chat-creds', JSON.stringify(fakeCreds));
-        */
-
-        socket.emit('re-auth', JSON.parse(localStorage.getItem('chat-creds')));
-        username = JSON.parse(localStorage.getItem('chat-creds')).username;
+        username = JSON.parse(localStorage.getItem('chat-credentials')).username;
+        socket.emit('re-auth', JSON.parse(localStorage.getItem('chat-credentials')));
     };
 
     this.sendMessage = function(text) {
@@ -110,8 +99,8 @@ ChatManager = function() {
     /* METHODS FOR STORING / LOADING FROM WEBSTORAGE */
 
     var loadFromStorage = function() {
-        if (localStorage.getItem('chat_conversations') !== null) {
-            var saveObject = JSON.parse(localStorage.getItem('chat_conversations'));
+        if (localStorage.getItem('chat-conversations') !== null) {
+            var saveObject = JSON.parse(localStorage.getItem('chat-conversations'));
             for (var i = 0; i < saveObject.conversations.length; i++) {
                 conversations.push(new Conversation(saveObject.conversations[i].id, saveObject.conversations[i].users, saveObject.conversations[i].name));
                 conversations[conversations.length-1].messages = saveObject.conversations[i].messages;
@@ -131,24 +120,21 @@ ChatManager = function() {
         for (var i = 0; i < conversations.length; i++) {
             saveObject.conversations.push(conversations[i]);
         }
-        localStorage.setItem('chat_conversations', JSON.stringify(saveObject));
+        localStorage.setItem('chat-conversations', JSON.stringify(saveObject));
     };
 
 
     /* HANDLER */
 
-    socket.on('auth-status', function(data) {
-        console.log("current auth status: " + data.status);
-        if (data.status === "UNAUTHENTICATED") {
-            reAuthenticate();
-        }
-    });
 
     socket.on('auth-success', function(data) {
         console.log("auth-success");
-        var chatCreds = JSON.parse(localStorage.getItem('chat-creds'));
-        chatCreds.authToken = data.authToken;
-        localStorage.setItem('chat-creds', JSON.stringify(chatCreds));
+        var chatCredentials = {
+            'username': username,
+            'authToken': data.authToken
+        };
+        localStorage.removeItem('chat-raw-credentials');
+        localStorage.setItem('chat-credentials', JSON.stringify(chatCredentials));
     });
 
     socket.on('message', function(message) {
@@ -210,7 +196,11 @@ ChatManager = function() {
 
     /* initial stuff */
     loadFromStorage();
-    getAuthStatus();
+    if (localStorage.getItem('chat-raw-credentials') === null) {
+        reAuthenticate();
+    } else {
+        authenticate();
+    }
 
 }
 
@@ -220,7 +210,6 @@ function Conversation(id, users, name) {
     this.name = name;
     this.messages = [];
 
-    console.log(this.name);
     if (this.name == null) {
         chatUi.addNewPersonChatButton(id, this.users);
     } else {

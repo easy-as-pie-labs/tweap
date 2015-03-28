@@ -1,5 +1,9 @@
 {% extends "tweap/base.html" %}
+{% load staticfiles%}
 {% load i18n %}
+{% block js %}
+    <script src="{% static 'tweap/js/chat-helper.js' %}"></script>
+{% endblock %}
 {% block navigation %}
     {% include "tweap/navigation.html" %}
 {% endblock %}
