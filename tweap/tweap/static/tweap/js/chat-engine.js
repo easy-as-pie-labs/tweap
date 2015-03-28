@@ -1,4 +1,4 @@
-function ChatManager() {
+ChatManager = function() {
     var username = undefined;
     var currentConversation = undefined;
     var conversations = [];
@@ -6,8 +6,6 @@ function ChatManager() {
     var socket = io('http://127.0.0.1:3000');
 
     var that = this;
-
-
 
     /* METHODS FOR COMMUNICATION WITH SERVER */
 
@@ -121,8 +119,6 @@ function ChatManager() {
             username = saveObject.username;
             currentConversation = findConversationById(saveObject.currentConversationId);
             that.changeConversation(currentConversation.id)
-        } else {
-            chatUi.activateOverview();
         }
     };
 
@@ -187,7 +183,7 @@ function ChatManager() {
         saveToStorage();
     });
 
-    socket.on('message-list', function(conversations) {
+    socket.on('conversation-list', function(conversations) {
         var projectConversations = [];
         var personConversations = [];
         for (var i = 0; i < conversations.length; i++) {
@@ -198,7 +194,7 @@ function ChatManager() {
                 personConversations[personConversations.length-1].name = conversations[i].id;
             }
         }
-        addConversationsToOverview(projectConversations, personConversations);
+        chatUi.addConversationsToOverview(projectConversations, personConversations);
     });
 
     socket.on('conversation-response', function(conversation) {

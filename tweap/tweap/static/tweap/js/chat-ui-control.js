@@ -1,11 +1,8 @@
-var chatManager;
 
-$(document).ready(function(){
-    chatUi = new chatUi;
-    chatUi.addNewGroupChatButton(12, "iLab");
-    chatUi.addNewPersonChatButton(2, "shony");
-    chatUi.addNewPersonChatButton(4, "jawu");
-    chatUi.addNewPersonChatButton(5, "goggelz");
+$(document).ready(function() {
+
+    chatUi = new ChatUi();
+    chatManager = new ChatManager();
 
     //Initialization of Chat
     var child = $('#chat-panel').children().first();
@@ -19,21 +16,20 @@ $(document).ready(function(){
         chatUi.chatPanelToggleUpCycle();
     }
 
-    chatManager = new ChatManager();
-
+    chatUi.activateOverview();
 });
 
 $(document).on('click', '#send-message', function (e) {
-    this.writeMessage();
+    chatUi.writeMessage();
 });
 
 $(document).on('keydown', '#message-text', function(e) {
     if (e.which == 13) {
-        this.writeMessage();
+        chatUi.writeMessage();
     }
 });
 
-chatUi = function() {
+ChatUi = function() {
 
     var that = this;
 
@@ -166,13 +162,13 @@ chatUi = function() {
         localStorage.setItem("overView", true);
     }
 
-    this.addConversationsToOverview = function(groups, users) {
-        for(var i = 0;groups.length>i;i++) {
-            this.appendPossibleChatButton(groups[i].name, "group", groups[i].id);
+    this.addConversationsToOverview = function(projects, users) {
+        for(var i = 0; projects.length>i; i++) {
+            this.appendPossibleChatButton(projects[i].name, "group", projects[i].id);
         }
 
-        for(var i = 0;users.length>i;i++) {
-            this.appendPossibleChatButton(userss[i].name, "user", users[i].id);
+        for(var i = 0; users.length>i; i++) {
+            this.appendPossibleChatButton(users[i].name, "user", users[i].id);
         }
     }
 
@@ -202,11 +198,6 @@ chatUi = function() {
     this.chatPanelToggleUpCycle = function() {
         this.removeBadge();
         this.updateScroll();
-        if(localStorage.getItem("overView") != "true") {
-            this.activateChat(localStorage.getItem("activeChatId"));
-        } else {
-            this.activateOverview();
-        }
         localStorage.setItem("chatToggleStatus", true);
     }
 

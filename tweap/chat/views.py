@@ -69,7 +69,11 @@ def api(request):
             conversations = Conversation.get_conversations_of_user(user)
             result['conversations'] = []
             for conversation in conversations:
-                result['conversations'].append(conversation.id)
+                conversation_object = {
+                    'id': conversation.id,
+                    'name': conversation.name
+                }
+                result['conversations'].append(conversation_object)
 
         elif action == "updateAuthToken":
             user = User.objects.get(username=data.get('username'))
