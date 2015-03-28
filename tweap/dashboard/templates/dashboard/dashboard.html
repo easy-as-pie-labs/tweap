@@ -78,12 +78,14 @@
             <div class="col-md-6">
                     <div class="list-group">
                         <span class="list-group-item active"><i class="fa fa-bell-o"></i> {% trans "Next 7 days" %}</span>
-                        {% if due_this_week or events_this_week %}
-                             {% for todo in due_this_week %}
-                                <a href="{% url 'todo:todo' todo.id %}" class="list-group-item"><i class="fa fa-pencil-square-o"></i> {{ todo.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ todo.project.name }} <span class="small pull-right">{% trans "until" %} {{ todo.due_date }}</span></a>
-                             {% endfor %}
-                            {% for event in events_this_week %}
-                                <a href="{% url 'cal:edit' event.id %}" class="list-group-item"><i class="fa fa-calendar"></i> {{ event.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ event.project.name }} <span class="small pull-right">{{ event.start }}</span></a>
+                        {% if week_mixed %}
+                            {% for entry in week_mixed %}
+                                {% ifequal entry.type 'todo' %}
+                                <a href="{% url 'todo:todo' entry.id %}" class="list-group-item"><i class="fa fa-pencil-square-o"></i> {{ entry.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ entry.project.name }} <span class="small pull-right">{% trans "until" %} {{ entry.due_date }}</span></a>
+                                {% endifequal %}
+                                {% ifequal entry.type 'event' %}
+                                <a href="{% url 'cal:edit' entry.id %}" class="list-group-item"><i class="fa fa-calendar"></i> {{ entry.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ entry.project.name }} <span class="small pull-right">{{ entry.start }}</span></a>
+                                {% endifequal %}
                             {% endfor %}
                         {% elif overdue or due_today %}
                             <div class="list-group-item"><i class="fa fa-rocket"></i> {% trans "Once you are done today, you got nothing for the rest of the week!" %}</div>

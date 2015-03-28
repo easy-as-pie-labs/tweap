@@ -4,6 +4,7 @@ from project_management.models import Invitation
 from notification_center.models import Notification
 from todo.models import Todo
 from cal.models import Event
+import datetime
 
 
 class Home(View):
@@ -25,15 +26,36 @@ class Home(View):
             for entry in cal_week:
                 entry.start = entry.get_start_datetime_for_dashboard()
 
+            week_events_todos = []
+            todos = list(todo_week.all())
+            for todo in todos:
+                todo.type = 'todo'
+            events = list(cal_week.all())
+            for event in events:
+                event.type = 'event'
+            while True:
+                if len(todos) > 0 and len(events) > 0:
+                    if todos[0].due_date.year == events[0].start.year and todos[0].due_date.month == events[0].start.month and todos[0].due_date.day < events[0].start.day:
+                        week_events_todos.append(todos[0])
+                        del todos[0]
+                    else:
+                        week_events_todos.append(events[0])
+                        del events[0]
+                else:
+                    for todo in todos:
+                        week_events_todos.append(todo)
+                    for event in events:
+                        week_events_todos.append(event)
+                    break
+
 
             context = {
                 'invitations': Invitation.objects.filter(user=request.user),
                 'due_today': Todo.get_due_today_for_user(request.user),
-                'due_this_week': todo_week,
                 'overdue': Todo.get_overdue_for_user(request.user),
                 'events_today': cal_today,
-                'events_this_week': cal_week,
-                'notifications': Notification.objects.filter(receiver=request.user)
+                'notifications': Notification.objects.filter(receiver=request.user),
+                'week_mixed': week_events_todos
             }
             return render(request, 'dashboard/dashboard.html', context)
         else:
