@@ -10,6 +10,8 @@ var ASSIGN_ME_ICON = 'fa-star';
 var UNASSIGN_ME_ICON = 'fa-star-o';
 var todoState = 'hidden';
 
+var todoQuickAdder;
+
 $(document).ready(function () {
 
     addHoverClassChange($('.hover-change'), 'fa-square-o', 'fa-check-square-o');
@@ -18,72 +20,78 @@ $(document).ready(function () {
 
     hideClosedTodos();
 
-    addAssigmentActions();
+    todoQuickAdder = new TodoQuickAdd();
 
 });
 
-var addAssigmentActions = function() {
-    var assign_user = $('.'+ASSIGN_ME_ICON);
-    var unassign_user = $('.'+UNASSIGN_ME_ICON);
+var TodoQuickAdd = function(){
 
-    addAssignmentHover(assign_user, ASSIGN_ME_ICON, UNASSIGN_ME_ICON);
-    addAssignmentHover(unassign_user, UNASSIGN_ME_ICON, ASSIGN_ME_ICON);
-    // click on opposite icon, because of hover effect
-    addAssignmentClick(unassign_user, "assign");
-    addAssignmentClick(assign_user, "unassign");
+    /**
+     * classchange on hover over element
+     * @param element to change class of
+     * @param from base clase
+     * @param to hover class
+     */
+     var addAssignmentHover = function(element, from, to){
+        element.hover(function () {
+            $(this).removeClass(from);
+            $(this).addClass(to);
+        }, function () {
+            if($(this).attr('data-changed-state') == 'false') {
+                $(this).removeClass(to);
+                $(this).addClass(from);
+            }
+            else {
+                // except if the user clicked
+                $(this).attr('data-changed-state', 'true');
+
+                // change hover effect
+                addAssignmentHover($(this), to, from);
+            }
+        });
+    };
+
+    /**
+     * adds assign / unassign click listener to element
+     * @param element to add click listener to
+     * @param type ["assign"|"unassign"] determines action to take
+     */
+    var addAssignmentClick = function(element, type) {
+        element.click(function() {
+            var todoId = $(this).attr('data-todo-id');
+            var that = this;
+
+            if(type == "assign"){
+                $.post("{% url 'todo:quick_assign' %}", { 'todo_id': todoId }, function (output) {
+                    if(output['success']) {
+                        updateAssigned(output, that);
+                    }
+                });
+            }
+            else if (type == "unassign") {
+                $.post("{% url 'todo:quick_unassign' %}", { 'todo_id': todoId }, function (output) {
+                    if(output['success']) {
+                        updateAssigned(output, that);
+                    }
+                });
+            }
+        });
+    };
+
+    this.addAssigmentActions = function() {
+        var assign_user = $('.'+ASSIGN_ME_ICON);
+        var unassign_user = $('.'+UNASSIGN_ME_ICON);
+
+        addAssignmentHover(assign_user, ASSIGN_ME_ICON, UNASSIGN_ME_ICON);
+        addAssignmentHover(unassign_user, UNASSIGN_ME_ICON, ASSIGN_ME_ICON);
+        // click on opposite icon, because of hover effect
+        addAssignmentClick(unassign_user, "assign");
+        addAssignmentClick(assign_user, "unassign");
+    };
+
+    this.addAssigmentActions();
 };
 
-/**
- * classchange on hover over element
- * @param element to change class of
- * @param from base clase
- * @param to hover class
- */
-var addAssignmentHover = function(element, from, to){
-    element.hover(function () {
-        $(this).removeClass(from);
-        $(this).addClass(to);
-    }, function () {
-        if($(this).attr('data-changed-state') == 'false') {
-            $(this).removeClass(to);
-            $(this).addClass(from);
-        }
-        else {
-            // except if the user clicked
-            $(this).attr('data-changed-state', 'true');
-
-            // change hover effect
-            addAssignmentHover($(this), to, from);
-        }
-    });
-};
-
-/**
- * adds assign / unassign click listener to element
- * @param element to add click listener to
- * @param type ["assign"|"unassign"] determines action to take
- */
-var addAssignmentClick = function(element, type) {
-    element.click(function() {
-        var todoId = $(this).attr('data-todo-id');
-        var that = this;
-
-        if(type == "assign"){
-            $.post("{% url 'todo:quick_assign' %}", { 'todo_id': todoId }, function (output) {
-                if(output['success']) {
-                    updateAssigned(output, that);
-                }
-            });
-        }
-        else if (type == "unassign") {
-            $.post("{% url 'todo:quick_unassign' %}", { 'todo_id': todoId }, function (output) {
-                if(output['success']) {
-                    updateAssigned(output, that);
-                }
-            });
-        }
-    });
-};
 
 var updateAssigned = function(output, that){
     var id = output['id'];
@@ -102,6 +110,7 @@ var updateAssigned = function(output, that){
     var due_date = new Date(year, month-1, day, 0, 0, 0, 0);
 
     var element = "";
+
     if(year == null){
         element = generateTodoDomElement(id, title, users, tags, assignment, "", 'default', 'open');
     } else if (currentDate.getDate() === due_date.getDate() &&
@@ -113,7 +122,30 @@ var updateAssigned = function(output, that){
         element = generateTodoDomElement(id, title, users, tags, assignment, due_date, 'danger', 'open');
     }
 
-    $(that).parentsUntil($('.panel')).parent().replaceWith(element);
+    var replacee = $(that).parentsUntil($('.panel')).parent();
+
+    replacee.replaceWith(element);
+
+    var element = $('#element-'+id);
+    if(element.parent().first().attr('id') == 'todo_closed_box') {
+        element.css('opacity', '0.4');
+
+        element.find('.assignee-marker').hide();
+
+        element.removeClass('panel-danger').addClass('panel-default');
+        element.removeClass('panel-warning').addClass('panel-default');
+
+        var square = element.find('.fa-square-o');
+        square.removeClass('fa-square-o').addClass('fa-check-square-o');
+        addHoverClassChange(square, 'fa-check-square-o', 'fa-refresh');
+    }
+
+    var square = element.find('.fa-square-o');
+    addHoverClassChange(square, 'fa-square-o', 'fa-check-square-o');
+
+    var square = element.find('.fa-check-square-o');
+    addHoverClassChange(square, 'fa-check-square-o', 'fa-refresh');
+
 
     var newElement = $('#element-' + id);
     var toggleIcon = newElement.find($('.toggle_header')).children().first();
@@ -122,7 +154,7 @@ var updateAssigned = function(output, that){
 
     newElement.show();
     newElement.find($('.toggle_content')).show();
-    addAssigmentActions();
+    todoQuickAdder.addAssigmentActions();
 };
 
 $(document).on('click', '#quickTodo', function (e) {
@@ -225,8 +257,10 @@ var quickAddTodo = function (title) {
 
             $('#todo_rest_box').prepend(element);
             var newElement = $('#element-' + id);
-            newElement.fadeIn();
-            addAssigmentActions();
+            newElement.fadeIn(function(){
+                todoQuickAdder.addAssigmentActions();
+                refreshCompletionHovers();
+            });
         }
     })
 };
@@ -287,7 +321,10 @@ var generateTodoDomElement = function (id, title, users, tags, assignment, due_d
     if (due_date == "")
         element += '{% trans "No due date" %}';
     else {
-        element += monthNames[due_date.getMonth()] + " " + due_date.getDate() + ", " + due_date.getFullYear();
+        var month = due_date.getMonth() + 1;
+        if(month < 10)
+            month = "0"+month;
+        element += '<span class="due-date" data-date="'+due_date.getFullYear() + "-" + month + "-" + due_date.getDate() + '">'+monthNames[due_date.getMonth()] + " " + due_date.getDate() + ", " + due_date.getFullYear()+'</span>'
     }
 
     element +=
@@ -419,6 +456,8 @@ function changeStateToClear(output, child) {
 
             if(todoState == 'hidden')
                 hideClosedTodos();
+
+            todoQuickAdder.addAssigmentActions();
         });
     }
 }
@@ -475,6 +514,7 @@ function changeStateToUnclear(output, child) {
                 showClosedTodos();
                 hideClosedTodos();
             }
+            todoQuickAdder.addAssigmentActions();
         });
     }
 }
@@ -493,4 +533,13 @@ function addHoverClassChange(element, baseClass, hoverClass) {
         $(this).removeClass(hoverClass);
         $(this).addClass(baseClass);
     });
+}
+
+/**
+ * adds refresh hovers
+ */
+function refreshCompletionHovers() {
+    addHoverClassChange($('.hover-change'), 'fa-square-o', 'fa-check-square-o');
+
+    addHoverClassChange($('.hover-reopen'), 'fa-check-square-o', 'fa-refresh');
 }

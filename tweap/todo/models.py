@@ -15,7 +15,7 @@ class Todo(models.Model):
     project = models.ForeignKey(Project)
     tags = models.ManyToManyField(Tag, null=True, blank=True)
     done = models.BooleanField(default=False)
-    completed_date = models.DateField(null=True, blank=True)
+    completed_date = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ['due_date', 'project__name']

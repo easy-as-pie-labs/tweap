@@ -99,10 +99,10 @@ class ProjectView(View):
         context['project'] = project
         context['invitations'] = Invitation.objects.filter(project=project)
 
-        overdue = Todo.get_open_overdue_for_project(project)
-        today = Todo.get_open_due_today_for_project(project)
-        closed = Todo.get_closed_for_project(project)
-        rest = Todo.get_open_rest_for_project(project)
+        overdue = Todo.get_open_overdue_for_project(project).order_by('-id')
+        today = Todo.get_open_due_today_for_project(project).order_by('-id')
+        closed = Todo.get_closed_for_project(project).order_by('-completed_date', '-id')
+        rest = Todo.get_open_rest_for_project(project).order_by('-id')
 
         context['todo_overdue'] = self.mark_todo_assignment(overdue, request.user)
         context['todo_today'] = self.mark_todo_assignment(today, request.user)
