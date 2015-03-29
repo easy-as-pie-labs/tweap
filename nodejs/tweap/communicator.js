@@ -217,7 +217,7 @@ define(function() {
          var dat = {};
          dat.request = JSON.stringify(data);
 
-         najax({ url:tweapUrl, type:'POST', data:dat})
+         najax({url:tweapUrl, type:'POST', data:dat})
              .success(function(resp){
                  if (callback != undefined) {
                      callback.call(communicator, JSON.parse(resp));

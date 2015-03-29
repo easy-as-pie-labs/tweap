@@ -13,7 +13,6 @@ def api(request):
         return HttpResponse(status=403)
 
     try:
-
         result = {'status': "OK"}
         data = json.loads(request.POST.get('request', ''))
         action = data.get('action', '')
@@ -34,7 +33,6 @@ def api(request):
                 result['username'] = user.username
             else:
                 result['authResult'] = "ERROR"
-
 
         elif action == "addMessage":
             conversation = Conversation.objects.get(id=data.get('message').get('conversation'))
