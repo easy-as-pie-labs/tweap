@@ -144,10 +144,9 @@ ChatUi = function() {
     }
 
     this.activateChat = function(chatId) {
-        this.emptyConversation();
         //chatManager.setCurrentConversation(chatId);
+        chatManager.changeConversation(chatId); //calls emptyConversation
         this.appendChatMessageInput();
-        chatManager.changeConversation(chatId);
 
         var elements = $('.chat-btn');
         elements.removeClass('btn-primary');
@@ -163,6 +162,9 @@ ChatUi = function() {
         var element = $(document).find("[data-chat-id='" + chatId + "']");
         element.parent().remove();
         chatManager.closeConversation(chatId);
+        if($('#chat-buttons').children().length < 1) {
+            this.activateOverview();
+        }
     }
 
     //TODO: Hier Dictionary für Ausgabe beachten
@@ -198,6 +200,7 @@ ChatUi = function() {
             var element = $('#group-chats').append(buttonHtmlString);
             element.click(function(){
                 chatManager.addConversation(chatId, chatname);
+                this.activateChat(chatId);
             });
         } else {
             var buttonHtmlString = '<li role="presentation" class="active psbl-chat-btn"><a href="#">' +
@@ -207,6 +210,7 @@ ChatUi = function() {
             var element = $('#person-chats').append(buttonHtmlString);
             element.click(function(){
                 chatManager.addConversation(chatId, chatname);
+                this.activateChat(chatId);
             });
         }
 
