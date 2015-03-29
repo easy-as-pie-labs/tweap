@@ -348,9 +348,9 @@ ChatUi = function() {
         var time = new Date(timestamp);
         var formatedTimestamp;
         if ((time.getDate() == now.getDate()) && (time.getMonth() == now.getMonth()) && (time.getFullYear() == now.getFullYear())) {
-            formatedTimestamp = time.getHours() + ":" + time.getMinutes();
+            formatedTimestamp = ("0" + time.getHours()).slice(-2) + ":" + ("0" + time.getMinutes()).slice(-2);
         } else {
-            formatedTimestamp = time.getDate() + "." + time.getMonth()+2 + "." + time.getFullYear() + " " + formatedTimestamp;
+            formatedTimestamp = time.getDate() + "." + (time.getMonth()+1) + "." + time.getFullYear() + " " + formatedTimestamp;
         }
         return formatedTimestamp;
     };

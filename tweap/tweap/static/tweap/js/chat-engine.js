@@ -33,11 +33,13 @@ ChatManager = function() {
     };
 
     this.getMessages = function() {
-        var messageRequest = {
-            'conversation': currentConversation.id,
-            'messageId': currentConversation.getOldestMessage().id
-        };
-        socket.emit('get-messages', messageRequest);
+        if (!currentConversation.allMessages) {
+            var messageRequest = {
+                'conversation': currentConversation.id,
+                'messageId': currentConversation.getOldestMessage().id
+            };
+            socket.emit('get-messages', messageRequest);
+        }
     };
 
     this.requestConversations = function() {
@@ -216,6 +218,7 @@ function Conversation(id, users, name) {
     this.name = name;
     this.messages = [];
     this.unreadMessages = 0;
+    this.allMessages = false;
 
     if (this.name == null) {
         chatUi.addNewPersonChatButton(id, this.users);
@@ -233,6 +236,10 @@ function Conversation(id, users, name) {
 
     this.addMessages = function(messages) {
         for (var i = 0; i < messages.length; i++) {
+            if (this.findMessageById(messages[i].id)) {
+                this.allMessages = true;
+                return;
+            }
             this.messages.unshift(messages[i]);
         }
     };
@@ -247,5 +254,14 @@ function Conversation(id, users, name) {
 
     this.addName = function(name) {
         this.name = name;
-    }
+    };
+
+    this.findMessageById = function(mesageId) {
+        for (var i = 0; i < this.messages.length; i++) {
+            if (this.messages[i].id == mesageId) {
+                return i;
+            }
+        }
+        return false;
+    };
 }
