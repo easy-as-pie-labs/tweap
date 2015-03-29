@@ -31,10 +31,8 @@ class Conversation(models.Model):
         count = Message.objects.filter(conversation=self).count()
         if count == 0:
             return []
-        if message and side == 'oldest':
+        if message:
             messages = Message.objects.filter(conversation=self).filter(timestamp__lt=message.timestamp)[:20]
-        elif message and side == 'newest':
-            messages = Message.objects.filter(conversation=self).filter(timestamp__gt=message.timestamp).order_by('timestamp')[:20]
         else:
             messages = Message.objects.filter(conversation=self)[:20]
 

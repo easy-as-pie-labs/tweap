@@ -121,7 +121,6 @@ define(function() {
         if (this.client && (this.socket.rooms.indexOf(messageRequest.conversation) !== -1)) {
             var data = {
                 'action': 'getMessages',
-                'side': messageRequest.side,
                 'conversation': messageRequest.conversation
             };
             if (messageRequest.messageId != undefined) {

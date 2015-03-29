@@ -45,7 +45,7 @@ def api(request):
                 message = Message.objects.get(id=data.get('messageId'))
             else:
                 message = None
-            result['messages'] = conversation.get_messages(data.get('side'), message)
+            result['messages'] = conversation.get_messages(message)
 
         elif action == "getOrAddConversation":
             users = []

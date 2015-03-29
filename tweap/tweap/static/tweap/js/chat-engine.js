@@ -32,15 +32,13 @@ ChatManager = function() {
         socket.emit('conversation-request', users);
     };
 
-    this.getMessages = function(side) {
-        if (side === 'oldest' || side === 'newest') {
-            var messageRequest = {
-                'side': side,
-                'conversation': currentConversation.id,
-                'messageId': currentConversation.getMessage(side).id
-            };
-            socket.emit('get-messages', messageRequest);
-        }
+    this.getMessages = function() {
+        var messageRequest = {
+            'side': side,
+            'conversation': currentConversation.id,
+            'messageId': currentConversation.getOldestMessage().id
+        };
+        socket.emit('get-messages', messageRequest);
     };
 
     this.requestConversations = function() {
@@ -211,8 +209,7 @@ ChatManager = function() {
     } else {
         console.log("No chat credentials please relogin!");
     }
-
-};
+}
 
 function Conversation(id, users, name) {
     this.id = id;
@@ -227,29 +224,17 @@ function Conversation(id, users, name) {
         chatUi.addNewGroupChatButton(id, name);
     }
 
-    this.getMessage = function(side) {
+    this.getOldestMessage = function() {
         if (this.messages.length > 0) {
-            if (side === 'oldest') {
-               return this.messages[0];
-            } else if (side === 'newest') {
-                return this.messages[this.messages.length-1];
-            }
+           return this.messages[0];
         } else {
             return {'id': ''};
         }
     };
 
     this.addMessages = function(messages) {
-        if (messages.length > 0) {
-            if ((this.messages.length > 0) && (messages[0].id > this.messages[this.messages.length-1].id)) {
-                for (var i = 0; i < messages.length; i++) {
-                    this.messages.push(messages[i]);
-                }
-            } else {
-                for (var i = 0; i < messages.length; i++) {
-                    this.messages.unshift(messages[i]);
-                }
-            }
+        for (var i = 0; i < messages.length; i++) {
+            this.messages.unshift(messages[i]);
         }
         this.unreadMessages = 0;
     };
