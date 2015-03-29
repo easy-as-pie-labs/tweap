@@ -210,12 +210,10 @@ class FeedUserView(View):
         events = Event.get_all_events_for_userprojects(request.user)
 
         # add all events to calendar
-        for e in events:
-            event = iEvent()
-            event.add('summary', e.title)
-            event.add('dtstart', e.start.replace(tzinfo=pytz.timezone("Europe/Berlin")))
-            event.add('dtend', e.end.replace(tzinfo=pytz.timezone("Europe/Berlin")))
-            cal.add_component(event)
+        for event in events:
+            #result['url'] = request.build_absolute_uri(reverse('project_management:project', args=(invitation.project.id,)))
+            url = request.build_absolute_uri(reverse('cal:edit', args=(event.id, )))
+            cal.add_component(make_i_event(event, url))
 
         stream = cal.to_ical()#.replace('\r\n', '\n').strip()
 
@@ -239,12 +237,10 @@ class FeedProjectView(View):
         events = Event.get_all_project_events_for_user(project)
 
         # add all events to calendar
-        for e in events:
-            event = iEvent()
-            event.add('summary', e.title)
-            event.add('dtstart', e.start.replace(tzinfo=pytz.timezone("Europe/Berlin")))
-            event.add('dtend', e.end.replace(tzinfo=pytz.timezone("Europe/Berlin")))
-            cal.add_component(event)
+        for event in events:
+            #result['url'] = request.build_absolute_uri(reverse('project_management:project', args=(invitation.project.id,)))
+            url = request.build_absolute_uri(reverse('cal:edit', args=(event.id, )))
+            cal.add_component(make_i_event(event, url))
 
         stream = cal.to_ical()#.replace('\r\n', '\n').strip()
 
@@ -255,3 +251,26 @@ class FeedProjectView(View):
         return response
 
 
+def make_i_event(event, url):
+    """
+    creates iEvent from cal event
+    :param event: cal event
+    :param url: url of said event
+    :return:
+    """
+    e = iEvent()
+    e.add('summary', event.title)
+
+    description = event.description
+    if len(event.attendees.all()) > 0:
+        description += " - attended by"
+    for user in event.attendees.all():
+        description += " " + user.username + ","
+    description = description[:-1]
+
+    e.add('url', url)
+    e.add('description', description)
+    e.add('location', event.location)
+    e.add('dtstart', event.start.replace(tzinfo=pytz.timezone("Europe/Berlin")))
+    e.add('dtend', event.end.replace(tzinfo=pytz.timezone("Europe/Berlin")))
+    return e
