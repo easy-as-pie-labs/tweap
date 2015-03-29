@@ -14,10 +14,6 @@ $(document).ready(function() {
         chatIcon.addClass('fa-chevron-down');
         chatBody.show();
         chatUi.chatPanelToggleUpCycle();
-        chatUi.addNewGroupChatButton(1, "iLab");
-        chatUi.addNewGroupChatButton(2, "iLab");
-        chatUi.addNewGroupChatButton(3, "iLab");
-        chatUi.addNewGroupChatButton(4, "iLab");
     }
 
 });
@@ -218,7 +214,7 @@ ChatUi = function() {
             '</span>';
         $('#chat-message').append(htmlString);
         $('#send-message').click(function(){
-           this.writeMessage();
+           that.writeMessage();
         });
     };
 
