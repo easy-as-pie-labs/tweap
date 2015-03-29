@@ -14,6 +14,9 @@ def api(request):
 
     try:
         result = {'status': "OK"}
+        print(request.POST)
+        print(request.POST.get('request'))
+
         data = json.loads(request.POST.get('request', ''))
         action = data.get('action', '')
 
@@ -21,7 +24,7 @@ def api(request):
             user = authenticate(username=data.get('username'), password=data.get('password'))
             if user:
                 result['authResult'] = "OK"
-                result['username'] = user.username;
+                result['username'] = user.username
             else:
                 result['authResult'] = "ERROR"
 
@@ -67,7 +70,7 @@ def api(request):
             conversations = Conversation.get_conversations_of_user(user)
             result['conversations'] = []
             for conversation in conversations:
-                user_string = conversation.values('members')
+                user_string = "demo" # conversation.values('members')
                 conversation_object = {
                     'id': conversation.id,
                     'name': conversation.name,
