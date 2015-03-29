@@ -52,9 +52,9 @@ ChatManager = function() {
         currentConversation = findConversationById(conversationId);
         saveToStorage();
         if (currentConversation.messages.length === 0) {
-            this.getMessages('oldest');
+            this.getMessages();
         } else {
-            this.getMessages('newest');
+            showMessages();
         }
     };
 
@@ -74,7 +74,6 @@ ChatManager = function() {
     };
 
     var showMessages = function() {
-        chatUi.emptyConversation();
         for (var i = 0; i < currentConversation.messages.length; i++) {
             if (currentConversation.messages[i].sender === username) {
                 chatUi.addOwnMessage(currentConversation.messages[i].text, currentConversation.messages[i].timestamp);
@@ -241,7 +240,7 @@ function Conversation(id, users, name) {
     this.addNewMessage = function(newMessage) {
         this.messages.push(newMessage);
         this.unreadMessages++;
-        chatUi.showBadge(this.id, this.unreadMessages);
+        chatUi.showChatButtonBadge(this.id, this.unreadMessages);
     };
 
     this.addUsers = function(newUsers) {

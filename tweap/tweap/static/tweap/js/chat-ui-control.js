@@ -214,6 +214,7 @@ ChatUi = function() {
      * @param chatId = id for which chat should be activated as Integer
      */
     this.activateChat = function(chatId) {
+        this.emptyConversation();
         chatManager.changeConversation(chatId); //calls emptyConversation and
         this.appendChatMessageInput();
         this.emptyChatButtonBadge(chatId);
