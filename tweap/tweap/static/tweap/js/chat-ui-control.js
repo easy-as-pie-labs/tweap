@@ -1,6 +1,5 @@
 
 $(document).ready(function() {
-
     chatUi = new ChatUi();
     chatManager = new ChatManager();
 
@@ -15,7 +14,7 @@ $(document).ready(function() {
         chatBody.show();
         chatUi.chatPanelToggleUpCycle();
     }
-
+    chatUi.activateOverview();
 });
 
 $(document).on('keydown', '#message-text', function(e) {
@@ -272,10 +271,12 @@ ChatUi = function() {
         removeButtonClasses();
         chatManager.requestConversations();
 
-        var overViewHtmlString = '<h2>Open Projectchat</h2>' +
-            '<ul id="group-chats" class="nav nav-pills"></ul>' +
-            '<h2>Open Chat with a single person</h2>' +
-            '<ul id="person-chats" class="nav nav-pills"></ul>';
+        var overViewHtmlString = '<div id="chat-list">' +
+            '<span class="fa fa-comment-o fa-2x"></span>' +
+            '<span style="font-size:20px;">Chatlist</span>' +
+            '</div>' +
+            '<div id="group-chats" class="nav nav-pills"></div>' +
+            '<div id="person-chats" class="nav nav-pills"></div>';
         $('#chat-content').append(overViewHtmlString);
 
     };
@@ -303,20 +304,20 @@ ChatUi = function() {
      */
     this.appendPossibleChatButton = function(chatname, chatType, chatId) {
         if(chatType == "group") {
-            var buttonHtmlString = '<li role="presentation" class="active psbl-chat-btn"><a href="#">' +
+            var buttonHtmlString = '<div class="chat-overview-element">' +
                 '<span class="fa fa-users"></span>'
                 + chatname +
-                '</a></li>';
+                '</div>';
             var element = $('#group-chats').append(buttonHtmlString);
             element.click(function(){
                 chatManager.addConversation(chatId, chatname);
                 that.activateChat(chatId);
             });
         } else {
-            var buttonHtmlString = '<li role="presentation" class="active psbl-chat-btn"><a href="#">' +
+            var buttonHtmlString = '<div class="chat-overview-element">' +
                 '<span class="fa fa-user"></span>'
                 + chatname +
-                '</a></li>';
+                '</div>';
             var element = $('#person-chats').append(buttonHtmlString);
             element.click(function(){
                 chatManager.addConversation(chatId, chatname);
