@@ -31,7 +31,7 @@ $(document).on('click', '#all-chats', function (e) {
 ChatUi = function() {
 
     var that = this;
-
+    var overviewState = false;
     /**
      * Called on every toggleevent(toggle down)
      */
@@ -66,15 +66,17 @@ ChatUi = function() {
      * @param timestamp = the timestamp to be shown as String
      */
     this.addPartnerMessage = function(msg, username, timestamp) {
-        var msgString = '<div class="row">' +
+        if(!overviewState) {
+            var msgString = '<div class="row">' +
             '<div class="col-md-12">' +
             '<div class="chat-partner-bubble">' +
             '<div class="chat-info">' + username + ' at ' + timestamp + ' :</div>' + msg + '</div>' +
             '</div>' +
             '</div>';
 
-        $('#chat-content').append(msgString);
-        this.updateScroll();
+            $('#chat-content').append(msgString);
+            this.updateScroll();
+        }
     }
 
     /**
@@ -83,15 +85,17 @@ ChatUi = function() {
      * @param timestamp = the timestamp to be shown as String
      */
     this.addOwnMessage = function(msg, timestamp) {
-        var msgString = '<div class="row">' +
-            '<div class="col-md-12">' +
-            '<div class="chat-own-bubble">' +
-            '<div class="chat-info">You at ' + timestamp + ' :</div>' + msg + '</div>' +
-            '</div>' +
-            '</div>';
+        if(!overviewState) {
+            var msgString = '<div class="row">' +
+                '<div class="col-md-12">' +
+                '<div class="chat-own-bubble">' +
+                '<div class="chat-info">You at ' + timestamp + ' :</div>' + msg + '</div>' +
+                '</div>' +
+                '</div>';
 
-        $('#chat-content').append(msgString);
-        this.updateScroll();
+            $('#chat-content').append(msgString);
+            this.updateScroll();
+        }
     }
 
     /**
@@ -226,6 +230,7 @@ ChatUi = function() {
 
         var element = $(document).find("[data-chat-id='" + chatId + "']");
         element.addClass('btn-primary');
+        overviewState = false;
     }
 
     /**
@@ -255,6 +260,8 @@ ChatUi = function() {
             '<h2>Open Chat with a single person</h2>' +
             '<ul id="person-chats" class="nav nav-pills"></ul>';
         $('#chat-content').append(overViewHtmlString);
+
+        overviewState = true;
     }
 
     /**
