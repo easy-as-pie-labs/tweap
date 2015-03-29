@@ -39,8 +39,17 @@
                         <tr>
                             <td><strong>{% trans "Invited" %}:</strong></td>
                             <td>{% for invitation in invitations %}
-                                        <p class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-envelope-o""></i>{{ invitation.user.username }}</span></p>
+                                        <p class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-envelope-o"></i>{{ invitation.user.username }}</span></p>
                                 {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>{% trans "Get the Calendar feed" %}:</strong></td>
+                            <td>
+                                {% trans "Download the project's calendar entries and import them into your calendar app" %}: <br>
+                                <a href="{% url 'cal:projectfeed' project.id %}"><button class="btn btn-primary"><i class="fa fa-download"></i> {% trans "Download" %}</button></a> <br>
+                                {% trans "Or copy the feed address and add the syncing feed to your calendar app" %}: <br>
+                                <button class="btn btn-primary"><i class="fa fa-files-o"></i> {% trans "Copy to Clipboard" %}</button>
                             </td>
                         </tr>
                     </table>
