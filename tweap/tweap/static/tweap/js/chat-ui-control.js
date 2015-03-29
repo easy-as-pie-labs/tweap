@@ -261,7 +261,7 @@ ChatUi = function() {
             var element = $('#group-chats').append(buttonHtmlString);
             element.click(function(){
                 chatManager.addConversation(chatId, chatname);
-                this.activateChat(chatId);
+                that.activateChat(chatId);
             });
         } else {
             var buttonHtmlString = '<li role="presentation" class="active psbl-chat-btn"><a href="#">' +
@@ -271,7 +271,7 @@ ChatUi = function() {
             var element = $('#person-chats').append(buttonHtmlString);
             element.click(function(){
                 chatManager.addConversation(chatId, chatname);
-                this.activateChat(chatId);
+                that.activateChat(chatId);
             });
         }
 

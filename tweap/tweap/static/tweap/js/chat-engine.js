@@ -245,7 +245,7 @@ function Conversation(id, users, name) {
                     this.messages.push(messages[i]);
                 }
             } else {
-                for (var i = 0; i < oldMessages.length; i++) {
+                for (var i = 0; i < messages.length; i++) {
                     this.messages.unshift(messages[i]);
                 }
             }
