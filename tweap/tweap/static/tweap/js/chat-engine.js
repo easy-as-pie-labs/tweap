@@ -240,7 +240,7 @@ function Conversation(id, users, name) {
 
     this.addMessages = function(messages) {
         if (messages.length > 0) {
-            if (messages[0].id > this.messages[this.messages.length-1].id) {
+            if ((this.messages.length > 0) && (messages[0].id > this.messages[this.messages.length-1].id)) {
                 for (var i = 0; i < messages.length; i++) {
                     this.messages.push(messages[i]);
                 }
