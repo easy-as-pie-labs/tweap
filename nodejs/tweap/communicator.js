@@ -18,10 +18,6 @@ define(function() {
 
         var that = this;
 
-        this.socket.on('auth-status', function() {
-            that.sendAuthStatus();
-        })
-
         this.socket.on('auth', function(data) {
             that.authenticate(data);
         });
@@ -38,6 +34,10 @@ define(function() {
             that.spreadMessage(data);
         });
 
+        this.socket.on('get-messages', function(data) {
+            that.loadMessages(data);
+        });
+
         this.socket.on('get-conversations', function() {
             that.conversationGetter();
         });
@@ -46,23 +46,7 @@ define(function() {
             that.conversationRequestHandler(data);
         });
 
-        this.socket.on('get-messages', function(data) {
-            that.loadMessages(data);
-        });
-
     }
-
-    Communicator.prototype.sendAuthStatus = function() {
-        var status = "UNAUTHENTICATED";
-        if (this.client) {
-            if (this.client.connected) {
-                status = "CONNECTED";
-            } else {
-                status = "DISCONNECTED";
-            }
-        }
-        this.socket.emit('auth-status', {'status': status});
-    };
 
     Communicator.prototype.authenticate = function(credentials) {
         if (this.clientManager.getClientBySocket(this.socket)) {
@@ -133,6 +117,26 @@ define(function() {
         }
     };
 
+    Communicator.prototype.loadMessages = function(messageRequest) {
+        if (this.client && (this.socket.rooms.indexOf(messageRequest.conversation) !== -1)) {
+            var data = {
+                'action': 'getMessages',
+                'side': messageRequest.side,
+                'conversation': messageRequest.conversation
+            };
+            if (messageRequest.messageId != undefined) {
+                data.messageId = messageRequest.messageId;
+            }
+            this.makeRequest(data, this.loadMessagesCB, this);
+        }
+    };
+
+     Communicator.prototype.loadMessagesCB = function(data) {
+         if (data.status === "OK") {
+             this.socket.emit('message-response', data.messages);
+         }
+     };
+
     Communicator.prototype.conversationGetter = function() {
         if (this.client) {
             var data = {
@@ -168,25 +172,6 @@ define(function() {
                 }
             }
             this.socket.emit('conversation-response', data.conversation);
-        }
-    };
-
-    Communicator.prototype.loadMessages = function(messageRequest) {
-        if (this.client && (this.socket.rooms.indexOf(messageRequest.conversation) !== -1)) {
-            var data = {
-                'action': 'getMessages',
-                'conversation': messageRequest.conversation
-            };
-            if (messageRequest.messageId != undefined) {
-                data.messageId = messageRequest.messageId;
-            }
-            this.makeRequest(data, this.loadMessagesCB, this);
-        }
-    };
-
-    Communicator.prototype.loadMessagesCB = function(data) {
-        if (data.status === "OK") {
-            this.socket.emit('message-response', data.messages);
         }
     };
 

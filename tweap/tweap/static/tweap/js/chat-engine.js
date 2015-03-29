@@ -31,12 +31,15 @@ ChatManager = function() {
         socket.emit('conversation-request', users);
     };
 
-    this.getOldMessages = function() {
-        var messageRequest = {
-            'conversation': currentConversation.id,
-            'messageId': currentConversation.getOldestMessage().id
-        };
-        socket.emit('get-messages', messageRequest);
+    this.getMessages = function(side) {
+        if (side === 'oldest' || side === 'newest') {
+            var messageRequest = {
+                'side': side,
+                'conversation': currentConversation.id,
+                'messageId': currentConversation.getMessage(side).id
+            };
+            socket.emit('get-messages', messageRequest);
+        }
     };
 
     this.requestConversations = function() {
@@ -51,15 +54,17 @@ ChatManager = function() {
         currentConversation = findConversationById(conversationId);
         saveToStorage();
         if (currentConversation.messages.length === 0) {
-            this.getOldMessages();
+            this.getMessages('oldest');
         } else {
             showMessages();
         }
     };
 
     this.addConversation = function(conversationId, name) {
-        conversations.push(new Conversation(conversationId, [username], name));
-        this.changeConversation(conversationId);
+        if(!findConversationById(conversationId)) {
+            conversations.push(new Conversation(conversationId, [username], name));
+            this.changeConversation(conversationId);
+        }
     };
 
     this.closeConversation = function(conversationId) {
@@ -69,7 +74,6 @@ ChatManager = function() {
         }
         saveToStorage();
     };
-
 
     var showMessages = function() {
         chatUi.emptyConversation();
@@ -100,14 +104,18 @@ ChatManager = function() {
 
     var loadFromStorage = function() {
         if (localStorage.getItem('chat-conversations') !== null) {
-            var saveObject = JSON.parse(localStorage.getItem('chat-conversations'));
-            for (var i = 0; i < saveObject.conversations.length; i++) {
-                conversations.push(new Conversation(saveObject.conversations[i].id, saveObject.conversations[i].users, saveObject.conversations[i].name));
-                conversations[conversations.length-1].messages = saveObject.conversations[i].messages;
+            try {
+                var saveObject = JSON.parse(localStorage.getItem('chat-conversations'));
+                for (var i = 0; i < saveObject.conversations.length; i++) {
+                    conversations.push(new Conversation(saveObject.conversations[i].id, saveObject.conversations[i].users, saveObject.conversations[i].name));
+                    conversations[conversations.length - 1].messages = saveObject.conversations[i].messages;
+                }
+                username = saveObject.username;
+                currentConversation = findConversationById(saveObject.currentConversationId);
+                that.changeConversation(currentConversation.id)
+            } catch(err) {
+                localStorage.removeItem('chat-conversations');
             }
-            username = saveObject.username;
-            currentConversation = findConversationById(saveObject.currentConversationId);
-            that.changeConversation(currentConversation.id)
         }
     };
 
@@ -128,7 +136,6 @@ ChatManager = function() {
 
 
     socket.on('auth-success', function(data) {
-        console.log("auth-success");
         var chatCredentials = {
             'username': username,
             'authToken': data.authToken
@@ -160,13 +167,13 @@ ChatManager = function() {
         if (messages.length > 0) {
             var conversation = findConversationById(messages[0].conversation);
             if (conversation) {
-                conversation.addOldMessages(messages);
+                conversation.addMessages(messages);
                 if (conversation === currentConversation) {
                     showMessages();
                 }
             }
+            saveToStorage();
         }
-        saveToStorage();
     });
 
     socket.on('conversation-list', function(conversations) {
@@ -198,11 +205,13 @@ ChatManager = function() {
     loadFromStorage();
     if (localStorage.getItem('chat-raw-credentials') === null) {
         reAuthenticate();
-    } else {
+    } else if(localStorage.getItem('chat-credentials') === null) {
         authenticate();
+    } else {
+        console.log("No chat credentials please relogin!");
     }
 
-}
+};
 
 function Conversation(id, users, name) {
     this.id = id;
@@ -216,22 +225,29 @@ function Conversation(id, users, name) {
         chatUi.addNewGroupChatButton(id, name);
     }
 
-
-    this.getOldestMessage = function() {
+    this.getMessage = function(side) {
         if (this.messages.length > 0) {
-            return this.messages[0];
+            if (side === 'oldest') {
+               return this.messages[0];
+            } else if (side === 'newest') {
+                return this.messages[this.messages.length-1];
+            }
         } else {
             return {'id': ''};
         }
     };
 
-    this.getMessages = function() {
-        return this.messages;
-    };
-
-    this.addOldMessages = function(oldMessages) {
-        for (var i = 0; i < oldMessages.length; i++) {
-            this.messages.unshift(oldMessages[i]);
+    this.addMessages = function(messages) {
+        if (messages.length > 0) {
+            if (messages[0].id > this.messages[this.messages.length-1].id) {
+                for (var i = 0; i < messages.length; i++) {
+                    this.messages.push(messages[i]);
+                }
+            } else {
+                for (var i = 0; i < oldMessages.length; i++) {
+                    this.messages.unshift(messages[i]);
+                }
+            }
         }
     };
 

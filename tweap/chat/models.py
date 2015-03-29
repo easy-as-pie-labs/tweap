@@ -27,12 +27,14 @@ class Conversation(models.Model):
 
         return conversation
 
-    def get_messages(self, oldest_message=None):
+    def get_messages(self, side, message=None):
         count = Message.objects.filter(conversation=self).count()
         if count == 0:
             return []
-        if oldest_message:
-            messages = Message.objects.filter(conversation=self).filter(timestamp__lt=oldest_message.timestamp)[:20]
+        if message and side == 'oldest':
+            messages = Message.objects.filter(conversation=self).filter(timestamp__lt=message.timestamp)[:20]
+        elif message and side == 'newest':
+            messages = Message.objects.filter(conversation=self).filter(timestamp__gt=message.timestamp).order_by('timestamp')[:20]
         else:
             messages = Message.objects.filter(conversation=self)[:20]
 

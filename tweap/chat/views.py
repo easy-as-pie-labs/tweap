@@ -47,7 +47,7 @@ def api(request):
                 message = Message.objects.get(id=data.get('messageId'))
             else:
                 message = None
-            result['messages'] = conversation.get_messages(message)
+            result['messages'] = conversation.get_messages(data.get('side'), message)
 
         elif action == "getOrAddConversation":
             users = []
@@ -69,7 +69,7 @@ def api(request):
             conversations = Conversation.get_conversations_of_user(user)
             result['conversations'] = []
             for conversation in conversations:
-                user_string = "test" # TODO: add other users
+                user_string = conversation.values('members')
                 conversation_object = {
                     'id': conversation.id,
                     'name': conversation.name,
