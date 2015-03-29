@@ -55,6 +55,7 @@ ChatUi = function() {
         $('.badge').html(val);
     }
 
+    //Adds a Message from your partner on the left side of the chat-content
     this.addPartnerMessage = function(msg, username, timestamp) {
         var msgString = '<div class="row">' +
             '<div class="col-md-12">' +
@@ -67,6 +68,7 @@ ChatUi = function() {
         this.updateScroll();
     }
 
+    //Adds a Message from yourself on the right side of the chat-content
     this.addOwnMessage = function(msg, timestamp) {
         var msgString = '<div class="row">' +
             '<div class="col-md-12">' +
@@ -79,6 +81,7 @@ ChatUi = function() {
         this.updateScroll();
     }
 
+    //Adds a new "Tab" in top of the chatwindow with a user-icon
     this.addNewPersonChatButton = function(chatId, name) {
         var chatButtonString = '<div class="btn-group" role="group">' +
             '<button type="button" class="btn btn-default chat-btn" data-chat-id="' + chatId + '">' +
@@ -92,6 +95,7 @@ ChatUi = function() {
         this.appendListenerToChatButtons(chatId);
     }
 
+    //Adds a new "Tab" in top of the chatwindow with a group-icon
     this.addNewGroupChatButton = function(chatId, name) {
         var chatButtonString = '<div class="btn-group" role="group">' +
             '<button type="button" class="btn btn-default chat-btn" data-chat-id="' + chatId + '">' +
@@ -104,6 +108,7 @@ ChatUi = function() {
         this.appendListenerToChatButtons(chatId);
     }
 
+    //Appends clickListener to the "Tabs" and is called inside addNewGroupChatButton() and addNewPersonChatButton
     this.appendListenerToChatButtons = function(chatId) {
         var recentylAddedButton = $('#chat-buttons').find("[data-chat-id='" + chatId + "']");
         recentylAddedButton.click(function(){
@@ -115,6 +120,7 @@ ChatUi = function() {
         });
     }
 
+    //Function for Clicklistener of chat-message inputfield. This function is used when the user send a message
     this.writeMessage = function() {
         var msg = $('#message-text').val();
         if(msg != "") {
@@ -123,6 +129,7 @@ ChatUi = function() {
         }
     }
 
+    //Scrolls the chatfield to the bottom
     this.updateScroll = function(){
         var chatContent = document.getElementById("chat-content");
         chatContent.scrollTop = chatContent.scrollHeight;
@@ -135,6 +142,7 @@ ChatUi = function() {
 
     //TODO: Hier Dictionary für Ausgabe beachten
 
+    //Appends the inputfield for chatmessages to the chatwindow
     this.appendChatMessageInput = function() {
         var htmlString = '<input id="message-text" type="text" class="form-control" placeholder="Your Message" aria-describedby="sizing-addon2">' +
             '<span id="send-message" class="input-group-addon btn">' +
@@ -143,9 +151,10 @@ ChatUi = function() {
         $('#chat-message').append(htmlString);
     }
 
+    //activates the chatbutton by highlighting it
     this.activateChat = function(chatId) {
         //chatManager.setCurrentConversation(chatId);
-        chatManager.changeConversation(chatId); //calls emptyConversation
+        chatManager.changeConversation(chatId); //calls emptyConversation and
         this.appendChatMessageInput();
 
         var elements = $('.chat-btn');
@@ -158,6 +167,7 @@ ChatUi = function() {
         localStorage.setItem("overView", false);
     }
 
+    //Used as clicklistener, closes an active chat
     this.closeChat = function(chatId) {
         var element = $(document).find("[data-chat-id='" + chatId + "']");
         element.parent().remove();
@@ -168,6 +178,7 @@ ChatUi = function() {
     }
 
     //TODO: Hier Dictionary für Ausgabe beachten
+    //deletes chat-content and sets it with chatoverview DOM
     this.activateOverview = function() {
 
         this.emptyConversation();
@@ -181,6 +192,7 @@ ChatUi = function() {
         localStorage.setItem("overView", true);
     }
 
+    //Calls appendPossibleChatButton for every Item in the given arrays
     this.addConversationsToOverview = function(projects, users) {
         for(var i = 0; projects.length>i; i++) {
             this.appendPossibleChatButton(projects[i].name, "group", projects[i].id);
@@ -191,6 +203,7 @@ ChatUi = function() {
         }
     }
 
+    //Appends a conversation Button to chatOverview
     this.appendPossibleChatButton = function(chatname, chatType, chatId) {
         if(chatType == "group") {
             var buttonHtmlString = '<li role="presentation" class="active psbl-chat-btn"><a href="#">' +
@@ -216,12 +229,14 @@ ChatUi = function() {
 
     }
 
+    //Routine when Chatwindow is toggled up
     this.chatPanelToggleUpCycle = function() {
         this.removeBadge();
         this.updateScroll();
         localStorage.setItem("chatToggleStatus", true);
     }
 
+    //Routine when Chatwindow is toggled down
     this.chatPanelToggleDownCycle = function() {
         this.addBadge();
         localStorage.setItem("chatToggleStatus", false);
