@@ -345,13 +345,11 @@ ChatUi = function() {
     };
 
     var formatTime = function(timestamp) {
-        var now = new Date();
-        var time = new Date(timestamp);
-        var formatedTimestamp;
-        if ((time.getDate() == now.getDate()) && (time.getMonth() == now.getMonth()) && (time.getFullYear() == now.getFullYear())) {
-            formatedTimestamp = ("0" + time.getHours()).slice(-2) + ":" + ("0" + time.getMinutes()).slice(-2);
-        } else {
-            formatedTimestamp = time.getDate() + "." + (time.getMonth()+1) + "." + time.getFullYear() + " " + formatedTimestamp;
+        var now =moment();
+        var timestamp = moment(timestamp);
+        var formatedTimestamp = timestamp.format("HH:mm")
+        if (!(now.date() == timestamp.date()) && (now.month() == timestamp.month()) && (now.year() == timestamp.year())) {
+            formatedTimestamp = timestamp.format("DD.MM.YYYY HH:mm");
         }
         return formatedTimestamp;
     };
