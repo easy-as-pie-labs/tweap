@@ -57,7 +57,7 @@ ChatManager = function() {
         if (currentConversation.messages.length === 0) {
             this.getMessages('oldest');
         } else {
-            showMessages();
+            this.getMessages('newest');
         }
     };
 
@@ -85,6 +85,7 @@ ChatManager = function() {
                 chatUi.addPartnerMessage(currentConversation.messages[i].text, currentConversation.messages[i].sender, currentConversation.messages[i].timestamp);
             }
         }
+        chatUi.activateChat(currentConversation.id);
     };
 
     var findConversationById = function(conversationId, index) {
