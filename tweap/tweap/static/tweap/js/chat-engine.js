@@ -108,18 +108,15 @@ ChatManager = function() {
                     conversations.push(new Conversation(saveObject.conversations[i].id, saveObject.conversations[i].users, saveObject.conversations[i].name));
                     conversations[conversations.length - 1].messages = saveObject.conversations[i].messages;
                 }
-                username = saveObject.username;
-                currentConversation = findConversationById(saveObject.currentConversationId);
-                chatUi.activateChat(currentConversation.id);
-            } catch(err) {
-                localStorage.removeItem('chat-conversations');
-            }
+                setTimeout(function() {
+                    chatUi.activateChat(saveObject.currentConversationId);
+                }, 2);
+            } catch(err) { }
         }
     };
 
     var saveToStorage = function() {
         var saveObject = {
-            'username': username,
             'conversations': [],
             'currentConversationId': currentConversation.id
         };
@@ -159,9 +156,7 @@ ChatManager = function() {
             }
         }
         if (message.sender != username) {
-            conversation.unreadMessages++;
-            console.log("counter: " + conversation.unreadMessages + " now add badge");
-            chatUi.showChatButtonBadge(conversation.id, conversation.unreadMessages);
+            chatUi.showChatButtonBadge(conversation.id, ++conversation.unreadMessages);
         }
         saveToStorage();
     });
