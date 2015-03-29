@@ -14,6 +14,10 @@ $(document).ready(function() {
         chatIcon.addClass('fa-chevron-down');
         chatBody.show();
         chatUi.chatPanelToggleUpCycle();
+        chatUi.addNewGroupChatButton(1, "iLab");
+        chatUi.addNewGroupChatButton(2, "iLab");
+        chatUi.addNewGroupChatButton(3, "iLab");
+        chatUi.addNewGroupChatButton(4, "iLab");
     }
 
 });
@@ -42,14 +46,14 @@ ChatUi = function() {
          */
         var panelHeading = $("#chat-panel").children().first();
         panelHeading.append('<span class="badge">0</span>');
-    }
+    };
 
     /**
      * Called on every toggleevent (toggle up) - removes the Badge
      */
     this.removeBadge = function() {
         $('.badge').remove();
-    }
+    };
 
     /**
      * Called on every toggleevent (toggle down) - updates the Badgevalue
@@ -57,7 +61,7 @@ ChatUi = function() {
      */
     this.updateBadge = function(val) {
         $('.badge').html(val);
-    }
+    };
 
     /**
      * Adds a Message from your partner on the left side of the chat-content
@@ -77,7 +81,7 @@ ChatUi = function() {
             $('#chat-content').append(msgString);
             this.updateScroll();
         }
-    }
+    };
 
     /**
      * Adds a Message from yourself on the right side of the chat-content
@@ -96,7 +100,7 @@ ChatUi = function() {
             $('#chat-content').append(msgString);
             this.updateScroll();
         }
-    }
+    };
 
     /**
      * Adds a new "Tab" in top of the chatwindow with a user-icon
@@ -114,7 +118,7 @@ ChatUi = function() {
         $('#chat-buttons').append(chatButtonString);
 
         this.appendListenerToChatButtons(chatId);
-    }
+    };
 
     /**
      * Adds a new "Tab" in top of the chatwindow with a group-icon
@@ -123,16 +127,16 @@ ChatUi = function() {
      */
     this.addNewGroupChatButton = function(chatId, name) {
         var chatButtonString = '<div class="btn-group" role="group">' +
-            '<button type="button" class="btn btn-default chat-btn" data-chat-id="' + chatId + '">' +
-            '<span class="fa fa-users"></span>' + name +
-            '<span class="chat-button-badge badge"></span>' +
+            '<div type="button" class="clearfix btn btn-default chat-btn" data-chat-id="' + chatId + '">' +
+            '<span class="chat-button-content"><span class="fa fa-users"></span>' + name +
+            '<span class="chat-button-badge badge"></span></span>' +
             '<span class="fa fa-close pull-right"></span>' +
-            '</button>' +
+            '</div>' +
             '</div>';
 
         $('#chat-buttons').append(chatButtonString);
         this.appendListenerToChatButtons(chatId);
-    }
+    };
 
     /**
      * Adds a Badge to a certain Chatbutton
@@ -143,7 +147,7 @@ ChatUi = function() {
         var button = $('#chat-buttons').find("[data-chat-id='" + chatId + "']");
         var element = button.find('.badge');
         element.html(amount);
-    }
+    };
 
     /**
      * Empties a Badge of a certain Chatbutton is called in this.activateChat()
@@ -153,23 +157,28 @@ ChatUi = function() {
         var button = $('#chat-buttons').find("[data-chat-id='" + chatId + "']");
         var element = button.find('.badge');
         element.empty();
-    }
+    };
 
-    //
     /**
      * Appends clickListener to the "Tabs" and is called inside addNewGroupChatButton() and addNewPersonChatButton
      * @param chatId = id for which chatbutton the Listener should be appended as Integer
      */
     this.appendListenerToChatButtons = function(chatId) {
         var recentylAddedButton = $('#chat-buttons').find("[data-chat-id='" + chatId + "']");
+
         recentylAddedButton.click(function(){
             that.activateChat(chatId);
         });
 
-        recentylAddedButton.children(".fa-close").click(function(){
-            that.closeChat(chatId);
+        var children = recentylAddedButton.children(".fa-close");
+        children.each(function(){
+            $(this).click(function(e){
+                that.closeChat(chatId);
+                e.preventDefault();
+                return false;
+            });
         });
-    }
+    };
 
     /**
      * Function for Clicklistener of chat-message inputfield. This function is used when the user send a message
@@ -196,7 +205,7 @@ ChatUi = function() {
     this.emptyConversation = function() {
         $('#chat-content').empty();
         $('#chat-message').empty();
-    }
+    };
 
     /**
      * Appends the inputfield for chatmessages to the chatwindow
@@ -211,7 +220,18 @@ ChatUi = function() {
         $('#send-message').click(function(){
            this.writeMessage();
         });
-    }
+    };
+
+    /**
+     * removes all
+     * @param elements
+     */
+    var removeButtonClasses = function() {
+        var elements = $('.chat-btn');
+        elements.removeClass('btn-primary');
+        elements.removeClass('btn-default');
+        elements.addClass('btn-default');
+    };
 
     /**
      * activates the chatbutton by highlighting it
@@ -224,27 +244,26 @@ ChatUi = function() {
         this.appendChatMessageInput();
         this.emptyChatButtonBadge(chatId);
 
-        var elements = $('.chat-btn');
-        elements.removeClass('btn-primary');
-        elements.removeClass('btn-default');
-        elements.addClass('btn-default');
+        removeButtonClasses();
 
         var element = $(document).find("[data-chat-id='" + chatId + "']");
+        element.removeClass('btn-default');
         element.addClass('btn-primary');
-    }
+    };
 
     /**
      * Used as clicklistener, closes an active chat
      * @param chatId = id for which chat should be closed as Integer
      */
     this.closeChat = function(chatId) {
+        console.log("closed");
         var element = $(document).find("[data-chat-id='" + chatId + "']");
         element.parent().remove();
         chatManager.closeConversation(chatId);
         if($('#chat-buttons').children().length < 1) {
             this.activateOverview();
         }
-    }
+    };
 
     /**
      * deletes chat-content and sets it with chatoverview DOM
@@ -253,6 +272,8 @@ ChatUi = function() {
     this.activateOverview = function() {
 
         this.emptyConversation();
+        overviewState = true;
+        removeButtonClasses();
         chatManager.requestConversations();
 
         var overViewHtmlString = '<h2>Open Projectchat</h2>' +
@@ -261,8 +282,7 @@ ChatUi = function() {
             '<ul id="person-chats" class="nav nav-pills"></ul>';
         $('#chat-content').append(overViewHtmlString);
 
-        overviewState = true;
-    }
+    };
 
     /**
      * Calls appendPossibleChatButton for every Item in the given arrays
@@ -277,7 +297,7 @@ ChatUi = function() {
         for(var i = 0; users.length>i; i++) {
             this.appendPossibleChatButton(users[i].name, "user", users[i].id);
         }
-    }
+    };
 
     /**
      * Appends a conversation Button to chatOverview
@@ -308,7 +328,7 @@ ChatUi = function() {
             });
         }
 
-    }
+    };
 
     /**
      * Routine when Chatwindow is toggled up
@@ -317,7 +337,7 @@ ChatUi = function() {
         this.removeBadge();
         this.updateScroll();
         localStorage.setItem("chatToggleStatus", true);
-    }
+    };
 
     /**
      * Routine when Chatwindow is toggled down
@@ -327,4 +347,4 @@ ChatUi = function() {
         localStorage.setItem("chatToggleStatus", false);
     }
 
-}
+};

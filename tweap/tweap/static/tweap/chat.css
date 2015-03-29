@@ -106,3 +106,12 @@
     margin-left:5px;
     font-size:10px !important;
 }
+
+.chat-button-content {
+    float:left;
+}
+
+#chat-buttons .fa-close {
+    margin-top:1px;
+    z-index:999;
+}
