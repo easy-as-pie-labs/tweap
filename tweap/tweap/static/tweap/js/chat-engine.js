@@ -34,7 +34,6 @@ ChatManager = function() {
 
     this.getMessages = function() {
         var messageRequest = {
-            'side': side,
             'conversation': currentConversation.id,
             'messageId': currentConversation.getOldestMessage().id
         };
