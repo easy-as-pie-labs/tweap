@@ -219,6 +219,7 @@ ChatUi = function() {
      */
     this.activateChat = function(chatId) {
         this.emptyConversation();
+        overviewState = false;
         chatManager.changeConversation(chatId); //calls emptyConversation and
         this.appendChatMessageInput();
         this.emptyChatButtonBadge(chatId);
@@ -230,7 +231,6 @@ ChatUi = function() {
 
         var element = $(document).find("[data-chat-id='" + chatId + "']");
         element.addClass('btn-primary');
-        overviewState = false;
     }
 
     /**

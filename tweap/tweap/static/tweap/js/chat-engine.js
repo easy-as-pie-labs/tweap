@@ -160,6 +160,7 @@ ChatManager = function() {
         }
         if (message.sender != username) {
             conversation.unreadMessages++;
+            console.log("counter: " + conversation.unreadMessages + " now add badge");
             chatUi.showChatButtonBadge(conversation.id, conversation.unreadMessages);
         }
         saveToStorage();
