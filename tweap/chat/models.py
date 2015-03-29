@@ -64,7 +64,7 @@ class Message(models.Model):
         Message(conversation=conversation, sender=sender, text=text).save()
 
     def __str__(self):
-        return "Message in Conversation " + str(self.conversation.id) +  " from " + self.sender.username + " at " + str(self.timestamp)
+        return "Message in Conversation " + str(self.conversation.id) + " from " + self.sender.username + " at " + str(self.timestamp)
 
 
 class AuthToken(models.Model):

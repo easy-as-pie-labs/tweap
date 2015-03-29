@@ -50,6 +50,7 @@ ChatManager = function() {
 
     this.changeConversation = function(conversationId) {
         currentConversation = findConversationById(conversationId);
+        currentConversation.unreadMessages = 0;
         saveToStorage();
         if (currentConversation.messages.length === 0) {
             this.getMessages();
@@ -157,6 +158,10 @@ ChatManager = function() {
                 chatUi.addPartnerMessage(message.text,  message.sender, message.timestamp);
             }
         }
+        if (message.sender != username) {
+            conversation.unreadMessages++;
+            chatUi.showChatButtonBadge(conversation.id, conversation.unreadMessages);
+        }
         saveToStorage();
     });
 
@@ -234,13 +239,10 @@ function Conversation(id, users, name) {
         for (var i = 0; i < messages.length; i++) {
             this.messages.unshift(messages[i]);
         }
-        this.unreadMessages = 0;
     };
 
     this.addNewMessage = function(newMessage) {
         this.messages.push(newMessage);
-        this.unreadMessages++;
-        chatUi.showChatButtonBadge(this.id, this.unreadMessages);
     };
 
     this.addUsers = function(newUsers) {
