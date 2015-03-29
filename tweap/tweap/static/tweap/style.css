@@ -267,3 +267,7 @@ p#project_icon{
 .hover-underline:hover {
     text-decoration: underline;
 }
+
+#main-container {
+    margin-bottom: 50px;
+}
