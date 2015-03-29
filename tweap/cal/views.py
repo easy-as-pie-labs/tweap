@@ -249,8 +249,8 @@ class FeedProjectView(View):
         stream = cal.to_ical()#.replace('\r\n', '\n').strip()
 
         response = HttpResponse(stream, content_type='text/calendar; charset=utf-8')
-        response['Filename'] = request.user.username + '.ics'
-        response['Content-Disposition'] = 'attachment; filename=' + request.user.username + '.ics'
+        response['Filename'] = project.name + '.ics'
+        response['Content-Disposition'] = 'attachment; filename=' + project.name + '.ics'
 
         return response
 
