@@ -14,9 +14,6 @@ def api(request):
 
     try:
         result = {'status': "OK"}
-        print(request.POST)
-        print(request.POST.get('request'))
-
         data = json.loads(request.POST.get('request', ''))
         action = data.get('action', '')
 
