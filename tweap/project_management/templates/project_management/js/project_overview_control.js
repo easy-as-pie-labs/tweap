@@ -92,7 +92,6 @@ var TodoQuickAdd = function(){
     this.addAssigmentActions();
 };
 
-
 var updateAssigned = function(output, that){
     var id = output['id'];
     var users = output['users'];
@@ -189,7 +188,7 @@ var hideClosedTodos = function() {
         }
     }
 
-    if(todos.length >= COMPLETED_TODO_LIMIT){
+    if(todos.length > COMPLETED_TODO_LIMIT){
         var surplus = todos.length - COMPLETED_TODO_LIMIT;
         box.append('<span id="show-all" class="noselect hover-underline cursor-pointer" style="margin: 10px;">show ' + surplus + ' more completed todos</span>');
         $('#show-all').click(function() {
