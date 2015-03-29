@@ -110,7 +110,7 @@ ChatManager = function() {
                 }
                 setTimeout(function() {
                     chatUi.activateChat(saveObject.currentConversationId);
-                }, 2);
+                }, 10);
             } catch(err) { }
         }
     };
