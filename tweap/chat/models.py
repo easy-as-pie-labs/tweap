@@ -27,7 +27,7 @@ class Conversation(models.Model):
 
         return conversation
 
-    def get_messages(self, side, message=None):
+    def get_messages(self, message=None):
         count = Message.objects.filter(conversation=self).count()
         if count == 0:
             return []
