@@ -13,6 +13,7 @@ from cal.tools import validate_for_event
 import json
 from datetime import datetime
 import pytz
+from icalendar import Calendar as iCal, Event as iEvent
 
 class CreateEdit(View):
     """
@@ -199,4 +200,58 @@ class UpdateFromCalendarView(View):
             result = {'success': 'false'}
 
         return HttpResponse(json.dumps(result), content_type="application/json")
+
+
+class FeedUserView(View):
+    def get(self, request):
+        cal = iCal()
+
+        # get all events for user
+        events = Event.get_all_events_for_userprojects(request.user)
+
+        # add all events to calendar
+        for e in events:
+            event = iEvent()
+            event.add('summary', e.title)
+            event.add('dtstart', e.start.replace(tzinfo=pytz.timezone("Europe/Berlin")))
+            event.add('dtend', e.end.replace(tzinfo=pytz.timezone("Europe/Berlin")))
+            cal.add_component(event)
+
+        stream = cal.to_ical()#.replace('\r\n', '\n').strip()
+
+        response = HttpResponse(stream, content_type='text/calendar; charset=utf-8')
+        response['Filename'] = request.user.username + '.ics'
+        response['Content-Disposition'] = 'attachment; filename=' + request.user.username + '.ics'
+
+        return response
+
+
+class FeedProjectView(View):
+    def get(self, request, project_id):
+        cal = iCal()
+
+        # get all events for project
+        try:
+            project = Project.objects.get(id=project_id, members=request.user)
+        except:
+            return HttpResponseRedirect(reverse('dashboard:home'))
+
+        events = Event.get_all_project_events_for_user(project)
+
+        # add all events to calendar
+        for e in events:
+            event = iEvent()
+            event.add('summary', e.title)
+            event.add('dtstart', e.start.replace(tzinfo=pytz.timezone("Europe/Berlin")))
+            event.add('dtend', e.end.replace(tzinfo=pytz.timezone("Europe/Berlin")))
+            cal.add_component(event)
+
+        stream = cal.to_ical()#.replace('\r\n', '\n').strip()
+
+        response = HttpResponse(stream, content_type='text/calendar; charset=utf-8')
+        response['Filename'] = request.user.username + '.ics'
+        response['Content-Disposition'] = 'attachment; filename=' + request.user.username + '.ics'
+
+        return response
+
 

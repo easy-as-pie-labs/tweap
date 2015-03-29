@@ -29,6 +29,25 @@ class Event(models.Model):
     def get_all_for_user(cls, user):
         return Event.objects.filter(attendees=user)
 
+    @classmethod
+    def get_all_events_for_userprojects(cls, user):
+        """
+        returns all events from one user (all projects, no matter if assigned or not)
+        :param user:
+        :return:
+        """
+        projects = Project.objects.filter(members=user)
+        return Event.objects.filter(project=projects)
+
+    @classmethod
+    def get_all_project_events_for_user(cls, project):
+        """
+        returns all events from one project
+        :param project:
+        :return:
+        """
+        return Event.objects.filter(project=project)
+
     # datetime.date.today() basically takes 00:00, so we want to show today for everything >= today() and < tomorrow()
     @classmethod
     def get_start_today_for_user(cls, user):

@@ -50,5 +50,4 @@ function chatToggle(chatHeader) {
             chatUi.chatPanelToggleDownCycle();
         });
     }
-
 }

@@ -74,7 +74,7 @@ ChatUi = function() {
             var msgString = '<div class="row">' +
             '<div class="col-md-12">' +
             '<div class="chat-partner-bubble">' +
-            '<div class="chat-info">' + username + ' at ' + timestamp + ' :</div>' + msg + '</div>' +
+            '<div class="chat-info">' + username + ' at ' + formatTime(timestamp) + ' </div>' + msg + '</div>' +
             '</div>' +
             '</div>';
 
@@ -93,7 +93,7 @@ ChatUi = function() {
             var msgString = '<div class="row">' +
                 '<div class="col-md-12">' +
                 '<div class="chat-own-bubble">' +
-                '<div class="chat-info">You at ' + timestamp + ' :</div>' + msg + '</div>' +
+                '<div class="chat-info">You at ' + formatTime(timestamp) + ' </div>' + msg + '</div>' +
                 '</div>' +
                 '</div>';
 
@@ -345,6 +345,19 @@ ChatUi = function() {
     this.chatPanelToggleDownCycle = function() {
         this.addBadge();
         localStorage.setItem("chatToggleStatus", false);
-    }
+    };
+
+    var formatTime = function(timestamp) {
+        var now = new Date();
+        var time = new Date(timestamp);
+        var formatedTimestamp;
+        if ((time.getDate() == now.getDate()) && (time.getMonth() == now.getMonth()) && (time.getFullYear() == now.getFullYear())) {
+            formatedTimestamp = time.getHours() + ":" + time.getMinutes();
+        } else {
+            formatedTimestamp = time.getDate() + "." + time.getMonth()+2 + "." + time.getFullYear() + " " + formatedTimestamp;
+        }
+        return formatedTimestamp;
+    };
 
 };
+

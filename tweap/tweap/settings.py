@@ -133,7 +133,7 @@ LOGIN_REQUIRED_URLS_EXCEPTIONS = (
 )
 
 LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locale'),
+    os.path.join(BASE_DIR, 'locale/'),
 )
 
 LANGUAGES = (
