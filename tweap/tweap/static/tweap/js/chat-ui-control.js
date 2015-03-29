@@ -121,12 +121,34 @@ ChatUi = function() {
         var chatButtonString = '<div class="btn-group" role="group">' +
             '<button type="button" class="btn btn-default chat-btn" data-chat-id="' + chatId + '">' +
             '<span class="fa fa-users"></span>' + name +
+            '<span class="chat-button-badge badge"></span>' +
             '<span class="fa fa-close pull-right"></span>' +
             '</button>' +
             '</div>';
 
         $('#chat-buttons').append(chatButtonString);
         this.appendListenerToChatButtons(chatId);
+    }
+
+    /**
+     * Adds a Badge to a certain Chatbutton
+     * @param chatId = id for which button the badge should be shown in Integer
+     * @param amount = number to be shown inside the badge as String
+     */
+    this.showChatButtonBadge = function(chatId, amount) {
+        var button = $('#chat-buttons').find("[data-chat-id='" + chatId + "']");
+        var element = button.find('.badge');
+        element.html(amount);
+    }
+
+    /**
+     * Empties a Badge of a certain Chatbutton is called in this.activateChat()
+     * @param chatId = id for which button the badge should be emptified in Integer
+     */
+    this.emptyChatButtonBadge = function(chatId) {
+        var button = $('#chat-buttons').find("[data-chat-id='" + chatId + "']");
+        var element = button.find('.badge');
+        element.empty();
     }
 
     //
@@ -163,12 +185,14 @@ ChatUi = function() {
         var chatContent = document.getElementById("chat-content");
         chatContent.scrollTop = chatContent.scrollHeight;
     }
-    
+
+    /**
+     * clears chat-content and the message-inputfield
+     */
     this.emptyConversation = function() {
         $('#chat-content').empty();
         $('#chat-message').empty();
     }
-
 
     /**
      * Appends the inputfield for chatmessages to the chatwindow
@@ -192,6 +216,7 @@ ChatUi = function() {
     this.activateChat = function(chatId) {
         chatManager.changeConversation(chatId); //calls emptyConversation and
         this.appendChatMessageInput();
+        this.emptyChatButtonBadge(chatId);
 
         var elements = $('.chat-btn');
         elements.removeClass('btn-primary');

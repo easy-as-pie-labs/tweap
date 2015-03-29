@@ -101,3 +101,8 @@
     cursor: pointer;
     text-decoration: underline;
 }
+
+.chat-button-badge {
+    margin-left:5px;
+    font-size:10px !important;
+}
