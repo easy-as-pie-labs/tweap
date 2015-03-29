@@ -36,11 +36,11 @@ class Conversation(models.Model):
         else:
             messages = Message.objects.filter(conversation=self)[:20]
 
-        result_messages = messages.values('text')
+        result_messages = messages.values('text', 'id', 'timestamp')
         for i in range(0, len(result_messages)):
             date = str("%04d" % messages[i].timestamp.year) + "-" + str("%02d" % messages[i].timestamp.month) + "-" + str("%02d" % messages[i].timestamp.day)
             time = str("%02d" % messages[i].timestamp.hour) + ":" + str("%02d" % messages[i].timestamp.minute + ":"+ str("%02d" % messages[i].timestamp.second))
-            result_messages[i]['timestamp'] = date + " " + time
+            # result_messages[i]['timestamp'] = date + " " + time
             result_messages[i]['sender'] = messages[i].sender.username
             result_messages[i]['conversation'] = messages[i].conversation.id
 
