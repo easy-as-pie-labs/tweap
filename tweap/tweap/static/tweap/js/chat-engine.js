@@ -85,7 +85,6 @@ ChatManager = function() {
                 chatUi.addPartnerMessage(currentConversation.messages[i].text, currentConversation.messages[i].sender, currentConversation.messages[i].timestamp);
             }
         }
-        chatUi.activateChat(currentConversation.id);
     };
 
     var findConversationById = function(conversationId, index) {
@@ -114,7 +113,7 @@ ChatManager = function() {
                 }
                 username = saveObject.username;
                 currentConversation = findConversationById(saveObject.currentConversationId);
-                that.changeConversation(currentConversation.id)
+                chatUi.activateChat(currentConversation.id);
             } catch(err) {
                 localStorage.removeItem('chat-conversations');
             }
@@ -220,6 +219,7 @@ function Conversation(id, users, name) {
     this.users = users;
     this.name = name;
     this.messages = [];
+    this.unreadMessages = 0;
 
     if (this.name == null) {
         chatUi.addNewPersonChatButton(id, this.users);
@@ -251,10 +251,13 @@ function Conversation(id, users, name) {
                 }
             }
         }
+        this.unreadMessages = 0;
     };
 
     this.addNewMessage = function(newMessage) {
         this.messages.push(newMessage);
+        this.unreadMessages++;
+        chatUi.showBadge(this.id, this.unreadMessages);
     };
 
     this.addUsers = function(newUsers) {
