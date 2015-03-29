@@ -14,7 +14,17 @@ $(document).ready(function() {
         chatBody.show();
         chatUi.chatPanelToggleUpCycle();
     }
+
     chatUi.activateOverview();
+
+    // for loading old messages by scrolling to top
+    $('#chat-content').scroll(function() {
+        if ($('#chat-content').scrollTop() == 0) {
+            chatManager.getMessages();
+            // TODO: scroll to old position after new messages are prepended
+        }
+    });
+    
 });
 
 $(document).on('keydown', '#message-text', function(e) {
@@ -64,17 +74,21 @@ ChatUi = function() {
      * @param username = the username to be shown as String
      * @param timestamp = the timestamp to be shown as String
      */
-    this.addPartnerMessage = function(msg, username, timestamp) {
+    this.addPartnerMessage = function(msg, username, timestamp, top) {
         if(!overviewState) {
             var msgString = '<div class="row">' +
-            '<div class="col-md-12">' +
-            '<div class="chat-partner-bubble">' +
-            '<div class="chat-info">' + username + ' at ' + formatTime(timestamp) + ' </div>' + msg + '</div>' +
-            '</div>' +
-            '</div>';
+                '<div class="col-md-12">' +
+                '<div class="chat-partner-bubble">' +
+                '<div class="chat-info">' + username + ' at ' + formatTime(timestamp) + ' </div>' + msg + '</div>' +
+                '</div>' +
+                '</div>';
 
-            $('#chat-content').append(msgString);
-            this.updateScroll();
+            if (top == undefined) {
+                $('#chat-content').append(msgString);
+                this.updateScroll();
+            } else {
+                $('#chat-content').prepend(msgString);
+            }
         }
     };
 
@@ -83,7 +97,7 @@ ChatUi = function() {
      * @param msg = the Message as String
      * @param timestamp = the timestamp to be shown as String
      */
-    this.addOwnMessage = function(msg, timestamp) {
+    this.addOwnMessage = function(msg, timestamp, top) {
         if(!overviewState) {
             var msgString = '<div class="row">' +
                 '<div class="col-md-12">' +
@@ -91,9 +105,12 @@ ChatUi = function() {
                 '<div class="chat-info">You at ' + formatTime(timestamp) + ' </div>' + msg + '</div>' +
                 '</div>' +
                 '</div>';
-
-            $('#chat-content').append(msgString);
-            this.updateScroll();
+            if (top == undefined) {
+                $('#chat-content').append(msgString);
+                this.updateScroll();
+            } else {
+                $('#chat-content').prepend(msgString);
+            }
         }
     };
 
