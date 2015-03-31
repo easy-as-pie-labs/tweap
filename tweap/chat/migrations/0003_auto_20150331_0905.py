@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='message',
             name='timestamp',
-            field=models.IntegerField(default=0),
+            field=models.IntegerField(),
             preserve_default=True,
         ),
     ]

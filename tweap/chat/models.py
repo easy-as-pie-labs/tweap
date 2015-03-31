@@ -50,7 +50,7 @@ class Conversation(models.Model):
 class Message(models.Model):
     conversation = models.ForeignKey(Conversation)
     sender = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
-    timestamp = models.IntegerField(default=0)
+    timestamp = models.IntegerField()
     text = models.CharField(max_length=2000)
 
     class Meta:
