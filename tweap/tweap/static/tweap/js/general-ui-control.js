@@ -1,18 +1,39 @@
 // toggle box and indicator icons
 $(document).on('click', '.toggle_header', function() {
+
+    var header = $(this);
     if($(this).parent().attr('id') == "chat-panel") {
         chatToggle($(this));
     } else {
-        $(this).next('.toggle_content').slideToggle();
 
-        var iconHolderFirst = $(this).children().first();
-        var iconHolderLast = $(this).children().last();
-
-        if(iconHolderFirst.hasClass('fa-chevron-right') || iconHolderFirst.hasClass('fa-chevron-down')) {
-            toggleIcon(iconHolderFirst);
-        } else {
-            toggleIcon(iconHolderLast);
+        if(header.hasClass('rounded-bottom-border') && header.hasClass('list-group-item')) {
+            header.removeClass('rounded-bottom-border');
         }
+
+        $(this).next('.toggle_content').slideToggle(function() {
+            var iconHolderFirst = header.children().first();
+            var iconHolderLast = header.children().last();
+
+            if(iconHolderFirst.hasClass('fa-chevron-right') || iconHolderFirst.hasClass('fa-chevron-down')) {
+                toggleIcon(iconHolderFirst);
+            } else {
+                toggleIcon(iconHolderLast);
+            }
+
+            //If togglecontent is list-group and not panel
+            if(header.hasClass('list-group-item')) {
+                var iconHolderLast = header.children().last();
+                if (iconHolderLast.hasClass('fa-chevron-down')) {
+                    // togglein and add rounded corners
+                    header.removeClass('rounded-bottom-border');
+                    header.addClass('no-rounded-bottom-border');
+                } else if(header.hasClass('list-group-item') && iconHolderLast.hasClass('fa-chevron-right')){
+                    // toggleout remove rounded corners
+                    header.removeClass('no-rounded-bottom-border');
+                    header.addClass('rounded-bottom-border');
+                }
+            }
+        });
     }
 });
 
