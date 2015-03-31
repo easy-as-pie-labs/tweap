@@ -123,10 +123,11 @@ ChatUi = function() {
      */
     this.addNewPersonChatButton = function(chatId, name) {
         var chatButtonString = '<div class="btn-group" role="group">' +
-            '<button type="button" class="btn btn-default chat-btn" data-chat-id="' + chatId + '">' +
-            '<span class="fa fa-user"></span>' + name +
+            '<div type="button" class="clearfix btn btn-default chat-btn" data-chat-id="' + chatId + '">' +
+            '<span class="chat-button-content"><span class="fa fa-user"></span>' + name +
+            '<span class="chat-button-badge badge"></span></span>' +
             '<span class="fa fa-close pull-right"></span>' +
-            '</button>' +
+            '</div>' +
             '</div>';
 
         $('#chat-buttons').append(chatButtonString);
