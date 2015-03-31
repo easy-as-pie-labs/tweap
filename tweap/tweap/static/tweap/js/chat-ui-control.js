@@ -24,7 +24,7 @@ $(document).ready(function() {
             // TODO: scroll to old position after new messages are prepended
         }
     });
-    
+
 });
 
 $(document).on('keydown', '#message-text', function(e) {
@@ -362,7 +362,7 @@ ChatUi = function() {
     };
 
     var formatTime = function(timestamp) {
-        var now =moment();
+        var now = moment();
         var timestamp = moment(timestamp);
         var formatedTimestamp = timestamp.format("HH:mm")
         if (!(now.date() == timestamp.date()) && (now.month() == timestamp.month()) && (now.year() == timestamp.year())) {

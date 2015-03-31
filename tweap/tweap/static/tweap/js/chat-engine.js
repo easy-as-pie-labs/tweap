@@ -71,6 +71,8 @@ ChatManager = function() {
         if (index) {
             conversations.splice(index, 1);
         }
+        // TODO: check if here must be reset currentConversation
+        // maybe splice doesn't work correctly
         saveToStorage();
     };
 
