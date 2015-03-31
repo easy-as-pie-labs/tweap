@@ -68,11 +68,10 @@ def api(request):
             conversations = Conversation.get_conversations_of_user(user)
             result['conversations'] = []
             for conversation in conversations:
-                user_string = "demo" # conversation.values('members')
                 conversation_object = {
                     'id': conversation.id,
                     'name': conversation.name,
-                    'users': user_string
+                    'users': list(conversation.members.all())
                 }
                 result['conversations'].append(conversation_object)
 

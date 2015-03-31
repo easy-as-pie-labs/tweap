@@ -207,6 +207,7 @@ ChatManager = function() {
                 conversations[i].name = ownIndex === 0 ? conversations[i].users[1] : conversations[i].users[0];
                 personConversations.push(conversations[i]);
             }
+            console.log(personConversations);
         }
         chatUi.addConversationsToOverview(projectConversations, personConversations);
     });
