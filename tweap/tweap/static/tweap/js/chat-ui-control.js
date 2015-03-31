@@ -320,28 +320,32 @@ ChatUi = function() {
      * @param chatId = Integer
      */
     this.appendPossibleChatButton = function(chatname, chatType, chatId) {
+        console.log("name: " + chatname + ", type: " + chatType + "id: "+ chatId);
         if(chatType == "group") {
-            var buttonHtmlString = '<div class="chat-overview-element">' +
+            var buttonHtmlString = '<div class="chat-overview-element" id="group-chat-button-'+chatId+'">' +
                 '<span class="fa fa-users"></span>'
                 + chatname +
                 '</div>';
-            var element = $('#group-chats').append(buttonHtmlString);
+            $('#group-chats').append(buttonHtmlString);
+            var element = $('#group-chat-button-'+chatId);
+            console.log(element);
             element.click(function(){
+                console.log(chatId);
                 chatManager.addConversation(chatId, chatname);
                 that.activateChat(chatId);
             });
         } else {
-            var buttonHtmlString = '<div class="chat-overview-element">' +
+            var buttonHtmlString = '<div class="chat-overview-element" id="person-chat-button-'+chatId+'">' +
                 '<span class="fa fa-user"></span>'
                 + chatname +
                 '</div>';
-            var element = $('#person-chats').append(buttonHtmlString);
+            $('#person-chats').append(buttonHtmlString);
+            var element = $('#person-chat-button-'+chatId);
             element.click(function(){
                 chatManager.addConversation(chatId, chatname);
                 that.activateChat(chatId);
             });
         }
-
     };
 
     /**

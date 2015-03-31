@@ -222,6 +222,8 @@ function Conversation(id, users, name) {
     this.unreadMessages = 0;
     this.allMessages = false;
 
+    // todo: why should this ever be null??
+    // person button and group button pass the same arguments to the same function
     if (this.name == null) {
         chatUi.addNewPersonChatButton(id, name);
     } else {
