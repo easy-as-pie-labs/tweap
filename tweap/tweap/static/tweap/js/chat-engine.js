@@ -31,13 +31,15 @@ ChatManager = function() {
         socket.emit('conversation-request', users);
     };
 
-    this.getMessages = function() {
+    this.getMessages = function(direction) {
+        console.log("loading for " + currentConversation.name + " " + direction);
         if (!currentConversation.allMessages) {
             var messageRequest = {
                 'conversation': currentConversation.id,
-                'direction': 'older',
-                'messageTimeStamp': currentConversation.getOldestMessage().timestamp
+                'direction': direction
             };
+            if (direction === 'newer') messageRequest['messageTimeStamp'] = currentConversation.getNewestMessage().timestamp;
+            else messageRequest['messageTimeStamp'] = currentConversation.getOldestMessage().timestamp;
             socket.emit('get-messages', messageRequest);
         }
     };
@@ -50,20 +52,20 @@ ChatManager = function() {
     /* METHODS FOR INTERACTING WITH GUI */
 
     this.unsetConversation = function() {
-        currentConversation = false;
-        saveToStorage();
+        //currentConversation = false;
+        //saveToStorage();
     };
 
     this.changeConversation = function(conversationId) {
         currentConversation = findConversationById(conversationId);
         currentConversation.unreadMessages = 0;
         saveToStorage();
-        if (currentConversation.messages.length === 0) this.getMessages();
+        if (!currentConversation.messages.length) this.getMessages('older');
         else showMessages();
     };
 
     this.addConversation = function(conversationId, name, type) {
-        if(!findConversationById(conversationId)) {
+        if (!findConversationById(conversationId)) {
             conversations.push(new Conversation(conversationId, [username], name, type));
         }
     };
@@ -105,6 +107,10 @@ ChatManager = function() {
                 for (var i = 0; i < saveObject.conversations.length; i++) {
                     conversations.push(new Conversation(saveObject.conversations[i].id, saveObject.conversations[i].users, saveObject.conversations[i].name));
                     conversations[conversations.length - 1].messages = saveObject.conversations[i].messages;
+
+                    currentConversation = findConversationById(saveObject.conversations[i].id);
+                    this.getMessages('newer');
+                    currentConversation = false;
                 }
                 setTimeout(function() {
                     if (saveObject.currentConversationId) chatUi.activateChat(saveObject.currentConversationId);
@@ -161,39 +167,49 @@ ChatManager = function() {
         if (messages.length) {
             var conversation = findConversationById(messages[0].conversation);
             if (conversation) {
-                for (var i = 0; i < messages.length; i++) {
-                    conversation.addOldMessage(messages[i]);
-                    if (messages[i].sender === username) {
-                        chatUi.addOwnMessage(messages[i].text, messages[i].timestamp, 'top');
-                    } else {
-                        chatUi.addPartnerMessage(messages[i].text,  messages[i].sender, messages[i].timestamp, 'top');
+                if (conversation.messages.length && conversation.messages[conversation.messages.length-1].timestamp < messages[0].timestamp) {
+                    console.log("insert newer messages");
+                    for (var i = 0; i < messages.length; i++) {
+                        conversation.addNewMessage(messages[i]);
+                        if (messages[i].sender === username) {
+                            chatUi.addOwnMessage(messages[i].text, messages[i].timestamp);
+                        } else {
+                            chatUi.addPartnerMessage(messages[i].text, messages[i].sender, messages[i].timestamp);
+                            chatUi.showChatButtonBadge(conversation.id, ++conversation.unreadMessages);
+                        }
+                    }
+                } else {
+                    console.log("insert older messages");
+                    for (var i = 0; i < messages.length; i++) {
+                        conversation.addOldMessage(messages[i]);
+                        if (messages[i].sender === username) {
+                            chatUi.addOwnMessage(messages[i].text, messages[i].timestamp, 'top');
+                        } else {
+                            chatUi.addPartnerMessage(messages[i].text, messages[i].sender, messages[i].timestamp, 'top');
+                        }
                     }
                 }
             }
-            saveToStorage();
         } else {
             currentConversation.allMessages = true;
         }
+         saveToStorage();
     });
 
     socket.on('conversation-list', function(conversations) {
         var projectConversations = [];
         var personConversations = [];
         for (var i = 0; i < conversations.length; i++) {
-            if (conversations[i].name) {
-                projectConversations.push(conversations[i]);
-            } else {
-                personConversations.push(conversations[i]);
-            }
+            if (conversations[i].name) projectConversations.push(conversations[i]);
+            else personConversations.push(conversations[i]);
         }
         chatUi.addConversationsToOverview(projectConversations, personConversations);
     });
 
     socket.on('conversation-response', function(conversation) {
         var conversation = findConversationById(conversation.id);
-        if (!conversation) {
-            conversations.push(new Conversation(conversation.id, conversation.users, conversation.name));
-        } else {
+        if (!conversation) conversations.push(new Conversation(conversation.id, conversation.users, conversation.name));
+        else {
             conversation.addUsers(conversation.users);
             conversation.addName(conversation.name);
         }
@@ -230,6 +246,14 @@ function Conversation(id, users, name, type) {
     this.getOldestMessage = function() {
         if (this.messages.length) {
             return this.messages[0];
+        } else {
+            return {'timestamp': ''};
+        }
+    };
+
+    this.getNewestMessage = function() {
+        if (this.messages.length) {
+            return this.messages[this.messages.length-1];
         } else {
             return {'timestamp': ''};
         }

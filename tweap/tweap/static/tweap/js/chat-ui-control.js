@@ -22,7 +22,7 @@ $(document).ready(function() {
     // for loading old messages by scrolling to top
     $('#chat-content').scroll(function() {
         if ($('#chat-content').scrollTop() == 0) {
-            chatManager.getMessages();
+            chatManager.getMessages('older');
             // TODO: scroll to old position after new messages are prepended
         }
     });
