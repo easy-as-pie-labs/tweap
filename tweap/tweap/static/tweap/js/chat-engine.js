@@ -32,15 +32,16 @@ ChatManager = function() {
     };
 
     this.getMessages = function(direction) {
-        console.log("loading for " + currentConversation.name + " " + direction);
-        if (!currentConversation.allMessages) {
-            var messageRequest = {
-                'conversation': currentConversation.id,
-                'direction': direction
-            };
-            if (direction === 'newer') messageRequest['messageTimeStamp'] = currentConversation.getNewestMessage().timestamp;
-            else messageRequest['messageTimeStamp'] = currentConversation.getOldestMessage().timestamp;
-            socket.emit('get-messages', messageRequest);
+        if (currentConversation) {
+            if (!currentConversation.allMessages) {
+                var messageRequest = {
+                    'conversation': currentConversation.id,
+                    'direction': direction
+                };
+                if (direction === 'newer') messageRequest['messageTimeStamp'] = currentConversation.getNewestMessage().timestamp;
+                else messageRequest['messageTimeStamp'] = currentConversation.getOldestMessage().timestamp;
+                socket.emit('get-messages', messageRequest);
+            }
         }
     };
 
@@ -51,13 +52,16 @@ ChatManager = function() {
 
     /* METHODS FOR INTERACTING WITH GUI */
 
+
     this.changeConversation = function(conversationId) {
-        console.log(conversations);
         currentConversation = findConversationById(conversationId);
-        currentConversation.unreadMessages = 0;
-        saveToStorage();
-        if (!currentConversation.messages.length) this.getMessages('older');
-        else showMessages();
+        if (currentConversation) {
+            currentConversation.unreadMessages = 0;
+            saveToStorage();
+            if (!currentConversation.messages.length) this.getMessages('older');
+            else this.getMessages('newer');
+            showMessages();
+        }
     };
 
     this.addConversation = function(conversationId, name, type) {
@@ -69,6 +73,7 @@ ChatManager = function() {
     this.closeConversation = function(conversationId) {
         var index = findConversationById(conversationId, true);
         if (index >= 0) conversations.splice(index, 1);
+        currentConversation = undefined;
         saveToStorage();
     };
 
@@ -105,7 +110,7 @@ ChatManager = function() {
                     conversations[conversations.length - 1].messages = saveObject.conversations[i].messages;
                 }
                 setTimeout(function() {
-                    chatUi.activateChat(saveObject.currentConversationId);
+                    if (saveObject.currentConversationId) chatUi.activateChat(saveObject.currentConversationId);
                 }, 10);
             } catch(err) { }
         }
@@ -114,7 +119,7 @@ ChatManager = function() {
     var saveToStorage = function() {
         var saveObject = {
             'conversations': [],
-            'currentConversationId': currentConversation.id
+            'currentConversationId': (currentConversation ? currentConversation.id : false)
         };
         for (var i = 0; i < conversations.length; i++) {
             saveObject.conversations.push(conversations[i]);
@@ -124,7 +129,6 @@ ChatManager = function() {
 
 
     /* HANDLER */
-
 
     socket.on('auth-success', function(data) {
         var chatCredentials = {
@@ -159,8 +163,8 @@ ChatManager = function() {
         if (messages.length) {
             var conversation = findConversationById(messages[0].conversation);
             if (conversation) {
+                //newer messages
                 if (conversation.messages.length && conversation.messages[conversation.messages.length-1].timestamp < messages[0].timestamp) {
-                    console.log("insert newer messages");
                     for (var i = 0; i < messages.length; i++) {
                         conversation.addNewMessage(messages[i]);
                         if (messages[i].sender === username) {
@@ -168,10 +172,11 @@ ChatManager = function() {
                         } else {
                             chatUi.addPartnerMessage(messages[i].text, messages[i].sender, messages[i].timestamp);
                             chatUi.showChatButtonBadge(conversation.id, ++conversation.unreadMessages);
+                            console.log("batch-button for " + conversation.id + conversation.name + " count: " + conversation.unreadMessages);
                         }
                     }
+                //older messages
                 } else {
-                    console.log("insert older messages");
                     for (var i = 0; i < messages.length; i++) {
                         conversation.addOldMessage(messages[i]);
                         if (messages[i].sender === username) {
@@ -200,7 +205,8 @@ ChatManager = function() {
 
     socket.on('conversation-response', function(conversation) {
         var conversation = findConversationById(conversation.id);
-        if (!conversation) conversations.push(new Conversation(conversation.id, conversation.users, conversation.name));
+        if (!conversation)
+            conversations.push(new Conversation(conversation.id, conversation.users, conversation.name));
         else {
             conversation.addUsers(conversation.users);
             conversation.addName(conversation.name);

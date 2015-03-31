@@ -293,6 +293,7 @@ ChatUi = function() {
 
         } else {
             element.parent().remove();
+            chatManager.closeConversation(chatId);
         }
     };
 
