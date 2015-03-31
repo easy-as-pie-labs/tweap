@@ -287,7 +287,6 @@ ChatUi = function() {
         this.emptyConversation();
         overviewState = true;
         removeButtonClasses();
-        chatManager.requestConversations();
 
         var overViewHtmlString = '<div id="chat-list">' +
             '<span class="fa fa-comment-o fa-2x"></span>' +
@@ -297,6 +296,8 @@ ChatUi = function() {
             '<div id="person-chats" class="nav nav-pills"></div>';
         $('#chat-content').append(overViewHtmlString);
 
+        chatManager.unsetConversation();
+        chatManager.requestConversations();
     };
 
     /**

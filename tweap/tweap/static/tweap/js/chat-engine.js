@@ -49,6 +49,11 @@ ChatManager = function() {
 
     /* METHODS FOR INTERACTING WITH GUI */
 
+    this.unsetConversation = function() {
+        currentConversation = false;
+        saveToStorage();
+    };
+
     this.changeConversation = function(conversationId) {
         currentConversation = findConversationById(conversationId);
         currentConversation.unreadMessages = 0;
@@ -102,7 +107,7 @@ ChatManager = function() {
                     conversations[conversations.length - 1].messages = saveObject.conversations[i].messages;
                 }
                 setTimeout(function() {
-                    chatUi.activateChat(saveObject.currentConversationId);
+                    if (saveObject.currentConversationId) chatUi.activateChat(saveObject.currentConversationId);
                 }, 10);
             } catch(err) { }
         }
