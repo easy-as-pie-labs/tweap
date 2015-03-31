@@ -45,10 +45,19 @@ function manageNotificationAjaxRequest(output, notificationId){
         $('#notification_container_id_' + notificationId).hide('slow', function() {
             $('#notification_container_id_' + notificationId).remove();
         });
-    }
 
-    if ($('#inbox-inner').children().length <= 1){
-        removeInboxContainer();
+        var notifications = $('.notification-item').length;
+        var invitations = $('.invitation-item').length;
+
+        if(notifications <= 3) {
+            $('#markAllSeenBox').hide('slow', function() {
+                $('#markAllSeenBox').remove();
+            });
+
+            if((notifications <= 2) && (invitations == 0)) {
+                removeInboxContainer();
+            }
+        }
     }
 }
 
@@ -87,8 +96,13 @@ function manageInvitationAjaxRequest(output, invitationId){
             $('#invitation_container_id_' + invitationId).remove();
         });
 
-        if ($('#inbox-inner').children().length <= 1){
-            removeInboxContainer();
+        var notifications = $('.notification-item').length;
+        var invitations = $('.invitation-item').length;
+
+        if(invitations <= 1) {
+            if(notifications == 0) {
+                removeInboxContainer();
+            }
         }
     }
 }
