@@ -321,7 +321,6 @@ ChatUi = function() {
      * @param chatId = Integer
      */
     this.appendPossibleChatButton = function(chatname, chatType, chatId) {
-        console.log("name: " + chatname + ", type: " + chatType + "id: "+ chatId);
         if(chatType == GROUP_TYPE) {
             var buttonHtmlString = '<div class="chat-overview-element" id="group-chat-button-'+chatId+'">' +
                 '<span class="fa fa-users"></span>'
@@ -329,9 +328,7 @@ ChatUi = function() {
                 '</div>';
             $('#group-chats').append(buttonHtmlString);
             var element = $('#group-chat-button-'+chatId);
-            console.log(element);
             element.click(function(){
-                console.log(chatId);
                 chatManager.addConversation(chatId, chatname, GROUP_TYPE);
                 that.activateChat(chatId);
             });
