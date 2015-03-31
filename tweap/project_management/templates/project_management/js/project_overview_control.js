@@ -22,6 +22,10 @@ $(document).ready(function () {
 
     todoQuickAdder = new TodoQuickAdd();
 
+    $('.start-user-chat').click(function() {
+        chatManager.requestConversation($(this).attr('data-chat-user'));
+    });
+
 });
 
 var TodoQuickAdd = function(){

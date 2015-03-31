@@ -56,6 +56,7 @@ def api(request):
                 conversation = Conversation.find_by_users_or_create(users)
                 result['conversation'] = {}
                 result['conversation']['id'] = conversation.id
+                result['name'] = conversation.name
                 result['conversation']['users'] = []
                 for user in users:
                     result['conversation']['users'].append(user.username)

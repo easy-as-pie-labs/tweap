@@ -331,6 +331,7 @@ ChatUi = function() {
         for(var i = 0; users.length>i; i++) {
             this.appendPossibleChatButton(users[i].name, "user", users[i].id);
         }
+
     };
 
     /**

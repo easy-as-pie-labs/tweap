@@ -32,7 +32,8 @@
                         <tr>
                             <td><strong>{% trans "Members" %}:</strong></td>
                             <td>{% for member in members %}
-                                   <a href="{% url 'user_management:profile' member %}" class="tag-outer "><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ member.username }}</span></a>
+                                    <a href="{% url 'user_management:profile' member %}" class="tag-outer "><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ member.username }}</span></a>
+                                    <a href="#" data-chat-user="{{ member.username }}" class="tag-outer start-user-chat"><span class="tag-no-interactive"><i class="fa fa-comment" style="margin-right:0;"></i></span></a>
                                 {% endfor %}
                             </td>
                         </tr>

@@ -6,6 +6,7 @@ ChatManager = function() {
     var conversations = [];
 
     var socket = io('http://dev.tweap.easy-as-pie.de:3000');
+    //var socket = io('http://127.0.0.1:3000');
 
     /* METHODS FOR COMMUNICATION WITH SERVER */
 
@@ -27,7 +28,8 @@ ChatManager = function() {
         socket.emit('message', message);
     };
 
-    this.requestConversation = function(users) {
+    this.requestConversation = function(user) {
+        var users = [user, username];
         socket.emit('conversation-request', users);
     };
 
@@ -204,12 +206,13 @@ ChatManager = function() {
     });
 
     socket.on('conversation-response', function(conversation) {
-        var conversation = findConversationById(conversation.id);
-        if (!conversation)
-            conversations.push(new Conversation(conversation.id, conversation.users, conversation.name));
-        else {
-            conversation.addUsers(conversation.users);
-            conversation.addName(conversation.name);
+        var localConversation = findConversationById(conversation.id);
+        if (!localConversation) {
+            if (!conversation.name) conversation.name = conversation.users[0];
+            conversations.push(new Conversation(conversation.id, conversation.users, conversation.name, SINGLE_TYPE));
+        } else {
+            localConversation.addUsers(conversation.users);
+            localConversation.addName(conversation.name);
         }
         saveToStorage();
     });
