@@ -41,8 +41,8 @@ def api(request):
 
         elif action == "getMessages":
             conversation = Conversation.objects.get(id=data.get('conversation'))
-            if data.get('messageId'):
-                message = Message.objects.get(id=data.get('messageId'))
+            if data.get('messageTimeStamp'):
+                message = Message.objects.get(conversation=conversation, timestamp=data.get('messageTimeStamp'))
             else:
                 message = None
             result['messages'] = conversation.get_messages(message)

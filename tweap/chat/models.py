@@ -32,15 +32,12 @@ class Conversation(models.Model):
         if count == 0:
             return []
         if message:
-            messages = Message.objects.filter(conversation=self).filter(id__lt=message.id)[:20]
+            messages = Message.objects.filter(conversation=self).filter(timestamp__lt=message.timestamp)[:20]
         else:
             messages = Message.objects.filter(conversation=self)[:20]
 
-        result_messages = messages.values('text', 'id')
+        result_messages = messages.values('text', 'timestamp')
         for i in range(0, len(result_messages)):
-            date = str("%04d" % messages[i].timestamp.year) + "-" + str("%02d" % messages[i].timestamp.month) + "-" + str("%02d" % messages[i].timestamp.day)
-            time = str("%02d" % messages[i].timestamp.hour) + ":" + str("%02d" % messages[i].timestamp.minute + ":"+ str("%02d" % messages[i].timestamp.second))
-            result_messages[i]['timestamp'] = date + " " + time
             result_messages[i]['sender'] = messages[i].sender.username
             result_messages[i]['conversation'] = messages[i].conversation.id
 
@@ -53,11 +50,11 @@ class Conversation(models.Model):
 class Message(models.Model):
     conversation = models.ForeignKey(Conversation)
     sender = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.IntegerField(default=0)
     text = models.CharField(max_length=2000)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['-timestamp']
 
     @classmethod
     def create(cls, conversation, sender, text):
