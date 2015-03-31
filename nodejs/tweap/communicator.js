@@ -35,7 +35,7 @@ define(function() {
         });
 
         this.socket.on('get-messages', function(data) {
-            that.loadMessages(data);
+            that.getMessages(data);
         });
 
         this.socket.on('get-conversations', function() {
@@ -117,20 +117,21 @@ define(function() {
         }
     };
 
-    Communicator.prototype.loadMessages = function(messageRequest) {
+    Communicator.prototype.getMessages = function(messageRequest) {
         if (this.client && (this.socket.rooms.indexOf(messageRequest.conversation) !== -1)) {
             var data = {
                 'action': 'getMessages',
-                'conversation': messageRequest.conversation
+                'conversation': messageRequest.conversation,
+                'direction': messageRequest.direction
             };
-            if (messageRequest.messageId != undefined) {
-                data.messageId = messageRequest.messageId;
+            if (messageRequest.messageTimeStamp != undefined) {
+                data.messageTimeStamp = messageRequest.messageTimeStamp;
             }
-            this.makeRequest(data, this.loadMessagesCB, this);
+            this.makeRequest(data, this.getMessagesCB, this);
         }
     };
 
-     Communicator.prototype.loadMessagesCB = function(data) {
+     Communicator.prototype.getMessagesCB = function(data) {
          if (data.status === "OK") {
              this.socket.emit('message-response', data.messages);
          }

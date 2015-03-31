@@ -4,9 +4,6 @@ ChatManager = function() {
     var conversations = [];
 
     var socket = io('http://dev.tweap.easy-as-pie.de:3000');
-    //var socket = io('http://127.0.0.1:3000');
-
-    var that = this;
 
     /* METHODS FOR COMMUNICATION WITH SERVER */
 
@@ -36,7 +33,8 @@ ChatManager = function() {
         if (!currentConversation.allMessages) {
             var messageRequest = {
                 'conversation': currentConversation.id,
-                'messageId': currentConversation.getOldestMessage().id
+                'direction': 'older',
+                'messageTimeStamp': currentConversation.getOldestMessage().timestamp
             };
             socket.emit('get-messages', messageRequest);
         }
@@ -234,7 +232,7 @@ function Conversation(id, users, name) {
         if (this.messages.length > 0) {
             return this.messages[0];
         } else {
-            return {'id': ''};
+            return {'timestamp': ''};
         }
     };
 
