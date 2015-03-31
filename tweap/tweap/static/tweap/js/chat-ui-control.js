@@ -255,7 +255,7 @@ ChatUi = function() {
     this.activateChat = function(chatId) {
         this.emptyConversation();
         overviewState = false;
-        chatManager.changeConversation(chatId); //calls emptyConversation and
+        //chatManager.changeConversation(chatId); //calls emptyConversation and
         this.appendChatMessageInput();
         this.emptyChatButtonBadge(chatId);
 
@@ -273,23 +273,26 @@ ChatUi = function() {
     this.closeChat = function(chatId) {
         var element = $(document).find("[data-chat-id='" + chatId + "']");
 
-        var sib = element.parent().prev();
-        var sibId = sib.children().attr('data-chat-id');
+        if(element.parent().children().hasClass('btn-primary')) {
+            var sib = element.parent().prev();
+            var sibId = sib.children().attr('data-chat-id');
 
-        if(sibId === undefined) {
-            sib = element.parent().next();
-            sibId = sib.children().attr('data-chat-id');
-        }
+            if(sibId === undefined) {
+                sib = element.parent().next();
+                sibId = sib.children().attr('data-chat-id');
+            }
 
-        console.log(sibId);
+            element.parent().remove();
+            chatManager.closeConversation(chatId);
 
-        element.parent().remove();
-        chatManager.closeConversation(chatId);
+            if($('#chat-buttons').children().length < 1) {
+                this.activateOverview();
+            } else {
+                this.activateChat(sibId);
+            }
 
-        if($('#chat-buttons').children().length < 1) {
-            this.activateOverview();
         } else {
-            this.activateChat(sibId);
+            element.parent().remove();
         }
     };
 
