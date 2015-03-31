@@ -51,12 +51,8 @@ ChatManager = function() {
 
     /* METHODS FOR INTERACTING WITH GUI */
 
-    this.unsetConversation = function() {
-        //currentConversation = false;
-        //saveToStorage();
-    };
-
     this.changeConversation = function(conversationId) {
+        console.log(conversations);
         currentConversation = findConversationById(conversationId);
         currentConversation.unreadMessages = 0;
         saveToStorage();
@@ -107,13 +103,9 @@ ChatManager = function() {
                 for (var i = 0; i < saveObject.conversations.length; i++) {
                     conversations.push(new Conversation(saveObject.conversations[i].id, saveObject.conversations[i].users, saveObject.conversations[i].name));
                     conversations[conversations.length - 1].messages = saveObject.conversations[i].messages;
-
-                    currentConversation = findConversationById(saveObject.conversations[i].id);
-                    this.getMessages('newer');
-                    currentConversation = false;
                 }
                 setTimeout(function() {
-                    if (saveObject.currentConversationId) chatUi.activateChat(saveObject.currentConversationId);
+                    chatUi.activateChat(saveObject.currentConversationId);
                 }, 10);
             } catch(err) { }
         }

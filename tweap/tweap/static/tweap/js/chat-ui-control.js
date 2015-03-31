@@ -255,7 +255,7 @@ ChatUi = function() {
     this.activateChat = function(chatId) {
         this.emptyConversation();
         overviewState = false;
-        //chatManager.changeConversation(chatId); //calls emptyConversation and
+        chatManager.changeConversation(chatId);
         this.appendChatMessageInput();
         this.emptyChatButtonBadge(chatId);
 
@@ -314,7 +314,6 @@ ChatUi = function() {
             '<div id="person-chats" class="nav nav-pills"></div>';
         $('#chat-content').append(overViewHtmlString);
 
-        chatManager.unsetConversation();
         chatManager.requestConversations();
     };
 
