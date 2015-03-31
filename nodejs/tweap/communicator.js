@@ -8,8 +8,8 @@ define(function() {
     var crypto = require('crypto');
     var najax = require('../libs/najax.js');
 
-    var tweapUrl = "http://127.0.0.1/chat/api/";
-    //var tweapUrl = "http://127.0.0.1:8000/chat/api/";
+    //var tweapUrl = "http://127.0.0.1/chat/api/";
+    var tweapUrl = "http://127.0.0.1:8000/chat/api/";
 
     function Communicator(socket, clientManager, io) {
         this.socket = socket;
