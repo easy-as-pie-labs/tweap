@@ -1,3 +1,5 @@
+var GROUP_TYPE = "group";
+
 ChatManager = function() {
     var username;
     var currentConversation;
@@ -58,9 +60,9 @@ ChatManager = function() {
         }
     };
 
-    this.addConversation = function(conversationId, name) {
+    this.addConversation = function(conversationId, name, type) {
         if(!findConversationById(conversationId)) {
-            conversations.push(new Conversation(conversationId, [username], name));
+            conversations.push(new Conversation(conversationId, [username], name, type));
         }
     };
 
@@ -214,7 +216,7 @@ ChatManager = function() {
     }
 }
 
-function Conversation(id, users, name) {
+function Conversation(id, users, name, type) {
     this.id = id;
     this.users = users;
     this.name = name;
@@ -222,9 +224,7 @@ function Conversation(id, users, name) {
     this.unreadMessages = 0;
     this.allMessages = false;
 
-    // todo: why should this ever be null??
-    // person button and group button pass the same arguments to the same function
-    if (this.name == null) {
+    if (type != GROUP_TYPE) {
         chatUi.addNewPersonChatButton(id, name);
     } else {
         chatUi.addNewGroupChatButton(id, name);

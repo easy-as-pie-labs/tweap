@@ -1,3 +1,5 @@
+var GROUP_TYPE = "group";
+var SINGLE_TYPE = "single";
 
 $(document).ready(function() {
     chatUi = new ChatUi();
@@ -321,7 +323,7 @@ ChatUi = function() {
      */
     this.appendPossibleChatButton = function(chatname, chatType, chatId) {
         console.log("name: " + chatname + ", type: " + chatType + "id: "+ chatId);
-        if(chatType == "group") {
+        if(chatType == GROUP_TYPE) {
             var buttonHtmlString = '<div class="chat-overview-element" id="group-chat-button-'+chatId+'">' +
                 '<span class="fa fa-users"></span>'
                 + chatname +
@@ -331,7 +333,7 @@ ChatUi = function() {
             console.log(element);
             element.click(function(){
                 console.log(chatId);
-                chatManager.addConversation(chatId, chatname);
+                chatManager.addConversation(chatId, chatname, GROUP_TYPE);
                 that.activateChat(chatId);
             });
         } else {
@@ -342,7 +344,7 @@ ChatUi = function() {
             $('#person-chats').append(buttonHtmlString);
             var element = $('#person-chat-button-'+chatId);
             element.click(function(){
-                chatManager.addConversation(chatId, chatname);
+                chatManager.addConversation(chatId, chatname, SINGLE_TYPE);
                 that.activateChat(chatId);
             });
         }
