@@ -45,7 +45,7 @@ def api(request):
                 message = Message.objects.get(conversation=conversation, timestamp=data.get('messageTimeStamp'))
             else:
                 message = None
-            result['messages'] = conversation.get_messages(message)
+            result['messages'] = conversation.get_messages(data.get('direction'), message)
 
         elif action == "getOrAddConversation":
             users = []

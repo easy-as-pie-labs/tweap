@@ -8,139 +8,128 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-29 16:13+0200\n"
-"PO-Revision-Date: 2015-01-31 17:05+0100\n"
-"Last-Translator: b'  <root@root.root>'\n"
+"POT-Creation-Date: 2015-03-31 10:47+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: pl\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Translated-Using: django-rosetta 0.7.4\n"
 
-#: cal/templates/cal/create_edit.html:29
-#: todo/templates/todo/create_edit.html:29
+#: cal/templates/cal/create_edit.html:28
+#: todo/templates/todo/create_edit.html:28
 msgid "Title"
 msgstr ""
 
-#: cal/templates/cal/create_edit.html:33
-#: todo/templates/todo/create_edit.html:33
-#, fuzzy
-#| msgid "The username must not be an email address"
+#: cal/templates/cal/create_edit.html:32
+#: todo/templates/todo/create_edit.html:32
 msgid "The title must not be empty!"
-msgstr "Imię użytkownika nie może być adres mailowy"
+msgstr ""
 
-#: cal/templates/cal/create_edit.html:36
+#: cal/templates/cal/create_edit.html:35
 msgid "Location"
 msgstr ""
 
-#: cal/templates/cal/create_edit.html:40 project_management/models.py:93
+#: cal/templates/cal/create_edit.html:39 project_management/models.py:93
 #: project_management/templates/project_management/create_edit.html:40
-#: todo/templates/todo/create_edit.html:37
+#: todo/templates/todo/create_edit.html:36
 msgid "Description"
-msgstr "Opisowanie"
+msgstr ""
 
-#: cal/templates/cal/create_edit.html:44
+#: cal/templates/cal/create_edit.html:43
 msgid "start date"
 msgstr ""
 
-#: cal/templates/cal/create_edit.html:50
-#, fuzzy
-#| msgid "The username must not be an email address"
+#: cal/templates/cal/create_edit.html:49
 msgid "The start date must not be empty!"
-msgstr "Imię użytkownika nie może być adres mailowy"
+msgstr ""
 
-#: cal/templates/cal/create_edit.html:53
+#: cal/templates/cal/create_edit.html:52
 msgid "Your choosen start date lies in the past!"
 msgstr ""
 
-#: cal/templates/cal/create_edit.html:57
+#: cal/templates/cal/create_edit.html:56
 msgid "end date"
 msgstr ""
 
-#: cal/templates/cal/create_edit.html:64
-#: todo/templates/todo/create_edit.html:53
-#, fuzzy
-#| msgid "Add Members"
+#: cal/templates/cal/create_edit.html:63
+#: todo/templates/todo/create_edit.html:52
 msgid "assign members"
-msgstr "Dodaj członki"
+msgstr ""
 
-#: cal/templates/cal/create_edit.html:68
+#: cal/templates/cal/create_edit.html:67
 msgid "select all"
 msgstr ""
 
-#: cal/templates/cal/create_edit.html:85
-#: todo/templates/todo/create_edit.html:74
+#: cal/templates/cal/create_edit.html:84
+#: todo/templates/todo/create_edit.html:73
 msgid "Tags"
 msgstr ""
 
-#: cal/templates/cal/create_edit.html:87
-#: todo/templates/todo/create_edit.html:76
+#: cal/templates/cal/create_edit.html:86
+#: todo/templates/todo/create_edit.html:75
 msgid "Add Tag"
 msgstr ""
 
-#: cal/templates/cal/create_edit.html:102
-#: todo/templates/todo/create_edit.html:92
+#: cal/templates/cal/create_edit.html:101
+#: todo/templates/todo/create_edit.html:91
 msgid "Delete"
 msgstr ""
 
-#: cal/templates/cal/create_edit.html:105
+#: cal/templates/cal/create_edit.html:104
 #: project_management/templates/project_management/create_edit.html:79
-#: todo/templates/todo/create_edit.html:95
+#: todo/templates/todo/create_edit.html:94
 msgid "Save"
-msgstr "Zapisz"
+msgstr ""
+
+#: cal/templates/cal/create_edit.html:104
+#: project_management/templates/project_management/create_edit.html:79
+#: todo/templates/todo/create_edit.html:94
+msgid "Create"
+msgstr ""
 
 #: cal/templates/cal/create_edit.html:105
-#: project_management/templates/project_management/create_edit.html:79
-#: todo/templates/todo/create_edit.html:95
-msgid "Create"
-msgstr "Otwórz"
-
-#: cal/templates/cal/create_edit.html:106
-#: cal/templates/cal/create_edit.html:123
+#: cal/templates/cal/create_edit.html:122
 #: project_management/templates/project_management/create_edit.html:81
-#: todo/templates/todo/create_edit.html:96
-#: todo/templates/todo/create_edit.html:113
+#: todo/templates/todo/create_edit.html:95
+#: todo/templates/todo/create_edit.html:112
 #: user_management/templates/user_management/delete_account.html:20
 msgid "Cancel"
 msgstr ""
 
-#: cal/templates/cal/create_edit.html:117
-#: cal/templates/cal/create_edit.html:126
+#: cal/templates/cal/create_edit.html:116
+#: cal/templates/cal/create_edit.html:125
 msgid "Delete event"
 msgstr ""
 
-#: cal/templates/cal/create_edit.html:120
-#, fuzzy
-#| msgid "Are you sure you want to leave this project?"
+#: cal/templates/cal/create_edit.html:119
 msgid "Are you sure you want to delete this event?"
-msgstr "Jesteś pewien że chcesz wyjśc z projektu"
+msgstr ""
 
-#: cal/views.py:36 cal/views.py:154
-#, fuzzy
-#| msgid "Create new project"
+#: cal/views.py:37 cal/views.py:155
 msgid "Create new Event in"
-msgstr "Otwórz nowy projekt"
+msgstr ""
 
-#: cal/views.py:55
+#: cal/views.py:56
 msgid "Edit Event in"
 msgstr ""
 
-#: cal/views.py:99 cal/views.py:110
+#: cal/views.py:100 cal/views.py:111
 msgid "Invalid Entry!"
 msgstr ""
 
-#: cal/views.py:100
+#: cal/views.py:101
 msgid "Edit Even in"
 msgstr ""
 
-#: cal/views.py:111 cal/views.py:152
+#: cal/views.py:112 cal/views.py:153
 msgid "Edit Event in "
 msgstr ""
 
-#: cal/views.py:148 todo/views.py:129
+#: cal/views.py:149 todo/views.py:129
 msgid "Invalid Entry"
 msgstr ""
 
@@ -149,10 +138,8 @@ msgid "Notifications"
 msgstr ""
 
 #: dashboard/templates/dashboard/dashboard.html:19
-#, fuzzy
-#| msgid "Invites"
 msgid "Invitation to project"
-msgstr "Zaproszenia"
+msgstr ""
 
 #: dashboard/templates/dashboard/dashboard.html:62
 msgid "Today"
@@ -187,14 +174,12 @@ msgid "Nothing to do this week! Why not start a"
 msgstr ""
 
 #: dashboard/templates/dashboard/dashboard.html:94
-#, fuzzy
-#| msgid "new Project"
 msgid "new project"
-msgstr "Nowy projekt"
+msgstr ""
 
 #: dashboard/templates/dashboard/home.html:7
 msgid "Hey! Welcome to tweap"
-msgstr "Hej! Witam na tweap"
+msgstr ""
 
 #: dashboard/templates/dashboard/home.html:8
 msgid ""
@@ -202,245 +187,246 @@ msgid ""
 "streamlined project management software that allows you to seamlessly "
 "create, manage and rock projects!"
 msgstr ""
-"tweap jest teamwork - easy as pie! (praca zespołowa - lekkie jak ćiasto) My "
-"staramy śie aby stworzyć wspaniałe i usprawnione oprogramowanie do "
-"zarządzania projekt."
 
 #: project_management/models.py:92
 #: project_management/templates/project_management/create_edit.html:31
 #: user_management/templates/user_management/profile.html:29
 msgid "Name"
-msgstr "Imię"
+msgstr ""
 
 #: project_management/models.py:97
 msgid "The name of the project is too long."
-msgstr "Imię od projektu jest za długi."
+msgstr ""
 
 #: project_management/templates/project_management/create_edit.html:18
-#, fuzzy
-#| msgid "Create new project"
 msgid "Please enter a project name!"
-msgstr "Otwórz nowy projekt"
+msgstr ""
 
 #: project_management/templates/project_management/create_edit.html:26
 msgid "Icon"
 msgstr ""
 
 #: project_management/templates/project_management/create_edit.html:36
-#, fuzzy
-#| msgid "The username must not be an email address"
 msgid "The name must not be empty!"
-msgstr "Imię użytkownika nie może być adres mailowy"
+msgstr ""
 
 #: project_management/templates/project_management/create_edit.html:46
 #: project_management/templates/project_management/project.html:33
 msgid "Members"
-msgstr "Członki"
+msgstr ""
 
 #: project_management/templates/project_management/create_edit.html:56
 #: project_management/templates/project_management/project.html:40
 msgid "Invited"
-msgstr "Zaproszeni"
+msgstr ""
 
 #: project_management/templates/project_management/create_edit.html:66
 msgid "Invite Members"
-msgstr "Zaproś członków"
+msgstr ""
 
 #: project_management/templates/project_management/create_edit.html:68
-#, fuzzy
-#| msgid "Username or eMail"
 msgid "Type in username or email"
-msgstr "Imię użytkownika albo adres mailowy"
+msgstr ""
 
 #: project_management/templates/project_management/create_edit.html:90
 msgid "Choose an icon for the project"
 msgstr ""
 
+#: project_management/templates/project_management/project.html:47
+#: user_management/templates/user_management/profile.html:42
+msgid "Get the Calendar feed"
+msgstr ""
+
+#: project_management/templates/project_management/project.html:49
+msgid ""
+"Download the project's calendar entries and import them into your calendar "
+"app"
+msgstr ""
+
 #: project_management/templates/project_management/project.html:50
+#: user_management/templates/user_management/profile.html:45
+msgid "Download"
+msgstr ""
+
+#: project_management/templates/project_management/project.html:51
+#: user_management/templates/user_management/profile.html:46
+msgid "Or copy the feed address and add the syncing feed to your calendar app"
+msgstr ""
+
+#: project_management/templates/project_management/project.html:52
+#: user_management/templates/user_management/profile.html:47
+msgid "Copy to Clipboard"
+msgstr ""
+
+#: project_management/templates/project_management/project.html:59
 msgid "leave project"
-msgstr "Wyjdż z projektu"
+msgstr ""
 
-#: project_management/templates/project_management/project.html:53
+#: project_management/templates/project_management/project.html:62
 msgid "edit project"
-msgstr "Edytuj projekt"
+msgstr ""
 
-#: project_management/templates/project_management/project.html:64
+#: project_management/templates/project_management/project.html:73
 msgid "Todo's"
 msgstr ""
 
-#: project_management/templates/project_management/project.html:70
+#: project_management/templates/project_management/project.html:79
 msgid "Quickly enter a todo"
 msgstr ""
-
-#: project_management/templates/project_management/project.html:103
-#: project_management/templates/project_management/project.html:186
-#: project_management/templates/project_management/project.html:269
-#: project_management/templates/project_management/project.html:351
-#: project_management/templates/project_management/project.html:436
-#: project_management/templates/project_management/project.html:492
-#, fuzzy
-#| msgid "Description"
-msgid "No description"
-msgstr "Opisowanie"
 
 #: project_management/templates/project_management/project.html:112
 #: project_management/templates/project_management/project.html:195
 #: project_management/templates/project_management/project.html:278
 #: project_management/templates/project_management/project.html:360
+#: project_management/templates/project_management/project.html:445
+#: project_management/templates/project_management/project.html:501
+msgid "No description"
+msgstr ""
+
+#: project_management/templates/project_management/project.html:121
+#: project_management/templates/project_management/project.html:204
+#: project_management/templates/project_management/project.html:287
+#: project_management/templates/project_management/project.html:369
 msgid "No due date"
 msgstr ""
 
-#: project_management/templates/project_management/project.html:124
-#: project_management/templates/project_management/project.html:207
-#: project_management/templates/project_management/project.html:290
-#: project_management/templates/project_management/project.html:372
+#: project_management/templates/project_management/project.html:133
+#: project_management/templates/project_management/project.html:216
+#: project_management/templates/project_management/project.html:299
+#: project_management/templates/project_management/project.html:381
 msgid "No assigned users"
 msgstr ""
 
-#: project_management/templates/project_management/project.html:137
-#: project_management/templates/project_management/project.html:220
-#: project_management/templates/project_management/project.html:303
-#: project_management/templates/project_management/project.html:385
-#: project_management/templates/project_management/project.html:471
-#: project_management/templates/project_management/project.html:527
+#: project_management/templates/project_management/project.html:146
+#: project_management/templates/project_management/project.html:229
+#: project_management/templates/project_management/project.html:312
+#: project_management/templates/project_management/project.html:394
+#: project_management/templates/project_management/project.html:480
+#: project_management/templates/project_management/project.html:536
 msgid "No tags"
 msgstr ""
 
-#: project_management/templates/project_management/project.html:413
-#: project_management/templates/project_management/project.html:423
+#: project_management/templates/project_management/project.html:422
+#: project_management/templates/project_management/project.html:432
 msgid "Calendar"
 msgstr ""
 
-#: project_management/templates/project_management/project.html:441
-#: project_management/templates/project_management/project.html:497
-#, fuzzy
-#| msgid "Description"
+#: project_management/templates/project_management/project.html:450
+#: project_management/templates/project_management/project.html:506
 msgid "No Location"
-msgstr "Opisowanie"
+msgstr ""
 
-#: project_management/templates/project_management/project.html:460
-#: project_management/templates/project_management/project.html:516
+#: project_management/templates/project_management/project.html:469
+#: project_management/templates/project_management/project.html:525
 msgid "No attending users"
 msgstr ""
 
-#: project_management/templates/project_management/project.html:548
-#: project_management/templates/project_management/project.html:561
+#: project_management/templates/project_management/project.html:557
+#: project_management/templates/project_management/project.html:570
 msgid "Leave Project"
-msgstr "Wyjdż z projektu"
+msgstr ""
 
-#: project_management/templates/project_management/project.html:551
+#: project_management/templates/project_management/project.html:560
 msgid "Are you sure you want to leave this project?"
-msgstr "Jesteś pewien że chcesz wyjśc z projektu"
+msgstr ""
 
-#: project_management/templates/project_management/project.html:553
+#: project_management/templates/project_management/project.html:562
 msgid ""
 "Since you are the last person in this project, the project and all its data "
 "will be deleted from our servers. This action cannot be undone!"
 msgstr ""
-"Jesteś ostatni w projekcie. Jak wyjdziesz, wszystkie dany będą zniszczone na "
-"naszych serwerach."
 
-#: project_management/templates/project_management/project.html:557
-#, fuzzy
-#| msgid "leave project"
+#: project_management/templates/project_management/project.html:566
 msgid "Don't leave project"
-msgstr "Wyjdż z projektu"
+msgstr ""
 
 #: project_management/views.py:24 project_management/views.py:49
 msgid "Create new project"
-msgstr "Otwórz nowy projekt"
+msgstr ""
 
 #: project_management/views.py:34 project_management/views.py:57
 msgid "Edit project"
-msgstr "Edytuj projekt"
+msgstr ""
 
-#: todo/templates/todo/create_edit.html:42
+#: todo/templates/todo/create_edit.html:41
 msgid "Due Date"
 msgstr ""
 
-#: todo/templates/todo/create_edit.html:49
+#: todo/templates/todo/create_edit.html:48
 msgid "Your choosen due date lies in the past!"
 msgstr ""
 
-#: todo/templates/todo/create_edit.html:57
+#: todo/templates/todo/create_edit.html:56
 msgid "assign all"
 msgstr ""
 
-#: todo/templates/todo/create_edit.html:107
-#: todo/templates/todo/create_edit.html:116
-#, fuzzy
-#| msgid "Create new project"
+#: todo/templates/todo/create_edit.html:106
+#: todo/templates/todo/create_edit.html:115
 msgid "Delete Todo"
-msgstr "Otwórz nowy projekt"
+msgstr ""
 
-#: todo/templates/todo/create_edit.html:110
-#, fuzzy
-#| msgid "Are you sure you want to leave this project?"
+#: todo/templates/todo/create_edit.html:109
 msgid "Are you sure you want to delete this todo?"
-msgstr "Jesteś pewien że chcesz wyjśc z projektu"
+msgstr ""
 
 #: todo/views.py:36 todo/views.py:135
-#, fuzzy
-#| msgid "Create new project"
 msgid "Create new Todo in"
-msgstr "Otwórz nowy projekt"
+msgstr ""
 
 #: todo/views.py:53 todo/views.py:133
 msgid "Edit Todo in"
 msgstr ""
 
-#: tweap/templates/tweap/base.html:86
+#: tweap/templates/tweap/base.html:88
 msgid "all active chats"
 msgstr ""
 
-#: tweap/templates/tweap/base.html:92
+#: tweap/templates/tweap/base.html:94
 msgid "Your message"
 msgstr ""
 
 #: tweap/templates/tweap/navigation.html:7
 msgid "Projects"
-msgstr "Projekty"
+msgstr ""
 
 #: tweap/templates/tweap/navigation.html:16
 msgid "new Project"
-msgstr "Nowy projekt"
+msgstr ""
 
 #: tweap/templates/tweap/navigation.html:19
 msgid "new Todo"
 msgstr ""
 
 #: tweap/templates/tweap/navigation.html:20
-#, fuzzy
-#| msgid "new Project"
 msgid "new Event"
-msgstr "Nowy projekt"
+msgstr ""
 
 #: tweap/templates/tweap/navigation.html:23
 msgid "Profile"
-msgstr "Profil"
+msgstr ""
 
 #: tweap/templates/tweap/navigation.html:24
 msgid "Logout"
-msgstr "Wylogowanie"
+msgstr ""
 
 #: tweap/templates/tweap/navigation.html:26
 #: user_management/templates/user_management/login.html:5
 #: user_management/templates/user_management/login.html:20
 msgid "Login"
-msgstr "Zalogowanie"
+msgstr ""
 
 #: tweap/templates/tweap/navigation.html:27
 #: user_management/templates/user_management/register.html:23
 msgid "Register"
-msgstr "Rejestruj śię"
+msgstr ""
 
 #: user_management/forms.py:7
 msgid "Change profile picture"
-msgstr "Zmień zdjęcie profilowy"
+msgstr ""
 
 #: user_management/forms.py:8
 msgid "No file selected"
-msgstr "Nie wybrałeś żadnego pliku"
+msgstr ""
 
 #: user_management/templates/user_management/delete_account.html:6
 msgid "Do you really want to delete your tweap account?"
@@ -463,10 +449,8 @@ msgid "Delete account"
 msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:5
-#, fuzzy
-#| msgid "Your profile"
 msgid "Edit your profile"
-msgstr "Twój profil"
+msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:11
 msgid ""
@@ -475,7 +459,7 @@ msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:24
 msgid "Upload image"
-msgstr "Przesłać zdjecie"
+msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:34
 msgid "Remove Picture"
@@ -487,55 +471,55 @@ msgstr ""
 #: user_management/templates/user_management/profile.html:17
 #: user_management/templates/user_management/register.html:13
 msgid "Username"
-msgstr "Imię użytkownika"
+msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:44
 #: user_management/templates/user_management/profile.html:21
 msgid "E-Mail"
-msgstr "Adres mailowy"
+msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:48
 #: user_management/templates/user_management/login.html:17
 #: user_management/templates/user_management/register.html:21
 msgid "Password"
-msgstr "Hasło"
+msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:52
 msgid "Repeat Password"
-msgstr "Powtórz hasło"
+msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:56
 msgid "First name"
-msgstr "Imię"
+msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:60
 msgid "Last name"
-msgstr "Nazwisko"
+msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:64
 #: user_management/templates/user_management/profile.html:33
 msgid "Phone"
-msgstr "Numer telefonu"
+msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:68
 msgid "City"
-msgstr "Miasto"
+msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:72
 msgid "ZIP-Code"
-msgstr "Kod pocztowy"
+msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:76
 msgid "Street"
-msgstr "Ulica"
+msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:80
 msgid "Housenumber"
-msgstr "Numer domu"
+msgstr ""
 
 #: user_management/templates/user_management/editprofile.html:85
 msgid "Save Changes"
-msgstr "Zapisz"
+msgstr ""
 
 #: user_management/templates/user_management/login.html:21
 msgid "I don't remember my password"
@@ -543,17 +527,15 @@ msgstr ""
 
 #: user_management/templates/user_management/logout.html:5
 msgid "Logged out"
-msgstr "Wylogowany"
+msgstr ""
 
 #: user_management/templates/user_management/logout.html:6
 msgid "Back to login."
-msgstr "Wróć do zalogowania."
+msgstr ""
 
 #: user_management/templates/user_management/lost_password.html:5
-#, fuzzy
-#| msgid "Password"
 msgid "Lost password"
-msgstr "Hasło"
+msgstr ""
 
 #: user_management/templates/user_management/lost_password.html:9
 msgid ""
@@ -567,89 +549,88 @@ msgstr ""
 
 #: user_management/templates/user_management/profile.html:7
 msgid "Your profile"
-msgstr "Twój profil"
+msgstr ""
 
 #: user_management/templates/user_management/profile.html:9
 msgid "profile"
-msgstr "Profil"
+msgstr ""
 
 #: user_management/templates/user_management/profile.html:25
 msgid "Last login"
-msgstr "Ostatnie zalogowanie"
+msgstr ""
 
 #: user_management/templates/user_management/profile.html:37
 msgid "Address"
-msgstr "Adres"
+msgstr ""
 
-#: user_management/templates/user_management/profile.html:42
+#: user_management/templates/user_management/profile.html:44
+msgid ""
+"Download all your calendar entries and import them into your calendar app"
+msgstr ""
+
+#: user_management/templates/user_management/profile.html:53
 msgid "Make Changes"
-msgstr "Edytuj"
+msgstr ""
 
 #: user_management/templates/user_management/register.html:5
 msgid "Registration"
-msgstr "Rejestracja"
+msgstr ""
 
 #: user_management/templates/user_management/register.html:17
 msgid "eMail"
-msgstr "Adres mailowy"
+msgstr ""
 
 #: user_management/templates/user_management/reset_password.html:5
-#, fuzzy
-#| msgid "Repeat Password"
 msgid "Set new password"
-msgstr "Powtórz hasło"
+msgstr ""
 
 #: user_management/templates/user_management/reset_password.html:16
-#, fuzzy
-#| msgid "Password"
 msgid "New password"
-msgstr "Hasło"
+msgstr ""
 
 #: user_management/templates/user_management/reset_password.html:20
 msgid "New password confirmation"
 msgstr ""
 
 #: user_management/templates/user_management/reset_password.html:22
-#, fuzzy
-#| msgid "Repeat Password"
 msgid "Set password"
-msgstr "Powtórz hasło"
+msgstr ""
 
 #: user_management/tools.py:39
 msgid "The username isn't available"
-msgstr "Imię użytkownika nie jest dostępny"
+msgstr ""
 
 #: user_management/tools.py:41
 msgid "The username can only contain letters and numbers"
-msgstr "Imię użytkownika nie jest dostępny"
+msgstr ""
 
 #: user_management/tools.py:43 user_management/tools.py:87
 msgid "The email address isn't valid"
-msgstr "Adres mailowy jest błędny"
+msgstr ""
 
 #: user_management/tools.py:45
 msgid "The email address is already in use"
-msgstr "Adres mailowy jest już zajęty"
+msgstr ""
 
 #: user_management/tools.py:49 user_management/tools.py:84
 msgid "The password is super weak"
-msgstr "Hasło jest super kiepski"
+msgstr ""
 
 #: user_management/tools.py:52
 msgid "All fields must be filled out"
-msgstr "Wszystkie pola musza byc wypełniąne"
+msgstr ""
 
 #: user_management/tools.py:55 user_management/tools.py:93
 msgid "An error occurred during form transfer"
-msgstr "Błąd w transmisji się okazał"
+msgstr ""
 
 #: user_management/tools.py:80 user_management/tools.py:202
 msgid "Passwords do not match!"
-msgstr "Oba hasła muszą być identyczne"
+msgstr ""
 
 #: user_management/tools.py:91
 msgid "This email is already in use"
-msgstr "Adres mailowy jest już zajęty"
+msgstr ""
 
 #: user_management/tools.py:160
 msgid ""
@@ -669,26 +650,20 @@ msgid "Set your new tweap password"
 msgstr ""
 
 #: user_management/tools.py:206
-#, fuzzy
-#| msgid "The password is super weak"
 msgid "The password is super weak!"
-msgstr "Hasło jest super kiepski"
+msgstr ""
 
 #: user_management/tools.py:210
-#, fuzzy
-#| msgid "All fields must be filled out"
 msgid "All fields must be filled out!"
-msgstr "Wszystkie pola musza byc wypełniąne"
+msgstr ""
 
 #: user_management/tools.py:212
-#, fuzzy
-#| msgid "An error occurred during form transfer"
 msgid "An error occurred during form transfer."
-msgstr "Błąd w transmisji się okazał"
+msgstr ""
 
 #: user_management/views.py:80
 msgid "Login not successful!"
-msgstr "Błąd w zalogowaniu"
+msgstr ""
 
 #: user_management/views.py:248
 msgid "Checkbox for confirmation must be checked!"
@@ -708,10 +683,8 @@ msgid "We've send you a link to reset your password."
 msgstr ""
 
 #: user_management/views.py:292
-#, fuzzy
-#| msgid "The username must not be an email address"
 msgid "Username must not be empty!"
-msgstr "Imię użytkownika nie może być adres mailowy"
+msgstr ""
 
 #: user_management/views.py:306 user_management/views.py:312
 msgid "This link is not valid."
@@ -720,73 +693,3 @@ msgstr ""
 #: user_management/views.py:323
 msgid "There was an error during login!"
 msgstr ""
-
-#~ msgid "Dashboard"
-#~ msgstr "Widok"
-
-#~ msgid "Don't leave group"
-#~ msgstr "Nie wyjdz z grupy"
-
-#~ msgid "Welcome"
-#~ msgstr "Witaj"
-
-#~ msgid ""
-#~ "Soon(ish) this is where you'll find your most needed information: "
-#~ "Upcoming todo's, calendar events, project invites and the most important "
-#~ "updates from your projects. You'll love it!"
-#~ msgstr ""
-#~ "Za niedługo tu bedą najważniejsze informację: lista zadań do wykonania, "
-#~ "kalendarz, wydarzenia, zaproszenia do rożnych projekt i aktualnosć "
-#~ "projektu."
-
-#~ msgid "Here are your updates:"
-#~ msgstr "Tutaj są twoje ostatnie doniesienia "
-
-#~ msgid "You have "
-#~ msgstr "Ty masz"
-
-#~ msgid " pending project invitations"
-#~ msgstr "zaproszenia"
-
-#~ msgid "Your projects"
-#~ msgstr "Twoje projekty"
-
-#~ msgid "Your invites"
-#~ msgstr "Twoje zaproszenia"
-
-#~ msgid "accept"
-#~ msgstr "akceptuj"
-
-#~ msgid "reject"
-#~ msgstr "odrzuć"
-
-#~ msgid "Once you register and login..."
-#~ msgstr "Po rejestracji i logowanju..."
-
-#~ msgid "...edit your own profile..."
-#~ msgstr "...edytować własny profil..."
-
-#~ msgid "...create projects and invite other people..."
-#~ msgstr "...otworzyć projekty i zaprośić osoby..."
-
-#~ msgid "...view, accept and reject pending project invites..."
-#~ msgstr "...akceptować i odrzucić zaproszenia"
-
-#~ msgid "...and of course check out your projects..."
-#~ msgstr "...i oczywiście sprawdzić własne projekty..."
-
-#~ msgid "edit group"
-#~ msgstr "Edytuj grupę"
-
-#~ msgid "Number"
-#~ msgstr "Numer domu"
-
-#~ msgid ""
-#~ "Welcome Guest! This is Tweap. Here we will introduce you into our project."
-#~ msgstr "Witaj gościu"
-
-#~ msgid "Welcome Guest!"
-#~ msgstr "Witam Gośćiu!"
-
-#~ msgid "change"
-#~ msgstr "zmień"

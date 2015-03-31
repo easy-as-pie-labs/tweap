@@ -27,12 +27,15 @@ class Conversation(models.Model):
 
         return conversation
 
-    def get_messages(self, message=None):
+    def get_messages(self, direction, message=None):
         count = Message.objects.filter(conversation=self).count()
         if count == 0:
             return []
         if message:
-            messages = Message.objects.filter(conversation=self).filter(timestamp__lt=message.timestamp)[:20]
+            if direction == 'newer':
+                messages = Message.objects.filter(conversation=self).filter(timestamp__gt=message.timestamp).order_by('timestamp')
+            elif direction == 'older':
+                messages = Message.objects.filter(conversation=self).filter(timestamp__lt=message.timestamp)[:20]
         else:
             messages = Message.objects.filter(conversation=self)[:20]
 

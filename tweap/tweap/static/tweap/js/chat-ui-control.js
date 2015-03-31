@@ -22,7 +22,7 @@ $(document).ready(function() {
     // for loading old messages by scrolling to top
     $('#chat-content').scroll(function() {
         if ($('#chat-content').scrollTop() == 0) {
-            chatManager.getMessages();
+            chatManager.getMessages('older');
             // TODO: scroll to old position after new messages are prepended
         }
     });
@@ -255,7 +255,7 @@ ChatUi = function() {
     this.activateChat = function(chatId) {
         this.emptyConversation();
         overviewState = false;
-        //chatManager.changeConversation(chatId); //calls emptyConversation and
+        chatManager.changeConversation(chatId);
         this.appendChatMessageInput();
         this.emptyChatButtonBadge(chatId);
 
@@ -293,6 +293,7 @@ ChatUi = function() {
 
         } else {
             element.parent().remove();
+            chatManager.closeConversation(chatId);
         }
     };
 
@@ -314,7 +315,6 @@ ChatUi = function() {
             '<div id="person-chats" class="nav nav-pills"></div>';
         $('#chat-content').append(overViewHtmlString);
 
-        chatManager.unsetConversation();
         chatManager.requestConversations();
     };
 
