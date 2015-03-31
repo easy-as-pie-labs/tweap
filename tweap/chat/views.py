@@ -37,7 +37,7 @@ def api(request):
         elif action == "addMessage":
             conversation = Conversation.objects.get(id=data.get('message').get('conversation'))
             sender = User.objects.get(username=data.get('message').get('sender'))
-            Message.create(conversation, sender, data.get('message').get('text'))
+            Message.create(conversation, sender, data.get('message').get('text'), data.get('message').get('timestamp'))
 
         elif action == "getMessages":
             conversation = Conversation.objects.get(id=data.get('conversation'))

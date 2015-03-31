@@ -57,8 +57,8 @@ class Message(models.Model):
         ordering = ['-timestamp']
 
     @classmethod
-    def create(cls, conversation, sender, text):
-        Message(conversation=conversation, sender=sender, text=text).save()
+    def create(cls, conversation, sender, text, timestamp):
+        Message(conversation=conversation, sender=sender, text=text, timestamp=timestamp).save()
 
     def __str__(self):
         return "Message in Conversation " + str(self.conversation.id) + " from " + self.sender.username + " at " + str(self.timestamp)

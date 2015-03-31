@@ -270,7 +270,6 @@ ChatUi = function() {
      * @param chatId = id for which chat should be closed as Integer
      */
     this.closeChat = function(chatId) {
-        console.log("closed");
         var element = $(document).find("[data-chat-id='" + chatId + "']");
         element.parent().remove();
         chatManager.closeConversation(chatId);

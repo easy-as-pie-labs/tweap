@@ -53,11 +53,8 @@ ChatManager = function() {
         currentConversation = findConversationById(conversationId);
         currentConversation.unreadMessages = 0;
         saveToStorage();
-        if (currentConversation.messages.length === 0) {
-            this.getMessages();
-        } else {
-            showMessages();
-        }
+        if (currentConversation.messages.length === 0) this.getMessages();
+        else showMessages();
     };
 
     this.addConversation = function(conversationId, name, type) {
@@ -68,11 +65,7 @@ ChatManager = function() {
 
     this.closeConversation = function(conversationId) {
         var index = findConversationById(conversationId, true);
-        if (index) {
-            conversations.splice(index, 1);
-        }
-        // TODO: check if here must be reset currentConversation
-        // maybe splice doesn't work correctly
+        if (index >= 0) conversations.splice(index, 1);
         saveToStorage();
     };
 
@@ -89,14 +82,12 @@ ChatManager = function() {
     var findConversationById = function(conversationId, index) {
         for (var i = 0; i < conversations.length; i++) {
             if (conversations[i].id == conversationId) {
-                if (index === true) {
-                    return i;
-                } else {
-                    return conversations[i];
-                }
+                if (index) return i;
+                else return conversations[i];
             }
         }
-        return false;
+        if (index) return -1;
+        else return false;
     };
 
 
@@ -162,7 +153,7 @@ ChatManager = function() {
     });
 
     socket.on('message-response', function(messages) {
-        if (messages.length > 0) {
+        if (messages.length) {
             var conversation = findConversationById(messages[0].conversation);
             if (conversation) {
                 for (var i = 0; i < messages.length; i++) {
@@ -226,12 +217,13 @@ function Conversation(id, users, name, type) {
 
     if (type != GROUP_TYPE) {
         chatUi.addNewPersonChatButton(id, name);
+
     } else {
         chatUi.addNewGroupChatButton(id, name);
     }
 
     this.getOldestMessage = function() {
-        if (this.messages.length > 0) {
+        if (this.messages.length) {
             return this.messages[0];
         } else {
             return {'timestamp': ''};
