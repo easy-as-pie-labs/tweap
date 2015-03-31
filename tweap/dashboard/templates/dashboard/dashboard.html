@@ -82,10 +82,10 @@
                         {% if week_mixed %}
                             {% for entry in week_mixed %}
                                 {% ifequal entry.type 'todo' %}
-                                <a href="{% url 'todo:todo' entry.id %}" class="list-group-item"><i class="fa fa-pencil-square-o"></i> {{ entry.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ entry.project.name }} <span class="small pull-right">{% trans "until" %} {{ entry.due_date }}</span></a>
+                                <a href="{% url 'todo:todo' entry.id %}" class="list-group-item"><i class="fa fa-pencil-square-o"></i> {{ entry.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ entry.project.name }} <span class="small pull-right">{% trans "until" %} {{ entry.timestamp }}</span></a>
                                 {% endifequal %}
                                 {% ifequal entry.type 'event' %}
-                                <a href="{% url 'cal:edit' entry.id %}" class="list-group-item"><i class="fa fa-calendar"></i> {{ entry.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ entry.project.name }} <span class="small pull-right">{{ entry.start }}</span></a>
+                                <a href="{% url 'cal:edit' entry.id %}" class="list-group-item"><i class="fa fa-calendar"></i> {{ entry.title }} <span class="small">&nbsp;{% trans "for" %}&nbsp;</span> {{ entry.project.name }} <span class="small pull-right">{{ entry.timestamp }}</span></a>
                                 {% endifequal %}
                             {% endfor %}
                         {% elif overdue or due_today %}
