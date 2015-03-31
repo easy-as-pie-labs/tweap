@@ -214,6 +214,7 @@ ChatManager = function() {
             localConversation.addUsers(conversation.users);
             localConversation.addName(conversation.name);
         }
+        this.changeConversation(conversation.id);
         saveToStorage();
     });
 
