@@ -77,7 +77,6 @@ def api(request):
                     'users': users
                 }
                 result['conversations'].append(conversation_object)
-                print(result['conversations'])
 
         elif action == "updateAuthToken":
             user = User.objects.get(username=data.get('username'))
