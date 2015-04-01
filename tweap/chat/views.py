@@ -6,6 +6,25 @@ from chat.models import Conversation, Message, AuthToken
 import json
 import traceback
 
+def debug(request):
+    result = {}
+    user = User.objects.get(username='jawu')
+    conversations = Conversation.get_conversations_of_user(user)
+    result['conversations'] = []
+    for conversation in conversations:
+        users = []
+        for user in conversation.members.all():
+            users.append(user.username)
+        conversation_object = {
+            'id': conversation.id,
+            'name': conversation.name,
+            'users': users
+        }
+        result['conversations'].append(conversation_object)
+
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+
 
 @csrf_exempt
 def api(request):
