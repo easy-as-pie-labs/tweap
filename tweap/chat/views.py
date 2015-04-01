@@ -69,20 +69,21 @@ def api(request):
                 result['status'] = "ERROR - there must be at least 2 users in a conversation"
 
         elif action == "getConversationsOfUser":
+            debug_file.write('entering getConversationsOfUser')
             user = User.objects.get(username=data.get('username'))
             conversations = Conversation.get_conversations_of_user(user)
             result['conversations'] = []
             for conversation in conversations:
                 users = []
                 for user in list(conversation.members.all()):
-                    users.append(user.username)
+                    users.append(user.get['username'])
                 conversation_object = {
                     'id': conversation.id,
                     'name': conversation.name,
                     'users': users
                 }
                 result['conversations'].append(conversation_object)
-                debug_file.write(conversation_object)
+                debug_file.write(str(conversation_object))
 
         elif action == "updateAuthToken":
             user = User.objects.get(username=data.get('username'))
@@ -110,12 +111,13 @@ def api(request):
 
         debug_file.write(result['status'])
 
+    debug_file.write('now enters return statement')
+
     try:
-        result_json = json.dumps(result)
+        return HttpResponse(json.dumps(result), content_type="application/json")
     except Exception as e:
         debug_file.write(str(result))
         debug_file.write("ERROR - " + e.__str__())
         debug_file.write(type(e))
         debug_file.write(traceback.print_tb(e.__traceback__))
 
-    return HttpResponse(result_json, content_type="application/json")
