@@ -387,7 +387,7 @@ ChatUi = function() {
         var now = moment();
         var timestamp = moment(timestamp);
         var formatedTimestamp = timestamp.format("HH:mm")
-        if (!(now.date() == timestamp.date()) && (now.month() == timestamp.month()) && (now.year() == timestamp.year())) {
+        if  (!((now.diff(timestamp, 'days') == 0) && (now.diff(timestamp, 'months') == 0) && (now.diff(timestamp, 'years') == 0))) {
             formatedTimestamp = timestamp.format("DD.MM.YYYY HH:mm");
         }
         return formatedTimestamp;

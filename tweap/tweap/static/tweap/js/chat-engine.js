@@ -69,9 +69,10 @@ ChatManager = function() {
         if (currentConversation) {
             currentConversation.unreadMessages = 0;
             saveToStorage();
-            if (!currentConversation.messages.length) this.getMessages('older');
-            else this.getMessages('newer');
+            this.getMessages('older');
+            this.getMessages('newer');
             showMessages();
+            chatUi.updateScroll();
         }
     };
 
