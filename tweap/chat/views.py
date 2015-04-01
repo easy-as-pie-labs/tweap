@@ -111,9 +111,11 @@ def api(request):
         debug_file.write(result['status'])
 
     try:
-        return HttpResponse(json.dumps(result), content_type="application/json")
+        result_json = json.dumps(result)
     except Exception as e:
         debug_file.write(str(result))
         debug_file.write("ERROR - " + e.__str__())
         debug_file.write(type(e))
         debug_file.write(traceback.print_tb(e.__traceback__))
+
+    return HttpResponse(result_json, content_type="application/json")
