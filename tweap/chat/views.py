@@ -77,7 +77,7 @@ def api(request):
                 users = []
                 debug_file.write('now adding users\n')
                 for user in conversation.members.all():
-                    users.append(user.get['username'])
+                    users.append(user.username)
                 debug_file.writable('creating conv obj\n')
                 conversation_object = {
                     'id': conversation.id,
@@ -113,7 +113,7 @@ def api(request):
 
         debug_file.write(result['status'])
 
-    debug_file.write('now enters return statement')
+    debug_file.write('now enters return statement\n')
 
     try:
         return HttpResponse(json.dumps(result), content_type="application/json")
