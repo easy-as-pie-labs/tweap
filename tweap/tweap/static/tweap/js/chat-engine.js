@@ -158,8 +158,9 @@ ChatManager = function() {
             getConversationInfo(message.conversation);
         }
         conversation.addNewMessage(message);
-        if (message.sender != username) {
-            chatUi.showChatButtonBadge(conversation.id, ++conversation.unreadMessages);
+        conversation.unreadMessages++;
+        if ((message.sender != username) && (conversation.type != "UNKNOWN")) {
+            chatUi.showChatButtonBadge(conversation.id, conversation.unreadMessages);
         }
         if (conversation === currentConversation) {
             if (message.sender === username) {
@@ -184,7 +185,6 @@ ChatManager = function() {
                         } else {
                             chatUi.addPartnerMessage(messages[i].text, messages[i].sender, messages[i].timestamp);
                             chatUi.showChatButtonBadge(conversation.id, ++conversation.unreadMessages);
-                            console.log("batch-button for " + conversation.id + conversation.name + " count: " + conversation.unreadMessages);
                         }
                     }
                 //older messages
@@ -215,7 +215,6 @@ ChatManager = function() {
                 conversations[i].name = ownIndex === 0 ? conversations[i].users[1] : conversations[i].users[0];
                 personConversations.push(conversations[i]);
             }
-            console.log(personConversations);
         }
         chatUi.addConversationsToOverview(projectConversations, personConversations);
     });
@@ -267,9 +266,6 @@ function Conversation(id, users, name, type) {
     this.unreadMessages = 0;
     this.allMessages = false;
 
-    if (type != "UNKNOWN") {
-        this.addToGui();
-    }
 
     this.addToGui = function() {
         if (this.type != GROUP_TYPE) {
@@ -277,6 +273,7 @@ function Conversation(id, users, name, type) {
         } else {
             chatUi.addNewGroupChatButton(this.id, this.name);
         }
+        if (this.unreadMessages > 0) chatUi.showChatButtonBadge(this.id, this.unreadMessages);
     };
 
     this.getOldestMessage = function() {
@@ -314,4 +311,8 @@ function Conversation(id, users, name, type) {
     this.setType = function(type) {
         this.type = type;
     };
+
+    if (type != "UNKNOWN") {
+        this.addToGui();
+    }
 }
