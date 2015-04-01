@@ -4,5 +4,4 @@ from chat import views
 urlpatterns = patterns(
     '',
     url(r'^api/$', views.api, name='api'),
-    url(r'^debug/$', views.debug, name='debug'),
 )

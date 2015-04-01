@@ -22,6 +22,13 @@ ChatManager = function() {
         socket.emit('re-auth', JSON.parse(localStorage.getItem('chat-credentials')));
     };
 
+    var getConversationInfo = function(conversationId) {
+        var conversationInfoRequest = {
+            'conversation': conversationId
+        };
+        socket.emit('get-conversation-info', conversationInfoRequest);
+    };
+
     this.sendMessage = function(text) {
         var message = {
             'conversation': currentConversation.id,
@@ -146,8 +153,9 @@ ChatManager = function() {
     socket.on('message', function(message) {
         var conversation = findConversationById(message.conversation);
         if (!conversation) {
-            conversation = new Conversation(message.conversation, [message.sender], message.sender);
+            conversation = new Conversation(message.conversation, [], "", "UNKNOWN");
             conversations.push(conversation);
+            getConversationInfo(message.conversation);
         }
         conversation.addNewMessage(message);
         if (message.sender != username) {
@@ -225,6 +233,20 @@ ChatManager = function() {
         saveToStorage();
     });
 
+    socket.on('conversation-info', function(conversation) {
+        var localConversation = findConversationById(conversation.id);
+        localConversation.setUsers(conversation.users);
+        if (conversation.name) {
+            localConversation.setType(GROUP_TYPE);
+        } else {
+            var ownIndex = conversation.users.indexOf(username);
+            conversation.name = ownIndex === 0 ? conversation.users[1] : conversation.users[0];
+            localConversation.setType(SINGLE_TYPE);
+        }
+        localConversation.setName(conversation.name);
+        localConversation.addToGui();
+    });
+
 
     /* initial stuff */
     loadFromStorage();
@@ -245,12 +267,17 @@ function Conversation(id, users, name, type) {
     this.unreadMessages = 0;
     this.allMessages = false;
 
-    if (type != GROUP_TYPE) {
-        chatUi.addNewPersonChatButton(id, name);
-
-    } else {
-        chatUi.addNewGroupChatButton(id, name);
+    if (type != "UNKNOWN") {
+        this.addToGui();
     }
+
+    this.addToGui = function() {
+        if (this.type != GROUP_TYPE) {
+            chatUi.addNewPersonChatButton(this.id, this.name);
+        } else {
+            chatUi.addNewGroupChatButton(this.id, this.name);
+        }
+    };
 
     this.getOldestMessage = function() {
         if (this.messages.length) {
@@ -276,11 +303,15 @@ function Conversation(id, users, name, type) {
         this.messages.unshift(oldMessage);
     };
 
-    this.addUsers = function(newUsers) {
+    this.setUsers = function(users) {
         this.users = newUsers;
     };
 
-    this.addName = function(name) {
+    this.setName = function(name) {
         this.name = name;
+    };
+
+    this.setType = function(type) {
+        this.type = type;
     };
 }

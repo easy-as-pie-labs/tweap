@@ -43,6 +43,10 @@ define(function() {
             that.conversationGetter();
         });
 
+        this.socket.on('get-conversation-info', function(data) {
+            that.conversationInfoHandler(data);
+        });
+
         this.socket.on('conversation-request', function(data) {
             that.conversationRequestHandler(data);
         });
@@ -151,6 +155,22 @@ define(function() {
     Communicator.prototype.conversationGetterCB = function(data) {
         if (data.status === "OK") {
             this.socket.emit('conversation-list', data.conversations);
+        }
+    };
+
+    Communicator.prototype.conversationInfoHandler = function(request) {
+        if (this.client) {
+            var data = {
+                'action': 'getConversationInfo',
+                'conversation': request.conversation
+            };
+            this.makeRequest(data, this.conversationInfoHandlerCB, this);
+        }
+    };
+
+    Communicator.prototype.conversationInfoHandlerCB = function(data) {
+        if (data.status === "OK") {
+            this.socket.emit('conversation-info', data.conversation);
         }
     }
 

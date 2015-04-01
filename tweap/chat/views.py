@@ -7,26 +7,6 @@ import json
 import traceback
 
 
-def debug(request):
-    result = {}
-    user = User.objects.get(username='jawu')
-    conversations = Conversation.get_conversations_of_user(user)
-    result['conversations'] = []
-    for conversation in conversations:
-        users = []
-        for user in conversation.members.all():
-            users.append(user.username)
-        conversation_object = {
-            'id': conversation.id,
-            'name': conversation.name,
-            'users': users
-        }
-        result['conversations'].append(conversation_object)
-
-    return HttpResponse(json.dumps(result), content_type="application/json")
-
-
-
 @csrf_exempt
 def api(request):
     if not request.method == 'POST' or request.META['REMOTE_ADDR'] != "127.0.0.1":
@@ -34,13 +14,9 @@ def api(request):
 
     try:
 
-        debug_file = open('/srv/teamcity/django-debug/chat-api.log', 'a')
-
         result = {'status': "OK"}
         data = json.loads(request.POST.get('request', ''))
         action = data.get('action', '')
-
-        debug_file.write(action + '\n\n')
 
         if action == "checkCredentials":
             user = authenticate(username=data.get('username'), password=data.get('password'))
@@ -72,6 +48,17 @@ def api(request):
                 message = None
             result['messages'] = conversation.get_messages(data.get('direction'), message)
 
+        elif action == "getConversationInfo":
+            conversation = Conversation.objects.get(id=data.get('conversation'))
+            users = []
+            for user in conversation.members.all():
+                users.append(user.username)
+            result['conversation'] = {
+                'id': conversation.id,
+                'name': conversation.name,
+                'users': users
+            }
+
         elif action == "getOrAddConversation":
             users = []
             for user in data.get('userlist'):
@@ -89,24 +76,19 @@ def api(request):
                 result['status'] = "ERROR - there must be at least 2 users in a conversation"
 
         elif action == "getConversationsOfUser":
-            debug_file.write('entering getConversationsOfUser\n')
             user = User.objects.get(username=data.get('username'))
             conversations = Conversation.get_conversations_of_user(user)
             result['conversations'] = []
             for conversation in conversations:
                 users = []
-                debug_file.write('now adding users\n')
                 for user in conversation.members.all():
                     users.append(user.username)
-                debug_file.write('creating conv obj\n')
                 conversation_object = {
                     'id': conversation.id,
                     'name': conversation.name,
                     'users': users
                 }
-                debug_file.write(str(conversation_object))
                 result['conversations'].append(conversation_object)
-            debug_file.write('loop ending')
 
         elif action == "updateAuthToken":
             user = User.objects.get(username=data.get('username'))
@@ -128,19 +110,4 @@ def api(request):
         print(type(e))
         print(traceback.print_tb(e.__traceback__))
 
-        debug_file.write("ERROR - " + e.__str__())
-        debug_file.write(type(e))
-        debug_file.write(traceback.print_tb(e.__traceback__))
-
-        debug_file.write(result['status'])
-
-    debug_file.write('now enters return statement\n')
-
-    try:
-        return HttpResponse(json.dumps(result), content_type="application/json")
-    except Exception as e:
-        debug_file.write(str(result))
-        debug_file.write("ERROR - " + e.__str__())
-        debug_file.write(type(e))
-        debug_file.write(traceback.print_tb(e.__traceback__))
-
+    return HttpResponse(json.dumps(result), content_type="application/json")
