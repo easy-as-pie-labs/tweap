@@ -20,7 +20,7 @@ def api(request):
         data = json.loads(request.POST.get('request', ''))
         action = data.get('action', '')
 
-        debug_file.write(action + '\n')
+        debug_file.write(action + '\n\n')
 
         if action == "checkCredentials":
             user = authenticate(username=data.get('username'), password=data.get('password'))
@@ -69,14 +69,16 @@ def api(request):
                 result['status'] = "ERROR - there must be at least 2 users in a conversation"
 
         elif action == "getConversationsOfUser":
-            debug_file.write('entering getConversationsOfUser')
+            debug_file.write('entering getConversationsOfUser\n')
             user = User.objects.get(username=data.get('username'))
             conversations = Conversation.get_conversations_of_user(user)
             result['conversations'] = []
             for conversation in conversations:
                 users = []
-                for user in list(conversation.members.all()):
+                debug_file.write('now adding users\n')
+                for user in conversation.members.all():
                     users.append(user.get['username'])
+                debug_file.writable('creating conv obj\n')
                 conversation_object = {
                     'id': conversation.id,
                     'name': conversation.name,
