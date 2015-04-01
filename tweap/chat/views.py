@@ -6,6 +6,7 @@ from chat.models import Conversation, Message, AuthToken
 import json
 import traceback
 
+
 def debug(request):
     result = {}
     user = User.objects.get(username='jawu')
@@ -97,14 +98,15 @@ def api(request):
                 debug_file.write('now adding users\n')
                 for user in conversation.members.all():
                     users.append(user.username)
-                debug_file.writable('creating conv obj\n')
+                debug_file.write('creating conv obj\n')
                 conversation_object = {
                     'id': conversation.id,
                     'name': conversation.name,
                     'users': users
                 }
-                result['conversations'].append(conversation_object)
                 debug_file.write(str(conversation_object))
+                result['conversations'].append(conversation_object)
+            debug_file.write('loop ending')
 
         elif action == "updateAuthToken":
             user = User.objects.get(username=data.get('username'))
