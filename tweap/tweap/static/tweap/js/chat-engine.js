@@ -262,10 +262,10 @@ function Conversation(id, users, name, type) {
     this.id = id;
     this.users = users;
     this.name = name;
+    this.type = type;
     this.messages = [];
     this.unreadMessages = 0;
     this.allMessages = false;
-
 
     this.addToGui = function() {
         if (this.type != GROUP_TYPE) {
@@ -301,7 +301,7 @@ function Conversation(id, users, name, type) {
     };
 
     this.setUsers = function(users) {
-        this.users = newUsers;
+        this.users = users;
     };
 
     this.setName = function(name) {
