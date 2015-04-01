@@ -13,9 +13,14 @@ def api(request):
         return HttpResponse(status=403)
 
     try:
+
+        debug_file = open('/srv/teamcity/django-debug/chat-api.log', 'a')
+
         result = {'status': "OK"}
         data = json.loads(request.POST.get('request', ''))
         action = data.get('action', '')
+
+        debug_file.write(action + '\n')
 
         if action == "checkCredentials":
             user = authenticate(username=data.get('username'), password=data.get('password'))
@@ -77,6 +82,7 @@ def api(request):
                     'users': users
                 }
                 result['conversations'].append(conversation_object)
+                debug_file.write(conversation_object)
 
         elif action == "updateAuthToken":
             user = User.objects.get(username=data.get('username'))
@@ -97,5 +103,11 @@ def api(request):
         print("ERROR - " + e.__str__())
         print(type(e))
         print(traceback.print_tb(e.__traceback__))
+        
+        debug_file.write("ERROR - " + e.__str__())
+        debug_file.write(type(e))
+        debug_file.write(traceback.print_tb(e.__traceback__))
+
+        debug_file.write(result['status'])
 
     return HttpResponse(json.dumps(result), content_type="application/json")
