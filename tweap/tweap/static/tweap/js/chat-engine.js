@@ -160,7 +160,7 @@ ChatManager = function() {
         }
         conversation.addNewMessage(message);
         conversation.unreadMessages++;
-        if ((message.sender != username) && (conversation.type != "UNKNOWN")) {
+        if ((message.sender != username) && (conversation.type != "UNKNOWN") && (conversation != currentConversation)) {
             chatUi.showChatButtonBadge(conversation.id, conversation.unreadMessages);
         }
         if (conversation === currentConversation) {
@@ -171,6 +171,7 @@ ChatManager = function() {
             }
         }
         saveToStorage();
+        chatUi.showBadge();
     });
 
     socket.on('message-response', function(messages) {

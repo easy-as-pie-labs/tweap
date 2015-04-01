@@ -66,8 +66,14 @@ ChatUi = function() {
      * Called on every toggleevent (toggle down) - updates the Badgevalue
      * @param val = number to be shown inside the badge as String
      */
-    this.updateBadge = function(val) {
-        $('.badge').html(val);
+    this.showBadge = function() {
+        if (localStorage.getItem("chatToggleStatus")) {
+            if (!$('.badge').length) {
+                var panelHeading = $("#chat-panel").children().first();
+                panelHeading.append('<span class="badge">0</span>');
+            }
+            $('.badge').html('<i class="fa fa-asterisk" style="padding:0;margin:0"></i>');
+        }
     };
 
     /**
@@ -308,7 +314,7 @@ ChatUi = function() {
         removeButtonClasses();
 
         var overViewHtmlString = '<div id="chat-list">' +
-            '<span class="fa fa-comment-o fa-2x"></span>' +
+            '<span id="chat-icon" class="fa fa-comments-o fa-2x fa-spin"></span>' +
             '<span style="font-size:20px;">Chatlist</span>' +
             '</div>' +
             '<div id="group-chats" class="nav nav-pills"></div>' +
@@ -324,6 +330,8 @@ ChatUi = function() {
      * @param users = Object-Array which contains single userchats
      */
     this.addConversationsToOverview = function(projects, users) {
+        $('#chat-icon').removeClass('fa-spin');
+
         for(var i = 0; projects.length>i; i++) {
             this.appendPossibleChatButton(projects[i].name, "group", projects[i].id);
         }
@@ -379,7 +387,6 @@ ChatUi = function() {
      * Routine when Chatwindow is toggled down
      */
     this.chatPanelToggleDownCycle = function() {
-        this.addBadge();
         localStorage.setItem("chatToggleStatus", false);
     };
 
