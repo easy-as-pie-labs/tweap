@@ -22,6 +22,10 @@ $(document).ready(function () {
 
     todoQuickAdder = new TodoQuickAdd();
 
+    $('.start-user-chat').click(function() {
+        chatManager.requestConversation($(this).attr('data-chat-user'));
+    });
+
 });
 
 var TodoQuickAdd = function(){
@@ -296,7 +300,7 @@ var generateTodoDomElement = function (id, title, users, tags, assignment, due_d
                 element += '<span data-todo-id="'+id+'" class="assignee-marker pull-right"><i title="no one is currently working on this todo" class="fa fa-fw fa-exclamation fa-lg"></i></span>'
             }
             else if (assignment == "you") {
-                element += '<span data-todo-id="'+id+'" class="assignee-marker pull-right"><i title="no one is currently working on this todo" class="fa fa-fw fa-eye fa-lg"></i></span>'
+                element += '<span data-todo-id="'+id+'" class="assignee-marker pull-right"><i title="this todo is assigned to you" class="fa fa-fw fa-eye fa-lg"></i></span>'
             }
 
             element +=

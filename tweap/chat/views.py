@@ -13,6 +13,7 @@ def api(request):
         return HttpResponse(status=403)
 
     try:
+
         result = {'status': "OK"}
         data = json.loads(request.POST.get('request', ''))
         action = data.get('action', '')
@@ -47,6 +48,17 @@ def api(request):
                 message = None
             result['messages'] = conversation.get_messages(data.get('direction'), message)
 
+        elif action == "getConversationInfo":
+            conversation = Conversation.objects.get(id=data.get('conversation'))
+            users = []
+            for user in conversation.members.all():
+                users.append(user.username)
+            result['conversation'] = {
+                'id': conversation.id,
+                'name': conversation.name,
+                'users': users
+            }
+
         elif action == "getOrAddConversation":
             users = []
             for user in data.get('userlist'):
@@ -56,6 +68,7 @@ def api(request):
                 conversation = Conversation.find_by_users_or_create(users)
                 result['conversation'] = {}
                 result['conversation']['id'] = conversation.id
+                result['name'] = conversation.name
                 result['conversation']['users'] = []
                 for user in users:
                     result['conversation']['users'].append(user.username)
@@ -67,11 +80,13 @@ def api(request):
             conversations = Conversation.get_conversations_of_user(user)
             result['conversations'] = []
             for conversation in conversations:
-                user_string = "demo" # conversation.values('members')
+                users = []
+                for user in conversation.members.all():
+                    users.append(user.username)
                 conversation_object = {
                     'id': conversation.id,
                     'name': conversation.name,
-                    'users': user_string
+                    'users': users
                 }
                 result['conversations'].append(conversation_object)
 

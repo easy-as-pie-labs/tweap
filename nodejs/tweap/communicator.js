@@ -9,6 +9,7 @@ define(function() {
     var najax = require('../libs/najax.js');
 
     var tweapUrl = "http://127.0.0.1/chat/api/";
+    //var tweapUrl = "http://127.0.0.1:8000/chat/api/";
 
     function Communicator(socket, clientManager, io) {
         this.socket = socket;
@@ -40,6 +41,10 @@ define(function() {
 
         this.socket.on('get-conversations', function() {
             that.conversationGetter();
+        });
+
+        this.socket.on('get-conversation-info', function(data) {
+            that.conversationInfoHandler(data);
         });
 
         this.socket.on('conversation-request', function(data) {
@@ -150,6 +155,22 @@ define(function() {
     Communicator.prototype.conversationGetterCB = function(data) {
         if (data.status === "OK") {
             this.socket.emit('conversation-list', data.conversations);
+        }
+    };
+
+    Communicator.prototype.conversationInfoHandler = function(request) {
+        if (this.client) {
+            var data = {
+                'action': 'getConversationInfo',
+                'conversation': request.conversation
+            };
+            this.makeRequest(data, this.conversationInfoHandlerCB, this);
+        }
+    };
+
+    Communicator.prototype.conversationInfoHandlerCB = function(data) {
+        if (data.status === "OK") {
+            this.socket.emit('conversation-info', data.conversation);
         }
     }
 

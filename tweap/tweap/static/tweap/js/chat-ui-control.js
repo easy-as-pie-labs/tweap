@@ -66,8 +66,11 @@ ChatUi = function() {
      * Called on every toggleevent (toggle down) - updates the Badgevalue
      * @param val = number to be shown inside the badge as String
      */
-    this.updateBadge = function(val) {
-        $('.badge').html(val);
+    this.showBadge = function() {
+        if (!$('.badge').length) {
+            var panelHeading = $("#chat-panel").children().first();
+            panelHeading.append('<span class="badge"><i class="fa fa-asterisk" style="padding:0;margin:0"></i></span>');
+        }
     };
 
     /**
@@ -314,7 +317,7 @@ ChatUi = function() {
         removeButtonClasses();
 
         var overViewHtmlString = '<div id="chat-list">' +
-            '<span class="fa fa-comment-o fa-2x"></span>' +
+            '<span id="chat-icon" class="fa fa-comments-o fa-2x fa-spin"></span>' +
             '<span style="font-size:20px;">Chatlist</span>' +
             '</div>' +
             '<div id="group-chats" class="nav nav-pills"></div>' +
@@ -330,6 +333,8 @@ ChatUi = function() {
      * @param users = Object-Array which contains single userchats
      */
     this.addConversationsToOverview = function(projects, users) {
+        $('#chat-icon').removeClass('fa-spin');
+
         for(var i = 0; projects.length>i; i++) {
             this.appendPossibleChatButton(projects[i].name, "group", projects[i].id);
         }
@@ -337,6 +342,7 @@ ChatUi = function() {
         for(var i = 0; users.length>i; i++) {
             this.appendPossibleChatButton(users[i].name, "user", users[i].id);
         }
+
     };
 
     /**
@@ -384,7 +390,6 @@ ChatUi = function() {
      * Routine when Chatwindow is toggled down
      */
     this.chatPanelToggleDownCycle = function() {
-        this.addBadge();
         localStorage.setItem("chatToggleStatus", false);
     };
 
@@ -392,7 +397,7 @@ ChatUi = function() {
         var now = moment();
         var timestamp = moment(timestamp);
         var formatedTimestamp = timestamp.format("HH:mm")
-        if (!(now.date() == timestamp.date()) && (now.month() == timestamp.month()) && (now.year() == timestamp.year())) {
+        if  (!((now.diff(timestamp, 'days') == 0) && (now.diff(timestamp, 'months') == 0) && (now.diff(timestamp, 'years') == 0))) {
             formatedTimestamp = timestamp.format("DD.MM.YYYY HH:mm");
         }
         return formatedTimestamp;

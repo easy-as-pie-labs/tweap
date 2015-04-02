@@ -9,7 +9,7 @@ from project_management.models import Project
 from project_management.tools import get_tags
 from notification_center.models import NotificationEvent, Notification
 from cal.models import Event
-from cal.tools import validate_for_event
+from cal.tools import validate_for_event, basicauth
 import json
 from datetime import datetime
 import pytz
@@ -201,54 +201,46 @@ class UpdateFromCalendarView(View):
 
         return HttpResponse(json.dumps(result), content_type="application/json")
 
+@basicauth()
+def userfeed(request):
+    cal = iCal()
 
-class FeedUserView(View):
-    def get(self, request):
-        cal = iCal()
+    # get all events for user
+    events = Event.get_all_events_for_userprojects(request.user)
 
-        # get all events for user
-        events = Event.get_all_events_for_userprojects(request.user)
+    # add all events to calendar
+    for event in events:
+        url = request.build_absolute_uri(reverse('cal:edit', args=(event.id, )))
+        cal.add_component(make_i_event(event, url))
 
-        # add all events to calendar
-        for event in events:
-            #result['url'] = request.build_absolute_uri(reverse('project_management:project', args=(invitation.project.id,)))
-            url = request.build_absolute_uri(reverse('cal:edit', args=(event.id, )))
-            cal.add_component(make_i_event(event, url))
+    stream = cal.to_ical()#.replace('\r\n', '\n').strip()
 
-        stream = cal.to_ical()#.replace('\r\n', '\n').strip()
+    response = HttpResponse(stream, content_type='text/calendar; charset=utf-8')
+    response['Filename'] = request.user.username + '.ics'
+    response['Content-Disposition'] = 'attachment; filename=' + request.user.username + '.ics'
 
-        response = HttpResponse(stream, content_type='text/calendar; charset=utf-8')
-        response['Filename'] = request.user.username + '.ics'
-        response['Content-Disposition'] = 'attachment; filename=' + request.user.username + '.ics'
-
-        return response
+    return response
 
 
-class FeedProjectView(View):
-    def get(self, request, project_id):
-        cal = iCal()
+@basicauth()
+def projectfeed(request, project_id):
+    cal = iCal()
 
-        # get all events for project
-        try:
-            project = Project.objects.get(id=project_id, members=request.user)
-        except:
-            return HttpResponseRedirect(reverse('dashboard:home'))
+    project = get_object_or_404(Project, id=project_id)
+    events = Event.get_all_project_events_for_user(project)
 
-        events = Event.get_all_project_events_for_user(project)
+    # add all events to calendar
+    for event in events:
+        url = request.build_absolute_uri(reverse('cal:edit', args=(event.id, )))
+        cal.add_component(make_i_event(event, url))
 
-        # add all events to calendar
-        for event in events:
-            #result['url'] = request.build_absolute_uri(reverse('project_management:project', args=(invitation.project.id,)))
-            url = request.build_absolute_uri(reverse('cal:edit', args=(event.id, )))
-            cal.add_component(make_i_event(event, url))
+    stream = cal.to_ical()#.replace('\r\n', '\n').strip()
 
-        stream = cal.to_ical()#.replace('\r\n', '\n').strip()
+    response = HttpResponse(stream, content_type='text/calendar; charset=utf-8')
+    response['Filename'] = project.name + '.ics'
+    response['Content-Disposition'] = 'attachment; filename=' + project.name + '.ics'
 
-        response = HttpResponse(stream, content_type='text/calendar; charset=utf-8')
-        response['Filename'] = project.name + '.ics'
-        response['Content-Disposition'] = 'attachment; filename=' + project.name + '.ics'
-
-        return response
+    return response
 
 
 def make_i_event(event, url):

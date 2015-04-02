@@ -13,7 +13,7 @@ class Conversation(models.Model):
 
     @classmethod
     def find_by_users_or_create(cls, users):
-        conversation = Conversation.objects.filter(members=users[0]).annotate(count=Count('members'))
+        conversation = Conversation.objects.filter(name__isnull=True).filter(members=users[0]).annotate(count=Count('members'))
         for user in users[1:]:
             conversation = conversation.filter(members=user)
         conversation.filter(count=len(users))
@@ -22,7 +22,8 @@ class Conversation(models.Model):
         else:
             conversation = Conversation()
             conversation.save()
-            conversation.members.add(*users)
+            for user in users:
+                conversation.members.add(user)
             conversation.save()
 
         return conversation
