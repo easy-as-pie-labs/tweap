@@ -67,12 +67,9 @@ ChatUi = function() {
      * @param val = number to be shown inside the badge as String
      */
     this.showBadge = function() {
-        if (!localStorage.getItem("chatToggleStatus")) {
-            if (!$('.badge').length) {
-                var panelHeading = $("#chat-panel").children().first();
-                panelHeading.append('<span class="badge">0</span>');
-            }
-            $('.badge').html('<i class="fa fa-asterisk" style="padding:0;margin:0"></i>');
+        if (!$('.badge').length) {
+            var panelHeading = $("#chat-panel").children().first();
+            panelHeading.append('<span class="badge"><i class="fa fa-asterisk" style="padding:0;margin:0"></i></span>');
         }
     };
 
