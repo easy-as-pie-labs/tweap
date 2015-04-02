@@ -201,7 +201,7 @@ class UpdateFromCalendarView(View):
 
         return HttpResponse(json.dumps(result), content_type="application/json")
 
-@basicauth()
+
 def userfeed(request):
     cal = iCal()
 
@@ -222,7 +222,6 @@ def userfeed(request):
     return response
 
 
-@basicauth()
 def projectfeed(request, project_id):
     cal = iCal()
 
