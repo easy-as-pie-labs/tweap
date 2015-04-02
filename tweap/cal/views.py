@@ -202,7 +202,6 @@ class UpdateFromCalendarView(View):
         return HttpResponse(json.dumps(result), content_type="application/json")
 
 
-@basicauth()
 def userfeed(request):
     cal = iCal()
 
@@ -222,11 +221,11 @@ def userfeed(request):
 
     return response
 
-@basicauth()
+
 def projectfeed(request, project_id):
     cal = iCal()
 
-    project = get_object_or_404(Project, id=project_id, members=request.user)
+    project = get_object_or_404(Project, id=project_id)
     events = Event.get_all_project_events_for_user(project)
 
     # add all events to calendar
