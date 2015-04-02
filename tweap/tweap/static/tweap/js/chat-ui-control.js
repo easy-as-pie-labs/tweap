@@ -356,9 +356,6 @@ ChatUi = function() {
             element.click(function(){
                 chatManager.addConversation(chatId, chatname, GROUP_TYPE);
                 that.activateChat(chatId);
-                setTimeout(function() {
-                    this.updateScroll();
-                }.bind(this), 100);
             });
         } else {
             var buttonHtmlString = '<div class="chat-overview-element" id="person-chat-button-'+chatId+'">' +
@@ -370,9 +367,6 @@ ChatUi = function() {
             element.click(function(){
                 chatManager.addConversation(chatId, chatname, SINGLE_TYPE);
                 that.activateChat(chatId);
-                setTimeout(function() {
-                    this.updateScroll();
-                }.bind(this), 100);
             });
         }
     };
