@@ -72,7 +72,6 @@ ChatManager = function() {
             this.getMessages('older');
             this.getMessages('newer');
             showMessages();
-            chatUi.updateScroll();
         }
     };
 
