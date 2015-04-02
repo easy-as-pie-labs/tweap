@@ -92,6 +92,9 @@ ChatUi = function() {
                 $('#chat-content').prepend(msgString);
             }
         }
+
+        this.updateScroll();
+
     };
 
     /**
@@ -114,6 +117,9 @@ ChatUi = function() {
                 $('#chat-content').prepend(msgString);
             }
         }
+
+        this.updateScroll();
+
     };
 
     /**
