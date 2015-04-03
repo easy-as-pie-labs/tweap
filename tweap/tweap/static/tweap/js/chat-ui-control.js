@@ -105,13 +105,13 @@ ChatUi = function() {
      */
     this.addOwnMessage = function(msg, timestamp, top) {
         if (timestamp == "now"){
-            timestamp = "You just now";
+            timestamp = "You - message is being sent...";
         }
         else {
             timestamp = "You at " + formatTime(timestamp);
 
             // empty the buffer where messages are kept until they are received...
-            $('#buffer').empty();
+            $('#buffer').remove();
         }
 
         if(!overviewState) {
@@ -123,7 +123,13 @@ ChatUi = function() {
                 '</div>';
 
             if(timestamp == "You just now") {
-                $('#buffer').append(msgString);
+                var buffer = $('#buffer');
+                if( buffer.length == 0 ) {
+                    var bufferDiv = '<div id="buffer"></div>';
+                    $('#chat-content').append(bufferDiv);
+                    buffer = $('#buffer');
+                }
+                buffer.append(msgString);
                 this.scrollChatToBottom();
             }
             else if (top == undefined) {
