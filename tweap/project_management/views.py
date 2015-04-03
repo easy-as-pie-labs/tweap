@@ -12,6 +12,7 @@ import pytz
 import json
 from chat.models import Conversation
 
+
 class CreateEdit(View):
     """
     View class for creating or editing a project
@@ -111,6 +112,7 @@ class ProjectView(View):
 
         context['events'] = Event.get_all_for_project(project)
         context['members'] = project.members.order_by('username')
+        context['user'] = request.user
 
         future = []
         past = []

@@ -222,6 +222,7 @@ ChatManager = function() {
 
     socket.on('conversation-response', function(conversation) {
         var localConversation = findConversationById(conversation.id);
+        console.log(localConversation);
         if (!localConversation) {
             if (!conversation.name) conversation.name = conversation.users[0];
             conversations.push(new Conversation(conversation.id, conversation.users, conversation.name, SINGLE_TYPE));

@@ -151,6 +151,48 @@ p#project_icon{
     white-space: nowrap;
 }
 
+.first-inner-double-tag {
+    color: #fff;
+    background-color: #337ab7;
+    font-size: 14px;
+    border-radius: 0.25em;
+    white-space: nowrap;
+    margin-left: 0px; margin-right: 0px;
+}
+
+.second-inner-double-tag {
+    color: #fff;
+    background-color: #337ab7;
+    font-size: 14px;
+    border-radius: 0.25em;
+    white-space: nowrap;
+    margin-left: 0px; margin-right: 0px;
+}
+
+.first-inner-double-tag:hover {
+    color: #fff;
+    background-color: #337ab7;
+    font-size: 14px;
+    border-radius: 0.25em;
+    white-space: nowrap;
+    text-underline: none;
+    text-decoration: none;
+    cursor: pointer;
+    margin-left: 0px; margin-right: 0px;
+}
+
+.second-inner-double-tag:hover {
+    color: #fff;
+    background-color: #337ab7;
+    font-size: 14px;
+    border-radius: 0.25em;
+    white-space: nowrap;
+    text-underline: none;
+    text-decoration: none;
+    cursor: pointer;
+    margin-left: 0px; margin-right: 0px;
+}
+
 .tag-no-hover{
     color: #fff;
     background-color: #337ab7;
