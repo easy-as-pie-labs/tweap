@@ -185,7 +185,7 @@ ChatUi = function() {
 
     /**
      * Empties a Badge of a certain Chatbutton is called in this.activateChat()
-     * @param chatId = id for which button the badge should be emptified in Integer
+     * @param chatId = id for which button the badge should be emptied in Integer
      */
     this.emptyChatButtonBadge = function(chatId) {
         var button = $('#chat-buttons').find("[data-chat-id='" + chatId + "']");
