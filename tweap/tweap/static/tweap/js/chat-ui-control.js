@@ -104,8 +104,9 @@ ChatUi = function() {
      * @param timestamp = the timestamp to be shown as String
      */
     this.addOwnMessage = function(msg, timestamp, top) {
+        var notSentString = "You - message is being sent...";
         if (timestamp == "now"){
-            timestamp = "You - message is being sent...";
+            timestamp = notSentString;
         }
         else {
             timestamp = "You at " + formatTime(timestamp);
@@ -122,7 +123,7 @@ ChatUi = function() {
                 '</div>' +
                 '</div>';
 
-            if(timestamp == "You just now") {
+            if(timestamp == notSentString) {
                 var buffer = $('#buffer');
                 if( buffer.length == 0 ) {
                     var bufferDiv = '<div id="buffer"></div>';
