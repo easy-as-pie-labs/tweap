@@ -1,5 +1,6 @@
 var GROUP_TYPE = "group";
 var SINGLE_TYPE = "single";
+var ENTER_KEY = 13;
 
 $(document).ready(function() {
     chatUi = new ChatUi();
@@ -30,7 +31,7 @@ $(document).ready(function() {
 });
 
 $(document).on('keydown', '#message-text', function(e) {
-    if (e.which == 13) {
+    if (e.which == ENTER_KEY) {
         chatUi.writeMessage();
     }
 });
@@ -90,7 +91,7 @@ ChatUi = function() {
 
             if (top == undefined) {
                 $('#chat-content').append(msgString);
-                this.updateScroll();
+                this.scrollChatToBottom();
             } else {
                 $('#chat-content').prepend(msgString);
             }
@@ -103,16 +104,31 @@ ChatUi = function() {
      * @param timestamp = the timestamp to be shown as String
      */
     this.addOwnMessage = function(msg, timestamp, top) {
+        if (timestamp == "now"){
+            timestamp = "You just now";
+        }
+        else {
+            timestamp = "You at " + formatTime(timestamp);
+
+            // empty the buffer where messages are kept until they are received...
+            $('#buffer').empty();
+        }
+
         if(!overviewState) {
             var msgString = '<div class="row">' +
                 '<div class="col-md-12">' +
                 '<div class="chat-own-bubble">' +
-                '<div class="chat-info">You at ' + formatTime(timestamp) + ' </div>' + msg + '</div>' +
+                '<div class="chat-info">' + timestamp + ' </div>' + msg + '</div>' +
                 '</div>' +
                 '</div>';
-            if (top == undefined) {
+
+            if(timestamp == "You just now") {
+                $('#buffer').append(msgString);
+                this.scrollChatToBottom();
+            }
+            else if (top == undefined) {
                 $('#chat-content').append(msgString);
-                this.updateScroll();
+                this.scrollChatToBottom();
             } else {
                 $('#chat-content').prepend(msgString);
             }
@@ -204,15 +220,16 @@ ChatUi = function() {
     this.writeMessage = function() {
         var msg = $('#message-text').val();
         if(msg != "") {
-            chatManager.sendMessage($('#message-text').val());
+            chatManager.sendMessage(msg);
             $('#message-text').val("");
+            chatUi.addOwnMessage(msg, "now", null);
         }
     }
 
     /**
      * Scrolls the chatfield to the bottom
      */
-    this.updateScroll = function(){
+    this.scrollChatToBottom = function(){
         var chatContent = document.getElementById("chat-content");
         chatContent.scrollTop = chatContent.scrollHeight;
     }
@@ -376,7 +393,7 @@ ChatUi = function() {
      */
     this.chatPanelToggleUpCycle = function() {
         this.removeBadge();
-        this.updateScroll();
+        this.scrollChatToBottom();
         localStorage.setItem("chatToggleStatus", true);
     };
 
