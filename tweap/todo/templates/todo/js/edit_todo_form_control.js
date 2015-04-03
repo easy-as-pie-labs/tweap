@@ -1,6 +1,8 @@
 {% load i18n %}
 var ENTER_KEY = 13;
 var SPACE_KEY = 32;
+var TAB_KEY = 9;
+var highlightedSuggestion;
 
 //listener for add tag button
 $(document).on('click', '.addTagButton', function() {
@@ -13,8 +15,7 @@ $(document).on('keydown', '#tag-input', function() {
 
 //overwrites enter to submit form when typing in tag input field and adds text as tag
 $(document).on('keydown', '#tag-input', function(e) {
-    if ( e.which == ENTER_KEY || e.which == SPACE_KEY) {
-        checkInputFieldAndAddTag();
+    if (e.which == ENTER_KEY || e.which == SPACE_KEY || e.which == TAB_KEY) {
         e.preventDefault();
     }
 });
@@ -54,6 +55,11 @@ function checkInputFieldAndAddTag() {
     }
 }
 
+function addTagFromSuggestion(tagname) {
+    $('#tag-input').parent().parent().removeClass('has-error');
+    addTagAndCleanInput(tagname);
+}
+
 //adds a new tag to the tag-list and cleans the tag-input
 function addTagAndCleanInput(newTagName) {
     tagList.add(newTagName);
@@ -65,11 +71,48 @@ function addTagAndCleanInput(newTagName) {
 
 //ajax request for getting tag suggestions
 $(document).on('keyup', '#tag-input', function(e) {
-    typedText = (this).value;
-    data = {search:typedText, project_id:"{{ project.id }}"};
-    $.get("{% url 'project_management:tag_suggestion' %}", data, function(output){
-        manageTagSuggestionAjaxRequest(output)
-    })
+    var suggestions = $('#suggestions');
+    if ( e.which == ENTER_KEY || e.which == SPACE_KEY ) {
+        if ( highlightedSuggestion == null ) {
+            checkInputFieldAndAddTag();
+        }
+        else {
+            var tagname = highlightedSuggestion.attr('id');
+            addTagFromSuggestion(tagname);
+        }
+
+        highlightedSuggestion = null;
+        e.preventDefault();
+    } else if (e.which == TAB_KEY ) {
+
+        if ( highlightedSuggestion == null ) {
+            highlightedSuggestion = suggestions.children().first();
+        } else {
+            highlightedSuggestion.children().first().css( "color", "white" );
+            var id = highlightedSuggestion.attr('id');
+
+            // because the tag name is the id
+            // and $(id) with special characters in the id isn't supported
+            id = "p[id='"+id+"']";
+            highlightedSuggestion = $(id).next();
+            if( highlightedSuggestion.length == 0 ) {
+                highlightedSuggestion = suggestions.children().first();
+            }
+        }
+        e.preventDefault();
+    }
+    else {
+        highlightedSuggestion = null;
+        var typedText = $('#tag-input').val();
+        var data = {search:typedText, project_id:"{{ project.id }}"};
+        $.get("{% url 'project_management:tag_suggestion' %}", data, function(output){
+            manageTagSuggestionAjaxRequest(output)
+        })
+    }
+
+    if ( highlightedSuggestion != null )
+        highlightedSuggestion.children().first().css( "color", "red" );
+
 });
 
 //handles ajax response

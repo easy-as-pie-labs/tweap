@@ -1,6 +1,12 @@
 {% load i18n %}
+var ENTER_KEY = 13;
+var SPACE_KEY = 32;
+var TAB_KEY = 9;
+var highlightedSuggestion;
+
 
 $(document).ready(function() {
+    highlightedSuggestion = null;
     invitationList = new Invitations();
 
     $('<p id="project_icon"><i id="projectIcon" name="projectIcon" class="{{ project.icon|default:"fa fa-folder-open-o" }} project_icon" data-toggle="modal" data-target="#projectIconModal"></i> {% trans "Click icon to change it" %}</p>')
@@ -60,12 +66,54 @@ $(document).on('click', '.project_icon_choose', function() {
     $('#projectIconModal').modal('hide');
 });
 
+
 //overwrites enter to submit form when typing in user input field and adds text as user
 $(document).on('keydown', '#user-input', function(e) {
-    if ( e.which == 13 ) {
-        checkInputFieldAndInviteUser();
+    if ( e.which == ENTER_KEY || e.which == SPACE_KEY || e.which == TAB_KEY) {
         e.preventDefault();
     }
+});
+
+$(document).on('keyup', '#user-input', function(e) {
+    var suggestions = $('#suggestions');
+    if ( e.which == ENTER_KEY || e.which == SPACE_KEY) {
+        if ( highlightedSuggestion == null)
+            checkInputFieldAndInviteUser();
+        else {
+            var username = highlightedSuggestion.attr('id');
+            inviteUserFromSuggestion(username);
+        }
+
+
+        highlightedSuggestion = null;
+        e.preventDefault();
+    } else if (e.which == TAB_KEY ) {
+
+        if ( highlightedSuggestion == null ) {
+            highlightedSuggestion = suggestions.children().first();
+        } else {
+            highlightedSuggestion.children().first().css( "color", "white" );
+            id = highlightedSuggestion.attr('id');
+            highlightedSuggestion = $('#'+id).next();
+
+            if( highlightedSuggestion.length == 0 ) {
+                highlightedSuggestion = suggestions.children().first();
+            }
+        }
+        e.preventDefault();
+    }
+    else {
+        highlightedSuggestion = null;
+        typedText = $('#user-input').val();
+        data = {search:typedText};
+        $.get("{% url 'user_management:user_suggestion' %}", data, function(output){
+            manageUserSuggestionAjaxRequest(output)
+        })
+    }
+
+    if ( highlightedSuggestion != null )
+        highlightedSuggestion.children().first().css( "color", "red" );
+
 });
 
 //adds clicked suggestion to invitation-list
@@ -95,6 +143,11 @@ function checkInputFieldAndInviteUser() {
     }
 }
 
+function inviteUserFromSuggestion(username) {
+    $('#user-input').parent().parent().removeClass('has-error');
+    addUserAndCleanInput(username);
+}
+
 //adds new user to the invitation-list and cleans the user-input
 function addUserAndCleanInput(newUser) {
      invitationList.add(newUser);
@@ -103,15 +156,6 @@ function addUserAndCleanInput(newUser) {
     $('#suggestions').empty();
     $('#user-input').focus();
 }
-
-//ajax request for getting user suggestions
-$(document).on('keyup', '#user-input', function(e){
-    typedText = (this).value
-    data = {search:typedText};
-    $.get("{% url 'user_management:user_suggestion' %}", data, function(output){
-        manageUserSuggestionAjaxRequest(output)
-    })
-});
 
 //handles ajax response
 function manageUserSuggestionAjaxRequest(data) {
