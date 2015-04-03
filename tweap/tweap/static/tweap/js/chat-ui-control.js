@@ -131,7 +131,21 @@ ChatUi = function() {
                     buffer = $('#buffer');
                 }
                 buffer.append(msgString);
+                var element = buffer.children().last();
                 this.scrollChatToBottom();
+
+                setTimeout(function(){
+                    timestamp = "You - message couldn't be sent, please try again";
+                    msgString = '<div class="row">' +
+                                '<div class="col-md-12">' +
+                                '<div class="chat-own-bubble">' +
+                                '<div class="chat-info">' + timestamp + ' </div>' + msg + '</div>' +
+                                '</div>' +
+                                '</div>';
+
+                    element.replaceWith(msgString);
+                }, 3000);
+
             }
             else if (top == undefined) {
                 $('#chat-content').append(msgString);
