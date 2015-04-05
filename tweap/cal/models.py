@@ -40,7 +40,7 @@ class Event(models.Model):
         return Event.objects.filter(project=projects)
 
     @classmethod
-    def get_all_project_events_for_user(cls, project):
+    def get_all_project_events(cls, project):
         """
         returns all events from one project
         :param project:

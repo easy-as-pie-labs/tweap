@@ -200,9 +200,14 @@ class UpdateFromCalendarView(View):
             result = {'success': 'false'}
 
         return HttpResponse(json.dumps(result), content_type="application/json")
-
+    
 
 def userfeed(request):
+    """
+    makes a calendar with all events in all projects of a user
+    :param request:
+    :return: .ics file response
+    """
     cal = iCal()
 
     # get all events for user
@@ -223,10 +228,16 @@ def userfeed(request):
 
 
 def projectfeed(request, project_id):
+    """
+    makes a calendar with all events in a project
+    :param request:
+    :param project_id: project for which to get all entries
+    :return: .ics file response
+    """
     cal = iCal()
 
-    project = get_object_or_404(Project, id=project_id)
-    events = Event.get_all_project_events_for_user(project)
+    project = get_object_or_404(Project, id=project_id, members=request.user)
+    events = Event.get_all_project_events(project)
 
     # add all events to calendar
     for event in events:

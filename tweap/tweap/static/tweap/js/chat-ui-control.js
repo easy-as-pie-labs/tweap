@@ -116,12 +116,7 @@ ChatUi = function() {
         }
 
         if(!overviewState) {
-            var msgString = '<div class="row">' +
-                '<div class="col-md-12">' +
-                '<div class="chat-own-bubble">' +
-                '<div class="chat-info">' + timestamp + ' </div>' + msg + '</div>' +
-                '</div>' +
-                '</div>';
+            var msgString = this.makeMessageString(msg, timestamp);
 
             if(timestamp == notSentString) {
                 var buffer = $('#buffer');
@@ -134,14 +129,10 @@ ChatUi = function() {
                 var element = buffer.children().last();
                 this.scrollChatToBottom();
 
+                var that = this;
                 setTimeout(function(){
                     timestamp = "You - message couldn't be sent, please try again";
-                    msgString = '<div class="row">' +
-                                '<div class="col-md-12">' +
-                                '<div class="chat-own-bubble">' +
-                                '<div class="chat-info">' + timestamp + ' </div>' + msg + '</div>' +
-                                '</div>' +
-                                '</div>';
+                    msgString = that.makeMessageString(msg, timestamp);
 
                     element.replaceWith(msgString);
                 }, 3000);
@@ -154,6 +145,15 @@ ChatUi = function() {
                 $('#chat-content').prepend(msgString);
             }
         }
+    };
+
+    this.makeMessageString = function(msg, timestamp) {
+        return '<div class="row">' +
+                '<div class="col-md-12">' +
+                '<div class="chat-own-bubble">' +
+                '<div class="chat-info">' + timestamp + ' </div>' + msg + '</div>' +
+                '</div>' +
+                '</div>';
     };
 
     /**
