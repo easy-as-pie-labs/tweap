@@ -308,6 +308,22 @@ ChatUi = function() {
     };
 
     /**
+     * finds  chat id by username from chatbutton
+     * @param username - username to find chat of
+     */
+    this.activateSingleUserChat = function(username) {
+        var id = -1;
+
+        $.each($('.chat-button-content'), function( index, value ) {
+            if($(value).text() == username)
+                id = $(value).parent().attr('data-chat-id');
+        });
+
+        if(id != -1)
+            this.activateChat(id);
+    };
+
+    /**
      * Used as clicklistener, closes an active chat
      * @param chatId = id for which chat should be closed as Integer
      */
