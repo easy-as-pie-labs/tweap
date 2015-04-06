@@ -49,8 +49,10 @@ ChatManager = function() {
                     'conversation': currentConversation.id,
                     'direction': direction
                 };
-                if (direction === 'newer') messageRequest['messageTimeStamp'] = currentConversation.getNewestMessage().timestamp;
-                else messageRequest['messageTimeStamp'] = currentConversation.getOldestMessage().timestamp;
+                if (direction === 'newer')
+                    messageRequest['messageTimeStamp'] = currentConversation.getNewestMessage().timestamp;
+                else
+                    messageRequest['messageTimeStamp'] = currentConversation.getOldestMessage().timestamp;
                 socket.emit('get-messages', messageRequest);
             }
         }
@@ -83,7 +85,8 @@ ChatManager = function() {
 
     this.closeConversation = function(conversationId) {
         var index = findConversationById(conversationId, true);
-        if (index >= 0) conversations.splice(index, 1);
+        if (index >= 0)
+            conversations.splice(index, 1);
         currentConversation = undefined;
         saveToStorage();
     };
@@ -101,12 +104,16 @@ ChatManager = function() {
     var findConversationById = function(conversationId, index) {
         for (var i = 0; i < conversations.length; i++) {
             if (conversations[i].id == conversationId) {
-                if (index) return i;
-                else return conversations[i];
+                if (index)
+                    return i;
+                else
+                    return conversations[i];
             }
         }
-        if (index) return -1;
-        else return false;
+        if (index)
+            return -1;
+        else
+            return false;
     };
 
 
@@ -121,7 +128,8 @@ ChatManager = function() {
                     conversations[conversations.length - 1].messages = saveObject.conversations[i].messages;
                 }
                 setTimeout(function() {
-                    if (saveObject.currentConversationId) chatUi.activateChat(saveObject.currentConversationId);
+                    if (saveObject.currentConversationId)
+                        chatUi.activateChat(saveObject.currentConversationId);
                 }, 10);
             } catch(err) { }
         }
@@ -210,7 +218,8 @@ ChatManager = function() {
         var projectConversations = [];
         var personConversations = [];
         for (var i = 0; i < conversations.length; i++) {
-            if (conversations[i].name) projectConversations.push(conversations[i]);
+            if (conversations[i].name)
+                projectConversations.push(conversations[i]);
             else {
                 var ownIndex = conversations[i].users.indexOf(username);
                 conversations[i].name = ownIndex === 0 ? conversations[i].users[1] : conversations[i].users[0];
