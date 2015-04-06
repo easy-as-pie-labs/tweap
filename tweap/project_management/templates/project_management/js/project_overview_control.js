@@ -24,6 +24,8 @@ $(document).ready(function () {
 
     $('.start-user-chat').click(function() {
         chatManager.requestConversation($(this).attr('data-chat-user'));
+        openChatWindow();
+        chatUi.activateChat($(this).attr('data-chat-user'));
     });
 
 });

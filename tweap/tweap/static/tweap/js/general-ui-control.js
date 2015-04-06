@@ -72,3 +72,14 @@ function chatToggle(chatHeader) {
         });
     }
 }
+
+function openChatWindow() {
+    var chatHeader = $('#chat-panel').children().first();
+    var iconHolderFirst = chatHeader.children().first();
+
+    if (iconHolderFirst.hasClass('fa-chevron-right')) {
+        chatHeader.next('.toggle_content').slideToggle();
+        toggleIcon(iconHolderFirst);
+        chatUi.chatPanelToggleUpCycle();
+    }
+}
