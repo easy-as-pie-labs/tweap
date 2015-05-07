@@ -148,7 +148,7 @@ var updateAssigned = function(output, that){
     var square = element.find('.fa-square-o');
     addHoverClassChange(square, 'fa-square-o', 'fa-check-square-o');
 
-    var square = element.find('.fa-check-square-o');
+    square = element.find('.fa-check-square-o');
     addHoverClassChange(square, 'fa-check-square-o', 'fa-refresh');
 
 
@@ -219,7 +219,6 @@ var showClosedTodos = function() {
     }
 
     if(todos.length >= COMPLETED_TODO_LIMIT){
-        var surplus = todos.length - COMPLETED_TODO_LIMIT;
         box.append('<span id="show-less" class="noselect hover-underline cursor-pointer" style="margin: 10px;">{% trans "hide completed todos" %}</span>')
         $('#show-less').click(function(){
             hideClosedTodos();
@@ -441,16 +440,12 @@ function changeStateToClear(output, child) {
 
             $('#todo_closed_box').prepend(todo_item);
 
-            var panel_header = todo_item.first();
+            var panelHeader = todo_item.first();
+            closeToggleBox(panelHeader);
 
-            // close open togglebox and change icon
-            panel_header.children().first().next('.toggle_content').hide();
-            panel_header.children().first().children().first().removeClass('fa-chevron-down');
-            panel_header.children().first().children().first().addClass('fa-chevron-right');
-
-            panel_header.removeClass("panel-danger");
-            panel_header.removeClass("panel-warning");
-            panel_header.addClass("panel-default");
+            panelHeader.removeClass("panel-danger");
+            panelHeader.removeClass("panel-warning");
+            panelHeader.addClass("panel-default");
 
             child.removeClass('fa fa-fw fa-square-o fa-lg');
             child.addClass('fa fa-fw fa-check-square-o fa-lg');
@@ -479,34 +474,31 @@ function changeStateToUnclear(output, child) {
             todo_item.find('.assignee-marker').show();
 
             //Get due_date from span of todoh
-            var due_date = todo_item.find('.due-date');
-            due_date = due_date.attr('data-date');
-            due_date = new Date(due_date);
+            var dueDate = todo_item.find('.due-date');
+            dueDate = dueDate.attr('data-date');
+            dueDate = new Date(dueDate);
 
             //Get current date
             var currentDate = new Date();
             currentDate.setHours(1, 0, 0);
 
+            var todoType = dateComparator(dueDate);
 
-            //comparing due_date with current date to choose a color for todoh
-            if (currentDate.getDate() === due_date.getDate() &&
-                currentDate.getMonth() === due_date.getMonth() &&
-                currentDate.getYear() === due_date.getYear()
-            ) {
+            if(todoType == "today") {
                 todo_item.addClass("panel panel-warning");
                 $('#todo_today_box').prepend(todo_item);
-            } else if (currentDate > due_date) {
+            }
+            else if (todoType == "younger") {
                 todo_item.addClass("panel panel-danger");
                 $('#todo_overdue_box').prepend(todo_item);
-            } else {
+            }
+            else if (todoType == "older"){
                 $('#todo_rest_box').prepend(todo_item);
             }
 
-            var panel_header = todo_item.first();
+            var panelHeader = todo_item.first();
             // close open togglebox and change icon
-            panel_header.children().first().next('.toggle_content').hide();
-            panel_header.children().first().children().first().removeClass('fa-chevron-down');
-            panel_header.children().first().children().first().addClass('fa-chevron-right');
+            closeToggleBox(panelHeader);
 
             child.removeClass('fa fa-fw fa-refresh fa-lg');
             child.addClass('fa fa-fw fa-square-o fa-lg');
@@ -523,6 +515,44 @@ function changeStateToUnclear(output, child) {
         });
     }
 }
+
+/**
+ * compares current date with other date
+ * @param other date to compare it with
+ * @returns {string} ["today"|"older"|"younger"]
+ * date is today
+ * date is "younger" than today
+ * date is "older" than today
+ */
+var dateComparator = function(other) {
+    //Get current date
+    var currentDate = new Date();
+    currentDate.setHours(1, 0, 0);
+
+    if (currentDate.getDate() === other.getDate() &&
+        currentDate.getMonth() === other.getMonth() &&
+        currentDate.getYear() === other.getYear()
+    ) {
+        return "today";
+    } else if (currentDate > other) {
+        return "younger";
+    } else {
+        return "older"
+    }
+};
+
+/**
+ * closes a toggle box
+ * @param panelHeader
+ */
+var closeToggleBox = function(panelHeader) {
+    var actualHeader = panelHeader.children().first();
+    actualHeader.next('.toggle_content').hide();
+
+    var iconContainer = panelHeader.children().first().children().first();
+    iconContainer.removeClass('fa-chevron-down');
+    iconContainer.addClass('fa-chevron-right');
+};
 
 /**
  * adds jquery hover event
