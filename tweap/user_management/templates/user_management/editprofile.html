@@ -83,9 +83,10 @@
         </table>
             <span class="pull-right">
                 <button id="save_changes" class="btn btn-primary">{% trans "Save Changes" %}</button>
+                <a href="{% url 'user_management:delete_account' %}" id="delete_account" name="delete_account" class="btn btn-danger">{% trans "Delete account" %}</a>
+            </span>
         </form>
-            <a href="{% url 'user_management:delete_account' %}"><button id="delete_account" name="delete_account" class="btn btn-danger">{% trans "Delete account" %}</button></a>
-        </span>
-        </div>
+
+    </div>
     </div>
 {% endblock %}
