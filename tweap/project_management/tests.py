@@ -4,11 +4,6 @@ from project_management.tools import invite_users, get_tags
 from django.contrib.auth.models import User
 import json
 from django.http.response import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.common.exceptions import ElementNotVisibleException
-
 
 class ModelTest(TestCase):
 

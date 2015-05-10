@@ -473,28 +473,7 @@ function changeStateToUnclear(output, child) {
             // show assignment marker
             todo_item.find('.assignee-marker').show();
 
-            //Get due_date from span of todoh
-            var dueDate = todo_item.find('.due-date');
-            dueDate = dueDate.attr('data-date');
-            dueDate = new Date(dueDate);
-
-            //Get current date
-            var currentDate = new Date();
-            currentDate.setHours(1, 0, 0);
-
-            var todoType = dateComparator(dueDate);
-
-            if(todoType == "today") {
-                todo_item.addClass("panel panel-warning");
-                $('#todo_today_box').prepend(todo_item);
-            }
-            else if (todoType == "younger") {
-                todo_item.addClass("panel panel-danger");
-                $('#todo_overdue_box').prepend(todo_item);
-            }
-            else if (todoType == "older"){
-                $('#todo_rest_box').prepend(todo_item);
-            }
+            appendUnclearedTodo(todo_item);
 
             var panelHeader = todo_item.first();
             // close open togglebox and change icon
@@ -538,6 +517,36 @@ var dateComparator = function(other) {
         return "younger";
     } else {
         return "older"
+    }
+};
+
+/**
+ * appends a newly uncleared to do
+ * @param todo_item item to move in DOM
+ */
+var appendUnclearedTodo = function(todo_item) {
+    //Get due_date from span of todoh
+    var dueDate = todo_item.find('.due-date');
+
+    dueDate = dueDate.attr('data-date');
+    dueDate = new Date(dueDate);
+
+    //Get current date
+    var currentDate = new Date();
+    currentDate.setHours(1, 0, 0);
+
+    var todoType = dateComparator(dueDate);
+
+    if(todoType == "today") {
+        todo_item.addClass("panel panel-warning");
+        $('#todo_today_box').prepend(todo_item);
+    }
+    else if (todoType == "younger") {
+        todo_item.addClass("panel panel-danger");
+        $('#todo_overdue_box').prepend(todo_item);
+    }
+    else if (todoType == "older"){
+        $('#todo_rest_box').prepend(todo_item);
     }
 };
 
