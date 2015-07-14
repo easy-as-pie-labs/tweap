@@ -193,9 +193,13 @@ class QuickAdd(View):
         data = sp.parse(text)
 
         title = data['title']
-        result = {}
         try:
             project = Project.objects.get(id=project_id)
+
+            # if the user isn't in the project, we won't allow a to do creation
+            if request.user not in project:
+                return HttpResponse(json.dumps({'success': False}), content_type="application/json")
+
             todo = Todo(project=project, title=title, description='')
             todo.save()
 
