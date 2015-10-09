@@ -3,7 +3,7 @@ tweap
 
 tweap - teamwork easy as pie
 
-tweap is a project management tool for loosely coupled groups. It includes simple group creation, project-wide shared todos and events and a chat system.
+tweap is a project management tool for loosely coupled groups with flat hierarchies. It includes simple group creation, project-wide shared todos and events and a chat system.
 
 tweap is built using the Python based webframewok Django, MySQL, JavaScript with jQuery, Node.js with socket.io and Bootstrap.
 
