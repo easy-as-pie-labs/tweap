@@ -1,9 +1,9 @@
-{% extends "todo_template.html" %}
+{% extends "todo/todo_template.html" %}
 {% load i18n %}
 {% load myfilters %}
 {% block js %}
 <script type="text/javascript">
-    {% include "edit_project_form_control.js" %}
+    {% include "project_management/js/edit_project_form_control.js" %}
 </script>
 {% endblock %}
 {% block todo_template %}
@@ -74,10 +74,12 @@
                     <div id="invitation-list" class="form-group"></div>
             </div>
         </div>
-        <div class="panel-footer">
-        <input tabindex="3" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
+        <div class="panel-footer clearfix">
+        <span class="pull-right">
+            <input tabindex="3" name="create_save" type="submit" class="btn btn-primary" value="{% if project %} {% trans "Save" %} {% else %} {% trans "Create" %} {% endif %}">
                 </form>
                 <a href="{% if project %} {% url 'project_management:project' project.id %} {% else %} {% url 'dashboard:home' %} {% endif %}"><button class="btn btn-default">{% trans "Cancel" %}</button></a>
+        </span>
         </div>
     </div>
     <div class="modal fade" id="projectIconModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

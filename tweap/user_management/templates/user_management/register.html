@@ -1,4 +1,4 @@
-{% extends "no_session_template.html" %}
+{% extends "tweap/no_session_template.html" %}
 {% load i18n %}
 {% block no_session_template %}
         <div class="col-md-4 col-sm-6 col-xs-10 col-xs-offset-1 col-sm-offset-3 col-md-offset-4 well well-lg panel">
@@ -10,15 +10,15 @@
                 {% csrf_token %}
                 <div class="input-group input-group-lg" style="margin-bottom:7px;">
                     <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-                    <input class="form-control" type="text" name="username" placeholder="{% trans "Username" %}" value="{{ username_field }}" tabindex="1" required autofocus="autofocus">
+                    <input class="form-control" type="text" id="username_field" name="username" placeholder="{% trans "Username" %}" value="{{ username_field }}" tabindex="1" required autofocus="autofocus">
                 </div>
                 <div class="input-group input-group-lg" style="margin-bottom:7px;">
                     <span class="input-group-addon"><i class="fa fa-envelope fa-fw"></i></span>
-                    <input class="form-control" type="email" name="email" placeholder="{% trans "eMail" %}" value="{{ email_field }}" tabindex="2" required>
+                    <input class="form-control" type="email" id="email_field" name="email" placeholder="{% trans "eMail" %}" value="{{ email_field }}" tabindex="2" required>
                 </div>
                 <div class="input-group input-group-lg">
                     <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
-                    <input class="form-control" type="password" name="password" placeholder="{% trans "Password" %}" tabindex="3" required>
+                    <input class="form-control" type="password" id="password_field" name="password" placeholder="{% trans "Password" %}" tabindex="3" required>
                 </div>
                 <input class="btn btn-primary btn-lg btn-middle" type="submit" value="{% trans "Register" %}" tabindex="4">
             </form>

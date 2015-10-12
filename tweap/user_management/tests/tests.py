@@ -3,9 +3,130 @@ from django.contrib.auth.models import User
 from user_management.models import Profile, ProfileAddress, PasswordResetToken
 from project_management.models import Project
 from django.http.response import HttpResponseNotAllowed
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions import ElementNotVisibleException
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
+
+class SeleniumTest(TestCase):
+    browser = None
+
+    def setUp(self):
+        self.browser = webdriver.Firefox()
+        self.email = '@usermanagement.de'
+        self.password = 'datPassword'
+        self.timeout = 2
+
+    def register(self, username, email, password):
+        self.browser.get('http://127.0.0.1:8000/users/register/')
+        self.assertTrue('Tweap' in self.browser.title)
+
+        elem = self.browser.find_element(by='id', value='username_field')
+        elem.send_keys(username)
+
+        elem = self.browser.find_element(by='id', value='email_field')
+        elem.send_keys(email)
+
+        elem = self.browser.find_element(by='id', value='password_field')
+        elem.send_keys(password + Keys.RETURN)
+
+    def login(self, username, password):
+        self.browser.get('http://127.0.0.1:8000/users/login/')
+        self.assertTrue('Tweap' in self.browser.title)
+
+        elem = self.browser.find_element_by_name('username')
+        elem.send_keys(username)
+
+        elem = self.browser.find_element_by_name('password')
+        elem.send_keys(password + Keys.RETURN)
+
+    def logout(self):
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element(by='id', value='navbar_logout_link'))
+        elem.click()
+
+    def delete_account(self):
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element(by='id', value='navbar_profile_link'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('make_changes'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('delete_account'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('confirm'))
+        elem.click()
+
+        elem = self.browser.find_element_by_name('delete_account')
+        elem.click()
+
+    ''' ----------------------------------------------------------------------------
+    ------------------------ actual tests start here -------------------------------
+    ---------------------------------------------------------------------------- '''
+    def test_register(self):
+        print('__UI_Test register__')
+        username = 'jsTesting'
+        self.register(username, username + self.email, self.password)
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element(by='id', value='navbar_profile_link'))
+        self.assertIsNotNone(elem)
+        self.logout()
+        self.browser.get('http://127.0.0.1:8000/users/login/')
+        self.assertTrue('Tweap' in self.browser.title)
+
+        self.login(username, self.password)
+        self.delete_account()
+        self.browser.close()
+
+    '''def test_delete_account(self):
+        print('__UI_Test delete account__')
+        username = 'testdeleteaccount'
+        self.register(username, username + self.email, self.password)
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_profile_link'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('make_changes'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('delete_account'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('confirm'))
+        elem.click()
+
+        elem = self.browser.find_element_by_name('delete_account')
+        elem.click()
+        self.browser.close()
+
+    def test_edit_profile(self):
+        print('__UI_Test edit profile__')
+        username = 'testeditprofile'
+        self.register(username, username + self.email, self.password)
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('navbar_profile_link'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('make_changes'))
+        elem.click()
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('street'))
+        elem.send_keys('some street')
+
+        elem = WebDriverWait(self.browser, self.timeout).until(lambda x: x.find_element_by_name('save_changes'))
+        elem.click()
+
+        self.delete_account()
+        self.browser.close()'''
 
 
 class UserManagementTest(TestCase):
+    def setUp(self):
+        user = User.objects.create_user('alice', 'alice@test.de', 'testpw')
+        user2 = User.objects.create_user('bob', 'bob@test.de', 'testpw')
+
     def test_home(self):
 
         print("__Test Dashboard__")
@@ -28,7 +149,7 @@ class UserManagementTest(TestCase):
 
     def test_register(self):
 
-        print("__Test Regisration__")
+        print("__Test Registration__")
 
         # site available
         print("Test: site available")
@@ -62,6 +183,18 @@ class UserManagementTest(TestCase):
         # username already in use
         print("Test: username already in use")
         resp = self.client.post('/users/register/', {'username': 'test', 'email': 'test2@test.de', 'password': 'testpw'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue('username' in resp.context['error_messages'])
+        self.assertFalse('email' in resp.context['error_messages'])
+        self.assertFalse('password' in resp.context['error_messages'])
+        self.assertFalse('blank' in resp.context['error_messages'])
+        self.assertFalse('form' in resp.context['error_messages'])
+        self.assertFalse('username_field' in resp.context)
+        self.assertEqual('test2@test.de', resp.context['email_field'])
+
+        # username not allowed (me, all, alice and bob are blocked usernames)
+        print("Test: username not allowed")
+        resp = self.client.post('/users/register/', {'username': 'me', 'email': 'test2@test.de', 'password': 'testpw'})
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('username' in resp.context['error_messages'])
         self.assertFalse('email' in resp.context['error_messages'])
@@ -420,7 +553,13 @@ class UserManagementTest(TestCase):
         self.assertEqual(Project.objects.filter(id=project2.id).count(), 0)
 
 
+
+
 class ViewTest(TestCase):
+    def setUp(self):
+        user = User.objects.create_user('alice', 'alice@test.de', 'testpw')
+        user2 = User.objects.create_user('bob', 'bob@test.de', 'testpw')
+
     def test_view_access_denied(self):
 
         print("__Test Access denied__")
@@ -521,6 +660,10 @@ class ViewTest(TestCase):
 
 
 class TestResetPassword(TestCase):
+    def setUp(self):
+        user = User.objects.create_user('alice', 'alice@test.de', 'testpw')
+        user2 = User.objects.create_user('bob', 'bob@test.de', 'testpw')
+
     def test_request_page_get(self):
         # get request
         resp = self.client.get('/users/lost_password/')

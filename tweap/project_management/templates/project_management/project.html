@@ -1,4 +1,4 @@
-{% extends "project_management_template.html" %}
+{% extends "project_management/project_management_template.html" %}
 {% load i18n %}
 {% load staticfiles %}
 {% block css %}
@@ -7,12 +7,12 @@
 {% endblock %}
 
 {% block js %}
-<script src='http://fullcalendar.io/js/fullcalendar-2.1.1/lib/moment.min.js'></script>
+<script src="{% static 'tweap/js/moment.min.js' %}"></script>
 <script src="{% static 'tweap/js/fullcalendar.min.js' %}"></script>
 <script src="{% static 'tweap/js/moment-with-locales.min.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
-    {% include "project_overview_control.js" %}
-    {% include "calendar_control.js" %}
+    {% include "project_management/js/project_overview_control.js" %}
+    {% include "project_management/js/calendar_control.js" %}
 </script>
 {% endblock %}
 
@@ -32,15 +32,27 @@
                         <tr>
                             <td><strong>{% trans "Members" %}:</strong></td>
                             <td>{% for member in members %}
-                                   <a href="{% url 'user_management:profile' member %}" class="tag-outer "><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ member.username }}</span></a>
+                                    <span class="tag-outer tag-no-interactive">
+                                        <a href="{% url 'user_management:profile' member %}"><span class="first-inner-double-tag"><i class="fa fa-user"></i>{{ member.username }}</span></a>
+                                        {% ifnotequal member.username user.username %}
+                                        <a href="#" data-chat-user="{{ member.username }}" style="border-left: 1px solid white; padding: 0px;" class="start-user-chat">&nbsp;<span class="second-inner-double-tag"><i class="fa fa-comment" style="margin-right:0;"></i></span></a>
+                                        {% endifnotequal %}
+                                    </span>
                                 {% endfor %}
                             </td>
                         </tr>
                         <tr>
                             <td><strong>{% trans "Invited" %}:</strong></td>
                             <td>{% for invitation in invitations %}
-                                        <p class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-envelope-o""></i>{{ invitation.user.username }}</span></p>
+                                        <p class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-envelope-o"></i>{{ invitation.user.username }}</span></p>
                                 {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>{% trans "Get the Calendar feed" %}:</strong></td>
+                            <td>
+                                {% trans "Download the project's calendar entries and import them into your calendar app" %}: <br>
+                                <a href="{% url 'cal:projectfeed' project.id %}"><button class="btn btn-primary"><i class="fa fa-download"></i> {% trans "Download" %}</button></a> <br>
                             </td>
                         </tr>
                     </table>
@@ -77,8 +89,21 @@
                         {% for todo in todo_overdue %}
                         <div class="panel panel-danger" style="margin: 7px;">
                             <div class="panel-heading noselect toggle_header">
-                                <i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right">
-                                <i class="fa fa-fw fa-square-o fa-lg hover-change"></i></span>
+                                <i class="fa fa-chevron-right"></i> {{ todo.title }}
+                                <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right">
+                                    <i class="fa fa-fw fa-square-o fa-lg hover-change"></i>
+                                </span>
+                                {% ifequal todo.assignment 'none' %}
+                                <span data-todo-id="{{ todo.id }}" class="assignee-marker pull-right">
+                                    <i title="no one is currently working on this todo" class="fa fa-fw fa-exclamation fa-lg"></i>
+                                </span>
+                                {% endifequal %}
+
+                                {% ifequal todo.assignment 'you' %}
+                                <span data-todo-id="{{ todo.id }}" class="assignee-marker pull-right">
+                                    <i title="this todo is assigned to you" class="fa fa-fw fa-eye fa-lg"></i>
+                                </span>
+                                {% endifequal %}
                             </div>
                             <div class="panel-body toggle_content hide-alert">
                                <div class="todo-table">
@@ -128,6 +153,16 @@
                                 </div>
                                 <hr style="margin-top:5px;margin-bottom:10px;">
                                 <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
+                                {% ifequal todo.assignment 'you' %}
+                                <span class="unassignme-maker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                    <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="unassign yourself from this todo" class="fa fa-fw fa-star fa-lg"></i>
+                                </span>
+                                {% endifequal %}
+                                {% ifnotequal todo.assignment 'you' %}
+                                <span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                    <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>
+                                </span>
+                                {% endifnotequal %}
                             </div>
                         </div>
                         {% endfor %}
@@ -136,8 +171,22 @@
                         {% for todo in todo_today %}
                         <div class="panel panel-warning" style="margin: 7px;">
                             <div class="panel-heading noselect toggle_header">
-                                <i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right">
-                                <i class="fa fa-fw fa-square-o fa-lg hover-change"></i></span>
+                                <i class="fa fa-chevron-right"></i> {{ todo.title }}
+                                <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right">
+                                    <i class="fa fa-fw fa-square-o fa-lg hover-change"></i>
+                                </span>
+
+                                {% ifequal todo.assignment 'none' %}
+                                <span data-todo-id="{{ todo.id }}" class="assignee-marker pull-right">
+                                    <i title="no one is currently working on this todo" class="fa fa-fw fa-exclamation fa-lg"></i>
+                                </span>
+                                {% endifequal %}
+
+                                {% ifequal todo.assignment 'you' %}
+                                <span data-todo-id="{{ todo.id }}" class="assignee-marker pull-right">
+                                    <i title="this todo is assigned to you" class="fa fa-fw fa-eye fa-lg"></i>
+                                </span>
+                                {% endifequal %}
                             </div>
                             <div class="panel-body toggle_content hide-alert">
                                <div class="todo-table">
@@ -187,6 +236,16 @@
                                 </div>
                                 <hr style="margin-top:5px;margin-bottom:10px;">
                                 <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
+                                {% ifequal todo.assignment 'you' %}
+                                <span class="unassignme-maker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                    <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="unassign yourself from this todo" class="fa fa-fw fa-star fa-lg"></i>
+                                </span>
+                                {% endifequal %}
+                                {% ifnotequal todo.assignment 'you' %}
+                                <span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                    <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>
+                                </span>
+                                {% endifnotequal %}
                             </div>
                         </div>
                     {% endfor %}
@@ -195,8 +254,22 @@
                     {% for todo in todo_rest %}
                     <div class="panel panel-default" style="margin: 7px;">
                         <div class="panel-heading noselect toggle_header">
-                            <i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right">
-                            <i class="fa fa-fw fa-square-o fa-lg hover-change"></i></span>
+                            <i class="fa fa-chevron-right"></i> {{ todo.title }}
+                            <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right">
+                                <i class="fa fa-fw fa-square-o fa-lg hover-change"></i>
+                            </span>
+                            {% ifequal todo.assignment 'none' %}
+                            <span data-todo-id="{{ todo.id }}" class="assignee-marker pull-right">
+                                <i title="no one is currently working on this todo" class="fa fa-fw fa-exclamation fa-lg"></i>
+                            </span>
+                            {% endifequal %}
+
+                            {% ifequal todo.assignment 'you' %}
+                            <span data-todo-id="{{ todo.id }}" class="assignee-marker pull-right">
+                                <i title="this todo is assigned to you" class="fa fa-fw fa-eye fa-lg"></i>
+                            </span>
+                            {% endifequal %}
+
                         </div>
                         <div class="panel-body toggle_content hide-alert">
                             <div class="todo-table">
@@ -246,70 +319,105 @@
                             </div>
                             <hr style="margin-top:5px;margin-bottom:10px;">
                             <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
+                            {% ifequal todo.assignment 'you' %}
+                            <span class="unassignme-maker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="unassign yourself from this todo" class="fa fa-fw fa-star fa-lg"></i>
+                            </span>
+                            {% endifequal %}
+                            {% ifnotequal todo.assignment 'you' %}
+                            <span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>
+                            </span>
+                            {% endifnotequal %}
                         </div>
                     </div>
                     {% endfor %}
                     </div>
-                        <hr style="margin: 10px">
-                        <div id="todo_closed_box">
-                            {% for todo in todo_closed %}
-                            <div class="panel panel-default" style="margin: 7px; opacity: 0.4;">
-                                <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }} <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right"><i class="fa fa-fw fa-check-square-o fa-lg hover-reopen"></i></span></div>
-                                    <div class="panel-body toggle_content hide-alert">
-                                        <div class="todo-table">
+                    <hr style="margin: 10px">
+                    <div id="todo_closed_box">
+                        {% for todo in todo_closed %}
+                        <div class="panel panel-default" style="margin: 7px; opacity: 0.4;">
+                            <div class="panel-heading noselect toggle_header"><i class="fa fa-chevron-right"></i> {{ todo.title }}
+                                <span data-todo-id="{{ todo.id }}" class="changeStateTodo pull-right">
+                                    <i class="fa fa-fw fa-check-square-o fa-lg hover-reopen"></i>
+                                </span>
+                                {% ifequal todo.assignment 'none' %}
+                                <span data-todo-id="{{ todo.id }}" class="assignee-marker pull-right" style="display: none;">
+                                    <i title="no one is currently working on this todo" class="fa fa-fw fa-exclamation fa-lg"></i>
+                                </span>
+                                {% endifequal %}
+
+                                {% ifequal todo.assignment 'you' %}
+                                <span data-todo-id="{{ todo.id }}" class="assignee-marker pull-right" style="display: none;">
+                                    <i title="this todo is assigned to you" class="fa fa-fw fa-eye fa-lg"></i>
+                                </span>
+                                {% endifequal %}
+                            </div>
+                                <div class="panel-body toggle_content hide-alert">
+                                    <div class="todo-table">
+                                        <div>
                                             <div>
-                                                <div>
-                                                    <i class="fa fa-fw fa-file-text-o"></i>
-                                                </div>
-                                                <div>
-                                                    <span>{% with description=todo.description|urlize %}{{ description|linebreaksbr }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}{% endwith %}</span>
-                                                </div>
+                                                <i class="fa fa-fw fa-file-text-o"></i>
                                             </div>
-                                            <div class="todo-table-spacer"></div>
                                             <div>
-                                                <div>
-                                                    <i class="fa fa-fw fa-calendar"></i>
-                                                </div>
-                                                <div>
-                                                    {% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}
-                                                </div>
-                                            </div>
-                                            <div class="todo-table-spacer"></div>
-                                            <div>
-                                                <div>
-                                                    <i class="fa fa-fw fa-users"></i>
-                                                </div>
-                                                <div>
-                                                    {% for assignee in todo.assignees.all|dictsort:"username" %}
-                                                        <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
-                                                        {% empty %}
-                                                        {% trans "No assigned users" %}
-                                                    {% endfor %}
-                                                </div>
-                                            </div>
-                                            <div class="todo-table-spacer"></div>
-                                            <div>
-                                                <div>
-                                                    <i class="fa fa-fw fa-tags"></i>
-                                                </div>
-                                                <div>
-                                                    {% for tag in todo.tags.all %}
-                                                        <span class="tag-outer"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
-                                                        {% empty %}
-                                                        {% trans "No tags" %}
-                                                    {% endfor %}
-                                                </div>
+                                                <span>{% with description=todo.description|urlize %}{{ description|linebreaksbr }}{% if todo.description == "" %}{% trans "No description" %}{% endif %}{% endwith %}</span>
                                             </div>
                                         </div>
-                                        <hr style="margin-top:5px;margin-bottom:10px;">
-                                        <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div>
+                                                <i class="fa fa-fw fa-calendar"></i>
+                                            </div>
+                                            <div>
+                                                {% if todo.due_date == None %}{% trans "No due date" %}{% else %}<span class="due-date" data-date="{{ todo.get_date }}">{{ todo.due_date }}</span>{% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div>
+                                                <i class="fa fa-fw fa-users"></i>
+                                            </div>
+                                            <div>
+                                                {% for assignee in todo.assignees.all|dictsort:"username" %}
+                                                    <a href="{% url 'user_management:profile' assignee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ assignee.username }}</span></a>
+                                                    {% empty %}
+                                                    {% trans "No assigned users" %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div>
+                                                <i class="fa fa-fw fa-tags"></i>
+                                            </div>
+                                            <div>
+                                                {% for tag in todo.tags.all %}
+                                                    <span class="tag-outer"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                                    {% empty %}
+                                                    {% trans "No tags" %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
                                     </div>
+                                    <hr style="margin-top:5px;margin-bottom:10px;">
+                                    <span class="pull-right"><a href="{% url 'todo:edit' todo.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
+                                    {% ifequal todo.assignment 'you' %}
+                                    <span class="unassignme-maker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                        <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="unassign yourself from this todo" class="fa fa-fw fa-star fa-lg"></i>
+                                    </span>
+                                    {% endifequal %}
+                                    {% ifnotequal todo.assignment 'you' %}
+                                    <span class="assignme-marker pull-right cursor-pointer noselect" style="margin-right: 5px;">
+                                        <i data-changed-state="false" data-todo-id="{{ todo.id }}" style="color: #337AB7;" title="assign yourself to this todo" class="fa fa-fw fa-star-o fa-lg"></i>
+                                    </span>
+                                    {% endifnotequal %}
                                 </div>
-                                {% endfor %}
                             </div>
+                            {% endfor %}
                         </div>
-                    </div>
                 </div>
+            </div>
+        </div>
             </div>
             <div class="col-md-6" id="big-cal">
                 <div class="panel panel-primary">
@@ -334,20 +442,50 @@
                                     <i class="fa fa-chevron-right"></i> {{ event.title }}<span class="pull-right">{{ event.start }}</span>
                                 </div>
                                 <div class="panel-body toggle_content hide-alert">
-                                    <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{% with description=event.description|urlize %}{{ description|linebreaksbr }}{% endwith %}</p>
-                                    <p><i class="fa fa-fw fa-map-marker fa-lg"></i>{{ event.location }}</p>
-                                    <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>Start: </strong>{{ event.start }}</p>
-                                    <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>End: </strong>{{ event.end }}</p>
-                                    <p><i class="fa fa-fw fa-users fa-lg"></i>
-                                    {% for attendee in event.attendees.all|dictsort:"username" %}
-                                        <a href="{% url 'user_management:profile' attendee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ attendee.username }}</span></a>
-                                    {% endfor %}
-                                    </p>
-                                    <p><i class="fa fa-fw fa-tags fa-lg"></i>
-                                    {% for tag in event.tags.all %}
-                                        <span class="tag-outer"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
-                                    {% endfor %}
-                                    </p>
+                                    <div class="todo-table">
+                                        <div>
+                                            <div><i class="fa fa-fw fa-file-text-o fa-lg"></i></div>
+                                            <div><span>{% with description=event.description|urlize %}{{ description|linebreaksbr }}{% if event.description == "" %}{% trans "No description" %}{% endif %}{% endwith %}</span></div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div><i class="fa fa-fw fa-map-marker fa-lg"></i></div>
+                                            <div><span>{{ event.location }}{% if event.location == "" %}{% trans "No Location" %}{% endif %}</span></div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div><i class="fa fa-fw fa-calendar-o fa-lg"></i></div>
+                                            <div><span><strong>Start: </strong>{{ event.start }}</span></div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div><i class="fa fa-fw fa-calendar-o fa-lg"></i></div>
+                                            <div><span><strong>End: </strong>{{ event.end }}</span></div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div><i class="fa fa-fw fa-users fa-lg"></i></div>
+                                            <div><span>
+                                                {% for attendee in event.attendees.all|dictsort:"username" %}
+                                                    <a href="{% url 'user_management:profile' attendee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ attendee.username }}</span></a>
+                                                    {% empty %}
+                                                    {% trans "No attending users" %}
+                                                {% endfor %}
+                                            </span></div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div><i class="fa fa-fw fa-tags fa-lg"></i></div>
+                                            <div><span>
+                                                {% for tag in event.tags.all %}
+                                                    <span class="tag-outer"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                                    {% empty %}
+                                                    {% trans "No tags" %}
+                                                {% endfor %}
+                                            </span></div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                    </div>
                                     <hr style="margin-top:5px;margin-bottom:10px;">
                                     <span class="pull-right"><a href="{% url 'cal:edit' event.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
                                 </div>
@@ -355,25 +493,55 @@
                             {% endfor %}
                             <hr style="margin: 10px">
                             {% for event in past %}
-                            <div class="panel panel-default" style="opacity: 0.4;">
+                            <div class="panel panel-default" style="opacity: 0.4; margin: 7px;">
                                 <div class="panel-heading noselect toggle_header">
-                                    {{ event.title }}<span class="pull-right">{{ event.start }}</span>
+                                    <i class="fa fa-chevron-right"></i> {{ event.title }}<span class="pull-right">{{ event.start }}</span>
                                 </div>
                                 <div class="panel-body toggle_content hide-alert">
-                                    <p><i class="fa fa-fw fa-file-text-o fa-lg"></i>{% with description=event.description|urlize %}{{ description|linebreaksbr }}{% endwith %}</p>
-                                    <p><i class="fa fa-fw fa-map-marker fa-lg"></i>{{ event.location }}</p>
-                                    <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>Start: </strong>{{ event.start }}</p>
-                                    <p><i class="fa fa-fw fa-calendar-o fa-lg"></i><strong>End: </strong>{{ event.end }}</p>
-                                    <p><i class="fa fa-fw fa-users fa-lg"></i>
-                                    {% for attendee in event.attendees.all %}
-                                        <a href="{% url 'user_management:profile' attendee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ attendee.username }}</span></a>
-                                    {% endfor %}
-                                    </p>
-                                    <p><i class="fa fa-fw fa-tags fa-lg"></i>
-                                    {% for tag in event.tags.all %}
-                                        <span class="tag-outer"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
-                                    {% endfor %}
-                                    </p>
+                                    <div class="todo-table">
+                                        <div>
+                                            <div><i class="fa fa-fw fa-file-text-o fa-lg"></i></div>
+                                            <div><span>{% with description=event.description|urlize %}{{ description|linebreaksbr }}{% if event.description == "" %}{% trans "No description" %}{% endif %}{% endwith %}</span></div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div><i class="fa fa-fw fa-map-marker fa-lg"></i></div>
+                                            <div><span>{{ event.location }}{% if event.location == "" %}{% trans "No Location" %}{% endif %}</span></div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div><i class="fa fa-fw fa-calendar-o fa-lg"></i></div>
+                                            <div><span><strong>Start: </strong>{{ event.start }}</span></div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div><i class="fa fa-fw fa-calendar-o fa-lg"></i></div>
+                                            <div><span><strong>End: </strong>{{ event.end }}</span></div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div><i class="fa fa-fw fa-users fa-lg"></i></div>
+                                            <div><span>
+                                                {% for attendee in event.attendees.all|dictsort:"username" %}
+                                                    <a href="{% url 'user_management:profile' attendee %}" class="tag-outer"><span class="tag-no-interactive"><i class="fa fa-user"></i>{{ attendee.username }}</span></a>
+                                                    {% empty %}
+                                                    {% trans "No attending users" %}
+                                                {% endfor %}
+                                            </span></div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                        <div>
+                                            <div><i class="fa fa-fw fa-tags fa-lg"></i></div>
+                                            <div><span>
+                                                {% for tag in event.tags.all %}
+                                                    <span class="tag-outer"><span class="tag-no-interactive" data-tag-name="{{ tag.name }}"><i class="fa fa-tag"></i>{{ tag.name }}</span></span>
+                                                    {% empty %}
+                                                    {% trans "No tags" %}
+                                                {% endfor %}
+                                            </span></div>
+                                        </div>
+                                        <div class="todo-table-spacer"></div>
+                                    </div>
                                     <hr style="margin-top:5px;margin-bottom:10px;">
                                     <span class="pull-right"><a href="{% url 'cal:edit' event.id %}"><i style="color: #337AB7;" class="fa fa-lg fa-pencil-square-o"></i></a></span>
                                 </div>

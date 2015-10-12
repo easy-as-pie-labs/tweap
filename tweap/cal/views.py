@@ -9,10 +9,11 @@ from project_management.models import Project
 from project_management.tools import get_tags
 from notification_center.models import NotificationEvent, Notification
 from cal.models import Event
-from cal.tools import validate_for_event
+from cal.tools import validate_for_event, basicauth
 import json
 from datetime import datetime
 import pytz
+from icalendar import Calendar as iCal, Event as iEvent
 
 class CreateEdit(View):
     """
@@ -36,6 +37,7 @@ class CreateEdit(View):
                 'headline': ugettext("Create new Event in") + " " + project.name,
                 'project': project,
                 'members': project.members.order_by('username'),
+                'invitees': project.get_invited_users(),
                 'start': request.GET.get('start', ''),
                 'end': request.GET.get('end', ''),
             }
@@ -54,7 +56,8 @@ class CreateEdit(View):
                 'headline': ugettext("Edit Event in") + " " + project.name,
                 'event': event,
                 'project': project,
-                'members': project.members.order_by('username')
+                'members': project.members.order_by('username'),
+                'invitees': project.get_invited_users(),
             }
         return render(request, 'cal/create_edit.html', context)
 
@@ -197,4 +200,79 @@ class UpdateFromCalendarView(View):
             result = {'success': 'false'}
 
         return HttpResponse(json.dumps(result), content_type="application/json")
+    
 
+def userfeed(request):
+    """
+    makes a calendar with all events in all projects of a user
+    :param request:
+    :return: .ics file response
+    """
+    cal = iCal()
+
+    # get all events for user
+    events = Event.get_all_events_for_userprojects(request.user)
+
+    # add all events to calendar
+    for event in events:
+        url = request.build_absolute_uri(reverse('cal:edit', args=(event.id, )))
+        cal.add_component(make_i_event(event, url))
+
+    stream = cal.to_ical()#.replace('\r\n', '\n').strip()
+
+    response = HttpResponse(stream, content_type='text/calendar; charset=utf-8')
+    response['Filename'] = request.user.username + '.ics'
+    response['Content-Disposition'] = 'attachment; filename=' + request.user.username + '.ics'
+
+    return response
+
+
+def projectfeed(request, project_id):
+    """
+    makes a calendar with all events in a project
+    :param request:
+    :param project_id: project for which to get all entries
+    :return: .ics file response
+    """
+    cal = iCal()
+
+    project = get_object_or_404(Project, id=project_id, members=request.user)
+    events = Event.get_all_project_events(project)
+
+    # add all events to calendar
+    for event in events:
+        url = request.build_absolute_uri(reverse('cal:edit', args=(event.id, )))
+        cal.add_component(make_i_event(event, url))
+
+    stream = cal.to_ical()#.replace('\r\n', '\n').strip()
+
+    response = HttpResponse(stream, content_type='text/calendar; charset=utf-8')
+    response['Filename'] = project.name + '.ics'
+    response['Content-Disposition'] = 'attachment; filename=' + project.name + '.ics'
+
+    return response
+
+
+def make_i_event(event, url):
+    """
+    creates iEvent from cal event
+    :param event: cal event
+    :param url: url of said event
+    :return:
+    """
+    e = iEvent()
+    e.add('summary', event.title)
+
+    description = event.description
+    if len(event.attendees.all()) > 0:
+        description += " - attended by"
+    for user in event.attendees.all():
+        description += " " + user.username + ","
+    description = description[:-1]
+
+    e.add('url', url)
+    e.add('description', description)
+    e.add('location', event.location)
+    e.add('dtstart', event.start.replace(tzinfo=pytz.timezone("Europe/Berlin")))
+    e.add('dtend', event.end.replace(tzinfo=pytz.timezone("Europe/Berlin")))
+    return e

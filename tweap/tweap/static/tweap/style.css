@@ -1,3 +1,17 @@
+html{
+    height:100%;
+}
+
+body {
+    background-image: url("img/bridge-bg.jpg");
+    background-attachment: fixed;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height:100%;
+    min-height:100%;
+}
+
 .btn-middle{
     width:100%;
     margin-top:10px;
@@ -116,7 +130,7 @@ p#project_icon{
     border-bottom-left-radius: 3px !important;
 }
 
-.tag-outer{
+.tag-outer, .tag-outer-no-hover{
     display: inline-block;
     margin-right: 5px;
     margin-bottom: 10px;
@@ -135,6 +149,61 @@ p#project_icon{
     border-radius: 0.25em;
     padding: 0.25em 0.75em;
     white-space: nowrap;
+}
+
+.first-inner-double-tag {
+    color: #fff;
+    background-color: #337ab7;
+    font-size: 14px;
+    border-radius: 0.25em;
+    white-space: nowrap;
+    margin-left: 0px; margin-right: 0px;
+}
+
+.second-inner-double-tag {
+    color: #fff;
+    background-color: #337ab7;
+    font-size: 14px;
+    border-radius: 0.25em;
+    white-space: nowrap;
+    margin-left: 0px; margin-right: 0px;
+}
+
+.first-inner-double-tag:hover {
+    color: #fff;
+    background-color: #337ab7;
+    font-size: 14px;
+    border-radius: 0.25em;
+    white-space: nowrap;
+    text-underline: none;
+    text-decoration: none;
+    cursor: pointer;
+    margin-left: 0px; margin-right: 0px;
+}
+
+.second-inner-double-tag:hover {
+    color: #fff;
+    background-color: #337ab7;
+    font-size: 14px;
+    border-radius: 0.25em;
+    white-space: nowrap;
+    text-underline: none;
+    text-decoration: none;
+    cursor: pointer;
+    margin-left: 0px; margin-right: 0px;
+}
+
+.tag-no-hover{
+    color: #fff;
+    background-color: #337ab7;
+    font-size: 14px;
+    border-radius: 0.25em;
+    padding: 0.25em 0.75em;
+    white-space: nowrap;
+}
+
+.tag-no-hover:hover{
+    cursor: pointer;
 }
 
 .tag:hover{
@@ -225,19 +294,32 @@ p#project_icon{
     height: 15px;
 }
 
-
-body {
-    background-image: url("img/bridge-bg.jpg");
-    background-attachment: fixed;
-    background-position: center top;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
 .panel {
     opacity: 0.95;
 }
 
 .opaque-well {
     opacity: 0.8;
+}
+
+.disabled-input {
+    color: #888;
+}
+
+.hover-underline:hover {
+    text-decoration: underline;
+}
+
+#main-container {
+    margin-bottom: 50px;
+}
+
+.rounded-bottom-border {
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.no-rounded-bottom-border {
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
 }

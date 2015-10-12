@@ -10,6 +10,8 @@ from notification_center.models import NotificationEvent, Notification
 from todo.tools import *
 from tweap.tools import StringParser
 import json
+import datetime
+from django.core import serializers
 
 
 class CreateEdit(View):
@@ -34,6 +36,7 @@ class CreateEdit(View):
                 'headline': ugettext("Create new Todo in") + " " + project.name,
                 'project': project,
                 'members': project.members.order_by('username'),
+                'invitees': project.get_invited_users()
             }
 
             return render(request, 'todo/create_edit.html', context)
@@ -51,6 +54,7 @@ class CreateEdit(View):
                 'todo': todo,
                 'project': project,
                 'members': project.members.order_by('username'),
+                'invitees': project.get_invited_users()
             }
         return render(request, 'todo/create_edit.html', context)
 
@@ -94,13 +98,13 @@ class CreateEdit(View):
                 assignees = form.getlist('assignees')
                 todo.save()
 
-                #Get already assigned assignees, for notification sending
-                already_assigned_assignees = []
+                # only get assignees that weren't assigned before (for notifications)
+                not_yet_assigned = []
 
                 for assignee in assignees:
                     user = User.objects.get(username=assignee)
-                    if user in todo.assignees.all():
-                        already_assigned_assignees.append(user)
+                    if user not in todo.assignees.all():
+                        not_yet_assigned.append(user)
 
                 todo.assignees.clear()
                 for assignee in assignees:
@@ -117,7 +121,7 @@ class CreateEdit(View):
                 todo.save()
 
                 # create notifications for all assignees
-                Notification.bulk_create(assignees, request.user, project, request.build_absolute_uri(reverse('todo:edit', args=(todo.id, ))), 'assigned a todo to you')
+                Notification.bulk_create(not_yet_assigned, request.user, project, request.build_absolute_uri(reverse('todo:edit', args=(todo.id, ))), 'assigned a todo to you')
 
                 return HttpResponseRedirect(reverse('project_management:project', args=(project.id, )))
 
@@ -158,6 +162,7 @@ class MarkDone(View):
 
         todo = validate_for_todo(request, todo_id)
         todo.done = True
+        todo.completed_date = datetime.datetime.today()
         todo.save()
         result = {'state': True}
 
@@ -172,6 +177,7 @@ class MarkUndone(View):
 
         todo = validate_for_todo(request, todo_id)
         todo.done = False
+        todo.completed_date = None
         todo.save()
         result = {'state': True}
 
@@ -187,19 +193,28 @@ class QuickAdd(View):
         data = sp.parse(text)
 
         title = data['title']
-
-        result = {}
         try:
             project = Project.objects.get(id=project_id)
+
+            # if the user isn't in the project, we won't allow a to do creation
+            if request.user not in project:
+                return HttpResponse(json.dumps({'success': False}), content_type="application/json")
+
             todo = Todo(project=project, title=title, description='')
             todo.save()
 
             for username in data['users']:
                 try:
-                    user = User.objects.get(username=username)
+                    if username == 'me':
+                        todo.assignees.add(request.user)
+                    elif username == 'all':
+                        for user in project.members.all():
+                            todo.assignees.add(user)
+                    else:
+                        user = User.objects.get(username=username)
 
-                    if user in project.members.all():
-                        todo.assignees.add(user)
+                        if user in project.members.all():
+                            todo.assignees.add(user)
                 except:
                     pass
 
@@ -211,9 +226,109 @@ class QuickAdd(View):
 
             todo.save()
 
-            result = {'success': True, 'id': todo.id, 'title': title, 'tags': data['tags']}
+            if title == '':
+                todo.delete()
+                raise Exception
+
+            tags = todo.tags.all().only('name')
+            tags_list = []
+            for tag in tags:
+                tags_list.append(tag.name)
+
+            assignees = todo.assignees.all().only('username')
+
+            if len(assignees) == 0:
+                assignment = 'none'
+            elif request.user in assignees:
+                assignment = 'you'
+            else:
+                assignment = 'someone'
+
+            assignee_list = []
+            for assignee in assignees:
+                assignee_list.append(assignee.username)
+
+            Notification.bulk_create(assignees, request.user, project, request.build_absolute_uri(reverse('todo:edit', args=(todo.id, ))), 'assigned a todo to you')
+            result = {'success': True, 'id': todo.id, 'title': todo.title, 'tags': tags_list, 'users': assignee_list, 'assignment': assignment}
         except:
-            result = {'success': False, 'tags': data['tags']}
+            result = {'success': False}
 
         return HttpResponse(json.dumps(result), content_type="application/json")
 
+
+class QuickAssign(View):
+    def post(self, request):
+        todo_id = int(request.POST.get('todo_id', ''))
+        user = request.user
+        todo = Todo.objects.get(id=todo_id)
+        todo.assignees.add(user)
+        todo.save()
+
+        tags = todo.tags.all().only('name')
+        tags_list = []
+        for tag in tags:
+            tags_list.append(tag.name)
+
+        assignees = todo.assignees.all().only('username')
+
+        if len(assignees) == 0:
+            assignment = 'none'
+        elif request.user in assignees:
+            assignment = 'you'
+        else:
+            assignment = 'someone'
+
+        assignee_list = []
+        for assignee in assignees:
+            assignee_list.append(assignee.username)
+
+        result = {'success': True, 'id': todo.id, 'title': todo.title, 'tags': tags_list, 'users': assignee_list, 'assignment': assignment}
+        try:
+            due_date = todo.due_date
+            if due_date is not None:
+                result['year'] = todo.due_date.year
+                result['month'] = todo.due_date.month
+                result['day'] = todo.due_date.day
+        except:
+            pass
+
+        return HttpResponse(json.dumps(result), content_type="application/json")
+
+
+class QuickUnAssign(View):
+    def post(self, request):
+        todo_id = int(request.POST.get('todo_id', ''))
+        user = request.user
+        todo = Todo.objects.get(id=todo_id)
+        todo.assignees.remove(user)
+        todo.save()
+
+        tags = todo.tags.all().only('name')
+        tags_list = []
+        for tag in tags:
+            tags_list.append(tag.name)
+
+        assignees = todo.assignees.all().only('username')
+
+        if len(assignees) == 0:
+            assignment = 'none'
+        elif request.user in assignees:
+            assignment = 'you'
+        else:
+            assignment = 'someone'
+
+        assignee_list = []
+        for assignee in assignees:
+            assignee_list.append(assignee.username)
+
+        result = {'success': True, 'id': todo.id, 'title': todo.title, 'tags': tags_list, 'users': assignee_list, 'assignment': assignment}
+        try:
+            due_date = todo.due_date
+            if due_date is not None:
+                result['year'] = todo.due_date.year
+                result['month'] = todo.due_date.month
+                result['day'] = todo.due_date.day
+        except:
+            pass
+
+        return HttpResponse(json.dumps(result), content_type="application/json")

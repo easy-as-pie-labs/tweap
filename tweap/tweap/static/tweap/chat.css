@@ -1,0 +1,146 @@
+#chat-container {
+    width:100%;
+    position: fixed;
+    bottom:0px;
+    z-index:9999;
+}
+
+#chat-container .container {
+    padding-bottom:0px;
+}
+
+#chat-container .panel {
+    margin-bottom:0px;
+    -webkit-box-shadow: 7px -5px 13px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 7px -5px 13px -4px rgba(0,0,0,0.75);
+    box-shadow: 7px -5px 13px -4px rgba(0,0,0,0.75);
+}
+
+#chat-container .fa {
+    margin-right:5px;
+}
+
+#chat-body {
+    height:0px;
+}
+
+#chat-content {
+    max-height:300px;
+    min-height:300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.chat-partner-bubble {
+    max-width:40%;
+    overflow-wrap: break-word;
+
+    display:inline;
+    padding:10px;
+    margin-bottom:10px;
+    background-color:#428bca;
+    float:left;
+    color:#fff;
+
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.chat-own-bubble {
+    max-width:40%;
+    overflow-wrap: break-word;
+    display:inline;
+
+    padding:10px;
+    margin-bottom:10px;
+    margin-right:5px;
+    background-color: #eff1f2;
+    float:right;
+
+    border:1px solid #dedfe1;
+
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.chat-info {
+    font-size:10px;
+    padding-bottom: 2px;
+    margin-bottom: 5px;
+}
+
+.msg-count {
+    margin-left:5px;
+}
+
+#chat-content h1 {
+    font-size: 23px;
+    margin-top:0px;
+}
+
+#chat-content h2 {
+    font-size: 18px;
+    margin-top:0px;
+}
+
+.psbl-chat-btn {
+    margin-bottom:5px;
+}
+
+#all-chats {
+    margin-top:10px;
+    margin-bottom: -10px;
+}
+
+#all-chats:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.chat-button-badge {
+    margin-left:5px;
+    font-size:10px !important;
+}
+
+.chat-button-content {
+    float:left;
+}
+
+#chat-buttons .fa-close {
+    margin-top:1px;
+    z-index:999;
+}
+
+.no-bottom-border-radius {
+    border-bottom-left-radius:0px !important;
+    border-bottom-right-radius:0px !important;
+}
+
+.chat-overview-element {
+    font-size: 16px;
+    padding:15px;
+    float:left;
+    cursor:pointer;
+    border:1px solid #ccc;
+    margin-left:5px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+
+.chat-overview-element:hover {
+    background-color: #e6e6e6;
+}
+
+#chat-list {
+    margin-bottom: 10px;
+}
+
+#group-chats {
+    margin-left:-5px;
+}
+
+#person-chats {
+    margin-left:-5px;
+}

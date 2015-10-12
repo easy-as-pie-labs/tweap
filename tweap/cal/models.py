@@ -29,15 +29,46 @@ class Event(models.Model):
     def get_all_for_user(cls, user):
         return Event.objects.filter(attendees=user)
 
+    @classmethod
+    def get_all_events_for_userprojects(cls, user):
+        """
+        returns all events from one user (all projects, no matter if assigned or not)
+        :param user:
+        :return:
+        """
+        projects = Project.objects.filter(members=user)
+        return Event.objects.filter(project=projects)
+
+    @classmethod
+    def get_all_project_events(cls, project):
+        """
+        returns all events from one project
+        :param project:
+        :return:
+        """
+        return Event.objects.filter(project=project)
+
     # datetime.date.today() basically takes 00:00, so we want to show today for everything >= today() and < tomorrow()
     @classmethod
     def get_start_today_for_user(cls, user):
-        return Event.objects.filter(attendees=user, start__gte=datetime.datetime.now(pytz.utc), start__lt=datetime.datetime.now(pytz.utc) + datetime.timedelta(days=(1)))
+        now = datetime.datetime.now(pytz.utc)
+        now = now - datetime.timedelta(days=(1))
+
+        # fixes strange bug where 00:00 was included even though it's supposed to be less than (not equals)
+        now = now.replace(hour=23, minute=59, second=59)
+        tomorrow = now + datetime.timedelta(days=(1))
+        #tomorrow = tomorrow.replace(hour=0,minute=0,second=0)
+        return Event.objects.filter(attendees=user, start__gte=now, start__lt=tomorrow)
+
 
     @classmethod
     def get_start_this_week_for_user(cls, user):
-        end_of_week = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=(8)) # 8 because today() is today 00:00 and we need it to be 24:00
-        return Event.objects.filter(attendees=user, start__lte=end_of_week, start__gte=datetime.datetime.now(pytz.utc) + datetime.timedelta(days=(1)))
+        now = datetime.datetime.now(pytz.utc)
+        today = now.replace(hour=0,minute=0,second=0)
+        # fixes strange bug where 00:00 wasn't included even though it's supposed to be less than and equals
+        tomorrow = now.replace(hour=23, minute=59, second=59)
+        end_of_week = today + datetime.timedelta(days=(7))
+        return Event.objects.filter(attendees=user, start__lt=end_of_week, start__gte=tomorrow)
 
     def __str__(self):
         return self.title

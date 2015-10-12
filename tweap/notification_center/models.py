@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from project_management.models import Project
-
+from django.core.exceptions import ObjectDoesNotExist
 
 class NotificationEvent(models.Model):
     text = models.CharField(max_length=50, null=False)
@@ -29,7 +29,6 @@ class Notification(models.Model):
         create a notification for a user
         :param receiver:
         :param trigger_user:
-        :param timestamp:
         :param project:
         :param target_url:
         :param event_string:
@@ -38,12 +37,10 @@ class Notification(models.Model):
         if receiver == trigger_user:
             return
 
-        event = NotificationEvent.objects.filter(text=event_string)
-        if event.exists():
-            event = event.first()
-        else:
-            event = NotificationEvent()
-            event.text = event_string
+        try:
+            event = NotificationEvent.objects.get(text=event_string)
+        except ObjectDoesNotExist:
+            event = NotificationEvent(text=event_string)
             event.save()
 
         cls(receiver=receiver, trigger_user=trigger_user, project=project, target_url=target_url, event=event).save()
@@ -53,9 +50,8 @@ class Notification(models.Model):
     def bulk_create(cls, username_list, trigger_user, project, target_url, event_string):
         """
         create a notification for a bunch of people
-        :param receiver_list:
+        :param username_list:
         :param trigger_user:
-        :param timestamp:
         :param project:
         :param target_url:
         :param event_string:

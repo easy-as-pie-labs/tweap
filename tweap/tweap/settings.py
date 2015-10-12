@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'notification_center',
     'cal',
     'debug_toolbar',
+    'chat',
     'settings',
 )
 
@@ -80,6 +81,10 @@ DATABASES = {
         'NAME': 'tweap',
         'USER': 'root',
         'PASSWORD': 'tweap',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'use_unicode': True,
+        },
     }
 }
 
@@ -88,7 +93,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Berlin'
 
 USE_I18N = True
 
@@ -130,7 +135,7 @@ LOGIN_REQUIRED_URLS_EXCEPTIONS = (
 )
 
 LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locale'),
+    os.path.join(BASE_DIR, 'locale/'),
 )
 
 LANGUAGES = (

@@ -1,0 +1,31 @@
+{
+  "web": {
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "client_secret": "MRVNeXZE_8hWwc4BgutkE-BS",
+    "token_uri": "https://accounts.google.com/o/oauth2/token",
+    "client_email": "74034931034-2j97tjtaqvq153mhj26l6d5qdro07n79@developer.gserviceaccount.com",
+    "redirect_uris": [
+      "http://tweap.de/oauth2callback",
+      "http://dev.tweap.de/oauth2callback",
+      "http://www.tweap.de/oauth2callback",
+      "http://www.dev.tweap.de/oauth2callback",
+      "http://tweap.easy-as-pie.de/oauth2callback",
+      "http://dev.tweap.easy-as-pie.de/oauth2callback",
+      "http://www.tweap.easy-as-pie.de/oauth2callback",
+      "http://www.dev.tweap.easy-as-pie.de/oauth2callback"
+    ],
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/74034931034-2j97tjtaqvq153mhj26l6d5qdro07n79@developer.gserviceaccount.com",
+    "client_id": "74034931034-2j97tjtaqvq153mhj26l6d5qdro07n79.apps.googleusercontent.com",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "javascript_origins": [
+      "http://tweap.de",
+      "http://dev.tweap.de",
+      "http://www.tweap.de",
+      "http://www.dev.tweap.de",
+      "http://tweap.easy-as-pie.de",
+      "http://dev.tweap.easy-as-pie.de",
+      "http://www.tweap.easy-as-pie.de",
+      "http://www.dev.tweap.easy-as-pie.de"
+    ]
+  }
+}

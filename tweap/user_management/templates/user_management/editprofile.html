@@ -1,4 +1,4 @@
-{% extends "user_management_template.html" %}
+{% extends "user_management/user_management_template.html" %}
 {% load i18n %}
 {% block user_management_template %}
     <div class="well well-lg panel">
@@ -24,7 +24,7 @@
 			<p><input type="submit" value="{% trans "Upload image" %}" /></p>
 		</form>
         <br>
-        <form class="form-group" id="edit_profile_form" action="{% url 'user_management:edit_profile' %}" method="POST" enctype="multipart/form-data">
+        <form class="form-group clearfix" id="edit_profile_form" action="{% url 'user_management:edit_profile' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {% if user.profile.picture %}
                 <p>or</p>
@@ -81,9 +81,12 @@
                 <td><input class="form-control" type="number" name="housenumber" value="{% if not profile_address.house_number %}{% else %}{{ profile_address.house_number }}{% endif %}"></td>
             </tr>
         </table>
-            <button id="save_changes" class="btn btn-primary">{% trans "Save Changes" %}</button>
+            <span class="pull-right">
+                <button id="save_changes" class="btn btn-primary">{% trans "Save Changes" %}</button>
+                <a href="{% url 'user_management:delete_account' %}" id="delete_account" name="delete_account" class="btn btn-danger">{% trans "Delete account" %}</a>
+            </span>
         </form>
-        <a href="{% url 'user_management:delete_account' %}"><button id="delete_account" name="delete_account" class="btn btn-danger">{% trans "Delete account" %}</button></a>
-        </div>
+
+    </div>
     </div>
 {% endblock %}
